@@ -50,7 +50,11 @@ public class TipoLancamento {
 	public void setDsTipoLancamento(String dsTipoLancamento) {
 		this.dsTipoLancamento = dsTipoLancamento;
 	}
-	
+
+	@Override
+	public String toString() {
+		return "TipoLancamento [dtCadastro=" + dtCadastro + ", dsTipoLancamento=" + dsTipoLancamento + "]";
+	}
 	
 	
 	
