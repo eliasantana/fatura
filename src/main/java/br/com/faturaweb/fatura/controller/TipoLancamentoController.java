@@ -14,19 +14,28 @@ import br.com.faturaweb.fatura.services.TipoLancamentoServices;
 
 @Controller
 @EnableAutoConfiguration
-
+@RequestMapping("tipolancamento")
 public class TipoLancamentoController {
 
-	@Autowired
+	@Autowired	
 	private TipoLancamentoRepository tipoLancamentoRepository;
 	
-	@PostMapping("/tipolancamento")
+	@GetMapping("listar")
+	public String tipoLancamento() {
+	
+		System.out.println("Listando tipos de lancamento");
+		return "home/listar-tipos-lancamentos";
+	}
+	
+	@PostMapping("adicionar")
 	public String home(TipoLancamento tipoLancamento) {
-		
+		System.out.println("Adicionando.... um tipo de lançamento!");
 		TipoLancamento tpLancamento = new TipoLancamento(tipoLancamento.getDsTipoLancamento());
 		tipoLancamentoRepository.save(tpLancamento);
 			
 		return "home/tipolancamento";
 	}
+	
+	
 
 }
