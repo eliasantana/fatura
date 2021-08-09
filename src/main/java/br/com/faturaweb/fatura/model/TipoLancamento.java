@@ -7,6 +7,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "Tipo_Lancamento")
@@ -16,6 +18,8 @@ public class TipoLancamento {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long cdTipoLancamento;
 	private LocalDate dtCadastro;
+	@NotNull	
+	@NotBlank
 	private String dsTipoLancamento;
 	
 	public TipoLancamento() {
