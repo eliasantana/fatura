@@ -1,5 +1,7 @@
 package br.com.faturaweb.fatura.controller;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Controller;
@@ -14,19 +16,32 @@ import br.com.faturaweb.fatura.services.TipoLancamentoServices;
 
 @Controller
 @EnableAutoConfiguration
-
+@RequestMapping("tipolancamento")
 public class TipoLancamentoController {
 
-	@Autowired
+	@Autowired	
 	private TipoLancamentoRepository tipoLancamentoRepository;
 	
-	@PostMapping("/tipolancamento")
-	public String home(TipoLancamento tipoLancamento) {
-		
-		TipoLancamento tpLancamento = new TipoLancamento(tipoLancamento.getDsTipoLancamento());
-		tipoLancamentoRepository.save(tpLancamento);
-			
-		return "home/tipolancamento";
+	@GetMapping("listar")
+	public String tipoLancamento() {
+	
+		System.out.println("Listando tipos de lancamento");
+		return "home/listar-tipos-lancamentos";
 	}
+	
+	@GetMapping("cadastro")
+	public String formCadastro() {
+		return "home/form-tipolancamento";
+	}
+	
+	@PostMapping("adicionar")
+	public String home(@Valid TipoLancamento tipoLancamento) {
+		System.out.println("Adicionando.... um tipo de lançamento!");
+		TipoLancamento tpLancamento = new TipoLancamento(tipoLancamento.getDsTipoLancamento());		
+		tipoLancamentoRepository.save(tpLancamento)	;
+		return "home/form-tipolancamento";
+	}
+	
+	
 
 }
