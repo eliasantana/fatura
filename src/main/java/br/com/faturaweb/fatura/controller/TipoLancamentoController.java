@@ -1,5 +1,7 @@
 package br.com.faturaweb.fatura.controller;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import br.com.faturaweb.fatura.model.TipoLancamento;
 import br.com.faturaweb.fatura.repository.TipoLancamentoRepository;
-import br.com.faturaweb.fatura.services.TipoLancamentoServices;
 
 @Controller
 @EnableAutoConfiguration
@@ -22,9 +23,11 @@ public class TipoLancamentoController {
 	@Autowired	
 	private TipoLancamentoRepository tipoLancamentoRepository;
 	
-	@GetMapping("listar")
-	public String tipoLancamento() {
 	
+	@GetMapping("listar")
+	public String tipoLancamento(Model model) {
+		List<TipoLancamento> tiposDeLancamentos = tipoLancamentoRepository.findAllTipoLancamentos();
+		model.addAttribute("tipolancamentos", tiposDeLancamentos);
 		System.out.println("Listando tipos de lancamento");
 		return "home/listar-tipos-lancamentos";
 	}
