@@ -32,19 +32,15 @@
 						<th scope="row" th:text="${tipolancamento.cdTipoLancamento}"></th>
 						<td th:text="${tipolancamento.dsTipoLancamento}">k</td>
 						<td>
-							<button type="button" class="btn btn-danger">Excluir</button>
-							<button type="button" class="btn btn-warning">Excluir</button>						
+							<a href="/tipolancamento/excluir/" th:href="@{'/tipolancamento/excluir/'+ ${tipolancamento.cdTipoLancamento}}" class="btn btn-danger">Excluir</a>
+							<a heref="" class="btn btn-warning">Alterar</a>						
 						</td>
 					</tr>
 				</tbody>
 			</table>
-			<a href="#" class="btn btn-success">Voltar</a>
-			<a href="#" class="btn btn-primary">Novo Tipo</a>
+			<a href="/tipolancamento/listar" class="btn btn-success">Voltar</a>
+			<a href="/tipolancamento/cadastro" class="btn btn-primary">Novo Tipo</a>
 		</div>
 	</div>
-
-
-
-
 </body>
 </html>
