@@ -6,20 +6,23 @@
 <body>
 	<div class="container-fluid">
 		<div class="card mt-1">
-			<div class="card-header">Cadastro de Tipos de Lancamento</div>
+			<div class="card-header">Tipos de Lançamento</div>
 			<div class="card-body">
-				<h5 class="card-title">Cadastro de Tipos de Lançamento</h5>
+				<h5 class="card-title">Alterar Tipos de Lançamento</h5>
 				<p class="card-text">
 				<div class="container">
-					<form method="post" action="/tipolancamento/adicionar">
+					<form method="post" action="/tipolancamento/atualizar">
 						<div class="col">
+							<label class="form-label" for="cdtipolancamento">ID</label> 
+							<input type="hidden" class="form-control" id="cdtipolancamento" name="cdTipoLancamento"
+								aria-describedby="desCricaoTipoLancamento"  th:value="${tipo.cdTipoLancamento}">
 							<label class="form-label" for="descricao">Descrição</label> 
 							<input type="text" class="form-control" id="descricao" name="dsTipoLancamento"
-								aria-describedby="desCricaoTipoLancamento" required="required">
+								aria-describedby="desCricaoTipoLancamento" required="required" th:value="${tipo.dsTipoLancamento}">
 							<div id="desCricaoTipoLancamento" class="form-text">Descrição 
 								do tipo de lancamento (ex.Cédito, Débito.)</div>
 						</div>
-						<button type="submit" class="btn btn-primary mt-3">Salvar</button>
+						<button type="submit" class="btn btn-warning mt-3">Alterar</button>
 						<a href="/tipolancamento/listar" class="btn btn-danger mt-3">Voltar</a>
 					</form>
 				</div>
