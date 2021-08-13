@@ -1,23 +1,13 @@
 <!DOCTYPE html>
 <html>
-<head>
-<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmento :: head}">
 <meta charset="UTF-8">
-<title>Lista de Tipos Lançamentos</title>
-<!-- Required meta tags -->
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link
-	href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css"
-	rel="stylesheet"
-	integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We"
-	crossorigin="anonymous">
 </head>
 <body>
 	<div class="card">
 		<div class="card-header">Tipos de Lançamento</div>
 		<div class="card-body">
-			<h5 class="card-title">Todos</h5>
+			<h5 class="card-title">Cadastro de Tipos de Lançamentos</h5>
 			<p class="card-text"></p>
 			<table class="table table-striped table-hover">
 				<thead>
@@ -33,12 +23,11 @@
 						<td th:text="${tipolancamento.dsTipoLancamento}">k</td>
 						<td>
 							<a href="/tipolancamento/excluir/" th:href="@{'/tipolancamento/excluir/'+ ${tipolancamento.cdTipoLancamento}}" class="btn btn-danger">Excluir</a>
-							<a heref="" class="btn btn-warning">Alterar</a>						
+							<a href="/tipolancamento/alterar/" th:href="@{'/tipolancamento/alterar/' + ${tipolancamento.cdTipoLancamento}}" class="btn btn-warning">Alterar</a>						
 						</td>
 					</tr>
 				</tbody>
 			</table>
-			<a href="/tipolancamento/listar" class="btn btn-success">Voltar</a>
 			<a href="/tipolancamento/cadastro" class="btn btn-primary">Novo Tipo</a>
 		</div>
 	</div>
