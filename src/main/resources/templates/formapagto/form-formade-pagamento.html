@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head th:replace="~{fragmento :: head}">
+<meta charset="UTF-8">
+</head>
+<body>
+	<div class="container-fluid">
+		<div class="card mt-1">
+			<div class="card-header">Formas de Pagamento</div>
+			<div class="card-body">
+				<h5 class="card-title">Cadastro de Formas de Pagamento</h5>
+				<p class="card-text">
+				<div class="container">
+					<form method="post" action="/formapagto/adicionar">
+						<div class="col">
+						<label th:if="${formapagto.cdFormaPgamento!=null}" class="form-label" for="codigo">ID</label> 
+						<input th:if="${formapagto.cdFormaPgamento!=null}" type="text" class="form-control" id="codigo" th:value="${formapagto.cdFormaPgamento}" name="cdFormaPgamento" aria-describedby="cdFormaPgamento">
+							<label class="form-label" for="descricao">Descrição</label> 
+							<input type="text" class="form-control" id="descricao" th:value="${formapagto.descricao}" name="descricao"	aria-describedby="desCricaoTipoLancamento" required="required">
+							<div id="desCricaoTipoLancamento" class="form-text">Descrição do tipo de lancamento (ex.Cédito, Débito.)</div>
+						</div>
+						<button type="submit" class="btn btn-primary mt-3">Salvar</button>
+						<a href="/formapagto/listar" class="btn btn-danger mt-3">Voltar</a>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
+	integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj"
+	crossorigin="anonymous"></script>
+</html>
