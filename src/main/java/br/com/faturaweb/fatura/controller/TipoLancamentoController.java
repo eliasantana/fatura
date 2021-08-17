@@ -1,5 +1,6 @@
 package br.com.faturaweb.fatura.controller;
 
+import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -9,20 +10,21 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Repository;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.view.RedirectView;
 
-import com.fasterxml.jackson.annotation.JsonCreator.Mode;
+import com.google.zxing.NotFoundException;
 
 import br.com.faturaweb.fatura.model.TipoLancamento;
 import br.com.faturaweb.fatura.repository.TipoLancamentoRepository;
+import br.com.faturaweb.fatura.services.ReportService;
+import br.com.faturaweb.fatura.services.TipoLancamentoServices;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 @Controller
 @EnableAutoConfiguration
@@ -31,6 +33,9 @@ public class TipoLancamentoController {
 
 	@Autowired
 	private TipoLancamentoRepository tipoLancamentoRepository;
+	
+	@Autowired
+	ReportService service;
 
 	@GetMapping("listar")
 	public String tipoLancamento(Model model) {
@@ -97,5 +102,17 @@ public class TipoLancamentoController {
 		RedirectView rdw = new RedirectView();
 		rdw.setUrl("http://localhost:8080/tipolancamento/listar");
 		return rdw;
+	}
+	
+
+	@GetMapping("relatorio/{formato}")
+	public RedirectView relatorio(@PathVariable String formato) throws NotFoundException, FileNotFoundException, JRException {
+
+		List<TipoLancamento> findAllTipoLancamentos = tipoLancamentoRepository.findAllTipoLancamentos();
+		JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(findAllTipoLancamentos);
+		service.exportReport(formato, "relTiposLancamento", beanCollectionDataSource);
+		RedirectView rw = new RedirectView("http://localhost:8080/tipolancamento/listar");
+		
+		return rw;
 	}
 }
