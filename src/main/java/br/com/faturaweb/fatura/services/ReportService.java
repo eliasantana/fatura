@@ -2,7 +2,10 @@ package br.com.faturaweb.fatura.services;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 
@@ -10,6 +13,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
 
@@ -62,9 +68,8 @@ public class ReportService {
 	public String exportReport(String format, String nomeRelatoirio, JRBeanCollectionDataSource dataSourceList)
 			throws NotFoundException, FileNotFoundException, JRException {
 
-		// String path = "C:\\Users\\elias\\Desktop\\relatorio";
 		String path = "C:\\fatura\\relatorio";
-		System.out.println("Criei o relatporio");
+		System.out.println("Criei o relatorio");
 		String relatorioPdf = nomeRelatoirio.concat(".pdf");
 		String relatorioHtml = nomeRelatoirio.concat(".html");
 		criaDiretorio();
@@ -75,15 +80,16 @@ public class ReportService {
 
 		if (format.equalsIgnoreCase("html")) {
 			JasperExportManager.exportReportToHtmlFile(jasperPrint, path + "\\" + relatorioHtml);
+			nomeRelatoirio = relatorioHtml;
 		}
 
 		if (format.equalsIgnoreCase("pdf")) {
 			JasperExportManager.exportReportToPdfFile(jasperPrint, path + "\\" + relatorioPdf);
+			nomeRelatoirio = relatorioPdf;
 		}
-
-		return "Relatório Gerado com sucesso! " + path;
+		
+		return nomeRelatoirio;
 	}
-
 	/**
 	 * Cria estrutura de diretórios se não existir
 	 * 
