@@ -37,27 +37,7 @@ public class ReportService {
 	@Autowired
 	TipoLancamentoRepository lancamentoRepository;
 
-	public String exportReport(String format) throws NotFoundException, FileNotFoundException, JRException {
-
-		String path = "C:\\Users\\elias\\Desktop\\relatorio";
-		List<TipoLancamento> tiposDeLancamento = lancamentoRepository.findAllTipoLancamentos();
-		File file = ResourceUtils.getFile("classpath:reports/relTiposLancamento.jrxml");
-		JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
-		JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(tiposDeLancamento);
-		Map<String, Object> parameters = new HashedMap();
-		JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
-
-		if (format.equalsIgnoreCase("pdf")) {
-			JasperExportManager.exportReportToHtmlFile(jasperPrint, path + "\\relTipoLancamento.html");
-		}
-
-		if (format.equalsIgnoreCase("pdf")) {
-			JasperExportManager.exportReportToPdfFile(jasperPrint, path + "\\relTipoLancamento.pdf");
-		}
-
-		return "Relatório Gerado com sucesso! " + path;
-	}
-
+	
 	/**
 	 * @author elias
 	 * @param format         - Formado do relatório PDF ou HTML
@@ -103,6 +83,35 @@ public class ReportService {
 			diretorios.mkdirs();
 		}
 
+	}
+
+	/**
+	 * Realiza o downloado do arquivo de relatório gerado
+	 * @param nomerelatorio - Nome do relatório sem extensão
+	 * @return {@link ResponseEntity} 
+	 * */
+	public ResponseEntity download(String nomerelatorio) {
+	
+		String caminho = "C:\\fatura\\relatorio\\".concat(nomerelatorio);
+		Path path = Paths.get(caminho);
+		byte[] pdfContents = null;
+
+		try {
+			pdfContents = Files.readAllBytes(path);
+		} catch (IOException e) {
+			e.printStackTrace();
+
+		}
+
+		org.springframework.http.HttpHeaders headers = new HttpHeaders();
+
+		headers.setContentType(org.springframework.http.MediaType.APPLICATION_PDF);
+		String filename = nomerelatorio;
+		headers.setContentDispositionFormData(filename, filename);
+		headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+		ResponseEntity response = new ResponseEntity(pdfContents, headers, HttpStatus.OK);
+		
+		return response;
 	}
 	
 }

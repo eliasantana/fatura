@@ -39,7 +39,7 @@ public class FormaDePagamentoController {
 
 	@Autowired
 	FormaDePagamentoRepository formaDePagamentoRepository;
-	
+
 	@Autowired
 	ReportService reportServices;
 
@@ -73,7 +73,7 @@ public class FormaDePagamentoController {
 				formaDePagamentoRepository.save(formapagtoForm);
 
 			} catch (NoSuchElementException e) {
-				
+
 				System.out.println("Salvando forma de pagamento não localizada!");
 
 			}
@@ -107,40 +107,23 @@ public class FormaDePagamentoController {
 		System.out.println("Forma de pagamento localizada: " + formaPagtoLocalizada.get().toString());
 		return "formapagto/form-formade-pagamento";
 	}
-	
-	
+
 	@GetMapping("relatorio/{formato}")
-	public RedirectView relatorio(@PathVariable String formato) throws NotFoundException, FileNotFoundException, JRException {
-		System.out.println("Formato informado!"+formato);
+	public RedirectView relatorio(@PathVariable String formato)
+			throws NotFoundException, FileNotFoundException, JRException {
+		System.out.println("Formato informado!" + formato);
 		List<FormaDePagamento> formasDePagamento = formaDePagamentoRepository.findAllFormasDePagamento();
 		JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(formasDePagamento);
 		String relatorio = reportServices.exportReport(formato, "relFormaPagto", beanCollectionDataSource);
-		RedirectView rw = new RedirectView("http://localhost:8080/formapagto/download/"+relatorio);
-		
+		RedirectView rw = new RedirectView("http://localhost:8080/formapagto/download/" + relatorio);
+
 		return rw;
 	}
 
 	@GetMapping("download/{nomerelatorio}")
 	public ResponseEntity showPdf(@PathVariable String nomerelatorio) {
-		String caminho = "C:\\fatura\\relatorio\\".concat(nomerelatorio);
-		Path path = Paths.get(caminho);
-		byte[] pdfContents = null;
+		ResponseEntity response = reportServices.download(nomerelatorio);
 
-		try {
-			pdfContents = Files.readAllBytes(path);
-		} catch (IOException e) {
-			e.printStackTrace();
-
-		}
-
-		org.springframework.http.HttpHeaders headers = new HttpHeaders();
-
-		headers.setContentType(org.springframework.http.MediaType.APPLICATION_PDF);
-		String filename = nomerelatorio;
-		headers.setContentDispositionFormData(filename, filename);
-		headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
-		ResponseEntity response = new ResponseEntity(pdfContents, headers, HttpStatus.OK);
-		
 		return response;
 
 	}

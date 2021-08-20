@@ -34,7 +34,7 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 @Controller
-@EnableAutoConfiguration
+@EnableAutoConfiguration	
 @RequestMapping("tipolancamento")
 public class TipoLancamentoController {
 
@@ -125,26 +125,8 @@ public class TipoLancamentoController {
 
 	@GetMapping("download/{nomerelatorio}")
 	public ResponseEntity showPdf(@PathVariable String nomerelatorio) {
-		String caminho = "C:\\fatura\\relatorio\\".concat(nomerelatorio);
-		Path path = Paths.get(caminho);
-		byte[] pdfContents = null;
+		ResponseEntity responseEntity = service.download(nomerelatorio);
 
-		try {
-			pdfContents = Files.readAllBytes(path);
-		} catch (IOException e) {
-			e.printStackTrace();
-
-		}
-
-		org.springframework.http.HttpHeaders headers = new HttpHeaders();
-
-		headers.setContentType(org.springframework.http.MediaType.APPLICATION_PDF);
-		String filename = nomerelatorio;
-		headers.setContentDispositionFormData(filename, filename);
-		headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
-		ResponseEntity response = new ResponseEntity(pdfContents, headers, HttpStatus.OK);
-		
-		return response;
-
+		return responseEntity;
 	}
 }
