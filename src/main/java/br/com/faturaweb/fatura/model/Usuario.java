@@ -7,19 +7,29 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.sun.istack.NotNull;
 
 @Entity
-@Table(name = "Usuario")
+@Table(name = "usuario")
 public class Usuario {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long cdUsuario;
+	@NotBlank
+	@NotNull
 	private String nome;
+	@NotBlank
+	@NotNull
 	private String login;
 	private String senha;
 	private String email;
 	private String snAtivo;
+	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
 	private LocalDate dtCardastro;
 	
 	 public Usuario() {
@@ -35,7 +45,7 @@ public class Usuario {
 		this.senha = senha;
 		this.email = email;
 		this.snAtivo = snAtivo;
-		this.dtCardastro = LocalDate.now();
+		this.dtCardastro = dtCardastro;
 	}
 	
 	public Usuario(String nome, String login, String senha, String email, String snAtivo, LocalDate dtCardastro) {
@@ -44,7 +54,7 @@ public class Usuario {
 		this.senha = senha;
 		this.email = email;
 		this.snAtivo = snAtivo;
-		this.dtCardastro = LocalDate.now();
+		this.dtCardastro = dtCardastro;
 	}
 	
 	public Long getCdUsuario() {
@@ -88,6 +98,13 @@ public class Usuario {
 	}
 	public void setDtCardastro(LocalDate dtCardastro) {
 		this.dtCardastro = dtCardastro;
+	}
+
+
+	@Override
+	public String toString() {
+		return "Usuario [cdUsuario=" + cdUsuario + ", nome=" + nome + ", login=" + login + ", senha=" + senha
+				+ ", email=" + email + ", snAtivo=" + snAtivo + ", dtCardastro=" + dtCardastro + "]";
 	}
 	
 	

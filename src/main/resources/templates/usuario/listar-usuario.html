@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head th:replace="~{fragmento :: head('Lista de Usuários') }">   
+</head>
+<body>
+
+<div class="card">
+  <div class="card-header">
+    Usuário
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">Todos</h5>
+    <p class="card-text">
+    	<table class="table">
+			  <thead>
+			    <tr>
+			      <th  scope="col">Código</th>
+			      <th scope="col">Nome</th>
+			      <th scope="col">Login</th>
+			      <th scope="col">Senha</th>
+			      <th scope="col">Ativo</th>
+			      <th scope="col">Data de Cadastro</th>
+			      <th scope="col">Ação</th>
+			    </tr>
+			  </thead>
+			  <tbody>
+			    <tr th:each="usuario: ${usuarios}">
+			      <th scope="row" th:text="${usuario.cdUsuario}">1</th>
+			      <td th:text="${usuario.nome}">Mark</td>
+			      <td th:text="${usuario.login}">Otto</td>
+			      <td>*****************</td>
+			      <td  th:if="${usuario.snAtivo}=='Não'" th:text="Não" style="background-color: red; color: white;" >Otto</td>
+			      <td  th:if="${usuario.snAtivo}=='Sim'" th:text="Sim" style="background-color: green; color: white;" >Otto</td>
+			      <td  th:text="${usuario.dtCardastro}">@mdo</td>
+			      <td>
+			      		<a href="/usuario/alterar/"  th:href="@{'/usuario/alterar/' + ${usuario.cdUsuario}}" class="btn btn-warning">Editar</a>
+			      		<a href="/usuario/excluir/" th:href="@{'/usuario/excluir/'+ ${usuario.cdUsuario}}" class="btn btn-danger">Excluir</a>
+			      </td>
+			    </tr>			    
+			  </tbody>
+			</table>
+    
+    </p>
+    <a href="/usuario/cadastro" class="btn btn-primary">Cadastrar</a>
+  </div>
+</div>
+			
+</body>
+</html>
