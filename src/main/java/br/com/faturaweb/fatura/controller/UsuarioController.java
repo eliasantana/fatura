@@ -1,8 +1,112 @@
 package br.com.faturaweb.fatura.controller;
 
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
+
+import javax.print.attribute.standard.Fidelity;
+import javax.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Repository;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.view.RedirectView;
+
+import br.com.faturaweb.fatura.model.Usuario;
+import br.com.faturaweb.fatura.repository.UsuarioRepository;
 
 @Controller
+@EnableAutoConfiguration
+@RequestMapping("usuario")
 public class UsuarioController {
 
+	@Autowired
+	private UsuarioRepository usuarioRepository;
+
+	@GetMapping("cadastro")
+	public String cadastro(Model model) {
+		Usuario u = new Usuario();
+		model.addAttribute("usuario", u);
+		return "usuario/form-usuario";
+	}
+
+	@PostMapping("adicionar")
+	public RedirectView adicionar(@Valid Usuario usuario, Model model) {
+		RedirectView rw = new RedirectView("http://localhost:8080/usuario/listar");
+
+//		   System.out.println("Salvando novo usuário");
+//		   usuario.setDtCardastro(LocalDate.now());
+//		   Usuario novoUsuario = usuario;
+//			usuarioRepository.save(novoUsuario);
+		if (usuario.getCdUsuario() != null) {
+			
+			
+			System.out.println("Alterando o usuário");
+			try {
+				Optional<Usuario> usuarioLocalizado = usuarioRepository.findById(usuario.getCdUsuario());
+				System.out.println("Usuário localizado!" +   usuarioLocalizado.toString());
+				
+				Usuario usuarioForm = new Usuario();
+				usuarioForm.setCdUsuario(usuarioLocalizado.get().getCdUsuario());
+				usuarioForm.setDtCardastro(usuarioLocalizado.get().getDtCardastro());
+				usuarioForm.setNome(usuario.getNome());
+				usuarioForm.setEmail(usuario.getEmail());
+				usuarioForm.setLogin(usuario.getLogin());
+				usuarioForm.setSenha(usuario.getSenha());
+				usuarioForm.setSnAtivo(usuario.getSnAtivo());				
+				System.out.println("Usuario form: " + usuarioForm.toString());
+				
+				usuarioRepository.save(usuarioForm);
+				
+			} catch (Exception e) {
+				
+			}
+			
+		}else {
+			 usuario.setDtCardastro(LocalDate.now());
+			 usuarioRepository.save(usuario);
+		}
+
+		return rw;
+
+	}
+
+	@GetMapping("listar")
+	public String listar(Model model) {
+		try {
+			List<Usuario> todosOsUusuarios = usuarioRepository.listarTodos();
+			model.addAttribute("usuarios", todosOsUusuarios);
+		} catch (Exception e) {
+
+		}
+		return "usuario/listar-usuario";
+	}
+
+	@GetMapping("excluir/{id}")
+	public RedirectView excluir(@PathVariable Long id, Usuario usuario) {
+
+		RedirectView rw = new RedirectView("http://localhost:8080/usuario/listar");
+		Optional<Usuario> usuarioLocalizado = usuarioRepository.findById(id);
+		if (usuarioLocalizado.get().getCdUsuario() != null) {
+			usuarioRepository.delete(usuarioLocalizado.get());
+			System.out.println(usuarioLocalizado.get().getNome() + "  excluído com sucesso! ");
+		}
+		return rw;
+	}
+
+	@GetMapping("alterar/{id}")
+	public String alterar(@PathVariable Long id, Model model) {
+
+		Optional<Usuario> usuarioLocalizado = usuarioRepository.findById(id);
+		Usuario u = usuarioLocalizado.get();
+		model.addAttribute("usuario", u);
+		System.out.println(id);
+		return "usuario/form-usuario";
+	}
 }
