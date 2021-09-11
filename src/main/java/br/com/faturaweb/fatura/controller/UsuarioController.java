@@ -1,5 +1,6 @@
 package br.com.faturaweb.fatura.controller;
 
+import java.io.FileNotFoundException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -9,8 +10,10 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,8 +21,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.view.RedirectView;
 
+import com.google.zxing.NotFoundException;
+
 import br.com.faturaweb.fatura.model.Usuario;
 import br.com.faturaweb.fatura.repository.UsuarioRepository;
+import br.com.faturaweb.fatura.services.ReportService;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 @Controller
 @EnableAutoConfiguration
@@ -28,6 +36,9 @@ public class UsuarioController {
 
 	@Autowired
 	private UsuarioRepository usuarioRepository;
+	
+	@Autowired
+	private ReportService service;
 
 	@GetMapping("cadastro")
 	public String cadastro(Model model) {
@@ -40,10 +51,6 @@ public class UsuarioController {
 	public RedirectView adicionar(@Valid Usuario usuario, Model model) {
 		RedirectView rw = new RedirectView("http://localhost:8080/usuario/listar");
 
-//		   System.out.println("Salvando novo usuário");
-//		   usuario.setDtCardastro(LocalDate.now());
-//		   Usuario novoUsuario = usuario;
-//			usuarioRepository.save(novoUsuario);
 		if (usuario.getCdUsuario() != null) {
 			
 			
@@ -109,4 +116,22 @@ public class UsuarioController {
 		System.out.println(id);
 		return "usuario/form-usuario";
 	}
+	
+	@GetMapping("relatorio/{formato}")
+	public RedirectView relatorio(@PathVariable String formato) throws NotFoundException, FileNotFoundException, JRException {
+		
+		List<Usuario> todosOsUsuarios = usuarioRepository.listarTodos();
+		JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(todosOsUsuarios);
+		String nomeRelatorio = service.exportReport(formato, "relUsuario", beanCollectionDataSource);
+		RedirectView rw = new RedirectView("http://localhost:8080/usuario/download/"+nomeRelatorio);
+		return rw;
+	}
+	
+	@GetMapping("download/{nomerelatorio}")
+	public ResponseEntity showPdf(@PathVariable String nomerelatorio) {
+		
+		ResponseEntity responseEntity = service.download(nomerelatorio);
+		return responseEntity;
+	}
+	
 }
