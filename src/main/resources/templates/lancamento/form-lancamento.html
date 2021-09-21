@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+ <head th:replace="~{fragmento :: head('Lançamento') }">   
+<meta charset="UTF-8">
+</head>
+<body>
+	<div class="container-fluid">
+		<div class="card mt-1">
+			<div class="card-header">Cadastro de Lançamentos</div>
+			<div class="card-body">
+				<h5 class="card-title" >Lançamentos</h5>
+				<div th:text="'Usuário Logado: ' + ${usuario.login}">Usuário Logado:  </div>
+				<div th:text="${mensagem}">yr</div>
+				<p class="card-text">
+				<div class="container">
+					<form method="post" action="/lancamento/salvar">
+						<div class="col">
+							<label th:if="${lancamentos.cdLancamento}==!null" class="form-label" for="codigo">ID</label>
+							<input th:if="${lancamentos.cdLancamento}==!null" type="text" class="form-control" name="cdLancamento" id="codigo" th:value="${lancamentos.cdLancamento}" aria-describedby="cdLancamento" />
+							<div th:if="${lancamentos.cdLancamento}==!null" id="cdLancamento" class="form-text">Código do Lançamento</div>
+						</div>
+						
+						<div class="col">
+							<label  class="form-label" for="Descrição">Descrição</label>
+							<input type="text" class="form-control" name="dsLancamento" id="descricao" th:value="${lancamentos.dsLancamento}" aria-describedby="dsLancamento" />
+							<div id="desCricao" class="form-text">Descrição do Lançamento Ex: Pagamento Cartão de Crédito</div>
+						</div>
+						<!-- 
+						<div class="col">
+							<label  class="form-label" for="dtCadastro">Data de Cadastro</label>
+							<input type="datetime-local" class="form-control" name="dtCadastro" id="dtcadastro" th:value="${lancamentos.dtCadastro}" aria-describedby="dtcadastro" />
+							<div id="dtcadastro" class="form-text">ex: dd/mm/yyyy</div>
+						</div>
+						 -->
+						
+						<div class="col">
+							<label  class="form-label" for="formadepagamento">Forma de Pagamento</label>
+							<select class="form-select" name="dsFormaDePagamento">
+								<option th:each="formadepagamento: ${formapagto}" th:text="${formadepagamento.descricao}">1</option>
+							</select>
+							<div id="formadepagamento" class="form-text">Ex: Espécie, Parcelado</div>
+						</div>
+						
+						<div class="col">
+							<label  class="form-label" for="tipolancamento">Tipo de Lançamento</label>
+							
+							<select class="form-select" name="dsTipoLancamento">
+								<option th:each="tipolancamento : ${tpLancamentos}" th:text="${tipolancamento.dsTipoLancamento}">1</option>
+							</select>
+							
+							<div id="formadepagamento" class="form-text">Ex: Crétido, Débito, Carteira</div>
+						</div>
+						
+						<div class="col">
+						<label class="form-label" for="snpago">Pago?</label>						
+							<select class="form-select" id="snpago" name="snPago">
+								<option>Não</option>
+								<option>SIM</option>
+							</select>
+						</div>
+						
+						<div class="col">
+						<label class="form-label" for="vlpago">Valor Pago R$</label>
+						<input class="form-control" type="text" id="vlpago" name="vlPago" th:value="${lancamentos.vlPago}">
+						
+						</div>
+						
+						<input type="submit" class="btn btn-primary mt-3 ml-3" value="Salvar"></button>
+						<a href="/" class="btn btn-danger mt-3 ml-3" value="Salvar">Volvar</a>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
+	integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj"
+	crossorigin="anonymous"></script>
+</html>

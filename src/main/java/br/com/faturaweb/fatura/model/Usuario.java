@@ -1,11 +1,15 @@
 package br.com.faturaweb.fatura.model;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
@@ -31,6 +35,8 @@ public class Usuario {
 	private String snAtivo;
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
 	private LocalDate dtCardastro;
+	@OneToMany(mappedBy = "usuario")	
+	private List<Lancamento> lancamento = new ArrayList<Lancamento>();
 	
 	 public Usuario() {
 		 
@@ -38,7 +44,7 @@ public class Usuario {
 	
 	
 	public Usuario(Long cdUsuario, String nome, String login, String senha, String email, String snAtivo,
-			LocalDate dtCardastro) {
+			LocalDate dtCardastro, ArrayList<Lancamento> lancamento) {
 		this.cdUsuario = cdUsuario;
 		this.nome = nome;
 		this.login = login;
@@ -46,15 +52,17 @@ public class Usuario {
 		this.email = email;
 		this.snAtivo = snAtivo;
 		this.dtCardastro = dtCardastro;
+		this.lancamento = lancamento;
 	}
 	
-	public Usuario(String nome, String login, String senha, String email, String snAtivo, LocalDate dtCardastro) {
+	public Usuario(String nome, String login, String senha, String email, String snAtivo, LocalDate dtCardastro, ArrayList<Lancamento> lancamento) {
 		this.nome = nome;
 		this.login = login;
 		this.senha = senha;
 		this.email = email;
 		this.snAtivo = snAtivo;
 		this.dtCardastro = dtCardastro;
+		this.lancamento = lancamento;
 	}
 	
 	public Long getCdUsuario() {
@@ -99,7 +107,14 @@ public class Usuario {
 	public void setDtCardastro(LocalDate dtCardastro) {
 		this.dtCardastro = dtCardastro;
 	}
-
+	
+	public void setLancamento(List<Lancamento> lancamento) {
+		this.lancamento = lancamento;
+	}
+	
+	public List<Lancamento> getLancamento() {
+		return lancamento;
+	}
 
 	@Override
 	public String toString() {
