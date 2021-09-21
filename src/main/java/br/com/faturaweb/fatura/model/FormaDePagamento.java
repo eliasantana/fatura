@@ -1,11 +1,14 @@
 package br.com.faturaweb.fatura.model;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -17,6 +20,8 @@ public class FormaDePagamento {
 	private Long cdFormaPgamento;
 	private LocalDate dtInclusao;
 	private String descricao;
+	@OneToMany(mappedBy = "formaDePagamento")
+	private List<Lancamento> lancamentos = new ArrayList<Lancamento>();
 	
 	public FormaDePagamento() {
 		
