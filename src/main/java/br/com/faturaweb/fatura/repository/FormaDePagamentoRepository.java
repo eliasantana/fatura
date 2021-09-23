@@ -14,6 +14,7 @@ public interface FormaDePagamentoRepository extends CrudRepository<FormaDePagame
 	@Query("Select fp from FormaDePagamento fp")
     List<FormaDePagamento> findAllFormasDePagamento();
 	
+	
 	@Query("Select fp from FormaDePagamento fp where fp.descricao =:descricao ")
    Optional<FormaDePagamento> findByDescricaoFormaDePagamento(String descricao);
 }

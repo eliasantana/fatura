@@ -6,10 +6,12 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Repository;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.view.RedirectView;
 
 import br.com.faturaweb.fatura.form.LancamentoForm;
 import br.com.faturaweb.fatura.model.FormaDePagamento;
@@ -25,66 +27,113 @@ import br.com.faturaweb.fatura.repository.UsuarioRepository;
 @EnableAutoConfiguration
 @RequestMapping("/lancamento")
 public class LancamentoController {
-	
+
 	@Autowired
 	LancamentoRepository lancamentoRepository;
-	
+
 	@Autowired
 	FormaDePagamentoRepository formaDePagamentoRepository;
-	
+
 	@Autowired
 	UsuarioRepository usuarioRepository;
 	@Autowired
 	TipoLancamentoRepository tipoLancamentoRepository;
-	
+
 	@RequestMapping("cadastro")
 	public String cadastrar(Model model) {
-		Lancamento lancamento= new Lancamento();		
+		Lancamento lancamento = new Lancamento();
 		LancamentoForm lf = new LancamentoForm();
 		Usuario u = new Usuario();
 		Optional<Usuario> usuario = usuarioRepository.findById(1L);
 		List<TipoLancamento> tiposDeLancamento = tipoLancamentoRepository.findAllTipoLancamentos();
-		
+
 		List<FormaDePagamento> formasDePagamento = formaDePagamentoRepository.findAllFormasDePagamento();
-		
-		model.addAttribute("lancamentos",lf);
-		model.addAttribute("formapagto",formasDePagamento);
-		model.addAttribute("tpLancamentos",tiposDeLancamento);
-		model.addAttribute("usuario",usuario.get());
-		
+
+		model.addAttribute("lancamentos", lf);
+		model.addAttribute("formapagto", formasDePagamento);
+		model.addAttribute("tpLancamentos", tiposDeLancamento);
+		model.addAttribute("usuario", usuario.get());
+
 		return "lancamento/form-lancamento";
 	}
-	
+
 	@PostMapping("salvar")
-	public String salvar(LancamentoForm lancamentoForm) {
-		Optional<FormaDePagamento> findByDescricaoFormaDePagamento = formaDePagamentoRepository.findByDescricaoFormaDePagamento(lancamentoForm.getDsFormaDePagamento());
+	public String salvar(LancamentoForm lancamentoForm, Model model) {
+		Optional<FormaDePagamento> findByDescricaoFormaDePagamento = formaDePagamentoRepository
+				.findByDescricaoFormaDePagamento(lancamentoForm.getDsFormaDePagamento());
 		FormaDePagamento formadepagamento = findByDescricaoFormaDePagamento.get();
-		Lancamento lancamento= new Lancamento();		
-		Optional<TipoLancamento> findBydsTipoLancamento = tipoLancamentoRepository.findBydsTipoLancamento(lancamentoForm.getDsTipoLancamento());
-		TipoLancamento tipoLancamento =findBydsTipoLancamento.get();
-		Optional<Usuario> usuario = usuarioRepository.findById(1L);
-		
-		if (lancamentoForm.getCdLancamento()==null) {
-			
+		Lancamento lancamento = new Lancamento();
+		Optional<TipoLancamento> findBydsTipoLancamento = tipoLancamentoRepository
+				.findBydsTipoLancamento(lancamentoForm.getDsTipoLancamento());
+		TipoLancamento tipoLancamento = findBydsTipoLancamento.get();
+		Optional<Usuario> usuario = usuarioRepository.findById(1L);		
+
 			lancamento.setCdLancamento(lancamentoForm.getCdLancamento());
-			lancamento.setDsLancamento(lancamentoForm.getDsFormaDePagamento());
+			lancamento.setDsLancamento(lancamentoForm.getDsLancamento());
 			lancamento.setDtCadastro(lancamentoForm.getDtCadastro());
-			lancamento.setDtCompetencia(lancamentoForm.getDtCompetencia());			
+			lancamento.setDtCompetencia(lancamentoForm.getDtCompetencia());
 			lancamento.setFormaDePagamento(formadepagamento);
 			lancamento.setSnPago(lancamentoForm.getSnPago());
 			lancamento.setTipoLancamento(tipoLancamento);
 			lancamento.setUsuario(usuario.get());
 			lancamento.setVlPago(lancamentoForm.getVlPago());
 			lancamentoRepository.save(lancamento);
-			
-			System.out.println(lancamento);
-			
+
+			List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentos();
+			model.addAttribute("lancamentos", lancamentos);
+
 		
-		}else {
-			Optional<FormaDePagamento> formaDePagamento = formaDePagamentoRepository.findByDescricaoFormaDePagamento(lancamentoForm.getDsFormaDePagamento());
-			
-		}
-		return "home/dashboard";
+		return "lancamento/listar-lancamento";
 	}
 
+	@GetMapping("listar")
+	public String listar(Model model) {
+		List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentos();
+		model.addAttribute("lancamentos", lancamentos);
+
+		return "lancamento/listar-lancamento";
+	}
+
+	@GetMapping("excluir/{id}")
+	public RedirectView excluir(@PathVariable Long id, Model model) {
+		List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentos();
+		model.addAttribute("lancamentos", lancamentos);
+		System.out.println("Excluindo lançamentos");
+		Optional<Lancamento> lancamentoLocalizado = lancamentoRepository.findById(id);
+		lancamentoRepository.delete(lancamentoLocalizado.get());
+		System.out.println("Lançamento Excluído com sucesso!");
+		RedirectView rw = new RedirectView("http://localhost:8080/lancamento/listar");
+
+		return rw;
+	}
+
+	@GetMapping("alterar/{id}")
+	public String alterar(@PathVariable Long id, Model model) {
+
+		Lancamento lancamento = lancamentoRepository.findByIdLancamento(id);
+
+		Optional<FormaDePagamento> formaDePagamento = formaDePagamentoRepository
+				.findById(lancamento.getFormaDePagamento().getCdFormaPgamento());
+
+		Optional<TipoLancamento> findBydsTipoLancamento = tipoLancamentoRepository
+				.findById(lancamento.getCdLancamento());
+
+		TipoLancamento tipoLancamento = tipoLancamentoRepository
+				.findTipoLancamentoId(lancamento.getTipoLancamento().getCdTipoLancamento());
+
+		Optional<Usuario> usuario = usuarioRepository.findById(1L);
+
+		LancamentoForm lf = new LancamentoForm();
+		lf.setCdLancamento(lancamento.getCdLancamento());
+		lf.setDsLancamento(lancamento.getDsLancamento());
+		lf.setDsFormaDePagamento(formaDePagamento.get().getDescricao());
+		lf.setSnPago(lancamento.getSnPago());
+		lf.setVlPago(lancamento.getVlPago());
+		List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentos();
+		model.addAttribute("lancamentos", lf);
+		model.addAttribute("formapagto", formaDePagamento.get());
+		model.addAttribute("tpLancamentos", tipoLancamento);
+		model.addAttribute("usuario", usuario.get());
+		return "lancamento/form-lancamento";
+	}
 }
