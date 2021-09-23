@@ -15,4 +15,6 @@ public interface LancamentoRepository extends CrudRepository<Lancamento, Long> {
 		
 		@Query("SELECT l from Lancamento l WHERE l.cdLancamento = :cdLancamento")
 		Lancamento findByIdLancamento(Long cdLancamento );
+		
+		
 }
