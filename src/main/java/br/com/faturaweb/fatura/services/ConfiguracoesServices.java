@@ -9,7 +9,7 @@ import br.com.faturaweb.fatura.model.Configuracoes;
 import br.com.faturaweb.fatura.repository.ConfiguracoesRepository;
 
 @Service
-public class Services {
-	
+public class ConfiguracoesServices {
 
+	
 }

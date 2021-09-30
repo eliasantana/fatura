@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
  <head th:replace="~{fragmento :: head('Formas de Pagamento - Listar') }">
+ 
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
@@ -14,20 +15,26 @@
 				<thead>
 					<tr>
 						<th scope="col" style="width: 20px;">Código</th>
-						<th scope="col" style="width: 80%;">Descrição</th>
+						<th></th>
+						<th scope="col" style="width: 70%;">Descrição</th>
 						<th scope="col" >Ação</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr th:each="formapagamento : ${forma}">
 						<th scope="row"  th:text="${formapagamento.cdFormaPgamento}" ></th>
+						<td th:if="${formapagamento.descricao}=='Dinheiro'"><span style="color:green;"  class="material-icons">account_balance_wallet</span></td>
+						<td th:if="${formapagamento.descricao}=='Crédito'"><span style="color:red;" class="material-icons">payment</span></td>
+						<td th:if="${formapagamento.descricao}=='Débito'"><span style="color:blue;"  class="material-icons">credit_score</span></td>
+						<td th:if="${formapagamento.descricao}=='Parcelado'"><span style="color:orange;" class="material-icons">superscript</span></td>
 						<td th:text="${formapagamento.descricao}"></td>
+						
 						<td>
 							<a href="/formapagto/excluir/" th:href="@{'/formapagto/excluir/' + ${formapagamento.cdFormaPgamento}}" class="btn btn-danger">Excluir</a>
 							<a href="/formapagto/alterar/" th:href="@{'/formapagto/alterar/' + ${formapagamento.cdFormaPgamento}}" class="btn btn-warning">Alterar</a>						
 						</td>
 					</tr>
-				</tbody>
+				</tbody>				
 			</table>
 			<a href="/" class="btn btn-success">Home
 		    	<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-house-door" viewBox="0 0 16 16">

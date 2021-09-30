@@ -13,14 +13,23 @@
 				<thead>
 					<tr>
 						<th scope="col" style="width: 20px;">Código</th>
-						<th scope="col" style="width: 80%;">Descrição</th>
+						<th></th>
+						<th scope="col" style="width: 60%;">Descrição</th>
 						<th scope="col" >Ação</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr th:each="tipolancamento: ${tipolancamentos}">
 						<th scope="row" th:text="${tipolancamento.cdTipoLancamento}"></th>
-						<td th:text="${tipolancamento.dsTipoLancamento}">k</td>
+						<td><span th:if="${tipolancamento.dsTipoLancamento}=='Aluguel'" style="color: red;"  class="material-icons">home</span>
+						<span th:if="${tipolancamento.dsTipoLancamento}=='Pessoal'" style="color:blue;"  class="material-icons">face</span>
+						<span th:if="${tipolancamento.dsTipoLancamento}=='Veículo'" style="color:green;"  class="material-icons">directions_car</span>
+						<span th:if="${tipolancamento.dsTipoLancamento}=='Alimentação'" style="color:navy;"  class="material-icons">restaurant_menu</span>
+						</td>
+						<td th:text="${tipolancamento.dsTipoLancamento}">k
+						
+						</td>
+						
 						<td>
 							<a href="/tipolancamento/excluir/" th:href="@{'/tipolancamento/excluir/'+ ${tipolancamento.cdTipoLancamento}}" class="btn btn-danger">Excluir</a>
 							<a href="/tipolancamento/alterar/" th:href="@{'/tipolancamento/alterar/' + ${tipolancamento.cdTipoLancamento}}" class="btn btn-warning">Alterar</a>						
@@ -28,8 +37,13 @@
 					</tr>
 				</tbody>
 			</table>
-			<a href="/tipolancamento/cadastro" class="btn btn-primary">Novo Tipo</a>
-			<a href="/tipolancamento/relatorio/pdf" class="btn btn-secondary">
+			<a href="/" class="btn btn-success">Home
+		    	<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-house-door" viewBox="0 0 16 16">
+		 				 <path d="M8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4.5a.5.5 0 0 0 .5-.5v-4h2v4a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146zM2.5 14V7.707l5.5-5.5 5.5 5.5V14H10v-4a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v4H2.5z"/>
+				</svg>
+		    </a>
+			<a href="/tipolancamento/cadastro" class="btn btn-primary">Cadastrar</a>
+			<a href="/tipolancamento/relatorio/pdf" class="btn btn-secondary">Imprimir
 				<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-printer" viewBox="0 0 16 16">
  					 <path d="M2.5 8a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1z"/>
  					 <path d="M5 1a2 2 0 0 0-2 2v2H2a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h1v1a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-1h1a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-1V3a2 2 0 0 0-2-2H5zM4 3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2H4V3zm1 5a2 2 0 0 0-2 2v1H2a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v-1a2 2 0 0 0-2-2H5zm7 2v3a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1z"/>
