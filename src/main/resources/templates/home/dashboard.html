@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
   <head th:replace="~{fragmento :: head('SysFatura') }">
  	 <meta charset="UTF-8">
   </head>
@@ -8,10 +8,15 @@
       <a class="navbar-brand col-sm-3 col-md-2 mr-20" href="#">Data atual</a>
       <input class="form-control form-control-dark w-100" type="text" placeholder="Localizar" aria-label="Search">
       <label class="text-white bg-dark">Logout</label>
+      
 
       <ul class="navbar-nav px-3">
-        <li class="nav-item text-nowrap">
-          <a class="nav-link" href="/">Sair</a>
+        <li class="nav-item text-nowrap" >
+        <form id="logoutForm" method="post" th:action="@{/logout}">
+        
+      		  <button class="form-control" type="submit">Sair</a>
+        </form>
+        	
         </li>
       </ul>
     </nav>
@@ -37,7 +42,6 @@
           </div>
 
           <canvas class="my-4" id="myChart" width="900" height="380"></canvas>
-			teste <div th:text="${valores}"></div>
         </main>
       </div>
     </div>
