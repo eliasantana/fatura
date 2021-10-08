@@ -79,7 +79,8 @@ public class LancamentoController {
 			lancamento.setVlPago(lancamentoForm.getVlPago());
 			lancamentoRepository.save(lancamento);
 
-			List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentos();
+			//List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentos();
+			List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentosDoMes();
 			model.addAttribute("lancamentos", lancamentos);
 
 		
@@ -88,7 +89,9 @@ public class LancamentoController {
 
 	@GetMapping("listar")
 	public String listar(Model model) {
-		List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentos();
+		//List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentos();
+		List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentosDoMes();
+		
 		model.addAttribute("lancamentos", lancamentos);
 
 		return "lancamento/listar-lancamento";
@@ -129,7 +132,8 @@ public class LancamentoController {
 		lf.setDsFormaDePagamento(formaDePagamento.get().getDescricao());
 		lf.setSnPago(lancamento.getSnPago());
 		lf.setVlPago(lancamento.getVlPago());
-		List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentos();
+		//List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentos();
+		List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentosDoMes();
 		model.addAttribute("lancamentos", lf);
 		model.addAttribute("formapagto", formaDePagamento.get());
 		model.addAttribute("tpLancamentos", tipoLancamento);
