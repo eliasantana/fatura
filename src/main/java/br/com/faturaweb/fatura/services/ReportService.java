@@ -1,35 +1,9 @@
 package br.com.faturaweb.fatura.services;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ResourceUtils;
 
-import com.google.zxing.NotFoundException;
-
-import br.com.faturaweb.fatura.model.TipoLancamento;
 import br.com.faturaweb.fatura.repository.TipoLancamentoRepository;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 @Service
 public class ReportService {
@@ -45,6 +19,7 @@ public class ReportService {
 	 * @param dataSourceList - Lista de objetos
 	 * @since 17/08/2021
 	 */
+	/*
 	public String exportReport(String format, String nomeRelatoirio, JRBeanCollectionDataSource dataSourceList)
 			throws NotFoundException, FileNotFoundException, JRException {
 
@@ -76,6 +51,7 @@ public class ReportService {
 	 * @author elias
 	 * @since 17/08/2021
 	 */
+	/*
 	public void criaDiretorio() {
 
 		File diretorios = new File("C:\\fatura\\relatorio");
@@ -90,6 +66,7 @@ public class ReportService {
 	 * @param nomerelatorio - Nome do relatório sem extensão
 	 * @return {@link ResponseEntity} 
 	 * */
+	/*
 	public ResponseEntity download(String nomerelatorio) {
 	
 		String caminho = "C:\\fatura\\relatorio\\".concat(nomerelatorio);
@@ -113,5 +90,5 @@ public class ReportService {
 		
 		return response;
 	}
-	
+	*/
 }

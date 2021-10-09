@@ -61,7 +61,7 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<!-- Jasper Report -->
+		<!-- Jasper Report 
 		<dependency>
 			<groupId>net.sf.jasperreports</groupId>
 			<artifactId>jasperreports</artifactId>
@@ -72,6 +72,7 @@
 			<artifactId>itext</artifactId>
 			<version>4.2.2</version>
 		</dependency>
+		-->
 		<!-- Spring Security -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

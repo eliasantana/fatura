@@ -1,10 +1,5 @@
 package br.com.faturaweb.fatura.controller;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -13,9 +8,6 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,13 +16,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.view.RedirectView;
 
-import com.google.zxing.NotFoundException;
-
 import br.com.faturaweb.fatura.model.FormaDePagamento;
 import br.com.faturaweb.fatura.repository.FormaDePagamentoRepository;
 import br.com.faturaweb.fatura.services.ReportService;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 @Controller
 @EnableAutoConfiguration
@@ -107,7 +95,7 @@ public class FormaDePagamentoController {
 		System.out.println("Forma de pagamento localizada: " + formaPagtoLocalizada.get().toString());
 		return "formapagto/form-formade-pagamento";
 	}
-
+/*
 	@GetMapping("relatorio/{formato}")
 	public RedirectView relatorio(@PathVariable String formato)
 			throws NotFoundException, FileNotFoundException, JRException {
@@ -127,5 +115,5 @@ public class FormaDePagamentoController {
 		return response;
 
 	}
-
+*/
 }
