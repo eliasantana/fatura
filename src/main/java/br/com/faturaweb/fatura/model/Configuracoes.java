@@ -29,7 +29,6 @@ public class Configuracoes {
 	}
 
 	
-	
 	public Long getCdConfiguracao() {
 		return cdConfiguracao;
 	}
