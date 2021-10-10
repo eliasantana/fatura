@@ -39,7 +39,7 @@ public class LancamentoController {
 	@Autowired
 	TipoLancamentoRepository tipoLancamentoRepository;
 
-	@RequestMapping("cadastro")
+	@GetMapping("cadastro")
 	public String cadastrar(Model model) {
 		Lancamento lancamento = new Lancamento();
 		LancamentoForm lf = new LancamentoForm();
