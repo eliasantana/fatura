@@ -25,7 +25,7 @@ import br.com.faturaweb.fatura.repository.UsuarioRepository;
 
 @Controller
 @EnableAutoConfiguration
-@RequestMapping("lancamento")
+@RequestMapping("/lancamento")
 public class LancamentoController {
 
 	@Autowired
