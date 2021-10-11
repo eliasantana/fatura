@@ -39,7 +39,7 @@ public class LancamentoController {
 	@Autowired
 	TipoLancamentoRepository tipoLancamentoRepository;
 
-	@GetMapping("cadastro")
+	@GetMapping("/cadastro")
 	public String cadastrar(Model model) {
 		Lancamento lancamento = new Lancamento();
 		LancamentoForm lf = new LancamentoForm();
@@ -87,7 +87,7 @@ public class LancamentoController {
 		return "lancamento/listar-lancamento";
 	}
 
-	@GetMapping("listar")
+	@GetMapping("/listar")
 	public String listar(Model model) {
 		//List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentos();
 		List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentosDoMes();
