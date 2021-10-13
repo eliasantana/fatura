@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootApplication
 @ComponentScan
-
 public class FaturaApplication {
 
 	public static void main(String[] args) {
