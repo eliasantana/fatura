@@ -39,7 +39,7 @@ public class LancamentoController {
 	@Autowired
 	TipoLancamentoRepository tipoLancamentoRepository;
 
-	@RequestMapping("cadastro")
+	@GetMapping("cadastro")
 	public String cadastrar(Model model) {
 		Lancamento lancamento = new Lancamento();
 		LancamentoForm lf = new LancamentoForm();
@@ -54,7 +54,7 @@ public class LancamentoController {
 		model.addAttribute("tpLancamentos", tiposDeLancamento);
 		model.addAttribute("usuario", usuario.get());
 
-		return "lancamento/form-lancamento";
+		return "/lancamento/form-lancamento";
 	}
 
 	@PostMapping("salvar")
@@ -84,7 +84,7 @@ public class LancamentoController {
 			model.addAttribute("lancamentos", lancamentos);
 
 		
-		return "lancamento/listar-lancamento";
+		return "/lancamento/listar-lancamento";
 	}
 
 	@GetMapping("listar")
