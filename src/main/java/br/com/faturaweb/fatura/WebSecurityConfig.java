@@ -21,6 +21,7 @@ public class WebSecurityConfig  extends WebSecurityConfigurerAdapter 	{
 				http
 					.authorizeRequests()
 					.antMatchers("/lancamento/**").permitAll()
+					.antMatchers("lancamento/**").hasRole("ADM")
 					.anyRequest().authenticated()
 					.and()
 					.formLogin(form -> form
