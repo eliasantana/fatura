@@ -101,7 +101,7 @@ public class LancamentoController {
 		System.out.println("listando");
 		model.addAttribute("lancamentos", lancamentos);
 
-		return "/lancamento/listar-lancamento";
+		return "listar-lancamento";
 	}
 
 	@GetMapping("excluir/{id}")
