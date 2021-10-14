@@ -41,20 +41,27 @@ public class LancamentoController {
 
 	@GetMapping("cadastro")
 	public String cadastrar(Model model) {
-		Lancamento lancamento = new Lancamento();
-		LancamentoForm lf = new LancamentoForm();
-		Usuario u = new Usuario();
-		Optional<Usuario> usuario = usuarioRepository.findById(1L);
-		List<TipoLancamento> tiposDeLancamento = tipoLancamentoRepository.findAllTipoLancamentos();
+		
+		try {
+			Lancamento lancamento = new Lancamento();
+			LancamentoForm lf = new LancamentoForm();
+			Usuario u = new Usuario();
+			Optional<Usuario> usuario = usuarioRepository.findById(1L);
+			List<TipoLancamento> tiposDeLancamento = tipoLancamentoRepository.findAllTipoLancamentos();
 
-		List<FormaDePagamento> formasDePagamento = formaDePagamentoRepository.findAllFormasDePagamento();
+			List<FormaDePagamento> formasDePagamento = formaDePagamentoRepository.findAllFormasDePagamento();
 
-		model.addAttribute("lancamentos", lf);
-		model.addAttribute("formapagto", formasDePagamento);
-		model.addAttribute("tpLancamentos", tiposDeLancamento);
-		model.addAttribute("usuario", usuario.get());
-
-		return "/lancamento/form-lancamento";
+			model.addAttribute("lancamentos", lf);
+			model.addAttribute("formapagto", formasDePagamento);
+			model.addAttribute("tpLancamentos", tiposDeLancamento);
+			model.addAttribute("usuario", usuario.get());
+			
+		} catch (Exception e) {
+			e.getMessage();
+		}
+	
+		
+		return "lancamento/form-lancamento";
 	}
 
 	@PostMapping("salvar")
@@ -84,7 +91,7 @@ public class LancamentoController {
 			model.addAttribute("lancamentos", lancamentos);
 
 		
-		return "/lancamento/listar-lancamento";
+		return "lancamento/listar-lancamento";
 	}
 
 	@GetMapping("listar")
