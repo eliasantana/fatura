@@ -64,7 +64,7 @@ public class LancamentoController {
 		return "lancamento/form-lancamento";
 	}
 
-	@PostMapping("salvar")
+	@PostMapping("/salvar")
 	public String salvar(LancamentoForm lancamentoForm, Model model) {
 		Optional<FormaDePagamento> findByDescricaoFormaDePagamento = formaDePagamentoRepository
 				.findByDescricaoFormaDePagamento(lancamentoForm.getDsFormaDePagamento());
@@ -94,7 +94,7 @@ public class LancamentoController {
 		return "lancamento/listar-lancamento";
 	}
 
-	@GetMapping("listar")
+	@GetMapping("/listar")
 	public String listar(Model model) {
 		//List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentos();
 		List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentosDoMes();
