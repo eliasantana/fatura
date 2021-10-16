@@ -94,14 +94,14 @@ public class LancamentoController {
 		return "lancamento/listar-lancamento";
 	}
 
-	@GetMapping("/listar")
+	@GetMapping("listar")
 	public String listar(Model model) {
 		//List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentos();
 		List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentosDoMes();
 		System.out.println("listando");
 		model.addAttribute("lancamentos", lancamentos);
 
-		return "listar-lancamento";
+		return "lancamento/listar-lancamento";
 	}
 
 	@GetMapping("excluir/{id}")
