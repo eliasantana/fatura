@@ -18,11 +18,11 @@ public class LancamentoForm {
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
 	private LocalDate dtCompetencia;
 	
+	
 	public LancamentoForm() {
 		 this.dtCadastro = LocalDate.now();
 		 this.dtCompetencia=LocalDate.now();
 	}
-	
 	
 
 	public LancamentoForm(Long cdLancamento, String dsLancamento, String usuario, LocalDate dtCadastro,
