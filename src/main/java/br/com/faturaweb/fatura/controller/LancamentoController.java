@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,6 +27,7 @@ import br.com.faturaweb.fatura.repository.UsuarioRepository;
 @Controller
 @EnableAutoConfiguration
 @RequestMapping("lancamento")
+@ComponentScan
 public class LancamentoController {
 
 	@Autowired
