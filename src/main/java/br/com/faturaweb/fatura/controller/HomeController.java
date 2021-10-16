@@ -19,4 +19,10 @@ public class HomeController {
 		return "home/dashboard";
 	}
 	
+	@GetMapping("teste")
+	public String listar(Model model) {
+	
+		return "home/listar";
+	}
+	
 }
