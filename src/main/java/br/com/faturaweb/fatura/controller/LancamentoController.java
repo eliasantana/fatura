@@ -98,7 +98,6 @@ public class LancamentoController {
 
 	@GetMapping("/listar")
 	public String listar(Model model) {
-		//List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentos();
 		List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentosDoMes();
 		System.out.println("listando");
 		model.addAttribute("lancamentos", lancamentos);
