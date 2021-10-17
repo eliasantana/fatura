@@ -22,7 +22,7 @@ public class HomeController {
 		return "home/dashboard";
 	}
 	
-	@GetMapping(value = "listar")
+	@GetMapping(value = "/listar")
 	public String listar(Model model) {
 		List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentos();
 		System.out.println("listando");

@@ -92,7 +92,7 @@ public class LancamentoController {
 			model.addAttribute("lancamentos", lancamentos);
 
 		
-		return "lancamento/listar-lancamento";
+		return "home/listar-lancamento";
 	}
 
 	@GetMapping("/listar")
@@ -101,7 +101,7 @@ public class LancamentoController {
 		System.out.println("listando");
 		model.addAttribute("lancamentos", lancamentos);
 
-		return "/lancamento/listar-lancamento";
+		return "home/listar-lancamento";
 	}
 
 	@GetMapping("excluir/{id}")
