@@ -87,8 +87,7 @@ public class LancamentoController {
 			lancamento.setVlPago(lancamentoForm.getVlPago());
 			lancamentoRepository.save(lancamento);
 
-			//List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentos();
-			List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentosDoMes();
+			List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentos();
 			model.addAttribute("lancamentos", lancamentos);
 
 		
