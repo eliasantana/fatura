@@ -24,9 +24,7 @@ public class HomeController {
 	
 	@GetMapping("/listar")
 	public String listar(Model model) {
-		List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentosDoMes();
-		System.out.println("listando");
-		model.addAttribute("lancamentos", lancamentos);
+	
 
 		return "home/listar-lancamento";
 	}

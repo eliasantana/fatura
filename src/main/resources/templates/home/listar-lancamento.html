@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
- <head th:replace="~{fragmento :: head('Lançamentos - Listar') }">
+ <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
@@ -25,20 +25,19 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr th:each="lancamento : ${lancamentos}">
-						<th scope="row" th:text="${lancamento.cdLancamento}">-</th>
-						<td th:text="${lancamento.dsLancamento}">					
+					<tr >
+						<th scope="row" >-</th>
+						<td >					
 						
-						<td th:text="${#temporals.format(lancamento.dtCadastro, 'dd/MM/yyyy')}">
-						<td th:text="${lancamento.snPago}">-</td>
-						<!-- <td th:text="${lancamento.vlPago}">-</td> -->
-						<td th:text="${#numbers.formatDecimal(lancamento.vlPago,1,2,'COMMA')}" >
-						<td th:text="${lancamento.formaDePagamento.descricao}">-</td>
-						<td th:text="${lancamento.tipoLancamento.dsTipoLancamento}">-</td>
-						<td th:text="${lancamento.usuario.login}">-</td>
 						<td>
-							<a href="/lancamento/excluir/" th:href="@{'/lancamento/excluir/'  + ${lancamento.cdLancamento}}" class="btn btn-danger">Excluir</a>
-							<a href="/lancamento/alterar/" th:href="@{'/lancamento/alterar/'  + ${lancamento.cdLancamento}}" class="btn btn-warning">Alterar</a>						
+						<td >-</td>
+						<td>
+						<td>-</td>
+						<td>-</td>
+						<td>-</td>
+						<td>
+							<a href="/lancamento/excluir/"  class="btn btn-danger">Excluir</a>
+							<a href="/lancamento/alterar/" class="btn btn-warning">Alterar</a>						
 						</td>
 					</tr>
 				</tbody>
