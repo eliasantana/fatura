@@ -22,9 +22,9 @@ public class HomeController {
 		return "home/dashboard";
 	}
 	
-	@GetMapping("/listar")
+	@GetMapping(value = "listar")
 	public String listar(Model model) {
-		List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentosDoMes();
+		List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentos();
 		System.out.println("listando");
 		model.addAttribute("lancamentos", lancamentos);
 
