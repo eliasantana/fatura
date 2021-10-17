@@ -13,7 +13,7 @@
 				<div th:text="${mensagem}">yr</div>
 				<p class="card-text">
 				<div class="container">
-					<form method="post" action="/lancamento/salvar">
+					<form method="post" action="/salvar">
 						<div class="col">
 							<label th:if="${lancamentos.cdLancamento}==!null" class="form-label" for="codigo">ID</label>
 							<input th:if="${lancamentos.cdLancamento}==!null" type="text" class="form-control" name="cdLancamento" id="codigo" th:value="${lancamentos.cdLancamento}" aria-describedby="cdLancamento" />
