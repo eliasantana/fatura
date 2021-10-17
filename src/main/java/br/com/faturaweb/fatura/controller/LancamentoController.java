@@ -111,7 +111,7 @@ public class LancamentoController {
 		Optional<Lancamento> lancamentoLocalizado = lancamentoRepository.findById(id);
 		lancamentoRepository.delete(lancamentoLocalizado.get());
 		System.out.println("Lançamento Excluído com sucesso!");
-		RedirectView rw = new RedirectView("http://localhost:8080/lancamento/listar");
+		RedirectView rw = new RedirectView("http://localhost:8080/listar");
 
 		return rw;
 	}
@@ -138,13 +138,12 @@ public class LancamentoController {
 		lf.setDsFormaDePagamento(formaDePagamento.get().getDescricao());
 		lf.setSnPago(lancamento.getSnPago());
 		lf.setVlPago(lancamento.getVlPago());
-		//List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentos();
-		List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentosDoMes();
+		List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentos();
 		model.addAttribute("lancamentos", lf);
 		model.addAttribute("formapagto", formaDePagamento.get());
 		model.addAttribute("tpLancamentos", tipoLancamento);
 		model.addAttribute("usuario", usuario.get());
-		return "lancamento/form-lancamento";
+		return "home/form-lancamento";
 	}
 	
 
