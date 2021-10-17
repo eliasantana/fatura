@@ -1,32 +1,8 @@
 <!DOCTYPE html>
-<html>
- <head>
- 
+<html xmlns:th="http://www.thymeleaf.org">
+ <head th:replace="~{fragmento :: head('Lançamentos - Listar') }">
 <meta charset="UTF-8">
-<title>Lançamentos do Mes</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css"
-	rel="stylesheet"
-	integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We"
-	crossorigin="anonymous">
-		
-	<link rel="icon" href="/docs/4.0/assets/img/favicons/favicon.ico">
-	<link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/dashboard/">
-    <!-- Link Jquery - Data Tables-->
-     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
-     
-    <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
-    <!-- JqueryMask -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
-    <!-- Custom styles for this template -->
-    <link href="dashboard.css" rel="stylesheet">
-    <!-- Google Fonts -->
-	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
+<title>Insert title here</title>
 </head>
 <body>
 		<div class="card">
@@ -49,19 +25,20 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr >
-						<th scope="row" >-</th>
-						<td >					
+					<tr th:each="lancamento : ${lancamentos}">
+						<th scope="row" th:text="${lancamento.cdLancamento}">-</th>
+						<td th:text="${lancamento.dsLancamento}">					
 						
+						<td th:text="${#temporals.format(lancamento.dtCadastro, 'dd/MM/yyyy')}">
+						<td th:text="${lancamento.snPago}">-</td>
+						<!-- <td th:text="${lancamento.vlPago}">-</td> -->
+						<td th:text="${#numbers.formatDecimal(lancamento.vlPago,1,2,'COMMA')}" >
+						<td th:text="${lancamento.formaDePagamento.descricao}">-</td>
+						<td th:text="${lancamento.tipoLancamento.dsTipoLancamento}">-</td>
+						<td th:text="${lancamento.usuario.login}">-</td>
 						<td>
-						<td >-</td>
-						<td>
-						<td>-</td>
-						<td>-</td>
-						<td>-</td>
-						<td>
-							<a href="/lancamento/excluir/"  class="btn btn-danger">Excluir</a>
-							<a href="/lancamento/alterar/" class="btn btn-warning">Alterar</a>						
+							<a href="/lancamento/excluir/" th:href="@{'/lancamento/excluir/'  + ${lancamento.cdLancamento}}" class="btn btn-danger">Excluir</a>
+							<a href="/lancamento/alterar/" th:href="@{'/lancamento/alterar/'  + ${lancamento.cdLancamento}}" class="btn btn-warning">Alterar</a>						
 						</td>
 					</tr>
 				</tbody>
