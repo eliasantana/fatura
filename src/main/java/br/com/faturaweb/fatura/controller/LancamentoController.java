@@ -47,7 +47,7 @@ public class LancamentoController {
 			Lancamento lancamento = new Lancamento();
 			LancamentoForm lf = new LancamentoForm();
 			Usuario u = new Usuario();
-			Optional<Usuario> usuario = usuarioRepository.findById(1L);
+			Optional<Usuario> usuario = usuarioRepository.findById(5L);
 			List<TipoLancamento> tiposDeLancamento = tipoLancamentoRepository.findAllTipoLancamentos();
 
 			List<FormaDePagamento> formasDePagamento = formaDePagamentoRepository.findAllFormasDePagamento();
@@ -74,7 +74,7 @@ public class LancamentoController {
 		Optional<TipoLancamento> findBydsTipoLancamento = tipoLancamentoRepository
 				.findBydsTipoLancamento(lancamentoForm.getDsTipoLancamento());
 		TipoLancamento tipoLancamento = findBydsTipoLancamento.get();
-		Optional<Usuario> usuario = usuarioRepository.findById(1L);		
+		Optional<Usuario> usuario = usuarioRepository.findById(5L);		
 
 			lancamento.setCdLancamento(lancamentoForm.getCdLancamento());
 			lancamento.setDsLancamento(lancamentoForm.getDsLancamento());
@@ -130,7 +130,7 @@ public class LancamentoController {
 		TipoLancamento tipoLancamento = tipoLancamentoRepository
 				.findTipoLancamentoId(lancamento.getTipoLancamento().getCdTipoLancamento());
 
-		Optional<Usuario> usuario = usuarioRepository.findById(1L);
+		Optional<Usuario> usuario = usuarioRepository.findById(5L);
 
 		LancamentoForm lf = new LancamentoForm();
 		lf.setCdLancamento(lancamento.getCdLancamento());
