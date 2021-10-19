@@ -36,10 +36,16 @@ public class Lancamento {
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
 	private LocalDate dtCompetencia;
 
+	
+	public Lancamento() {
+		
+	}
+	
 	public Long getCdLancamento() {
 		return cdLancamento;
 	}
-
+	
+	
 	public void setCdLancamento(Long cdLancamento) {
 		this.cdLancamento = cdLancamento;
 	}
