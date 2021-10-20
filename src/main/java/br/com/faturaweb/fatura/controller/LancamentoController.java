@@ -103,7 +103,7 @@ public class LancamentoController {
 		return "home/listar-lancamento";
 	}
 
-	@GetMapping("excluir/{id}")
+	@GetMapping("/excluir/{id}")
 	public String excluir(@PathVariable Long id, Model model) {
 		List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentos();
 		model.addAttribute("lancamentos", lancamentos);
