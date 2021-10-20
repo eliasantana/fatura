@@ -104,15 +104,15 @@ public class LancamentoController {
 	}
 
 	@GetMapping("/excluir/{id}")
-	public String excluir(@PathVariable Long id, Model model) {
+	public  RedirectView excluir(@PathVariable Long id, Model model) {
 		List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentos();
 		model.addAttribute("lancamentos", lancamentos);
 		System.out.println("Excluindo lançamentos");
 		Optional<Lancamento> lancamentoLocalizado = lancamentoRepository.findById(id);
 		lancamentoRepository.delete(lancamentoLocalizado.get());
 		System.out.println("Lançamento Excluído com sucesso!");
-		//RedirectView rw = new RedirectView("http://localhost:8080/listar");
-		return "home/listar-lancamento";
+		RedirectView rw = new RedirectView("http://localhost:8080/listar");
+		return rw;
 		
 	}
 
