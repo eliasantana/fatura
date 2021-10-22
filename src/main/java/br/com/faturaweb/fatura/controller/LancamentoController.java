@@ -103,7 +103,7 @@ public class LancamentoController {
 		return "home/listar-lancamento";
 	}
 
-	@GetMapping("/excluir/{id}")
+	@GetMapping("excluir/{id}")
 	public  RedirectView excluir(@PathVariable Long id, Model model) {
 		List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentos();
 		model.addAttribute("lancamentos", lancamentos);
@@ -144,6 +144,7 @@ public class LancamentoController {
 		model.addAttribute("formapagto", formaDePagamento.get());
 		model.addAttribute("tpLancamentos", tipoLancamento);
 		model.addAttribute("usuario", usuario.get());
+		
 		return "home/form-lancamento";
 	}
 	
