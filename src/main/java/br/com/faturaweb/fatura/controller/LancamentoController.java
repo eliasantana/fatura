@@ -70,7 +70,11 @@ public class LancamentoController {
 		Optional<FormaDePagamento> findByDescricaoFormaDePagamento = formaDePagamentoRepository
 				.findByDescricaoFormaDePagamento(lancamentoForm.getDsFormaDePagamento());
 		FormaDePagamento formadepagamento = findByDescricaoFormaDePagamento.get();
-		Lancamento lancamento = new Lancamento();
+		System.out.println(formadepagamento.getDescricao());
+		//Lancamento lancamento = new Lancamento();
+		Optional<Lancamento> lancamentoLocalizado = lancamentoRepository.findById(lancamentoForm.getCdLancamento());
+		
+		Lancamento lancamento = lancamentoLocalizado.get();
 		Optional<TipoLancamento> findBydsTipoLancamento = tipoLancamentoRepository
 				.findBydsTipoLancamento(lancamentoForm.getDsTipoLancamento());
 		TipoLancamento tipoLancamento = findBydsTipoLancamento.get();
