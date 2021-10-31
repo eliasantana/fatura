@@ -15,9 +15,9 @@
 				<div class="container">
 					<form method="post" action="/lancamento/salvar">
 						<div class="col">
-							<label th:if="${lancamentos.cdLancamento}" class="form-label" for="codigo">ID</label>
-							<input th:if="${lancamentos.cdLancamento}" type="text" class="form-control" name="cdLancamento" id="codigo" th:value="${lancamentos.cdLancamento}" aria-describedby="cdLancamento" />
-							<div th:if="${lancamentos.cdLancamento}" id="cdLancamento" class="form-text">Código do Lançamento</div>
+							<label th:if="${lancamentos.cdLancamento!=null}" class="form-label" for="codigo">ID</label>
+							<input th:if="${lancamentos.cdLancamento!=null}" type="text" class="form-control" name="cdLancamento" id="codigo" th:value="${lancamentos.cdLancamento}" aria-describedby="cdLancamento" readonly="readonly" />
+							<div th:if="${lancamentos.cdLancamento!=null}" id="cdLancamento" class="form-text">Código do Lançamento</div>
 						</div>
 						
 						<div class="col">
@@ -54,7 +54,7 @@
 						
 						<div class="col">
 						<label class="form-label" for="vlpago">Valor Pago R$</label>
-						<input class="form-control" type="numeric" id="vlpago" name="vlPago" th:value="${lancamentos.vlPago}" required="required"  onkeypress="$(this).mask('9999.990,00')">
+						<input class="form-control" type="numeric" id="vlpago" onfocus="this.value=''" name="vlPago" th:value="${lancamentos.vlPago}" required="required"  onkeypress="$(this).mask('9999.990,00')">
 						
 						</div>						
 						<a href="/" class="btn btn-success mt-2">Home
