@@ -1,7 +1,5 @@
 package br.com.faturaweb.fatura.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,32 +20,18 @@ private ConfiguracoesRepository configuracoesRepository;
 
 @GetMapping("listar")
 public String configuracoes(Model model) {
-	List<Configuracoes> findConfiguracao = configuracoesRepository.findConfiguracao();
-	model.addAttribute("config",findConfiguracao.get(0));
+	 Configuracoes config = configuracoesRepository.findConfiguracao();
+	model.addAttribute("config",config);
 	
-	return "configuracoes/configuracoes";
+	return "home/configuracoes";
 }
 
 @PostMapping("salvar")
-public RedirectView salvar(Model model, Configuracoes configuracoesForm) {
-	List<Configuracoes> findConfiguracao = configuracoesRepository.findConfiguracao();
-		
-	Configuracoes c = new Configuracoes();
-	c.setCdConfiguracao(findConfiguracao.get(0).getCdConfiguracao());
-	System.out.println(c.toString());
-	if (configuracoesForm.getSnParcelado().equals("on")) {
-		c.setSnParcelado("S");
-	}else {
-		c.setSnParcelado("N");
-	}
-
-	
-	System.out.println(configuracoesForm.getSnParcelado());
-	System.out.println(c.toString());
-	configuracoesRepository.save(c);
-	model.addAttribute("config",c);
-	RedirectView redirectView = new RedirectView("http://localhost:8080/configuracoes/listar");
+public RedirectView salvar(Model model, Configuracoes formConfiguracoes) {
+ 
+  System.out.println(formConfiguracoes.getSnParcelado());
+   RedirectView redirectView = new RedirectView("http://localhost:8080/configuracoes/listar");
 	return	 redirectView;
 }
-
 }
+ 

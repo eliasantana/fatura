@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head th:replace="~{fragmento :: head('SysFatura') }">
+ 	 <meta charset="UTF-8">
+  </head>
+ <body>
+ 
+ <!-- Configurações do Card -->
+
+ <div class="card">
+  <div class="card-header">
+    Configurações Gerais
+  </div>
+  <div class="card-body">
+    <h5 class="card-title"></h5>
+    <p class="card-text">Configura o comportamento do sistema habilitando ou desabilitando funcionalidades</p>
+   
+    <form action="/configuracoes/salvar" method="post" id="formulario">
+	   <label th:if="${config.cdConfiguracao}==null" for="cdConfiguracao">Código</label>
+	   <input th:if="${config.cdConfiguracao}==null" th:value="${config.cdConfiguracao}" type="text" name="cdConfiguracao" id="cdConfiguracao" class="form-control">
+	   <label for="snParcelar">Parcelar?</label>	  
+	   <select class="form-select" id="snParcelar" name="snParcelado">
+		  <option th:value="N" selected>Selecione uma opção</option>
+		  <option th:value="S">Sim</option>
+		  <option th:value="N">Não</option>		  
+		</select>
+		<button type="submit" class="btn btn-primary mt-5">Salvar</button>
+	</form>
+	 
+	
+</div>
+ 
+ 
+</body>
+<script type="text/javascript">
+var myform = document.getElementById("formulario");
+document.getElementById("flexSwitchCheckDefault").addEventListener("click", function () {
+  myform.submit();
+});
+
+</script>
+
+</html>
