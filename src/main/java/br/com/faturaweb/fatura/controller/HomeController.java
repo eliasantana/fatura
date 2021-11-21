@@ -107,6 +107,7 @@ public class HomeController {
 			   
 		}
 		//Imprimindo o resultado - apagar após finalização
+		/*
 		   System.out.println("Janeiro: " + janeiro);
 			System.out.println("fevereiro: " + fevereiro);
 			System.out.println("março: " + marco);
@@ -119,7 +120,9 @@ public class HomeController {
 			System.out.println("outubro: " + outubro);
 			System.out.println("novembro: " + novembro);
 			System.out.println("dezembro: " + dezembro);
-			//Crian hash map e tribuindo o mes e seu valor
+			*/
+			
+			//Criando hash map e tribuindo o mes e seu valor
 			Map<String,BigDecimal> dados = new LinkedHashMap<String, BigDecimal>();
 			dados.put("Janeiro", janeiro);
 			dados.put("Fevereiro", fevereiro);
