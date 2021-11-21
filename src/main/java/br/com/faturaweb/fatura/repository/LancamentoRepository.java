@@ -10,7 +10,7 @@ import br.com.faturaweb.fatura.model.Lancamento;
 public interface LancamentoRepository extends CrudRepository<Lancamento, Long> {
 
 		@Query("SELECT l from Lancamento l")
-		List<Lancamento> findAllLancamentos();
+		List<Lancamento> findAllLancamentos();	
 		
 		@Query("SELECT l from Lancamento l WHERE l.cdLancamento = :cdLancamento")
 		Lancamento findByIdLancamento(Long cdLancamento );

@@ -70,7 +70,11 @@ public class LancamentoController {
 		Optional<FormaDePagamento> findByDescricaoFormaDePagamento = formaDePagamentoRepository
 				.findByDescricaoFormaDePagamento(lancamentoForm.getDsFormaDePagamento());
 		FormaDePagamento formadepagamento = findByDescricaoFormaDePagamento.get();
-		Lancamento lancamento = new Lancamento();
+		System.out.println(formadepagamento.getDescricao());
+		//Lancamento lancamento = new Lancamento();
+		Optional<Lancamento> lancamentoLocalizado = lancamentoRepository.findById(lancamentoForm.getCdLancamento());
+		
+		Lancamento lancamento = lancamentoLocalizado.get();
 		Optional<TipoLancamento> findBydsTipoLancamento = tipoLancamentoRepository
 				.findBydsTipoLancamento(lancamentoForm.getDsTipoLancamento());
 		TipoLancamento tipoLancamento = findBydsTipoLancamento.get();
@@ -104,16 +108,17 @@ public class LancamentoController {
 	}
 
 	@GetMapping("excluir/{id}")
-	public RedirectView excluir(@PathVariable Long id, Model model) {
+	public  RedirectView excluir(@PathVariable Long id, Model model) {
 		List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentos();
 		model.addAttribute("lancamentos", lancamentos);
 		System.out.println("Excluindo lançamentos");
 		Optional<Lancamento> lancamentoLocalizado = lancamentoRepository.findById(id);
 		lancamentoRepository.delete(lancamentoLocalizado.get());
 		System.out.println("Lançamento Excluído com sucesso!");
-		RedirectView rw = new RedirectView("http://localhost:8080/listar");
-
+		//RedirectView rw = new RedirectView("http://localhost:8080/listar");
+		RedirectView rw = new RedirectView("https://sysfaturaapp.herokuapp.com/listar"); 
 		return rw;
+		
 	}
 
 	@GetMapping("alterar/{id}")
@@ -143,6 +148,7 @@ public class LancamentoController {
 		model.addAttribute("formapagto", formaDePagamento.get());
 		model.addAttribute("tpLancamentos", tipoLancamento);
 		model.addAttribute("usuario", usuario.get());
+		
 		return "home/form-lancamento";
 	}
 	

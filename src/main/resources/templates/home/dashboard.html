@@ -1,19 +1,20 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org">
   <head th:replace="~{fragmento :: head('SysFatura') }">
- 	 <meta charset="UTF-8">
+ 		<meta charset="UTF-8">
+ 		<script src = "https://code.highcharts.com/highcharts.js" > </script>
+		<script src = "/js/highstock.js "></script>
+		<script src = "/js/highmaps.js "> </script>
   </head>
   <body>
     <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
-      <a class="navbar-brand col-sm-3 col-md-2 mr-20" href="#">v.1.23</a>
+      <a class="navbar-brand col-sm-3 col-md-2 mr-20" href="#">v.1.29</a>
       <input class="form-control form-control-dark w-100" type="text" placeholder="Localizar" aria-label="Search">
-      <label class="text-white bg-dark">Logout</label>
-      
+      <label class="text-white bg-dark">Logout</label>      
 
       <ul class="navbar-nav px-3">
         <li class="nav-item text-nowrap" >
-        <form id="logoutForm" method="post" th:action="@{/logout}">
-        
+        <form id="logoutForm" method="post" th:action="@{/logout}">        
       		  <button class="form-control" type="submit">Sair</a>
         </form>
         	
@@ -40,12 +41,12 @@
               </button>
             </div>
           </div>
-
-          <canvas class="my-4" id="myChart" width="900" height="380"></canvas>
+          <!-- Grafico -->
+         <div id="container" style="width:100%;height:400 px;"> </div> 
         </main>
       </div>
     </div>
-
+	
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
@@ -58,67 +59,46 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.css"/>
     <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.js"></script>
 
-
-
-    <!-- -->
     <!-- Icons -->
     <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
     <script>
       feather.replace()
     </script>
-		<!--  labels: labels:["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Dez"]-->
+	<!--  labels: labels:["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Dez"]-->
     
 
-    <!-- Graphs -->
-    
-  
-    
-</script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
-    <script th:inline="javascript">
-      var ctx = document.getElementById("myChart");
-      var myChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels:[ "Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez" ]
-          ,
-          datasets: [{
-            data: [
-            	'${valores}'
-            ],
-            lineTension: 0,
-            backgroundColor: 'transparent',
-            borderColor: '#007bff',
-            borderWidth: 4,
-            pointBackgroundColor: '#007bff'
-          }]
-        },
-        options: {
-          scales: {
-            yAxes: [{
-              ticks: {
-                beginAtZero: false
-              }
-            }]
+<!-- Grafico -->
+<script  th:inline="javascript">
+
+document.addEventListener('DOMContentLoaded', function () {
+var  data=[[${values}]];
+var  series=[[${keyset}]];
+var  titulo=[[${titulo}]];
+var  grafico=[[${grafico}]];
+      const chart = Highcharts.chart('container', {
+          chart: {
+              type: grafico
           },
-          legend: {
-            display: false,
-          }
-        }
+          title: {
+              text: titulo
+          },
+          xAxis: {
+              categories:series
+          },
+          yAxis: {
+              title: {
+                  text: 'Faturamento em milhares R$'
+              }
+          },
+          series: [{
+              name: '2021',
+              data: data
+          }]
       });
-    </script>
+  });
 
-  <script>
-      $(document).ready(function() {
-    $('#tabela_lancamento').DataTable( {
-
-        deferRender:    true,
-        scrollY:        200,
-        scrollCollapse: true,
-        scroller:       true
-    } );
-} );
-</script>
+</script> 
+<!--  --> 
 
   </body>
 </html>

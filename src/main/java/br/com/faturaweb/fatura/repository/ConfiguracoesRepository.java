@@ -11,6 +11,6 @@ import br.com.faturaweb.fatura.model.Configuracoes;
 public interface ConfiguracoesRepository  extends CrudRepository<Configuracoes, Long>{
 
 	@Query("SELECT c FROM Configuracoes c")
-	List<Configuracoes> findConfiguracao();
+Configuracoes findConfiguracao();
 	
 }

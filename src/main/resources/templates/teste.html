@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	
+<meta charset="UTF-8">
+<title>Insert title here</title>
+	<script src = "https://code.highcharts.com/highcharts.js " > </script>
+	<script src = "/js/highstock.js "></script>
+	<script src = "/js/highmaps.js "> </script>
+</head>
+<body>
+	<div id="container" style="width:100%;height:400 px;"> </div>   
+	<script  th:inline="javascript">
+	
+	document.addEventListener('DOMContentLoaded', function () {
+		var  data=[[${values}]];
+		var  series=[[${keyset}]];
+		var  titulo=[[${titulo}]];
+		var  grafico=[[${grafico}]];
+        const chart = Highcharts.chart('container', {
+            chart: {
+                type: grafico
+            },
+            title: {
+                text: titulo
+            },
+            xAxis: {
+                categories:series
+            },
+            yAxis: {
+                title: {
+                    text: 'Faturamento em milhares R$'
+                }
+            },
+            series: [{
+                name: 'Meses',
+                data: data
+            }]
+        });
+    });
+	
+	</script> 
+</body>
+</html>

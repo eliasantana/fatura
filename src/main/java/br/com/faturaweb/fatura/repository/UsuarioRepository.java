@@ -13,6 +13,9 @@ import br.com.faturaweb.fatura.model.Usuario;
 public interface UsuarioRepository extends CrudRepository<Usuario, Long>{
 	@Query("SELECT u from Usuario u WHERE u.nome =:nome")
 	Optional<Usuario>findByNomeUsuario(String nome);
+	
+	@Query("SELECT u from Usuario u WHERE u.senha=:password")
+	Optional <Usuario>findByPassword(String password);
 
 	@Query("SELECT u from Usuario u")
 	List<Usuario> listarTodos();
