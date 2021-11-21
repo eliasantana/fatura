@@ -88,9 +88,6 @@ public class testeController {
 			default:
 				break;
 			}
-				
-			
-				
 			}
 			System.out.println("Janeiro: " + janeiro);
 			System.out.println("fevereiro: " + fevereiro);
