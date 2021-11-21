@@ -46,6 +46,7 @@
       </div>
     </div>
 
+	
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
@@ -80,11 +81,11 @@
       var myChart = new Chart(ctx, {
         type: 'line',
         data: {
-          labels:[ "Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez" ]
+          labels:[ "${keyset}"]
           ,
           datasets: [{
             data: [
-            	'${valores}'
+            	"${values}"
             ],
             lineTension: 0,
             backgroundColor: 'transparent',
