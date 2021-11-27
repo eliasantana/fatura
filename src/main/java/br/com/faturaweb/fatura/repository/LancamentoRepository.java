@@ -22,4 +22,6 @@ public interface LancamentoRepository extends CrudRepository<Lancamento, Long> {
 				+ "group by  ds_lancamento", nativeQuery = true)
 		List<Lancamento> findAllLancamentosDoMes();
 		
+		
+		
 }

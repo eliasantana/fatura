@@ -8,21 +8,7 @@
   </head>
   <body>
     <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
-      <a class="navbar-brand col-sm-3 col-md-2 mr-20" href="#">v.1.30</a>
-       <div class="pos-f-t">
-		  <div class="collapse" id="navbarToggleExternalContent">
-		    <div class="bg-dark p-4">
-		      <h4 class="text-white">Collapsed content</h4>
-		      <span class="text-muted">Toggleable via the navbar brand.</span>
-		    </div>
-		  </div>
-		  <nav class="navbar navbar-dark bg-dark">
-		    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
-		      <span class="navbar-toggler-icon"></span>
-		    </button>
-		  </nav>
-		</div>
-	  <!--  -->
+      <a class="navbar-brand col-sm-3 col-md-2 mr-20" href="#">v.1.29</a>
       <input class="form-control form-control-dark w-100" type="text" placeholder="Localizar" aria-label="Search">
       <label class="text-white bg-dark">Logout</label>      
 
@@ -89,8 +75,6 @@ var  data=[[${values}]];
 var  series=[[${keyset}]];
 var  titulo=[[${titulo}]];
 var  grafico=[[${grafico}]];
-var data_receitas=[[${valuesreceitas}]]
-var series_receitas=[]
       const chart = Highcharts.chart('container', {
           chart: {
               type: grafico
@@ -107,13 +91,9 @@ var series_receitas=[]
               }
           },
           series: [{
-              name: 'Despesas',
+              name: '2021',
               data: data
-          },{
-        	  name: 'Receitas',
-              data: data_receitas
-          }
-          ]
+          }]
       });
   });
 

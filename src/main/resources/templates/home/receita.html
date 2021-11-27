@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmento :: head('SysFatura') }">
+<meta charset="UTF-8">
+<title>Lançamento de receitas</title>
+</head>
+<body>
+	
+	<div class="container-fluid">
+		<div class="card mt-1">
+			<div class="card-body">
+				<h5 class="card-title">Cadastro de Receitas</h5>
+				<p class="card-texte">
+				<div class="card-container">
+					<form method="post" action="/receita/salvar">
+					<!-- ID -->
+						<div class="col">
+							<label class="form-label" th:if="${receita.cdReceita!=null}" for="id">ID</label>
+							<input type="text" class="form-control" id="id" th:value="${receita.cdReceita}" th:if="${receita.cdReceita!=null}" name="cdReceita" readonly="readonly">
+							<div id="codigo" th:if="${receita.cdReceita!=null}" class="form-text">Código da Receita</div>
+						</div>
+						<div class="col">
+							<label class="form-label" for="descricao" >Descrição</label>
+							<input type="text" class="form-control" th:value="${receita.dsReceita}" id="descricao" name="dsReceita">
+							<div id="ds" class="form-text">Descrição da Receita ex: Salário, férias, etc.</div>
+						</div>
+						<div class="col">
+							<label class="form-label" for="salbruto" >Valor Bruto</label>
+							<input type="text" class="form-control" th:value="${receita.salBruto}" id="salbruto" name="salBruto">
+							<div id="salariBruto" class="form-text">Informe o valor bruto </div>
+						</div>	
+						<div class="col">
+							<label class="form-label" for="salliquido" >Valor Liquido</label>
+							<input type="text" class="form-control" th:value="${receita.salLiquido}" id="salliquido" name="salLiquido">
+							<div id="salarioliq" class="form-text">Informe o valor líquido </div>
+						</div>	
+						<div class="col">
+							<label class="form-label" for="desc" >Desconto</label>
+							<input type="text" class="form-control" th:value="${receita.desconto}" id="desc" name="desconto">
+							<div id="desconto" class="form-text">Informe o valor do desconto</div>
+						</div>						
+						<div class="col">
+							<label class="form-label" for="data">Data</label>
+							<input type="datetime-local" id="data" th:value="${receita.dtRecebimento}" name="dtRecebimento" required="required">
+							<div class="form-text" id="dt">Informe a data do Recebimento</div>
+						</div>
+						 <a href="/" class="btn btn-success">Home
+				    	<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-house-door" viewBox="0 0 16 16">
+				 				 <path d="M8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4.5a.5.5 0 0 0 .5-.5v-4h2v4a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146zM2.5 14V7.707l5.5-5.5 5.5 5.5V14H10v-4a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v4H2.5z"/>
+						</svg>
+				    	</a>	
+						<button type="submit" class="btn btn-primary">Salvar</button>	
+						<div class="form-text" th:text="${mensagem}"></div>				
+					</form>
+				</div>
+			</div>			
+		</div>
+	</div>
+</body>
+</html>

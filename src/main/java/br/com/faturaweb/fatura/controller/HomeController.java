@@ -22,8 +22,10 @@ import br.com.faturaweb.fatura.model.TipoLancamento;
 import br.com.faturaweb.fatura.model.Usuario;
 import br.com.faturaweb.fatura.repository.FormaDePagamentoRepository;
 import br.com.faturaweb.fatura.repository.LancamentoRepository;
+import br.com.faturaweb.fatura.repository.ReceitaRepository;
 import br.com.faturaweb.fatura.repository.TipoLancamentoRepository;
 import br.com.faturaweb.fatura.repository.UsuarioRepository;
+import br.com.faturaweb.fatura.services.ReceitaServices;
 @ComponentScan
 @Controller
 
@@ -39,6 +41,11 @@ public class HomeController {
 	@Autowired
 	TipoLancamentoRepository tipoLancamentoRepository;
 
+	@Autowired
+	ReceitaRepository receitaRepository;
+	
+	@Autowired
+	ReceitaServices services;
 	
 	@GetMapping("/")
 	public String index(Model model) {
@@ -137,11 +144,15 @@ public class HomeController {
 			dados.put("Novembro", novembro);
 			dados.put("Dezembro", dezembro);
 			
+		    Map<String, BigDecimal> receitas = services.totalizaReceita(receitaRepository.findAllList());
+			
 			//Adicionando a view os valores acumuladods
 			model.addAttribute("keyset",dados.keySet()); // Meses
 			model.addAttribute("values",dados.values()); // Valores
 			model.addAttribute("titulo","Faturamento Mensal - SysFatura");//Titulo do Gráfico
 			model.addAttribute("grafico","column"); //Tipo do gráfico column - Gráfico de Colunas - bar - Gráfico de Barras
+			model.addAttribute("keysetreceitas",receitas.keySet());
+			model.addAttribute("valuesreceitas",receitas.values());
 		return "home/dashboard";
 	}
 	
