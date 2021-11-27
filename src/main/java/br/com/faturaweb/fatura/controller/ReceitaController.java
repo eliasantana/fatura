@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import br.com.faturaweb.fatura.model.Receita;
@@ -46,9 +47,11 @@ public class ReceitaController {
 	public String salvar(Model model, Receita recetaForm) {
 		try {
 			receitaRepository.save(recetaForm);
-			model.addAttribute("mensagem","Receita salva com sucesso!");
+			//model.addAttribute("mensagem","Receita salva com sucesso!");
+			model.addAttribute("mensagem","Receita Salva com sucesso!");
 		} catch (Exception e) {
 			  System.out.println("Não foi possível salvar a receita informada ->"+ recetaForm.getDsReceita());
+			  model.addAttribute("mensagem","Falha ao tentar savar a receita!");
 		}
 		model.addAttribute("receita",new Receita());
 		return "home/receita";
