@@ -30,8 +30,10 @@
 						<td th:text="${lancamento.dsLancamento}">					
 						
 						<td th:text="${#temporals.format(lancamento.dtCadastro, 'dd/MM/yyyy')}">
-						<td th:text="${lancamento.snPago}">-</td>
-						<!-- <td th:text="${lancamento.vlPago}">-</td> -->
+						<td th:if="${lancamento.snPago}=='SIM'" th:text="${lancamento.snPago}">-</td>
+						<td th:if="${lancamento.snPago}=='Não'">
+								<a href="/lancamento/pagar/" th:href="@{'/lancamento/pagar/'  + ${lancamento.cdLancamento}}" class="btn btn-success">Pagar</a>
+						</td>
 						<td th:text="${#numbers.formatDecimal(lancamento.vlPago,1,2,'COMMA')}" >
 						<td th:text="${lancamento.formaDePagamento.descricao}">-</td>
 						<td th:text="${lancamento.tipoLancamento.dsTipoLancamento}">-</td>

@@ -21,7 +21,5 @@ public interface LancamentoRepository extends CrudRepository<Lancamento, Long> {
 				+ "where date_format(dt_cadastro,'%m') = (date_format(now(),'%m' ))  "
 				+ "group by  ds_lancamento", nativeQuery = true)
 		List<Lancamento> findAllLancamentosDoMes();
-		
-		
-		
+	
 }
