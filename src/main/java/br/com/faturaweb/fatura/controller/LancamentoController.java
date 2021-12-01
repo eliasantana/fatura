@@ -155,7 +155,7 @@ public class LancamentoController {
 	
 	@GetMapping("pagar/{id}")
 	public RedirectView pagar(@PathVariable Long id, Model model) {
-		RedirectView rw = new RedirectView("http://localhost:8080/listar");
+		RedirectView rw = new RedirectView("https://sysfaturaapp.herokuapp.com/listar"); 
 		Lancamento lancamento = lancamentoRepository.findByIdLancamento(id);
 		List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentos();
 		lancamento.setSnPago("SIM");

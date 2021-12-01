@@ -21,7 +21,7 @@
 				<tbody>
 					<tr th:each="tipolancamento: ${tipolancamentos}">
 						<th scope="row" th:text="${tipolancamento.cdTipoLancamento}"></th>
-						<td><span th:if="${tipolancamento.dsTipoLancamento}=='Aluguel'" style="color: red;"  class="material-icons">home</span>
+						<td><span th:if="${tipolancamento.dsTipoLancamento}=='Moradia'" style="color: red;"  class="material-icons">home</span>
 						<span th:if="${tipolancamento.dsTipoLancamento}=='Pessoal'" style="color:blue;"  class="material-icons">face</span>
 						<span th:if="${tipolancamento.dsTipoLancamento}=='Veículo'" style="color:green;"  class="material-icons">directions_car</span>
 						<span th:if="${tipolancamento.dsTipoLancamento}=='Alimentação'" style="color:navy;"  class="material-icons">restaurant_menu</span>
