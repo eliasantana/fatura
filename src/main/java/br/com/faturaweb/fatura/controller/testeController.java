@@ -123,4 +123,10 @@ public class testeController {
 			model.addAttribute("grafico","column"); //column - Gráfico de Colunas - bar - Gráfico de Barras
 			return "teste";
 		}
+		
+		@GetMapping("/ds2")
+		public String teste2() {
+			
+			return "home/dashboard2";
+		}
 }
