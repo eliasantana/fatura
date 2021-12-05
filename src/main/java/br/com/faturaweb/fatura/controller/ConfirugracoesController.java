@@ -18,7 +18,7 @@ public class ConfirugracoesController {
 @Autowired	
 private ConfiguracoesRepository configuracoesRepository;
 
-@GetMapping("listar")
+@GetMapping("/listar")
 public String configuracoes(Model model) {
 	 Configuracoes config = configuracoesRepository.findConfiguracao();
 	model.addAttribute("config",config);
