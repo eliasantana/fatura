@@ -198,10 +198,10 @@ public class HomeController {
 		
 		return "home/listar-lancamento";
 	}
-@GetMapping("/configuracoes")
+@GetMapping("configuracoes")
 	public String configuracoes(Model model) {
 		Configuracoes config = configuracoesRepository.findConfiguracao();
 		model.addAttribute("config",config);
-		return "/configuracoes";
+		return "configuracoes";
 	}
 }
