@@ -12,7 +12,7 @@ import br.com.faturaweb.fatura.model.Configuracoes;
 import br.com.faturaweb.fatura.repository.ConfiguracoesRepository;
 
 @Controller
-@RequestMapping("configuracoes")
+@RequestMapping("/configuracoes")
 public class ConfirugracoesController {
 
 @Autowired	
