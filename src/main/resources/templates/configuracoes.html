@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head th:replace="~{fragmento :: head('SysFatura') }">
+ 	 <meta charset="UTF-8">
+  </head>
+ <body>
+ <!-- NavBar -->
+ <nav th:replace="~{navfragment:: nav }"></nav>
+ <!-- Configurações do Card -->
+
+ <div class="card">
+  <div class="card-header">
+    Configurações Gerais
+  </div>
+  <div class="card-body">
+    <h5 class="card-title"></h5>
+    <p class="card-text">Configura o comportamento do sistema habilitando ou desabilitando funcionalidades</p>
+   
+    <form action="/configuracoes/salvar" method="post" id="formulario">
+	   <label th:if="${config.cdConfiguracao}==null" for="cdConfiguracao">Código</label>
+	   <input th:if="${config.cdConfiguracao}==null" th:value="${config.cdConfiguracao}" type="text" name="cdConfiguracao" id="cdConfiguracao" class="form-control">
+	   <label for="snParcelar">Parcelar?</label>	  
+	   <select class="form-select" id="snParcelar" name="snParcelado">
+		  <option th:value="N" selected>Selecione uma opção</option>
+		  <option th:value="S">Sim</option>
+		  <option th:value="N">Não</option>		  
+		</select>
+		<button type="submit" class="btn btn-primary mt-5">Salvar</button>
+	</form>
+	 
+	
+</div>
+ 
+ 
+</body>
+<script type="text/javascript">
+var myform = document.getElementById("formulario");
+document.getElementById("flexSwitchCheckDefault").addEventListener("click", function () {
+  myform.submit();
+});
+
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+<!-- Necessário para execição dos ícones feather-->
+<script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
+<script>
+     feather.replace()
+</script>
+
+</html>

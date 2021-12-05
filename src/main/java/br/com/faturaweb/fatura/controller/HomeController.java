@@ -202,6 +202,6 @@ public class HomeController {
 	public String configuracoes(Model model) {
 		Configuracoes config = configuracoesRepository.findConfiguracao();
 		model.addAttribute("config",config);
-		return "home/configuracoes";
+		return "/configuracoes";
 	}
 }
