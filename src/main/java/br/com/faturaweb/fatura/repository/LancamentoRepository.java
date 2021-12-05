@@ -22,4 +22,14 @@ public interface LancamentoRepository extends CrudRepository<Lancamento, Long> {
 				+ "group by  ds_lancamento", nativeQuery = true)
 		List<Lancamento> findAllLancamentosDoMes();
 	
+		/**
+		 * Retorna todos os lancantos do ano corrente
+		 * @author elias
+		 * @since 04/12/2021
+		 * @return {@link List}
+		 * */
+		@Query(value = "SELECT * FROM fatura.lancamento "
+										+ "where date_format(dt_cadastro,'%Y') = date_format(curdate(),'%Y') order by sn_pago"
+											,nativeQuery = true)
+		List<Lancamento>findLancamentosDoAno();
 }

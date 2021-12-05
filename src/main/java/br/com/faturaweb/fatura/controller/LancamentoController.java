@@ -100,7 +100,9 @@ public class LancamentoController {
 
 	@GetMapping("/listar")
 	public String listar(Model model) {
-		List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentos();
+		//List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentos();
+		//Lançamentos do Ano
+		List<Lancamento> lancamentos = lancamentoRepository.findLancamentosDoAno();
 		System.out.println("listando");
 		model.addAttribute("lancamentos", lancamentos);
 
@@ -157,7 +159,8 @@ public class LancamentoController {
 	public RedirectView pagar(@PathVariable Long id, Model model) {
 		RedirectView rw = new RedirectView("https://sysfaturaapp.herokuapp.com/listar"); 
 		Lancamento lancamento = lancamentoRepository.findByIdLancamento(id);
-		List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentos();
+		//List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentos();
+		List<Lancamento> lancamentos = lancamentoRepository.findLancamentosDoAno();
 		lancamento.setSnPago("SIM");
 		lancamentoRepository.save(lancamento);
 		model.addAttribute("lacamentos",lancamentos);
