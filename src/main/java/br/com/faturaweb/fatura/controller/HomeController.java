@@ -16,10 +16,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import br.com.faturaweb.fatura.form.LancamentoForm;
+import br.com.faturaweb.fatura.model.Configuracoes;
 import br.com.faturaweb.fatura.model.FormaDePagamento;
 import br.com.faturaweb.fatura.model.Lancamento;
 import br.com.faturaweb.fatura.model.TipoLancamento;
 import br.com.faturaweb.fatura.model.Usuario;
+import br.com.faturaweb.fatura.repository.ConfiguracoesRepository;
 import br.com.faturaweb.fatura.repository.FormaDePagamentoRepository;
 import br.com.faturaweb.fatura.repository.LancamentoRepository;
 import br.com.faturaweb.fatura.repository.ReceitaRepository;
@@ -46,10 +48,13 @@ public class HomeController {
 	
 	@Autowired
 	ReceitaServices services;
+	@Autowired
+	ConfiguracoesRepository configuracoesRepository;
 	
 	@GetMapping("/")
 	public String index(Model model) {
 		 List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentos();
+		 
 		 //Formata data retorando apenas o mes ex: jan = 01
 		 DateTimeFormatter df = DateTimeFormatter.ofPattern("MM");
 		 //Variáveis para acumular os valores pagos 
@@ -193,6 +198,10 @@ public class HomeController {
 		
 		return "home/listar-lancamento";
 	}
-
-	
+@GetMapping("/configuracoes")
+	public String configuracoes(Model model) {
+		Configuracoes config = configuracoesRepository.findConfiguracao();
+		model.addAttribute("config",config);
+		return "home/configuracoes";
+	}
 }

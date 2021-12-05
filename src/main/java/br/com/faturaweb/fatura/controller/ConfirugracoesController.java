@@ -20,7 +20,7 @@ private ConfiguracoesRepository configuracoesRepository;
 
 @GetMapping("/listar")
 public String configuracoes(Model model) {
-	 Configuracoes config = configuracoesRepository.findConfiguracao();
+	Configuracoes config = configuracoesRepository.findConfiguracao();
 	model.addAttribute("config",config);
 	
 	return "home/configuracoes";
