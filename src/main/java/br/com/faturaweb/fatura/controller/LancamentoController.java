@@ -155,17 +155,17 @@ public class LancamentoController {
 	}
 	
 	
-	@GetMapping("pagar/{id}")
-	public RedirectView pagar(@PathVariable Long id, Model model) {
-		RedirectView rw = new RedirectView("https://sysfaturaapp.herokuapp.com/listar"); 
+	@GetMapping("/pagar/{id}")
+	public String pagar(@PathVariable Long id, Model model) {
+		//RedirectView rw = new RedirectView("https://sysfaturaapp.herokuapp.com/listar"); 
 		Lancamento lancamento = lancamentoRepository.findByIdLancamento(id);
 		//List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentos();
 		List<Lancamento> lancamentos = lancamentoRepository.findLancamentosDoAno();
 		lancamento.setSnPago("SIM");
 		lancamentoRepository.save(lancamento);
-		model.addAttribute("lacamentos",lancamentos);
-		return rw;
-	}
+		model.addAttribute("lancamentos",lancamentos);
+		return "home/listar-lancamento";
+		}
 
 }
 
