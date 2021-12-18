@@ -27,6 +27,7 @@ import br.com.faturaweb.fatura.repository.LancamentoRepository;
 import br.com.faturaweb.fatura.repository.ReceitaRepository;
 import br.com.faturaweb.fatura.repository.TipoLancamentoRepository;
 import br.com.faturaweb.fatura.repository.UsuarioRepository;
+import br.com.faturaweb.fatura.services.LancamentoServices;
 import br.com.faturaweb.fatura.services.ReceitaServices;
 @ComponentScan
 @Controller
@@ -48,6 +49,9 @@ public class HomeController {
 	
 	@Autowired
 	ReceitaServices services;
+	@Autowired
+	LancamentoServices lancamentoServices;
+	
 	@Autowired
 	ConfiguracoesRepository configuracoesRepository;
 	
@@ -180,7 +184,7 @@ public class HomeController {
 				.findBydsTipoLancamento(lancamentoForm.getDsTipoLancamento());
 		TipoLancamento tipoLancamento = findBydsTipoLancamento.get();
 		Optional<Usuario> usuario = usuarioRepository.findById(5L);		
-
+		Configuracoes config = configuracoesRepository.findConfiguracao();		
 			lancamento.setCdLancamento(lancamentoForm.getCdLancamento());
 			lancamento.setDsLancamento(lancamentoForm.getDsLancamento());
 			lancamento.setDtCadastro(lancamentoForm.getDtCadastro());
@@ -190,12 +194,23 @@ public class HomeController {
 			lancamento.setTipoLancamento(tipoLancamento);
 			lancamento.setUsuario(usuario.get());
 			lancamento.setVlPago(lancamentoForm.getVlPago());
+		    lancamento.setNrParcela(1);
 			lancamentoRepository.save(lancamento);
 
 			List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentos();
 			model.addAttribute("lancamentos", lancamentos);
-
-		
+			
+			// Se lancamento Parcelado
+			if (config.getSnParcelado().toUpperCase().equals("S")) {
+				Lancamento ultimoLancamento = lancamentoRepository.findUltimoLancamentoUsuario(usuario.get().getCdUsuario());
+				List<Lancamento> parcelas = lancamentoServices.parcelar("S", usuario.get().getCdUsuario(), lancamentoForm.getNrParcelas());
+					lancamentoRepository.saveAll(parcelas);
+				    lancamentoRepository.delete(ultimoLancamento);
+				    lancamentos = lancamentoRepository.findAllLancamentos();
+				    
+					model.addAttribute("lancamentos", lancamentos);
+			}
+			
 		return "home/listar-lancamento";
 	}
 @GetMapping("configuracoes")

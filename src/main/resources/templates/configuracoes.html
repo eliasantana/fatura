@@ -14,21 +14,27 @@
   </div>
   <div class="card-body">
     <h5 class="card-title"></h5>
-    <p class="card-text">Configura o comportamento do sistema habilitando ou desabilitando funcionalidades</p>
+    <p class="card-text">xxConfigura o comportamento do sistema habilitando ou desabilitando funcionalidades</p>
    
     <form action="/configuracoes/salvar" method="post" id="formulario">
 	   <label th:if="${config.cdConfiguracao}==null" for="cdConfiguracao">Código</label>
 	   <input th:if="${config.cdConfiguracao}==null" th:value="${config.cdConfiguracao}" type="text" name="cdConfiguracao" id="cdConfiguracao" class="form-control">
 	   <label for="snParcelar">Parcelar?</label>	  
 	   <select class="form-select" id="snParcelar" name="snParcelado">
-		  <option th:value="N" selected>Selecione uma opção</option>
-		  <option th:value="S">Sim</option>
-		  <option th:value="N">Não</option>		  
+		  <option th:value="S" th:if="${config.snParcelado=='S'}" selected>Sim</option>
+		  <option th:value="N" th:if="${config.snParcelado=='S'}" th:text="Não">Não</option>	
+		  <option th:value="N" th:if="${config.snParcelado=='N'}" selected>Não</option>
+		  <option th:value="S" th:if="${config.snParcelado=='N'}" th:text="Sim">Sim</option>		  
 		</select>
-		<button type="submit" class="btn btn-primary mt-5">Salvar</button>
-	</form>
-	 
+		<div class="col">
+		<button type="submit" class="btn btn-primary mt-5">Salvar</button>	
+		<a th:replace="~{btn_home_fragment::btn_home}">home</a>	
+		</div>	
+	</form>	
 	
+	<div  class="alert alert-primary mt-2" role="alert" th:if="${mensagem!=null}">
+		<h5 th:text="${mensagem}"></h5>
+	</div>
 </div>
  
  

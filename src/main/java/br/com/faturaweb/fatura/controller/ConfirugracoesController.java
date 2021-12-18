@@ -10,6 +10,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import br.com.faturaweb.fatura.model.Configuracoes;
 import br.com.faturaweb.fatura.repository.ConfiguracoesRepository;
+import br.com.faturaweb.fatura.repository.LancamentoRepository;
 
 @Controller
 @RequestMapping("/configuracoes")
@@ -27,11 +28,14 @@ public String configuracoes(Model model) {
 }
 
 @PostMapping("salvar")
-public RedirectView salvar(Model model, Configuracoes formConfiguracoes) {
- 
-  System.out.println(formConfiguracoes.getSnParcelado());
-   RedirectView redirectView = new RedirectView("http://localhost:8080/configuracoes/listar");
+public  RedirectView  salvar(Model model, Configuracoes formConfiguracoes) {
+   Configuracoes config = configuracoesRepository.findConfiguracao();
+   config.setSnParcelado(formConfiguracoes.getSnParcelado());
+   configuracoesRepository.save(config);
+   model.addAttribute("msg","Configurações salvas com sucesso!");
+   RedirectView redirectView = new RedirectView("http://localhost:8080/configuracoes");
 	return	 redirectView;
 }
+
 }
  

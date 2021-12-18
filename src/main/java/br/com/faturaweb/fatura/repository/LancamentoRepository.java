@@ -32,4 +32,11 @@ public interface LancamentoRepository extends CrudRepository<Lancamento, Long> {
 										+ "where date_format(dt_cadastro,'%Y') = date_format(curdate(),'%Y') order by sn_pago"
 											,nativeQuery = true)
 		List<Lancamento>findLancamentosDoAno();
+		
+		/**
+		 * Retorna o último lancamento realizado pelo usuário
+		 * */
+		@Query(value="select * from fatura.lancamento where cd_lancamento = ("
+										+ "select max(cd_lancamento) cd_lancamento from fatura.lancamento where usuario_cd_usuario = :cdUsuario) ",nativeQuery = true)
+		Lancamento findUltimoLancamentoUsuario(Long cdUsuario);
 }

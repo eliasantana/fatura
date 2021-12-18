@@ -32,10 +32,12 @@ public class Lancamento {
 	private FormaDePagamento formaDePagamento;
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
 	private LocalDate dtCompetencia;
-
+	
+	private Integer nrParcela;
+	
 	
 	public Lancamento() {
-		
+		this.nrParcela = 1;	   
 	}
 	
 	public Long getCdLancamento() {
@@ -110,13 +112,23 @@ public class Lancamento {
 	public void setDtCompetencia(LocalDate dtCompetencia) {
 		this.dtCompetencia = dtCompetencia;
 	}
+	
+	
+	public Integer getNrParcela() {
+		return nrParcela;
+	}
+	
+	public void setNrParcela(Integer nrParcela) {
+		this.nrParcela = nrParcela;
+	}
 
 	@Override
 	public String toString() {
 		return "Lancamento [cdLancamento=" + cdLancamento + ", dsLancamento=" + dsLancamento + ", usuario=" + usuario
 				+ ", dtCadastro=" + dtCadastro + ", tipoLancamento=" + tipoLancamento + ", snPago=" + snPago
 				+ ", vlPago=" + vlPago + ", formaDePagamento=" + formaDePagamento + ", dtCompetencia=" + dtCompetencia
-				+ "]";
+				+ ", nrParcela=" + nrParcela + "]";
 	}
+	
 
 }
