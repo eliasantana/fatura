@@ -1,5 +1,6 @@
 package br.com.faturaweb.fatura.controller;
 
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import br.com.faturaweb.fatura.form.LancamentoForm;
 import br.com.faturaweb.fatura.model.Configuracoes;
+import br.com.faturaweb.fatura.model.EnviaEmailThread;
 import br.com.faturaweb.fatura.model.FormaDePagamento;
 import br.com.faturaweb.fatura.model.Lancamento;
 import br.com.faturaweb.fatura.model.TipoLancamento;
@@ -29,36 +31,35 @@ import br.com.faturaweb.fatura.repository.TipoLancamentoRepository;
 import br.com.faturaweb.fatura.repository.UsuarioRepository;
 import br.com.faturaweb.fatura.services.LancamentoServices;
 import br.com.faturaweb.fatura.services.ReceitaServices;
+import br.com.faturaweb.fatura.services.AppServices;
 @ComponentScan
 @Controller
 
 public class HomeController {
 	@Autowired
 	LancamentoRepository lancamentoRepository;
-
 	@Autowired
 	FormaDePagamentoRepository formaDePagamentoRepository;
-
 	@Autowired
 	UsuarioRepository usuarioRepository;
 	@Autowired
 	TipoLancamentoRepository tipoLancamentoRepository;
-
 	@Autowired
 	ReceitaRepository receitaRepository;
-	
 	@Autowired
 	ReceitaServices services;
 	@Autowired
 	LancamentoServices lancamentoServices;
-	
 	@Autowired
 	ConfiguracoesRepository configuracoesRepository;
+	@Autowired
+	AppServices appservices;
+	
 	
 	@GetMapping("/")
 	public String index(Model model) {
 		 List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentos();
-		 
+		 List<Lancamento> lancamentosVencidos = lancamentoRepository.findVencidos();
 		 //Formata data retorando apenas o mes ex: jan = 01
 		 DateTimeFormatter df = DateTimeFormatter.ofPattern("MM");
 		 //Variáveis para acumular os valores pagos 
@@ -162,6 +163,11 @@ public class HomeController {
 			model.addAttribute("grafico","column"); //Tipo do gráfico column - Gráfico de Colunas - bar - Gráfico de Barras
 			model.addAttribute("keysetreceitas",receitas.keySet());
 			model.addAttribute("valuesreceitas",receitas.values());
+			if (lancamentosVencidos.size()>0) {
+				model.addAttribute("mensagem", "Atenção! Você possui despesas não pagas!");
+			}else {
+				model.addAttribute("mesagem",null);
+			}
 		return "home/dashboard";
 	}
 	
@@ -170,7 +176,33 @@ public class HomeController {
 		List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentos();
 		System.out.println("listando");
 		model.addAttribute("lancamentos", lancamentos);
-
+		List<Lancamento> lancamentosVencidos = lancamentoRepository.findVencidos();
+		
+		if (lancamentosVencidos.size() > 0 ) {
+			System.out.println("Preparando o envio de e-mail....");
+//			EnviaEmailThread thread = new EnviaEmailThread();
+//			thread.setName("thread-Envia Email");
+//			thread.run(lancamentosVencidos);
+//			thread.start();
+			
+			StringBuilder sbw = new StringBuilder();
+			 sbw.append("Atenção!\n");
+			   for (Lancamento lancamento : lancamentosVencidos) {
+				   sbw.append("As depesas abaixo estão vencidas a pelo menos " + configuracoesRepository.findConfiguracao().getNrDias() + " dias! \n");
+				   sbw.append("\nDescrição: " + lancamento.getDsLancamento()+ "\n");
+				   sbw.append("\nVencimento: " + lancamento.getDtCompetencia() + "\n");
+				   sbw.append("\nValor: " + lancamento.getVlPago());
+			}			
+			   try {
+				appservices.sendEmai("eliasantana@gmail.com","Elias Santana" , "eliasantana@hotmail.com", "Elias Santana da Silva", "Contas Vencidas!", sbw);
+				System.out.println("E-mail enviado com sucesso!");
+			} catch (UnsupportedEncodingException e) {
+				System.out.println("Erro ao tentar enviar e-mail -> sendEmail ");
+				e.printStackTrace();
+			}
+			
+		}
+		
 		return "home/listar-lancamento";
 	}
 
@@ -219,4 +251,24 @@ public class HomeController {
 		model.addAttribute("config",config);
 		return "configuracoes";
 	}
+
+@GetMapping("email")
+public String email() {
+	
+	System.out.println("enviando e-mail");
+	try {
+		StringBuilder assunto = new StringBuilder();
+		assunto.append("Os seguintes títulos abaixo estão com vencimento próximo:\n");
+		assunto.append("Descrição:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n");
+		assunto.append("Vencimento:"+"12/12/2021\n");
+		assunto.append("Valor:");
+		assunto.append("120,00");
+		
+		appservices.sendEmai("eliasantanasilva@gmail.com", "Elias", "eliasantana@hotmail.com", "Elias Hotmail", "Teste2", assunto);
+	} catch (UnsupportedEncodingException e) {
+		
+		e.printStackTrace();
+	}
+	return "home/dashboard";
+}
 }

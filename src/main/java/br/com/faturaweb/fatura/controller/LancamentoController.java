@@ -48,7 +48,7 @@ public class LancamentoController {
 	
 @Autowired
 	ConfiguracoesRepository configuracoesRepository;
-	
+
 	@GetMapping("cadastro")
 	public String cadastrar(Model model) {
 		
@@ -113,12 +113,18 @@ public class LancamentoController {
 
 	@GetMapping("/listar")
 	public String listar(Model model) {
-		//List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentos();
-		//Lançamentos do Ano
-		List<Lancamento> lancamentos = lancamentoRepository.findLancamentosDoAno();
-		System.out.println("listando");
-		model.addAttribute("lancamentos", lancamentos);
-
+//    Método duplicado - Este método está sendo utilizado através do controller HomeController
+//		Configuracoes conf = configuracoesRepository.findConfiguracao();
+//		//Lançamentos do Ano
+//		List<Lancamento> lancamentos = lancamentoRepository.findLancamentosDoAno();
+//		System.out.println("listandox");
+//		model.addAttribute("lancamentos", lancamentos);
+//
+//		List<Lancamento> lancamentosVencidos = lancamentoRepository.findVencidos(conf.getNrDias());
+//		for (Lancamento lancamento : lancamentosVencidos) {
+//			System.out.println(lancamento.getCdLancamento());
+//		}
+//		
 		return "home/listar-lancamento";
 	}
 
@@ -130,8 +136,8 @@ public class LancamentoController {
 		Optional<Lancamento> lancamentoLocalizado = lancamentoRepository.findById(id);
 		lancamentoRepository.delete(lancamentoLocalizado.get());
 		System.out.println("Lançamento Excluído com sucesso!");
-		//RedirectView rw = new RedirectView("http://localhost:8080/listar");
-		RedirectView rw = new RedirectView("https://sysfaturaapp.herokuapp.com/listar"); 
+		RedirectView rw = new RedirectView("http://localhost:8080/listar");
+		//RedirectView rw = new RedirectView("https://sysfaturaapp.herokuapp.com/listar"); 
 		return rw;
 		
 	}

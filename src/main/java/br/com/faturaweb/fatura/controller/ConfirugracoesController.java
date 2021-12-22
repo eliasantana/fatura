@@ -31,8 +31,16 @@ public String configuracoes(Model model) {
 public  RedirectView  salvar(Model model, Configuracoes formConfiguracoes) {
    Configuracoes config = configuracoesRepository.findConfiguracao();
    config.setSnParcelado(formConfiguracoes.getSnParcelado());
+   if (formConfiguracoes.getSnNotificar()==null) {
+	   config.setSnNotificar("N");
+   }else {
+	   config.setSnNotificar("S");
+   }   
+   config.setNrDias(formConfiguracoes.getNrDias());
    configuracoesRepository.save(config);
+   config = configuracoesRepository.findConfiguracao();   
    model.addAttribute("msg","Configurações salvas com sucesso!");
+   model.addAttribute("config",config);
    RedirectView redirectView = new RedirectView("http://localhost:8080/configuracoes");
 	return	 redirectView;
 }

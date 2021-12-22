@@ -7,37 +7,59 @@
  <!-- NavBar -->
  <nav th:replace="~{navfragment:: nav }"></nav>
  <!-- Configurações do Card -->
-
- <div class="card">
-  <div class="card-header">
-    Configurações Gerais
-  </div>
-  <div class="card-body">
-    <h5 class="card-title"></h5>
-    <p class="card-text">xxConfigura o comportamento do sistema habilitando ou desabilitando funcionalidades</p>
-   
-    <form action="/configuracoes/salvar" method="post" id="formulario">
-	   <label th:if="${config.cdConfiguracao}==null" for="cdConfiguracao">Código</label>
-	   <input th:if="${config.cdConfiguracao}==null" th:value="${config.cdConfiguracao}" type="text" name="cdConfiguracao" id="cdConfiguracao" class="form-control">
-	   <label for="snParcelar">Parcelar?</label>	  
-	   <select class="form-select" id="snParcelar" name="snParcelado">
-		  <option th:value="S" th:if="${config.snParcelado=='S'}" selected>Sim</option>
-		  <option th:value="N" th:if="${config.snParcelado=='S'}" th:text="Não">Não</option>	
-		  <option th:value="N" th:if="${config.snParcelado=='N'}" selected>Não</option>
-		  <option th:value="S" th:if="${config.snParcelado=='N'}" th:text="Sim">Sim</option>		  
-		</select>
+<div class="container">
+	<div class="row">
 		<div class="col">
-		<button type="submit" class="btn btn-primary mt-5">Salvar</button>	
-		<a th:replace="~{btn_home_fragment::btn_home}">home</a>	
+			<div class="card">
+				  <div class="card-header">
+				  </div>
+				  <div class="card-body">
+				    <h5 class="card-title">Parcelar?</h5>
+				    <p class="card-text">Habilita/Desabilita Lançamentos Parcelados</p>
+				   
+				    <form action="/configuracoes/salvar" method="post" id="formulario">
+					   <label th:if="${config.cdConfiguracao}==null" for="cdConfiguracao">Código</label>
+					   <input th:if="${config.cdConfiguracao}==null" th:value="${config.cdConfiguracao}" type="text" name="cdConfiguracao" id="cdConfiguracao" class="form-control">
+					   <label for="snParcelar">Parcelar?</label>	  
+					   <select class="form-select" id="snParcelar" name="snParcelado">
+						  <option th:value="S" th:if="${config.snParcelado=='S'}" selected>Sim</option>
+						  <option th:value="N" th:if="${config.snParcelado=='S'}" th:text="Não">Não</option>	
+						  <option th:value="N" th:if="${config.snParcelado=='N'}" selected>Não</option>
+						  <option th:value="S" th:if="${config.snParcelado=='N'}" th:text="Sim">Sim</option>		  
+						</select>
+						
+						<div class="col">
+						<button type="submit" class="btn btn-primary mt-5">Salvar</button>	
+						<a th:replace="~{btn_home_fragment::btn_home}">home</a>	
+						</div>	
+					
+					
+					<div  class="alert alert-primary mt-2" role="alert" th:if="${mensagem!=null}">
+						<h5 th:text="${mensagem}"></h5>
+					</div>
+				</div>
 		</div>	
+	</div> 
+		
+		<div class="col"><!-- Envia e-mail -->
+			<div class="card">
+				  <div class="card-header">
+				  </div>
+				  <div class="card-body">
+				    <h5 class="card-title">Notificar via E-mail</h5>
+				    <p class="card-text">Notificar via e-mail o vencimento de Despesas</p>
+				  		<label for="snEviar">Notificar?</label>
+						<input type="checkbox" th:if="${config.snNotificar}=='N'" id="snEviar" th:value="N" name="snNotificar"/>
+						<input type="checkbox" th:if="${config.snNotificar}=='S'" id="snEviar" th:value="S" checked="checked" name="snNotificar"/>
+						<label for="nrDias">&nbsp;&nbsp;&nbsp;Número de Dias de Atrazo</label>
+						<input type="number"  th:value="${config.nrDias}" id="nrDias" name="nrDias" size="2">
+				</div>
+			</div>	
+		</div><!-- Fim Envia-Email -->
+		
+	</div> <!-- Fim da row -->
 	</form>	
-	
-	<div  class="alert alert-primary mt-2" role="alert" th:if="${mensagem!=null}">
-		<h5 th:text="${mensagem}"></h5>
-	</div>
 </div>
- 
- 
 </body>
 <script type="text/javascript">
 var myform = document.getElementById("formulario");

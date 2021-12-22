@@ -17,7 +17,7 @@
 					<tr>
 						<th scope="col" >Código</th>
 						<th scope="col">Descrição</th>
-						<th scope="col" >Data de Cadastro</th>
+						<th scope="col" >Vencimento</th>
 						<th scope="col" >Pago</th>
 						<th scope="col" >Valor</th>
 						<th scope="col" >Forma de Pagamento</th>
@@ -31,7 +31,8 @@
 						<th scope="row" th:text="${lancamento.cdLancamento}">-</th>
 						<td th:text="${lancamento.dsLancamento}">					
 						
-						<td th:text="${#temporals.format(lancamento.dtCadastro, 'dd/MM/yyyy')}">
+						<!-- <td th:text="${#temporals.format(lancamento.dtCadastro, 'dd/MM/yyyy')}"> -->
+						<td th:text="${#temporals.format(lancamento.dtCompetencia, 'dd/MM/yyyy')}"> 
 						<td th:if="${lancamento.snPago}=='SIM'" th:text="${lancamento.snPago}">-</td>
 						<td th:if="${lancamento.snPago}=='Não'">
 								<a href="/lancamento/pagar/" th:href="@{'/lancamento/pagar/'  + ${lancamento.cdLancamento}}" class="btn btn-success">Pagar</a>
