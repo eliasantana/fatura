@@ -18,6 +18,8 @@ public class Configuracoes {
 	
 	private Long cdConfiguracao;
 	private String snParcelado;
+	private String snNotificar;
+	private Integer nrDias;
 	
 	public Configuracoes() {
 		
@@ -44,12 +46,25 @@ public class Configuracoes {
 	public void setSnParcelado(String snParcelado) {
 		this.snParcelado = snParcelado;
 	}
+	
+	public String getSnNotificar() {
+		return snNotificar;
+	}
+	public void setSnNotificar(String snNotificar) {
+		this.snNotificar = snNotificar;
+	}
+	
+	public void setNrDias(Integer nrDias) {
+		this.nrDias = nrDias;
+	}
+	public Integer getNrDias() {
+		return nrDias;
+	}
 
 	@Override
 	public String toString() {
-		return "Configuracoes [cdConfiguracao=" + cdConfiguracao + ", snParcelado=" + snParcelado + "]";
+		return "Configuracoes [cdConfiguracao=" + cdConfiguracao + ", snParcelado=" + snParcelado + ", snNotificar="
+				+ snNotificar + ", nrDias=" + nrDias + "]";
 	}
-	
-  
-	
+
 }

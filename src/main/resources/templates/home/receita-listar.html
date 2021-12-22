@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+ <head th:replace="~{fragmento :: head('Receitas') }">
+<meta charset="UTF-8">
+<!-- Imports do Bootstrap -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+</head>
+<body>
+		 <!-- Nav Bar -->
+    <nav th:replace="~{navfragment:: nav }"></nav>
+		<div class="card">
+			<div class="card-header">Receitas</div>
+				<div class="card-body">
+					<h5 class="card-title">Listagem</h5>
+					<p class="card-text"></p>
+					<table class="table table-striped table-hover table-sm" id="receitas">
+						<thead>
+							<tr>
+								<th scope="col">Código</th>
+								<th scope="col">Descrição</th>
+								<th scope="col">Salário Bruto</th>
+								<th scope="col">Descontos</th>
+								<th scope="col">Salário Líquido</th>
+								<th scope="col">Recebio em</th>
+								<th scope="col">Ação</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="receita: ${receitas}">
+								<td scope="row" th:text="${receita.cdReceita}">-</td>
+								<td scope="row" th:text="${receita.dsReceita}">-</td>
+								<td scope="row" th:text="${receita.salBruto}">-</td>
+								<td scope="row" th:text="${receita.desconto}">-</td>
+								<td scope="row" th:text="${receita.salLiquido}">-</td>
+								<td scope="row" th:text="${#temporals.format(receita.dtRecebimento,'dd/MM/yyyy')}">-</td>
+								<td scope="row">
+									<a href="/receita/excluir/" th:href="@{'/receita/excluir/'  + ${receita.cdReceita}}" class="btn btn-danger">Excluir</a>
+									<a href="/receita/alterar/" th:href="@{'/receita/alterar/'  + ${receita.cdReceita}}" class="btn btn-warning">Alterar</a>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					 <a href="/" class="btn btn-success">Home
+				    	<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-house-door" viewBox="0 0 16 16">
+				 				 <path d="M8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4.5a.5.5 0 0 0 .5-.5v-4h2v4a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146zM2.5 14V7.707l5.5-5.5 5.5 5.5V14H10v-4a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v4H2.5z"/>
+						</svg>
+				    </a>
+					<a href="/receita/cadastro" class="btn btn-primary">Cadastro</a>
+					<a href="/receita/relatorio/pdf" class="btn btn-secondary">Imprimir
+						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-printer" viewBox="0 0 16 16">
+			 					 <path d="M2.5 8a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1z"/>
+			 					 <path d="M5 1a2 2 0 0 0-2 2v2H2a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h1v1a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-1h1a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-1V3a2 2 0 0 0-2-2H5zM4 3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2H4V3zm1 5a2 2 0 0 0-2 2v1H2a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v-1a2 2 0 0 0-2-2H5zm7 2v3a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1z"/>
+						</svg>
+					</a>
+					
+			</div>
+		</div>
+		
+<!-- Paginação -->
+<script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>		
+ <script>
+  $(document).ready(function(){
+      $('#receitas').DataTable({
+        	"language": {
+                "lengthMenu": "Mostrando _MENU_ registros por página",
+                "zeroRecords": "Nada encontrado",
+                "info": "Mostrando página _PAGE_ de _PAGES_",
+                "infoEmpty": "Nenhum registro disponível",
+                "infoFiltered": "(filtrado de _MAX_ registros no total)"
+               
+            }
+        });
+  });
+  </script>		
+ <!-- Imports do Java Script do bootstrap -->	
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+<!-- Icons -->
+ <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
+ <script>
+   feather.replace()
+ </script>  
+</body>
+</html>

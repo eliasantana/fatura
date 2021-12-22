@@ -1,0 +1,65 @@
+<nav th:fragment="nav" class="navbar navbar-expand-lg navbar-light bg-dark">
+  <div class="container-fluid text-white"  >
+    <a class="navbar-brand" href="#" style="color: white;">SysFatuarWeb</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+      	<li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/" style="color: white;"><span data-feather="home"></span>Home</a>
+        </li>
+        <!-- Menu Lançamentos / Despesas -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: white;">
+            <span data-feather="dollar-sign"></span>Despesas
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="lancamento/cadastro"><span data-feather="layers"></span>Cadastro</a></li>
+            <li><a class="dropdown-item" href="/listar"><span data-feather="dollar-sign"></span>Listar Despesas</a></li>           
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="#"><span data-feather="book-open"></span>Relatório de Despesas</a></li>
+          </ul>
+        </li>
+         <!-- Menu Receitas -->
+         
+         <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: white;">
+            <span data-feather="dollar-sign"></span>Receitas
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="/receita/cadastro"><span data-feather="layers"></span>Cadastro</a></li>
+            <li><a class="dropdown-item" href="/receita/listar"><span data-feather="dollar-sign"></span>Listar Receitas</a></li>           
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="#"><span data-feather="book-open"></span>Relatório de Receitas</a></li>
+          </ul>
+        </li>
+       <!-- Menu Configurações-->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: white;">
+            <span data-feather="sliders"></span>Configurações 
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="#"><span data-feather="users"></span>Usuários</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="/usuario/cadastro">Cadastrar</a></li>
+            <li><a class="dropdown-item" href="/usuario/listar"></span>Exibir</a></li>
+            <li><hr class="dropdown-divider"></li> 
+            <li><a class="dropdown-item" href="#"><span data-feather="layers"></span>Tipo de Lançamento</a></li>
+            <li><a class="dropdown-item" href="/tipolancamento/cadastro">Cadastrar</a></li>
+            <li><a class="dropdown-item" href="/tipolancamento/listar">Exibir</a></li>
+            <li><hr class="dropdown-divider"></li> 
+            <li><a class="dropdown-item" href="#"><span data-feather="credit-card"></span>Forma de Pagamento</a></li>
+            <li><a class="dropdown-item" href="/formapagto/cadastrar">Cadastrar</a></li>
+            <li><a class="dropdown-item" href="/formapagto/listar">Exibir</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="/configuracoes"><span data-feather="activity"></span>Configurações do Sistema</a></li>
+          </ul>
+        </li>       
+      </ul>
+      <form class="d-flex" th:action="@{/logout}">      
+        <button class="btn btn-outline-success" type="submit">Sair</button>
+      </form> 
+    </div>
+  </div>
+</nav>	

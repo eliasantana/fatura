@@ -5,23 +5,11 @@
  		<script src = "https://code.highcharts.com/highcharts.js" > </script>
 		<script src = "/js/highstock.js "></script>
 		<script src = "/js/highmaps.js "> </script>
+		
   </head>
   <body>
-    <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
-      <a class="navbar-brand col-sm-3 col-md-2 mr-20" href="#">v.1.29</a>
-      <input class="form-control form-control-dark w-100" type="text" placeholder="Localizar" aria-label="Search">
-      <label class="text-white bg-dark">Logout</label>      
-
-      <ul class="navbar-nav px-3">
-        <li class="nav-item text-nowrap" >
-        <form id="logoutForm" method="post" th:action="@{/logout}">        
-      		  <button class="form-control" type="submit">Sair</a>
-        </form>
-        	
-        </li>
-      </ul>
-    </nav>
-
+    <!-- Nav Bar -->
+    <nav th:replace="~{navfragment:: nav }"></nav>
     <div class="container-fluid">
       <div class="row">
         <nav th:replace="~{menu_fragmento :: menu}">   
@@ -29,15 +17,18 @@
 
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
           <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-            <h1 class="h2">Dashboard - Despesas</h1>
+            <h3 class="h4">Dashboard - Despesas</h4>
+            <div class="alert alert-danger" role="alert" th:text="${mensagem}" th:if="${mensagem!=null}">
+			  A simple danger alert—check it out!
+			</div>
             <div class="btn-toolbar mb-2 mb-md-0">
               <div class="btn-group mr-2">
-                <button class="btn btn-sm btn-outline-secondary">Share</button>
-                <button class="btn btn-sm btn-outline-secondary">Export</button>
+                <button class="btn btn-sm btn-outline-secondary">Compartilhar</button>
+                <button class="btn btn-sm btn-outline-secondary">Exportar</button>
               </div>
               <button class="btn btn-sm btn-outline-secondary dropdown-toggle">
                 <span data-feather="calendar"></span>
-                This week
+               		Esta Semana
               </button>
             </div>
           </div>
@@ -65,7 +56,7 @@
       feather.replace()
     </script>
 	<!--  labels: labels:["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Dez"]-->
-    
+     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 
 <!-- Grafico -->
 <script  th:inline="javascript">
@@ -75,6 +66,8 @@ var  data=[[${values}]];
 var  series=[[${keyset}]];
 var  titulo=[[${titulo}]];
 var  grafico=[[${grafico}]];
+var data_receitas=[[${valuesreceitas}]]
+var series_receitas=[]
       const chart = Highcharts.chart('container', {
           chart: {
               type: grafico
@@ -91,9 +84,13 @@ var  grafico=[[${grafico}]];
               }
           },
           series: [{
-              name: '2021',
+              name: 'Despesas',
               data: data
-          }]
+          },{
+        	  name: 'Receitas',
+              data: data_receitas
+          }
+          ]
       });
   });
 

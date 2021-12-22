@@ -9,7 +9,7 @@ import br.com.faturaweb.fatura.model.Lancamento;
 
 public interface LancamentoRepository extends CrudRepository<Lancamento, Long> {
 
-		@Query("SELECT l from Lancamento l")
+		@Query("SELECT l from Lancamento l WHERE l.snPago='Não'")
 		List<Lancamento> findAllLancamentos();	
 		
 		@Query("SELECT l from Lancamento l WHERE l.cdLancamento = :cdLancamento")
@@ -21,5 +21,36 @@ public interface LancamentoRepository extends CrudRepository<Lancamento, Long> {
 				+ "where date_format(dt_cadastro,'%m') = (date_format(now(),'%m' ))  "
 				+ "group by  ds_lancamento", nativeQuery = true)
 		List<Lancamento> findAllLancamentosDoMes();
+	
+		/**
+		 * Retorna todos os lancantos do ano corrente
+		 * @author elias
+		 * @since 04/12/2021
+		 * @return {@link List}
+		 * */
+		@Query(value = "SELECT * FROM fatura.lancamento "
+										+ "where date_format(dt_cadastro,'%Y') = date_format(curdate(),'%Y') order by sn_pago"
+											,nativeQuery = true)
+		List<Lancamento>findLancamentosDoAno();
 		
+		/**
+		 * Retorna o último lancamento realizado pelo usuário
+		 * @author elias
+		 * @since04-12-2021
+		 * @param nrDias
+		 * @return {@link Lancamento}
+		 * */
+		@Query(value="select * from fatura.lancamento where cd_lancamento = ("
+										+ "select max(cd_lancamento) cd_lancamento from fatura.lancamento where usuario_cd_usuario = :cdUsuario) ",nativeQuery = true)
+		Lancamento findUltimoLancamentoUsuario(Long cdUsuario);
+		
+		/**
+		 * Retorna os pagametos vencidos filtrados a partir do número de dias de atrazo.
+		 * @author elias
+		 * @since 21/12/2021
+		 * @param nrDias
+		 * @return {@link List} - Lista dos lançamentos vencidos
+		 * */
+		@Query(value="select * FROM FATURA.LANCAMENTO L WHERE timestampdiff(DAY, CURDATE(),L.DT_COMPETENCIA) <=5  AND SN_PAGO = 'NÃO'",nativeQuery = true)
+		List<Lancamento> findVencidos();
 }

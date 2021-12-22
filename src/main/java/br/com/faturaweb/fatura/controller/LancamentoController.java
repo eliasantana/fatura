@@ -14,14 +14,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.view.RedirectView;
 
 import br.com.faturaweb.fatura.form.LancamentoForm;
+import br.com.faturaweb.fatura.model.Configuracoes;
 import br.com.faturaweb.fatura.model.FormaDePagamento;
 import br.com.faturaweb.fatura.model.Lancamento;
 import br.com.faturaweb.fatura.model.TipoLancamento;
 import br.com.faturaweb.fatura.model.Usuario;
+import br.com.faturaweb.fatura.repository.ConfiguracoesRepository;
 import br.com.faturaweb.fatura.repository.FormaDePagamentoRepository;
 import br.com.faturaweb.fatura.repository.LancamentoRepository;
 import br.com.faturaweb.fatura.repository.TipoLancamentoRepository;
 import br.com.faturaweb.fatura.repository.UsuarioRepository;
+import br.com.faturaweb.fatura.services.LancamentoServices;
 
 @Controller
 @EnableAutoConfiguration
@@ -39,6 +42,12 @@ public class LancamentoController {
 	UsuarioRepository usuarioRepository;
 	@Autowired
 	TipoLancamentoRepository tipoLancamentoRepository;
+	
+	@Autowired
+	LancamentoServices services;
+	
+@Autowired
+	ConfiguracoesRepository configuracoesRepository;
 
 	@GetMapping("cadastro")
 	public String cadastrar(Model model) {
@@ -70,6 +79,8 @@ public class LancamentoController {
 		Optional<FormaDePagamento> findByDescricaoFormaDePagamento = formaDePagamentoRepository
 				.findByDescricaoFormaDePagamento(lancamentoForm.getDsFormaDePagamento());
 		FormaDePagamento formadepagamento = findByDescricaoFormaDePagamento.get();
+		Configuracoes config = configuracoesRepository.findConfiguracao();
+		
 		System.out.println(formadepagamento.getDescricao());
 		//Lancamento lancamento = new Lancamento();
 		Optional<Lancamento> lancamentoLocalizado = lancamentoRepository.findById(lancamentoForm.getCdLancamento());
@@ -79,7 +90,7 @@ public class LancamentoController {
 				.findBydsTipoLancamento(lancamentoForm.getDsTipoLancamento());
 		TipoLancamento tipoLancamento = findBydsTipoLancamento.get();
 		Optional<Usuario> usuario = usuarioRepository.findById(5L);		
-
+			
 			lancamento.setCdLancamento(lancamentoForm.getCdLancamento());
 			lancamento.setDsLancamento(lancamentoForm.getDsLancamento());
 			lancamento.setDtCadastro(lancamentoForm.getDtCadastro());
@@ -90,20 +101,30 @@ public class LancamentoController {
 			lancamento.setUsuario(usuario.get());
 			lancamento.setVlPago(lancamentoForm.getVlPago());
 			lancamentoRepository.save(lancamento);
+			Lancamento findUltimoLancamentoUsuario = lancamentoRepository.findUltimoLancamentoUsuario(usuario.get().getCdUsuario());
+			System.out.println("Ultimo lancamento Localizado: " + findUltimoLancamentoUsuario.toString());
 
 			List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentos();
 			model.addAttribute("lancamentos", lancamentos);
-
-		
+			
+			
 		return "home/listar-lancamento";
 	}
 
 	@GetMapping("/listar")
 	public String listar(Model model) {
-		List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentos();
-		System.out.println("listando");
-		model.addAttribute("lancamentos", lancamentos);
-
+//    Método duplicado - Este método está sendo utilizado através do controller HomeController
+//		Configuracoes conf = configuracoesRepository.findConfiguracao();
+//		//Lançamentos do Ano
+//		List<Lancamento> lancamentos = lancamentoRepository.findLancamentosDoAno();
+//		System.out.println("listandox");
+//		model.addAttribute("lancamentos", lancamentos);
+//
+//		List<Lancamento> lancamentosVencidos = lancamentoRepository.findVencidos(conf.getNrDias());
+//		for (Lancamento lancamento : lancamentosVencidos) {
+//			System.out.println(lancamento.getCdLancamento());
+//		}
+//		
 		return "home/listar-lancamento";
 	}
 
@@ -115,8 +136,8 @@ public class LancamentoController {
 		Optional<Lancamento> lancamentoLocalizado = lancamentoRepository.findById(id);
 		lancamentoRepository.delete(lancamentoLocalizado.get());
 		System.out.println("Lançamento Excluído com sucesso!");
-		//RedirectView rw = new RedirectView("http://localhost:8080/listar");
-		RedirectView rw = new RedirectView("https://sysfaturaapp.herokuapp.com/listar"); 
+		RedirectView rw = new RedirectView("http://localhost:8080/listar");
+		//RedirectView rw = new RedirectView("https://sysfaturaapp.herokuapp.com/listar"); 
 		return rw;
 		
 	}
@@ -152,6 +173,18 @@ public class LancamentoController {
 		return "home/form-lancamento";
 	}
 	
+	
+	@GetMapping("pagar/{id}")
+	public String pagar(@PathVariable Long id, Model model) {
+		//RedirectView rw = new RedirectView("https://sysfaturaapp.herokuapp.com/listar"); 
+		Lancamento lancamento = lancamentoRepository.findByIdLancamento(id);
+		//List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentos();
+		List<Lancamento> lancamentos = lancamentoRepository.findLancamentosDoAno();
+		lancamento.setSnPago("SIM");
+		lancamentoRepository.save(lancamento);
+		model.addAttribute("lancamentos",lancamentos);
+		return "home/listar-lancamento";
+		}
 
 }
 

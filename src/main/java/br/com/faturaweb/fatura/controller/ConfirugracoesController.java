@@ -10,28 +10,40 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import br.com.faturaweb.fatura.model.Configuracoes;
 import br.com.faturaweb.fatura.repository.ConfiguracoesRepository;
+import br.com.faturaweb.fatura.repository.LancamentoRepository;
 
 @Controller
-@RequestMapping("configuracoes")
+@RequestMapping("/configuracoes")
 public class ConfirugracoesController {
 
 @Autowired	
 private ConfiguracoesRepository configuracoesRepository;
 
-@GetMapping("listar")
+@GetMapping("/listar")
 public String configuracoes(Model model) {
-	 Configuracoes config = configuracoesRepository.findConfiguracao();
+	Configuracoes config = configuracoesRepository.findConfiguracao();
 	model.addAttribute("config",config);
 	
 	return "home/configuracoes";
 }
 
 @PostMapping("salvar")
-public RedirectView salvar(Model model, Configuracoes formConfiguracoes) {
- 
-  System.out.println(formConfiguracoes.getSnParcelado());
-   RedirectView redirectView = new RedirectView("http://localhost:8080/configuracoes/listar");
+public  RedirectView  salvar(Model model, Configuracoes formConfiguracoes) {
+   Configuracoes config = configuracoesRepository.findConfiguracao();
+   config.setSnParcelado(formConfiguracoes.getSnParcelado());
+   if (formConfiguracoes.getSnNotificar()==null) {
+	   config.setSnNotificar("N");
+   }else {
+	   config.setSnNotificar("S");
+   }   
+   config.setNrDias(formConfiguracoes.getNrDias());
+   configuracoesRepository.save(config);
+   config = configuracoesRepository.findConfiguracao();   
+   model.addAttribute("msg","Configurações salvas com sucesso!");
+   model.addAttribute("config",config);
+   RedirectView redirectView = new RedirectView("http://localhost:8080/configuracoes");
 	return	 redirectView;
 }
+
 }
  

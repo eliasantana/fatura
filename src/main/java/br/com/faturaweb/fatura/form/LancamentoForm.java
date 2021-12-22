@@ -17,17 +17,18 @@ public class LancamentoForm {
 	private String dsFormaDePagamento;
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
 	private LocalDate dtCompetencia;
-	
+	private  Integer nrParcelas;
 	
 	public LancamentoForm() {
 		 this.dtCadastro = LocalDate.now();
 		 this.dtCompetencia=LocalDate.now();
+		
 	}
 	
 
 	public LancamentoForm(Long cdLancamento, String dsLancamento, String usuario, LocalDate dtCadastro,
 			String dsTipoLancamento, String snPago, BigDecimal vlPago, String dsFormaDePagamento,
-			LocalDate dtCompetencia) {
+			LocalDate dtCompetencia, Integer nrPArcelas) {
 			super();
 			this.cdLancamento = cdLancamento;
 			this.dsLancamento = dsLancamento;
@@ -38,6 +39,7 @@ public class LancamentoForm {
 			this.vlPago = vlPago;
 			this.dsFormaDePagamento = dsFormaDePagamento;
 			this.dtCompetencia = LocalDate.now();
+			this.nrParcelas = nrPArcelas;
 	}
 
 
@@ -114,12 +116,20 @@ public class LancamentoForm {
 		this.dtCompetencia = dtCompetencia;
 	}
 
+	public void setNrParcelas(Integer nrParcelas) {
+		this.nrParcelas = nrParcelas;
+	}
+	public Integer getNrParcelas() {
+		return nrParcelas;
+	}
+
+
 	@Override
 	public String toString() {
 		return "LancamentoForm [cdLancamento=" + cdLancamento + ", dsLancamento=" + dsLancamento + ", usuario="
 				+ usuario + ", dtCadastro=" + dtCadastro + ", dsTipoLancamento=" + dsTipoLancamento + ", snPago="
 				+ snPago + ", vlPago=" + vlPago + ", dsFormaDePagamento=" + dsFormaDePagamento + ", dtCompetencia="
-				+ dtCompetencia + "]";
+				+ dtCompetencia + ", nrParcelas=" + nrParcelas + "]";
 	}
 	
 	

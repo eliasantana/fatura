@@ -1,18 +1,19 @@
 package br.com.faturaweb.fatura.controller;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.tree.AbstractLayoutCache;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.servlet.view.RedirectView;
 
 import br.com.faturaweb.fatura.model.Lancamento;
 import br.com.faturaweb.fatura.repository.LancamentoRepository;
@@ -121,6 +122,30 @@ public class testeController {
 			model.addAttribute("values",dados.values());
 			model.addAttribute("titulo","Faturamento Mensal - SysFatura");
 			model.addAttribute("grafico","column"); //column - Gráfico de Colunas - bar - Gráfico de Barras
+			
+			System.out.println("Parcelando valores");
+			BigDecimal total = new BigDecimal(800.75);
+			BigDecimal qtdParcelas = new BigDecimal(12);
+			BigDecimal parcela = new BigDecimal(0);
+			 parcela = total.divide(qtdParcelas,MathContext.DECIMAL32);
+			// parcela = total.divide(qtdParcelas, new MathContext(2, RoundingMode.CEILING));
+			 BigDecimal totalCalculado  = qtdParcelas.multiply(parcela);
+			 System.out.println(parcela);
+			
+			
 			return "teste";
+		}
+		
+		@GetMapping("/ds2")
+		public String teste2() {
+			
+			return "home/dashboard2";
+		}
+		
+		@GetMapping("/divide")
+		public RedirectView divide() {
+		
+			RedirectView rw = new RedirectView("http://localhost/teste");
+			return  rw;
 		}
 }
