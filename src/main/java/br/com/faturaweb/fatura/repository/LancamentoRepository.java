@@ -2,14 +2,16 @@ package br.com.faturaweb.fatura.repository;
 
 import java.util.List;
 
+import org.hibernate.annotations.Parameter;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import br.com.faturaweb.fatura.model.Lancamento;
+import io.lettuce.core.dynamic.annotation.Param;
 
 public interface LancamentoRepository extends CrudRepository<Lancamento, Long> {
 
-		@Query("SELECT l from Lancamento l WHERE l.snPago='Não'")
+		@Query("SELECT l from Lancamento l ")
 		List<Lancamento> findAllLancamentos();	
 		
 		@Query("SELECT l from Lancamento l WHERE l.cdLancamento = :cdLancamento")
@@ -51,6 +53,6 @@ public interface LancamentoRepository extends CrudRepository<Lancamento, Long> {
 		 * @param nrDias
 		 * @return {@link List} - Lista dos lançamentos vencidos
 		 * */
-		@Query(value="select * FROM FATURA.LANCAMENTO L WHERE timestampdiff(DAY, CURDATE(),L.DT_COMPETENCIA) <=5  AND SN_PAGO = 'NÃO'",nativeQuery = true)
-		List<Lancamento> findVencidos();
+		@Query(value="select * FROM FATURA.LANCAMENTO L WHERE timestampdiff(DAY, CURDATE(),L.DT_COMPETENCIA) <=:dias  AND SN_PAGO = 'NÃO'",nativeQuery = true)
+		List<Lancamento> findVencidos0(@Param(value = "dias") Integer dias);
 }

@@ -59,7 +59,8 @@ public class HomeController {
 	@GetMapping("/")
 	public String index(Model model) {
 		 List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentos();
-		 List<Lancamento> lancamentosVencidos = lancamentoRepository.findVencidos();
+		 Integer dias = configuracoesRepository.findConfiguracao().getNrDias();
+		 List<Lancamento> lancamentosVencidos = lancamentoRepository.findVencidos0(dias);
 		 //Formata data retorando apenas o mes ex: jan = 01
 		 DateTimeFormatter df = DateTimeFormatter.ofPattern("MM");
 		 //Variáveis para acumular os valores pagos 
@@ -176,7 +177,8 @@ public class HomeController {
 		List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentos();
 		System.out.println("listando");
 		model.addAttribute("lancamentos", lancamentos);
-		List<Lancamento> lancamentosVencidos = lancamentoRepository.findVencidos();
+		Integer nrDias = configuracoesRepository.findConfiguracao().getNrDias();
+		List<Lancamento> lancamentosVencidos = lancamentoRepository.findVencidos0(nrDias);
 		
 		if (lancamentosVencidos.size() > 0 ) {
 			System.out.println("Preparando o envio de e-mail....");
