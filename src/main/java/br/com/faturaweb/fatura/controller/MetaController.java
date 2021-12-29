@@ -19,9 +19,11 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import br.com.faturaweb.fatura.model.Conta;
 import br.com.faturaweb.fatura.model.ItMeta;
+import br.com.faturaweb.fatura.model.LogMovimentacaoFinanceira;
 import br.com.faturaweb.fatura.model.Meta;
 import br.com.faturaweb.fatura.repository.ContaRepository;
 import br.com.faturaweb.fatura.repository.ItMetaRepository;
+import br.com.faturaweb.fatura.repository.LogMovimentacaoFinanceiraRepository;
 import br.com.faturaweb.fatura.repository.MetaRepository;
 import br.com.faturaweb.fatura.services.MetaService;
 
@@ -36,6 +38,8 @@ MetaRepository metaRepository;
 ItMetaRepository ItMetaRepository;
 @Autowired
 MetaService metaServices;
+@Autowired
+LogMovimentacaoFinanceiraRepository logServices;
 
 	@GetMapping("/listar")
 	public String listar(Model model, Meta meta) {
@@ -120,6 +124,13 @@ MetaService metaServices;
 			Optional<Meta> meta = metaRepository.findById(id);
 			if (meta.isPresent()) {
 				model.addAttribute("mensagem", " A meta " + meta.get().getCdMeta() + " foi excluída com sucesso!");
+				LogMovimentacaoFinanceira log = new LogMovimentacaoFinanceira();
+				log.setDescricao("Excluisão do meta " +meta.get().getCdMeta()+ " - "+ meta.get().getDescricao() + " Valor " + meta.get().getVlMeta());
+				log.setVlMovimentado(meta.get().getVlMeta());
+				log.setTpMovimentacao("D");
+				log.setNrConta(meta.get().getConta().getNrConta());
+				log.setDtMovimentacao(LocalDate.now());
+				logServices.save(log);
 				metaRepository.delete(meta.get());
 			}
 		} catch (Exception e) {
