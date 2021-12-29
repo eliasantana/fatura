@@ -3,7 +3,9 @@ package br.com.faturaweb.fatura.controller;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,7 +82,7 @@ MetaService metaServices;
 	}
 	
 	@GetMapping("/teste")
-	public String teste() {
+	public String teste(Model model) {
 	  Conta c = new Conta();	
 	  c.setNrConta("1007048-1");
 	  c.setNrAgencia("1783-3");
@@ -101,6 +103,12 @@ MetaService metaServices;
 	System.out.println("Totalização dos Itens da Meta: " + totalItMeta);
 	System.out.println("Andamento da Meta: " + andamentoMeta);
 	
+	// Dados do Gráfico 
+	
+	model.addAttribute("totalmeta",totalItMeta);
+	model.addAttribute("andamento", andamentoMeta);
+	model.addAttribute("titulo", "Meta 2021");
+	model.addAttribute("descricao"," Resta para a meta "+meta.getDescricao());
 		return "teste";
 		
 	}

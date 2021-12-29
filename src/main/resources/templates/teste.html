@@ -52,7 +52,12 @@
     </p>
 </figure>
 <!-- Gráfico de Metas -->
-<script type="text/javascript">
+<script th:inline="javascript">
+		
+		var  series=[[${andamento}]];
+		var  descricao=[[${descricao}]];
+		var  tituloGrafico=[[${titulo}]];
+		
 		Highcharts.chart('meta', {
 		    chart: {
 		        plotBackgroundColor: null,
@@ -60,7 +65,7 @@
 		        plotShadow: false
 		    },
 		    title: {
-		        text: 'Metas 2021',
+		        text: tituloGrafico,
 		        align: 'center',
 		        verticalAlign: 'middle',
 		        y: 60
@@ -94,12 +99,12 @@
 		        name: 'Metas',
 		        innerSize: '50%',
 		        data: [
-		            ['Gramado', 72.3],
-		            ['restante', 27.7],
+		            ["Andamento", series],
+		            
 		            
 		            {
-		                name: 'Other',
-		                y:0,
+		                name: descricao,
+		                y:100,
 		                dataLabels: {
 		                    enabled: false
 		                }
