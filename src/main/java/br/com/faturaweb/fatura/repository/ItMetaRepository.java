@@ -21,6 +21,12 @@ public interface ItMetaRepository extends CrudRepository<ItMeta, Long> {
 	   * Retorna os itens da meta que não foram creditatos
 	   * @author elias
 	   * */
-	  @Query(value = "select * from fatura.it_meta where meta_cd_meta = :cdMeta and sn_creditado is null ",nativeQuery = true)
+	  @Query(value = "select * from fatura.it_meta where meta_cd_meta = :cdMeta and sn_creditado = 'N'",nativeQuery = true)
 		List<ItMeta> findItNaoCreditado(@Param(value = "cdMeta") Long cdMeta);
+	  /**
+	   * Retorna o item de meta informado
+	   * @author elias
+	   * */
+	  @Query(value = "SELECT * FROM fatura.it_meta where cd_it_meta = :id",nativeQuery = true)
+	  ItMeta findItMetaId(@Param(value = "id") Long id);
 }

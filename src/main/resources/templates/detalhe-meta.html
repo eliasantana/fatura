@@ -32,7 +32,7 @@
 		    		<td th:text="${itmeta.descricao}"> x </td>
 		    		<td th:text="${itmeta.nrSemana}"> x </td>
 		    		<td th:text="${itmeta.vlrSemana}"> x </td>
-		    		<td> <a class="btn btn-danger">Creditar</a></td>
+		    		<td> <a href="@{'/itmeta/credita/'}" th:href="@{'/itmeta/credita/'+${cdmeta}+ '/'+ ${itmeta.cdItMeta}}" class="btn btn-danger">Creditar</a></td>
 		    		</tr>
 		    	</tbody>
 		    </table>

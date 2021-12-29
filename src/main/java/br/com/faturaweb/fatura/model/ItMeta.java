@@ -76,6 +76,14 @@ public class ItMeta {
 		this.meta = meta;
 	}
 
+	public String getSnCreditado() {
+		return snCreditado;
+	}
+	
+	public void setSnCreditado(String snCreditado) {
+		this.snCreditado = snCreditado;
+	}
+	
 	@Override
 	public String toString() {
 		return "ItMeta [cdItMeta=" + cdItMeta + ", descricao=" + descricao + ", nrSemana=" + nrSemana + ", vlrSemana="

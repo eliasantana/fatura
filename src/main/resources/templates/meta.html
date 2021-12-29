@@ -123,13 +123,12 @@
 	    			<tr th:each="metas : ${metas}">
 	    				<td th:text="${metas.cdMeta}"></td>
 	    				<td th:text="${metas.descricao}"></td>
-	    				<td th:text="${metas.dtInicio}"></td>
-	    				<td th:text="${metas.dtFim}"></td>
-	    				<td th:text="${metas.vlMeta}"></td>
+	    				<td th:text="${#temporals.format(metas.dtInicio,'dd/MM/yyyy')}">
+	    				<td th:text="${#temporals.format(metas.dtFim,'dd/MM/yyyy')}"></td>
+	    				<td th:text="${#numbers.formatDecimal(metas.vlMeta,1,2,'COMMA')}">
 	    				<td th:text="${metas.conta.nrConta}"></td>
 	    				<td>
-	    					<a class="btn btn-danger">Excluir</a>
-	    					<a class="btn btn-warning">Alterar</a>
+	    					<a href="/meta/excluir/" th:href="@{'/meta/excluir/'  + ${metas.cdMeta}}" class="btn btn-danger">Excluir</a>
 	    					<a href="/itmeta/listar/" th:href="@{'/itmeta/listar/'  + ${metas.cdMeta}}" class="btn btn-success">Detalhe</a>
 	    				</td>
 	    			</tr>
@@ -139,11 +138,6 @@
 	  </div>
 	</div>
 </div>	
-	
-	
-	
-	
-	
  <!-- Imports -->
  <!-- Bootstrap core JavaScript
     ================================================== -->

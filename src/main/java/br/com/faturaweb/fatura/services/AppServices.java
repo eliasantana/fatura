@@ -57,12 +57,8 @@ public class AppServices {
 	public Conta credita(Conta c, BigDecimal valor) {
 			BigDecimal saldo = c.getSaldo();
 			if (!(valor.compareTo(BigDecimal.ZERO) < 0)) { // Valor maior que zero
-				if (!(valor.compareTo(saldo)==1)) { // Saldo maior que o valor informado		
-					System.out.println("Creditando valor");
-					c.setSaldo(saldo.add(valor));			
-				}else {
-					System.out.println(" Saldo insuficiente -> "  + c.getSaldo());
-				}
+				System.out.println("Creditando valor");
+				c.setSaldo(saldo.add(valor));
 			}
 		    return c;	
 	}

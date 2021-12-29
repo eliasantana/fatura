@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.view.RedirectView;
@@ -33,8 +34,6 @@ MetaRepository metaRepository;
 ItMetaRepository ItMetaRepository;
 @Autowired
 MetaService metaServices;
-
-
 
 	@GetMapping("/listar")
 	public String listar(Model model, Meta meta) {
@@ -106,6 +105,19 @@ MetaService metaServices;
 		
 	}
 	
-	
+	@GetMapping("excluir/{id}")
+	public RedirectView exclulir (@PathVariable Long id, Model model) {
+		RedirectView rw = new RedirectView("http://localhost:8080/meta/listar");
+		try {
+			Optional<Meta> meta = metaRepository.findById(id);
+			if (meta.isPresent()) {
+				model.addAttribute("mensagem", " A meta " + meta.get().getCdMeta() + " foi excluída com sucesso!");
+				metaRepository.delete(meta.get());
+			}
+		} catch (Exception e) {
+			
+		}
+		return rw;
+	}
 	
 }
