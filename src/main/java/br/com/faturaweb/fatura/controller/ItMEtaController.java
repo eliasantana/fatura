@@ -1,5 +1,6 @@
 package br.com.faturaweb.fatura.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,8 +14,10 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import br.com.faturaweb.fatura.model.Conta;
 import br.com.faturaweb.fatura.model.ItMeta;
+import br.com.faturaweb.fatura.model.LogMovimentacaoFinanceira;
 import br.com.faturaweb.fatura.model.Meta;
 import br.com.faturaweb.fatura.repository.ItMetaRepository;
+import br.com.faturaweb.fatura.repository.LogMovimentacaoFinanceiraRepository;
 import br.com.faturaweb.fatura.repository.MetaRepository;
 import br.com.faturaweb.fatura.services.AppServices;
 
@@ -29,6 +32,9 @@ public class ItMEtaController {
 	
 	@Autowired
 	AppServices appServices;
+	
+	@Autowired
+	LogMovimentacaoFinanceiraRepository log;
 	
 	@GetMapping("listar/{id}")
 	public String listarItMeta(@PathVariable Long id, Model model) {
@@ -57,12 +63,22 @@ public class ItMEtaController {
 	public RedirectView creditar(@PathVariable Long idMeta, @PathVariable Long idItMeta, Model model) {
 		RedirectView rw = new RedirectView("http://localhost:8080/itmeta/listar/"+idMeta);
 		ItMeta itMeta = itMetaRepository.findItMetaId(idItMeta);
+		LogMovimentacaoFinanceira logMovimentacao = new LogMovimentacaoFinanceira();
+		
 		//Valia o id informadoé igual ao localizado
 		if (itMeta.getCdItMeta()!=null) {
 			//Localizando a conta  conta
 			 Conta conta = itMeta.getMeta().getConta();
 			 //Credita o valor do item da meta (Valor Semanal)
 			appServices.credita(conta, itMeta.getVlrSemana());
+			//Gerando log da movimentação
+			logMovimentacao.setDescricao("Creditando valor em " + conta.getNrConta()  +" Ag. " + conta.getNrAgencia() );
+			logMovimentacao.setNrConta(conta.getNrConta()  );
+			logMovimentacao.setDtMovimentacao(LocalDate.now());
+			logMovimentacao.setTpMovimentacao("C");
+			logMovimentacao.setVlMovimentado(itMeta.getVlrSemana());
+			log.save(logMovimentacao);
+			
 			//Muda o status para creditado
 			itMeta.setSnCreditado("S");
 			itMetaRepository.save(itMeta);
