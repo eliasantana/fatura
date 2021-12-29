@@ -8,7 +8,7 @@
  <!-- Nav Bar -->
 <nav th:replace="~{navfragment:: nav }"></nav>	
 <div class="container-sm">
-	<div class="card">
+	<div class="card mt-2">
 	  <div class="card-header">
 	    Cadastro 
 	  </div>
@@ -130,7 +130,7 @@
 	    				<td>
 	    					<a class="btn btn-danger">Excluir</a>
 	    					<a class="btn btn-warning">Alterar</a>
-	    					<a href="#" class="btn btn-success">Detalhe</a>
+	    					<a href="/itmeta/listar/" th:href="@{'/itmeta/listar/'  + ${metas.cdMeta}}" class="btn btn-success">Detalhe</a>
 	    				</td>
 	    			</tr>
 	    		</tbody>
