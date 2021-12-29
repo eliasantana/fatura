@@ -16,6 +16,11 @@
 		    <h5 class="card-title" th:text=" 'Código: ' + ${cdmeta}"></h5>
 		    <p class="card-text" th:text="'Meta: '+${nome_meta}"></p>
 		    <a href="/meta/listar" class="btn btn-success mb-2" > Voltar</a>
+		    <!-- Gráfico de Metas -->
+	         <figure class="highcharts-figure">
+			    <div id="meta" style="width: 100%;"></div>
+			    <p class="highcharts-description"></p>
+			</figure>
 		    <table class="table table-striped table-hover" id="itmeta">
 		    	<thead>
 			    	<tr>
@@ -60,5 +65,66 @@
 	<!--  labels: labels:["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Dez"]-->
      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 	
+	<!-- Gráfico de Metas -->
+	<script type="text/javascript">
+			Highcharts.chart('meta', {
+			    chart: {
+			        plotBackgroundColor: null,
+			        plotBorderWidth: 0,
+			        plotShadow: false
+			    },
+			    title: {
+			        text: 'Metas 2021',
+			        align: 'center',
+			        verticalAlign: 'middle',
+			        y: 60
+			    },
+			    tooltip: {
+			        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+			    },
+			    accessibility: {
+			        point: {
+			            valueSuffix: '%'
+			        }
+			    },
+			    plotOptions: {
+			        pie: {
+			            dataLabels: {
+			                enabled: true,
+			                distance: -50,
+			                style: {
+			                    fontWeight: 'bold',
+			                    color: 'white'
+			                }
+			            },
+			            startAngle: -90,
+			            endAngle: 90,
+			            center: ['50%', '75%'],
+			            size: '110%'
+			        }
+			    },
+			    series: [{
+			        type: 'pie',
+			        name: 'Metas',
+			        innerSize: '50%',
+			        data: [
+			            ['Gramado', 72.3],
+			            ['restante', 27.7],
+			            
+			            {
+			                name: 'Other',
+			                y:0,
+			                dataLabels: {
+			                    enabled: false
+			                }
+			            }
+			        ]
+			    }]
+			});
+	
+	</script>
+	
+	
+	<!-- Fim do Gráfico de MEta -->
 </body>
 </html>

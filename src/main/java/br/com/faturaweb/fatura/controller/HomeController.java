@@ -253,7 +253,7 @@ public class HomeController {
 		model.addAttribute("config",config);
 		return "configuracoes";
 	}
-
+//Excluir após os testes
 @GetMapping("email")
 public String email() {
 	
