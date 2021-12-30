@@ -21,6 +21,7 @@ import br.com.faturaweb.fatura.model.Configuracoes;
 import br.com.faturaweb.fatura.model.EnviaEmailThread;
 import br.com.faturaweb.fatura.model.FormaDePagamento;
 import br.com.faturaweb.fatura.model.Lancamento;
+import br.com.faturaweb.fatura.model.Receita;
 import br.com.faturaweb.fatura.model.TipoLancamento;
 import br.com.faturaweb.fatura.model.Usuario;
 import br.com.faturaweb.fatura.repository.ConfiguracoesRepository;
@@ -30,6 +31,7 @@ import br.com.faturaweb.fatura.repository.ReceitaRepository;
 import br.com.faturaweb.fatura.repository.TipoLancamentoRepository;
 import br.com.faturaweb.fatura.repository.UsuarioRepository;
 import br.com.faturaweb.fatura.services.LancamentoServices;
+import br.com.faturaweb.fatura.services.MetaService;
 import br.com.faturaweb.fatura.services.ReceitaServices;
 import br.com.faturaweb.fatura.services.AppServices;
 @ComponentScan
@@ -54,8 +56,9 @@ public class HomeController {
 	ConfiguracoesRepository configuracoesRepository;
 	@Autowired
 	AppServices appservices;
-	
-	
+	@Autowired
+	MetaService metaservice;
+		
 	@GetMapping("/")
 	public String index(Model model) {
 		 List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentos();
@@ -124,22 +127,7 @@ public class HomeController {
 				}		   
 			   
 		}
-		//Imprimindo o resultado - apagar após finalização
-		/*
-		   System.out.println("Janeiro: " + janeiro);
-			System.out.println("fevereiro: " + fevereiro);
-			System.out.println("março: " + marco);
-			System.out.println("abril: " + abril);
-			System.out.println("maio: " + maio);
-			System.out.println("junho: " + junho);
-			System.out.println("julho: " + julho);
-			System.out.println("Agosto: " + agosto);
-			System.out.println("setembro: " + setembro);
-			System.out.println("outubro: " + outubro);
-			System.out.println("novembro: " + novembro);
-			System.out.println("dezembro: " + dezembro);
-			*/
-			
+		
 			//Criando hash map e tribuindo o mes e seu valor
 			Map<String,BigDecimal> dados = new LinkedHashMap<String, BigDecimal>();
 			dados.put("Janeiro", janeiro);
@@ -169,6 +157,12 @@ public class HomeController {
 			}else {
 				model.addAttribute("mesagem",null);
 			}
+			Integer qtdMetasAtivas = metaservice.qtdMetasAtivas();
+			model.addAttribute("metasativas",qtdMetasAtivas);
+			List<Lancamento> findAllLancamentosDoMes = lancamentoRepository.findAllLancamentosDoMes();
+			model.addAttribute("lctomes",findAllLancamentosDoMes.size());
+			List<Receita> receitaMesCorrente = receitaRepository.findAllReceitaMesCorrente();
+			model.addAttribute("receitamescorrente",receitaMesCorrente.size());
 		return "home/dashboard";
 	}
 	

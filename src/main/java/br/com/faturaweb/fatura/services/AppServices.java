@@ -12,6 +12,7 @@ import com.google.common.collect.Lists;
 
 import br.com.faturaweb.fatura.model.Conta;
 import br.com.faturaweb.fatura.repository.ContaRepository;
+import br.com.faturaweb.fatura.repository.LancamentoRepository;
 import it.ozimov.springboot.mail.model.Email;
 import it.ozimov.springboot.mail.model.defaultimpl.DefaultEmail;
 import it.ozimov.springboot.mail.service.EmailService;
@@ -23,6 +24,7 @@ public class AppServices {
 	public EmailService emailService;
 	@Autowired
 	ContaRepository contaRepository;
+	
 	/**
 	 * Envia e-mail de texto simples
 	 * @author elias

@@ -1,5 +1,6 @@
 package br.com.faturaweb.fatura.repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.Query;
@@ -20,5 +21,12 @@ public interface ReceitaRepository extends CrudRepository<Receita, Long>{
 	 * */
 	@Query(value = "select * from fatura.receita where date_format(dt_recebimento,'%Y') = date_format(curdate(),'%Y')",nativeQuery = true)
 	List<Receita> findaAllReceitaAnoCorrente();
-	
+	/**
+	 * Retornas as receitas do mes Corrente
+	 * @author elias
+	 * @since 30-12-2021
+	 * @return {@link ArrayList}
+	 * */
+	@Query(value = "SELECT * FROM fatura.receita where date_format(dt_recebimento,'%m')=date_format( curdate(),'%m')",nativeQuery = true)
+	List<Receita> findAllReceitaMesCorrente();
 }
