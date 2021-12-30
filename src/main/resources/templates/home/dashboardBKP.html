@@ -14,9 +14,10 @@
       <div class="row">
         <nav th:replace="~{menu_fragmento :: menu}">   
         </nav>
+
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
           <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-            <h3 class="h4">Dashboard - Despesas</h4>
+            <h3 class="h4">xDashboard - Despesas</h4>
             <div class="alert alert-danger" role="alert" th:text="${mensagem}" th:if="${mensagem!=null}">
 			  A simple danger alert—check it out!
 			</div>
@@ -34,51 +35,6 @@
           <!-- Grafico -->
          <div id="container" style="width:100%;height:400 px;"> </div> 
        
-        <!-- grid -->
-        	<div class="container">
-			  <div class="row">
-			    <div class="col-3 ml-2 mr-2">
-			      <!-- Card1 -->
-			      <div class="card text-center" style="width: 18rem;">
-					  <div class="card-body">
-					    <h5 class="card-title">Metas Ativas</h5>
-					    <h6 class="card-subtitle mb-2 text-muted">Total</h6>
-					    <p class="card-text" style="font-size:50px;">2</p>
-					    <a href="#" class="card-link">Card link</a>
-					    <a href="#" class="card-link">Another link</a>
-					  </div>
-				 </div>
-			      <!-- Card1 -->
-			    </div>
-			    <div class="col-3 ml-2 mr-2">
-			       <!-- Card1 -->
-			      <div class="card text-center" style="width: 18rem;">
-					  <div class="card-body">
-					    <h5 class="card-title">Lançamentos do Mês</h5>
-					    <h6 class="card-subtitle mb-2 text-muted">Total</h6>
-					    <p class="card-text" style="font-size:50px;">10</p>
-					    <a href="#" class="card-link">Card link</a>
-					    <a href="#" class="card-link">Another link</a>
-					  </div>
-				 </div>
-			      <!-- Card1 -->
-			    </div>
-			    <div class="col-3 ml-2 mr-2">
-			       <!-- Card1 -->
-			      <div class="card text-center" style="width: 18rem;">
-					  <div class="card-body">
-					    <h5 class="card-title">Receitas do Mês</h5>
-					    <h6 class="card-subtitle mb-2 text-muted">Total</h6>
-					    <p class="card-text" style="font-size:50px;">1</p>
-					    <a href="#" class="card-link">Card link</a>
-					    <a href="#" class="card-link">Another link</a>
-					  </div>
-				 </div>
-			      <!-- Card1 -->
-			    </div>
-			  </div>
-			</div>
-        <!-- Fim da grid -->
         </main>
       </div>
     </div>
