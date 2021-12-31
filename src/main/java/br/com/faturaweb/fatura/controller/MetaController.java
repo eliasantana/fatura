@@ -94,14 +94,14 @@ LogMovimentacaoFinanceiraRepository logServices;
 	  ArrayList<ItMeta> iteMetas = new  ArrayList<ItMeta>();
 	  Meta meta = new Meta();
 	  meta.setConta(c);
-	  meta.setDescricao("teste");
+	  meta.setDescricao("Gramado 2022");
 	  meta.setDtFim(LocalDate.of(2022, 8, 31));
 	  meta.setDtInicio(LocalDate.of(2022, 1, 1));
 	  meta.setSnAtivo("S");
 	  meta.setVlMeta(new BigDecimal(6000));
 	  meta.setItMeta(iteMetas);
-	  
-	 List<ItMeta> itemCreditados = ItMetaRepository.findItMeta(11L);
+	  meta.setCdMeta(13L);
+	 List<ItMeta> itemCreditados = ItMetaRepository.findItMeta(13L);
 	BigDecimal totalItMeta = metaServices.totalizaItMeta(itemCreditados);
     BigDecimal andamentoMeta = metaServices.andamentoMeta(meta, totalItMeta); 
 	System.out.println("Totalização dos Itens da Meta: " + totalItMeta);
@@ -113,6 +113,14 @@ LogMovimentacaoFinanceiraRepository logServices;
 	model.addAttribute("andamento", andamentoMeta);
 	model.addAttribute("titulo", "Meta 2021");
 	model.addAttribute("descricao"," Resta para a meta "+meta.getDescricao());
+	
+	List<ItMeta> itensDaMEta = metaServices.geraItMeta(meta);
+	System.out.println("Itens gerados: "+itensDaMEta.size());
+	 for (ItMeta itMeta : itensDaMEta) {
+		itMeta.setCdItMeta(meta.getCdMeta());
+		System.out.println(itMeta.getCdItMeta() + " " + itMeta.getDescricao());
+	}
+	ItMetaRepository.saveAll(itensDaMEta);
 		return "teste";
 		
 	}
