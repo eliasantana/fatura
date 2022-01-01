@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head th:replace="~{fragmento :: head('SysFatura') }">
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<!-- Nav Bar -->
+    <nav th:replace="~{navfragment:: nav }"></nav>
+	<div class="container mt-2">
+		<div class="card">
+		  <div class="card-header">
+		    Detalhe da Meta
+		  </div>
+		  <div class="card-body">
+		    <h5 class="card-title" th:text=" 'Código: ' + ${cdmeta}"></h5>
+		    <p class="card-text" th:text="'Meta: '+${nome_meta}"></p>
+		    <a href="/meta/listar" class="btn btn-success mb-2" > Voltar</a>
+		    <!-- Gráfico de Metas -->
+	         <figure class="highcharts-figure">
+			    <div id="meta" style="width: 100%;"></div>
+			    <p class="highcharts-description"></p>
+			</figure>
+		    <table class="table table-striped table-hover" id="itmeta">
+		    	<thead>
+			    	<tr>
+			    		<th scope="col">Código</th>
+			    		<th scope="col">Descrição</th>
+			    		<th scope="col">Semana</th>
+			    		<th scope="col">Valor</th>
+			    		<th scope="col">Acões</th>
+			    	<tr/>
+		    	</thead>
+		    	<tbody>
+		    	<tr th:each="itmeta : ${itens}">
+		    		<td th:text="${itmeta.cdItMeta}"> </td>
+		    		<td th:text="${itmeta.descricao}"> x </td>
+		    		<td th:text="${itmeta.nrSemana}"> x </td>
+		    		<td th:text="${itmeta.vlrSemana}"> x </td>
+		    		<td> <a href="@{'/itmeta/credita/'}" th:href="@{'/itmeta/credita/'+${cdmeta}+ '/'+ ${itmeta.cdItMeta}}" class="btn btn-danger">Creditar</a></td>
+		    		</tr>
+		    	</tbody>
+		    </table>
+		  </div>
+		</div>
+	</div>
+	
+	<!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+    <script src="../../assets/js/vendor/popper.min.js"></script>
+    <script src="../../dist/js/bootstrap.min.js"></script>
+    <!-- Jquery Data Tables-->
+    <script src="hhttps://cdnjs.com/libraries/jquery.mask"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.css"/>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.js"></script>
+
+    <!-- Icons -->
+    <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
+    <script>
+      feather.replace()
+    </script>
+	<!--  labels: labels:["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Dez"]-->
+     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+	
+	<!-- Gráfico de Metas -->
+	<script th:inline="javascript">
+		
+		var  series=[[${andamento}]];
+		var  descricao=[[${descricao}]];
+		var  tituloGrafico=[[${titulo}]];
+		var  series2=[[${restante}]];
+		Highcharts.chart('meta', {
+		    chart: {
+		        plotBackgroundColor: null,
+		        plotBorderWidth: 0,
+		        plotShadow: false
+		    },
+		    title: {
+		        text: tituloGrafico,
+		        align: 'center',
+		        verticalAlign: 'middle',
+		        y: 60
+		    },
+		    tooltip: {
+		        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+		    },
+		    accessibility: {
+		        point: {
+		            valueSuffix: '%'
+		        }
+		    },
+		    plotOptions: {
+		        pie: {
+		            dataLabels: {
+		                enabled: true,
+		                distance: -50,
+		                style: {
+		                    fontWeight: 'bold',
+		                    color: 'white'
+		                }
+		            },
+		            startAngle: -90,
+		            endAngle: 90,
+		            center: ['50%', '75%'],
+		            size: '110%'
+		        }
+		    },
+		    series: [{
+		        type: 'pie',
+		        name: 'Metas',
+		        innerSize: '50%',
+		        data: [
+		            ["Andamento", series],
+		            
+		            
+		            {
+		                name: descricao,
+		                y:series2,
+		                dataLabels: {
+		                    enabled: false
+		                }
+		            }
+		        ]
+		    }]
+		});
+
+</script>
+	
+	
+	<!-- Fim do Gráfico de MEta -->
+</body>
+</html>

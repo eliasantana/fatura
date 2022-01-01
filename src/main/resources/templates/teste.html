@@ -40,5 +40,79 @@
     });
 	
 	</script> 
+	
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
+<figure class="highcharts-figure">
+    <div id="meta"></div>
+    <p class="highcharts-description">
+        
+    </p>
+</figure>
+<!-- Gráfico de Metas -->
+<script th:inline="javascript">
+		
+		var  series=[[${andamento}]];
+		var  descricao=[[${descricao}]];
+		var  tituloGrafico=[[${titulo}]];
+		
+		Highcharts.chart('meta', {
+		    chart: {
+		        plotBackgroundColor: null,
+		        plotBorderWidth: 0,
+		        plotShadow: false
+		    },
+		    title: {
+		        text: tituloGrafico,
+		        align: 'center',
+		        verticalAlign: 'middle',
+		        y: 60
+		    },
+		    tooltip: {
+		        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+		    },
+		    accessibility: {
+		        point: {
+		            valueSuffix: '%'
+		        }
+		    },
+		    plotOptions: {
+		        pie: {
+		            dataLabels: {
+		                enabled: true,
+		                distance: -50,
+		                style: {
+		                    fontWeight: 'bold',
+		                    color: 'white'
+		                }
+		            },
+		            startAngle: -90,
+		            endAngle: 90,
+		            center: ['50%', '75%'],
+		            size: '110%'
+		        }
+		    },
+		    series: [{
+		        type: 'pie',
+		        name: 'Metas',
+		        innerSize: '50%',
+		        data: [
+		            ["Andamento", series],
+		            
+		            
+		            {
+		                name: descricao,
+		                y:100,
+		                dataLabels: {
+		                    enabled: false
+		                }
+		            }
+		        ]
+		    }]
+		});
+
+</script>
 </body>
 </html>
