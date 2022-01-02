@@ -15,6 +15,7 @@
 		  <div class="card-body">
 		    <h5 class="card-title" th:text=" 'Código: ' + ${cdmeta}"></h5>
 		    <p class="card-text" th:text="'Meta: '+${nome_meta}"></p>
+		    <p th:text=" 'Conta: ' + ${conta.nrConta} + ' Agência: ' + ${conta.nrAgencia}+ ' Saldo: ' + ${conta.saldo}" style="font-size:30px;"></p>
 		    <a href="/meta/listar" class="btn btn-success mb-2" > Voltar</a>
 		    <!-- Gráfico de Metas -->
 	         <figure class="highcharts-figure">

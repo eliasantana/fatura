@@ -127,7 +127,7 @@ public class HomeController {
 				}		   
 			   
 		}
-		
+	
 			//Criando hash map e tribuindo o mes e seu valor
 			Map<String,BigDecimal> dados = new LinkedHashMap<String, BigDecimal>();
 			dados.put("Janeiro", janeiro);
@@ -152,6 +152,7 @@ public class HomeController {
 			model.addAttribute("grafico","column"); //Tipo do gráfico column - Gráfico de Colunas - bar - Gráfico de Barras
 			model.addAttribute("keysetreceitas",receitas.keySet());
 			model.addAttribute("valuesreceitas",receitas.values());
+			
 			if (lancamentosVencidos.size()>0) {
 				model.addAttribute("mensagem", "Atenção! Você possui despesas não pagas!");
 			}else {
@@ -171,16 +172,12 @@ public class HomeController {
 		List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentos();
 		System.out.println("listando");
 		model.addAttribute("lancamentos", lancamentos);
-		Integer nrDias = configuracoesRepository.findConfiguracao().getNrDias();
+		Configuracoes config = configuracoesRepository.findConfiguracao();
+		Integer nrDias = config.getNrDias();
+		String snNotificar = config.getSnNotificar();
 		List<Lancamento> lancamentosVencidos = lancamentoRepository.findVencidos0(nrDias);
 		
-		if (lancamentosVencidos.size() > 0 ) {
-			System.out.println("Preparando o envio de e-mail....");
-//			EnviaEmailThread thread = new EnviaEmailThread();
-//			thread.setName("thread-Envia Email");
-//			thread.run(lancamentosVencidos);
-//			thread.start();
-			
+		if (lancamentosVencidos.size() > 0 && snNotificar.equals("S")) {
 			StringBuilder sbw = new StringBuilder();
 			 sbw.append("Atenção!\n");
 			   for (Lancamento lancamento : lancamentosVencidos) {
