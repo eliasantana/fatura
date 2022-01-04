@@ -1,8 +1,8 @@
 package br.com.faturaweb.fatura.controller;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.MathContext;
-import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
@@ -13,10 +13,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.view.RedirectView;
 
 import br.com.faturaweb.fatura.model.Lancamento;
+import br.com.faturaweb.fatura.model.Teste;
 import br.com.faturaweb.fatura.repository.LancamentoRepository;
+import io.lettuce.core.dynamic.annotation.Param;
 
 @Controller
 public class testeController {
@@ -131,8 +137,7 @@ public class testeController {
 			// parcela = total.divide(qtdParcelas, new MathContext(2, RoundingMode.CEILING));
 			 BigDecimal totalCalculado  = qtdParcelas.multiply(parcela);
 			 System.out.println(parcela);
-			
-			
+	
 			return "teste";
 		}
 		
@@ -147,5 +152,13 @@ public class testeController {
 		
 			RedirectView rw = new RedirectView("http://localhost/teste");
 			return  rw;
+		}
+		
+		@GetMapping("/teste/arquivo")
+		public String arquivo(Model model, @RequestParam("anexo") MultipartFile file) {
+			System.out.println("Estou aqui");
+			System.out.println("Nome arquivo"+file.getOriginalFilename());
+			
+			return "teste";
 		}
 }

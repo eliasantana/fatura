@@ -37,6 +37,7 @@ public  RedirectView  salvar(Model model, Configuracoes formConfiguracoes) {
 	   config.setSnNotificar("S");
    }   
    config.setNrDias(formConfiguracoes.getNrDias());
+   config.setDirImportacao(formConfiguracoes.getDirImportacao().replaceAll("'\'", "'/'"));
    configuracoesRepository.save(config);
    config = configuracoesRepository.findConfiguracao();   
    model.addAttribute("msg","Configurações salvas com sucesso!");

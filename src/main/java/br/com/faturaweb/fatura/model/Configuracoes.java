@@ -20,6 +20,8 @@ public class Configuracoes {
 	private String snParcelado;
 	private String snNotificar;
 	private Integer nrDias;
+	private String dirImportacao;
+	
 	
 	public Configuracoes() {
 		
@@ -61,10 +63,20 @@ public class Configuracoes {
 		return nrDias;
 	}
 
+	public void setDirImportacao(String dirImportacao) {
+		this.dirImportacao = dirImportacao;
+	}
+	
+	public String getDirImportacao() {
+		return dirImportacao;
+	}
+
 	@Override
 	public String toString() {
 		return "Configuracoes [cdConfiguracao=" + cdConfiguracao + ", snParcelado=" + snParcelado + ", snNotificar="
-				+ snNotificar + ", nrDias=" + nrDias + "]";
+				+ snNotificar + ", nrDias=" + nrDias + ", dirImportacao=" + dirImportacao + "]";
 	}
+	
+	
 
 }

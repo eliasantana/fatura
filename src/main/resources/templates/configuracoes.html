@@ -51,8 +51,13 @@
 				  		<label for="snEviar">Notificar?</label>
 						<input type="checkbox" th:if="${config.snNotificar}=='N'" id="snEviar" th:value="N" name="snNotificar"/>
 						<input type="checkbox" th:if="${config.snNotificar}=='S'" id="snEviar" th:value="S" checked="checked" name="snNotificar"/>
-						<label for="nrDias">&nbsp;&nbsp;&nbsp;Número de Dias de Atrazo</label>
+						<label for="nrDias">&nbsp;&nbsp;&nbsp;Número de Dias de Atrazo</label>						
 						<input type="number"  th:value="${config.nrDias}" id="nrDias" name="nrDias" size="2">
+						<div>
+						<label class="form-label" for="diretorio">Diretório de Importação</label>
+						<input type="text" class="form-control" id="diretorio" name="dirImportacao" th:value="${config.dirImportacao}">
+						<div class="form-text">obs: Utilize barras invertidas para informar o caminho</div>
+						</div>
 				</div>
 			</div>	
 		</div><!-- Fim Envia-Email -->
