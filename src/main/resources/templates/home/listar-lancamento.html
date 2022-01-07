@@ -8,7 +8,7 @@
 		 <!-- Nav Bar -->
     	<nav th:replace="~{navfragment:: nav }"></nav>
 		<div class="card">
-		<div class="card-header">Lançamentos</div>
+		<div class="card-header">xLançamentos</div>
 		<div class="card-body">
 			<h5 class="card-title">Relação de Lançamentos</h5>
 			<p class="card-text"></p>
@@ -44,6 +44,8 @@
 						<td>
 							<a href="/lancamento/excluir/" th:href="@{'/lancamento/excluir/'  + ${lancamento.cdLancamento}}" class="btn btn-danger">Excluir</a>
 							<a href="/lancamento/alterar/" th:href="@{'/lancamento/alterar/'  + ${lancamento.cdLancamento}}" class="btn btn-warning">Alterar</a>						
+							<a href="/lancamento/anexar" th:if="${lancamento.cdAnexo==null}" th:href="@{'/lancamento/anexar/'  + ${lancamento.cdLancamento}}" class="btn btn-secondary">Anexar</a>
+							<a th:if="${lancamento.cdAnexo!=null}" class="btn btn-success"><span data-feather="paperclip"></span></a>
 						</td>
 					</tr>
 				</tbody>

@@ -7,5 +7,5 @@ import org.springframework.web.multipart.MultipartFile;
 public interface FileUpLoadServices {
 	
 
-	public void upLoadToLocal(MultipartFile file);
+	public void upLoadToLocal(MultipartFile file, Long cdAnexo);
 }

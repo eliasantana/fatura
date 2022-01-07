@@ -186,5 +186,35 @@ public class LancamentoController {
 		return "home/listar-lancamento";
 		}
 
+	@GetMapping("anexar/{id}")
+	public String anexar(@PathVariable Long id, Model model) {
+
+		Lancamento lancamento = lancamentoRepository.findByIdLancamento(id);
+
+		Optional<FormaDePagamento> formaDePagamento = formaDePagamentoRepository
+				.findById(lancamento.getFormaDePagamento().getCdFormaPgamento());
+
+		Optional<TipoLancamento> findBydsTipoLancamento = tipoLancamentoRepository
+				.findById(lancamento.getCdLancamento());
+
+		TipoLancamento tipoLancamento = tipoLancamentoRepository
+				.findTipoLancamentoId(lancamento.getTipoLancamento().getCdTipoLancamento());
+
+		Optional<Usuario> usuario = usuarioRepository.findById(5L);
+
+		LancamentoForm lf = new LancamentoForm();
+		lf.setCdLancamento(lancamento.getCdLancamento());
+		lf.setDsLancamento(lancamento.getDsLancamento());
+		lf.setDsFormaDePagamento(formaDePagamento.get().getDescricao());
+		lf.setSnPago(lancamento.getSnPago());
+		lf.setVlPago(lancamento.getVlPago());
+		List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentos();
+		model.addAttribute("lancamentos", lf);
+		model.addAttribute("formapagto", formaDePagamento.get());
+		model.addAttribute("tpLancamentos", tipoLancamento);
+		model.addAttribute("usuario", usuario.get());
+		model.addAttribute("cdLancamento",id);
+		return "home/form-lancamento-anexo";
+	}
 }
 

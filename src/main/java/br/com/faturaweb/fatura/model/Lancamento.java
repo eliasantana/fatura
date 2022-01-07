@@ -34,7 +34,7 @@ public class Lancamento {
 	private LocalDate dtCompetencia;
 	
 	private Integer nrParcela;
-	
+	private Long cdAnexo;
 	
 	public Lancamento() {
 		this.nrParcela = 1;	   
@@ -122,13 +122,22 @@ public class Lancamento {
 		this.nrParcela = nrParcela;
 	}
 
+	public void setCdAnexo(Long cdAnexo) {
+		this.cdAnexo = cdAnexo;
+	}
+	
+	public Long getCdAnexo() {
+		return cdAnexo;
+	}
+
 	@Override
 	public String toString() {
 		return "Lancamento [cdLancamento=" + cdLancamento + ", dsLancamento=" + dsLancamento + ", usuario=" + usuario
 				+ ", dtCadastro=" + dtCadastro + ", tipoLancamento=" + tipoLancamento + ", snPago=" + snPago
 				+ ", vlPago=" + vlPago + ", formaDePagamento=" + formaDePagamento + ", dtCompetencia=" + dtCompetencia
-				+ ", nrParcela=" + nrParcela + "]";
+				+ ", nrParcela=" + nrParcela + ", cdAnexo=" + cdAnexo + "]";
 	}
+	
 	
 
 }

@@ -1,5 +1,6 @@
 package br.com.faturaweb.fatura.services;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -17,9 +18,9 @@ public class UploadServicesImpl implements FileUpLoadServices {
 	
 	private String urlLocal="";
 	@Override
-	public void upLoadToLocal(MultipartFile file) {
+	public void upLoadToLocal(MultipartFile file, Long cdAnexo) {
 		urlLocal = config.findConfiguracao().getDirImportacao().replace("\\", "/");
-		urlLocal  = urlLocal.concat("/uploaded_");
+		urlLocal  = urlLocal.concat("/uploaded_cdAnexo_".concat(cdAnexo.toString() +"_"));
 		
 		try {
 			byte[]data = file.getBytes();
