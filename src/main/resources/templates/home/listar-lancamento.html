@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
  <head th:replace="~{fragmento :: head('Lançamentos - Listar') }">
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>Lançamentos</title>
 </head>
 <body>
 		 <!-- Nav Bar -->
@@ -44,8 +44,8 @@
 						<td>
 							<a href="/lancamento/excluir/" th:href="@{'/lancamento/excluir/'  + ${lancamento.cdLancamento}}" class="btn btn-danger">Excluir</a>
 							<a href="/lancamento/alterar/" th:href="@{'/lancamento/alterar/'  + ${lancamento.cdLancamento}}" class="btn btn-warning">Alterar</a>						
-							<a href="/lancamento/anexar" th:if="${lancamento.cdAnexo==null}" th:href="@{'/lancamento/anexar/'  + ${lancamento.cdLancamento}}" class="btn btn-secondary">Anexar</a>
-							<a th:if="${lancamento.cdAnexo!=null}" class="btn btn-success"><span data-feather="paperclip"></span></a>
+							<a href="/lancamento/anexar" th:if="${lancamento.dsAnexo==null}" th:href="@{'/lancamento/anexar/'  + ${lancamento.cdLancamento}}" class="btn btn-secondary">Anexar</a>
+							<a href="/lancamento/anexo/" th:href="@{'/lancamento/anexo/'  + ${lancamento.cdLancamento}}"  th:if="${lancamento.dsAnexo!=null}" class="btn btn-success" th:alt="teste" ><span data-feather="paperclip"></span></a>
 						</td>
 					</tr>
 				</tbody>

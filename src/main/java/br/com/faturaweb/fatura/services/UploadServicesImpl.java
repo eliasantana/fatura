@@ -20,7 +20,8 @@ public class UploadServicesImpl implements FileUpLoadServices {
 	@Override
 	public void upLoadToLocal(MultipartFile file, Long cdAnexo) {
 		urlLocal = config.findConfiguracao().getDirImportacao().replace("\\", "/");
-		urlLocal  = urlLocal.concat("/uploaded_cdAnexo_".concat(cdAnexo.toString() +"_"));
+		//urlLocal  = urlLocal.concat("/uploaded_cdAnexo_".concat(cdAnexo.toString() +"_"));
+		urlLocal  = urlLocal.concat("/");
 		
 		try {
 			byte[]data = file.getBytes();
