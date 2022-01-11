@@ -11,7 +11,7 @@ import io.lettuce.core.dynamic.annotation.Param;
 
 public interface LancamentoRepository extends CrudRepository<Lancamento, Long> {
 
-		@Query(value = "select * from fatura.lancamento where date_format(dt_competencia,'%Y') = date_format(curdate(),'%Y')",nativeQuery = true)
+		@Query(value = "select * from fatura.lancamento where date_format(dt_competencia,'%Y') = date_format(curdate(),'%Y') order by dt_competencia",nativeQuery = true)
 		List<Lancamento> findAllLancamentos();	
 		
 		@Query("SELECT l from Lancamento l WHERE l.cdLancamento = :cdLancamento")

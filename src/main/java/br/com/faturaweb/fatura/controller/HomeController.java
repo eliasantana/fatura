@@ -85,9 +85,9 @@ public class HomeController {
 			   LocalDate localDateFormat = lancamento.getDtCompetencia();
 			   String mes = lancamento.getDtCompetencia().format(df);
 			   //Verificando o mes e acumulando seu valor
-			   switch (mes) {
+			   switch (mes) {			   
 				case "01":
-					janeiro = lancamento.getVlPago().plus();
+					janeiro =janeiro.add( lancamento.getVlPago().plus());					
 					break;
 				case "02":
 					fevereiro=fevereiro.add( lancamento.getVlPago());
@@ -127,6 +127,7 @@ public class HomeController {
 				}		   
 			   
 		}
+	
 	
 			//Criando hash map e tribuindo o mes e seu valor
 			Map<String,BigDecimal> dados = new LinkedHashMap<String, BigDecimal>();
