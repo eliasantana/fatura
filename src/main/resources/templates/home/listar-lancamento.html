@@ -2,13 +2,13 @@
 <html xmlns:th="http://www.thymeleaf.org">
  <head th:replace="~{fragmento :: head('Lançamentos - Listar') }">
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>Lançamentos</title>
 </head>
 <body>
 		 <!-- Nav Bar -->
     	<nav th:replace="~{navfragment:: nav }"></nav>
 		<div class="card">
-		<div class="card-header">Lançamentos</div>
+		<div class="card-header">xLançamentos</div>
 		<div class="card-body">
 			<h5 class="card-title">Relação de Lançamentos</h5>
 			<p class="card-text"></p>
@@ -44,6 +44,8 @@
 						<td>
 							<a href="/lancamento/excluir/" th:href="@{'/lancamento/excluir/'  + ${lancamento.cdLancamento}}" class="btn btn-danger">Excluir</a>
 							<a href="/lancamento/alterar/" th:href="@{'/lancamento/alterar/'  + ${lancamento.cdLancamento}}" class="btn btn-warning">Alterar</a>						
+							<a href="/lancamento/anexar" th:if="${lancamento.dsAnexo==null}" th:href="@{'/lancamento/anexar/'  + ${lancamento.cdLancamento}}" class="btn btn-secondary">Anexar</a>
+							<a href="/lancamento/anexo/" th:href="@{'/lancamento/anexo/'  + ${lancamento.cdLancamento}}"  th:if="${lancamento.dsAnexo!=null}" class="btn btn-success" th:alt="teste" ><span data-feather="paperclip"></span></a>
 						</td>
 					</tr>
 				</tbody>

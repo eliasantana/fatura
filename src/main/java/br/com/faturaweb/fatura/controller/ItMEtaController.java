@@ -17,6 +17,7 @@ import br.com.faturaweb.fatura.model.Conta;
 import br.com.faturaweb.fatura.model.ItMeta;
 import br.com.faturaweb.fatura.model.LogMovimentacaoFinanceira;
 import br.com.faturaweb.fatura.model.Meta;
+import br.com.faturaweb.fatura.repository.ContaRepository;
 import br.com.faturaweb.fatura.repository.ItMetaRepository;
 import br.com.faturaweb.fatura.repository.LogMovimentacaoFinanceiraRepository;
 import br.com.faturaweb.fatura.repository.MetaRepository;
@@ -31,7 +32,8 @@ public class ItMEtaController {
 	ItMetaRepository itMetaRepository;
 	@Autowired
 	MetaRepository metaRepository;
-	
+	@Autowired
+	ContaRepository contaRepository;
 	@Autowired
 	AppServices appServices;
 	
@@ -45,6 +47,7 @@ public class ItMEtaController {
 		
 		List<ItMeta> itMeta = itMetaRepository.findItNaoCreditado(id);
 		Optional<Meta> metaLocalizada = metaRepository.findById(id);
+		Conta conta = metaLocalizada.get().getConta();
 		List<ItMeta> itemCreditados = itMetaRepository.findItMeta(id);
 		BigDecimal totalItMeta = metaservices.totalizaItMeta(itemCreditados);
 		BigDecimal andamentoMeta = metaservices.andamentoMeta(metaLocalizada.get(), totalItMeta);
@@ -65,7 +68,7 @@ public class ItMEtaController {
 			model.addAttribute("cdmeta","");
 			model.addAttribute("itens",itMeta);
 		}
-		
+		 model.addAttribute("conta",conta);
 		
 		return "detalhe-meta";
 		

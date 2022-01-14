@@ -3,6 +3,7 @@ package br.com.faturaweb.fatura.services;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.time.Period;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -35,9 +36,10 @@ public class MetaService {
 		BigDecimal vlParcela = meta.getVlMeta().divide(new BigDecimal(totalSemanas), mt.DECIMAL32);
 		System.out.println("Valor da Parcela: " + vlParcela);
 		System.out.println("Total de Semanas: "+ totalSemanas);
+		LocalDate dataMeta = meta.getDtInicio();
 		for (int i=1; i <= totalSemanas; i++) {
-			
-			ItMeta it = new ItMeta(meta.getDescricao() + " - " + "Semana " + i +"/" + totalSemanas, i, vlParcela, meta);
+			dataMeta = dataMeta.plusDays(7);
+			ItMeta it = new ItMeta(meta.getDescricao() + " - " + "Semana " + i +"/" + totalSemanas + " - " + dataMeta, i, vlParcela, meta);
 			itensMeta.add(it);
 		}
 		

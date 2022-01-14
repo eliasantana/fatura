@@ -17,7 +17,7 @@
 				    <h5 class="card-title">Parcelar?</h5>
 				    <p class="card-text">Habilita/Desabilita Lançamentos Parcelados</p>
 				   
-				    <form action="/configuracoes/salvar" method="post" id="formulario">
+				    <form action="/configuracoes/salvar" method="post" id="formulario" enctype="multipart/form-data">
 					   <label th:if="${config.cdConfiguracao}==null" for="cdConfiguracao">Código</label>
 					   <input th:if="${config.cdConfiguracao}==null" th:value="${config.cdConfiguracao}" type="text" name="cdConfiguracao" id="cdConfiguracao" class="form-control">
 					   <label for="snParcelar">Parcelar?</label>	  
@@ -27,7 +27,7 @@
 						  <option th:value="N" th:if="${config.snParcelado=='N'}" selected>Não</option>
 						  <option th:value="S" th:if="${config.snParcelado=='N'}" th:text="Sim">Sim</option>		  
 						</select>
-						
+						<!--  
 						<div class="col">
 						<button type="submit" class="btn btn-primary mt-5">Salvar</button>	
 						<a th:replace="~{btn_home_fragment::btn_home}">home</a>	
@@ -36,7 +36,7 @@
 					
 					<div  class="alert alert-primary mt-2" role="alert" th:if="${mensagem!=null}">
 						<h5 th:text="${mensagem}"></h5>
-					</div>
+					</div>-->
 				</div>
 		</div>	
 	</div> 
@@ -51,12 +51,49 @@
 				  		<label for="snEviar">Notificar?</label>
 						<input type="checkbox" th:if="${config.snNotificar}=='N'" id="snEviar" th:value="N" name="snNotificar"/>
 						<input type="checkbox" th:if="${config.snNotificar}=='S'" id="snEviar" th:value="S" checked="checked" name="snNotificar"/>
-						<label for="nrDias">&nbsp;&nbsp;&nbsp;Número de Dias de Atrazo</label>
+						<!-- <label for="nrDias">&nbsp;&nbsp;&nbsp;Número de Dias de Atrazo</label>	 -->
+						<label class="form-label" for="nrDias">Dias de Atrazo</label>						
 						<input type="number"  th:value="${config.nrDias}" id="nrDias" name="nrDias" size="2">
+						<div>
+						<label class="form-label" for="diretorio">Diretório de Importação</label>
+						<input type="text" class="form-control" id="diretorio" name="dirImportacao" th:value="${config.dirImportacao}">
+						<div class="form-text">obs: Utilize barras invertidas para informar o caminho</div>
+						</div>
 				</div>
 			</div>	
 		</div><!-- Fim Envia-Email -->
 		
+		<div class="col"><!-- Upload-->
+			<div class="card">
+				  <div class="card-header">
+				  </div>
+				  <div class="card-body">
+				    <h5 class="card-title">Logo do Sistema</h5>
+				    <p class="card-text">Imagem</p>
+				  		<label for="snEviar"></label>
+						<div class="mb-3">
+					  		<label for="formFile" class="form-label">Selecionar arquivo</label>
+					 		 <input class="form-control" type="file" id="formFile" name="file" >
+						</div>	
+						<div>
+							<img th:src="|getimagem|" width="100px" height="100px"/>
+						</div>
+				</div>
+			</div>	
+		</div><!-- Fim upLoad -->
+		
+		<div>
+				<div class="col">
+						<button type="submit" class="btn btn-primary mt-5">Salvar</button>	
+						<a th:replace="~{btn_home_fragment::btn_home}">home</a>	
+						</div>	
+					
+					
+					<div  class="alert alert-primary mt-2" role="alert" th:if="${mensagem!=null}">
+						<h5 th:text="${mensagem}"></h5>
+					</div>
+		
+		</div>
 	</div> <!-- Fim da row -->
 	</form>	
 </div>

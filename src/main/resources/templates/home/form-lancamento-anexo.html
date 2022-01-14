@@ -15,7 +15,7 @@
 				<div th:text="${mensagem}">yr</div>
 				<p class="card-text">
 				<div class="container">
-					<form method="post" action="/lancamento/salvar">
+					<form method="post" action="/upload/local" enctype="multipart/form-data">
 						<div class="col">
 							<label th:if="${lancamentos.cdLancamento!=null}" class="form-label" for="codigo">ID</label>
 							<input th:if="${lancamentos.cdLancamento!=null}" type="text" class="form-control" name="cdLancamento" id="codigo" th:value="${lancamentos.cdLancamento}" aria-describedby="cdLancamento" readonly="readonly" />
@@ -24,22 +24,22 @@
 						
 						<div class="col">
 							<label  class="form-label" for="Descrição">Descrição</label>
-							<input type="text" class="form-control" name="dsLancamento" id="descricao" th:value="${lancamentos.dsLancamento}" aria-describedby="dsLancamento" required="required" />
+							<input type="text" class="form-control" name="dsLancamento" id="descricao" th:value="${lancamentos.dsLancamento}" aria-describedby="dsLancamento" required="required" readonly="readonly" />
 							<div id="desCricao" class="form-text">Descrição do Lançamento Ex: Pagamento Cartão de Crédito</div>
 						</div>
 						
 						<div class="col">
 							<label  class="form-label" for="formadepagamento">Forma de Pagamento</label>
-							<select class="form-select" name="dsFormaDePagamento">
+							<select class="form-select" name="dsFormaDePagamento" readonly="readonly" >
 								<option th:each="formadepagamento: ${formapagto}" th:text="${formadepagamento.descricao}">1</option>
 							</select>
 							<div id="formadepagamento" class="form-text">Ex: Espécie, Parcelado</div>
 						</div>
 						
 						<div class="col">
-							<label  class="form-label" for="tipolancamento">Tipo de Lançamento</label>
+							<label  class="form-label" for="tipolancamento" >Tipo de Lançamento</label>
 							
-							<select class="form-select" name="dsTipoLancamento">
+							<select class="form-select" name="dsTipoLancamento" readonly="readonly" >
 								<option th:each="tipolancamento : ${tpLancamentos}" th:text="${tipolancamento.dsTipoLancamento}">1</option>
 							</select>
 							
@@ -47,8 +47,8 @@
 						</div>
 						
 						<div class="col">
-						<label class="form-label" for="snpago">Pago?</label>						
-							<select class="form-select" id="snpago" name="snPago">
+						<label class="form-label" for="snpago"  >Pago?</label>						
+							<select class="form-select" id="snpago" name="snPago" readonly="readonly">
 								<option>Não</option>
 								<option>SIM</option>
 							</select>												
@@ -56,7 +56,7 @@
 						
 						<div class="col">
 						<label class="form-label" for="vlpago">Valor Pago R$</label>
-						<input class="form-control" type="numeric" id="vlpago" onfocus="this.value=''" name="vlPago" th:value="${lancamentos.vlPago}" required="required"  onkeypress="$(this).mask('9999.990,00')">
+						<input class="form-control" type="numeric" id="vlpago" onfocus="this.value=''" name="vlPago" th:value="${lancamentos.vlPago}" required="required"  onkeypress="$(this).mask('9999.990,00')" readonly="readonly" >
 						
 						</div>						
 						<a href="/" class="btn btn-success mt-2">Home
@@ -64,8 +64,27 @@
 				 				 <path d="M8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4.5a.5.5 0 0 0 .5-.5v-4h2v4a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146zM2.5 14V7.707l5.5-5.5 5.5 5.5V14H10v-4a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v4H2.5z"/>
 						</svg>
 					    </a>
-						<button type="submit" class="btn btn-primary mt-2">Cadastrar</button>
-					</form>					
+					    <!-- Teste -->
+					    <div class="mb-3">
+						  <label for="formFile" class="form-label">Anexo</label>
+						  <input class="form-control" type="file" id="formFile" name="file">
+						</div>	
+						<div>
+							<button type="submit" class="btn btn-primary">Anexar</button>
+						</div>
+						
+					</form>
+					<!-- 
+					<form action="/upload/local" method="post" enctype="multipart/form-data">
+						<div class="mb-3">
+						  <label for="formFile" class="form-label">Anexo</label>
+						  <input class="form-control" type="file" id="formFile" name="file">
+						</div>	
+						<div>
+							<button type="submit" class="btn btn-primary">Anexar</button>
+						</div>
+					</form>	
+					-->
 				</div>
 			</div>
 		</div>

@@ -11,7 +11,7 @@ import io.lettuce.core.dynamic.annotation.Param;
 
 public interface LancamentoRepository extends CrudRepository<Lancamento, Long> {
 
-		@Query("SELECT l from Lancamento l ")
+		@Query(value = "select * from fatura.lancamento where date_format(dt_competencia,'%Y') = date_format(curdate(),'%Y') order by dt_competencia",nativeQuery = true)
 		List<Lancamento> findAllLancamentos();	
 		
 		@Query("SELECT l from Lancamento l WHERE l.cdLancamento = :cdLancamento")
@@ -20,7 +20,7 @@ public interface LancamentoRepository extends CrudRepository<Lancamento, Long> {
 		//retorna os lancamentos do mês corrente
 		@Query(value = "SELECT cd_lancamento, ds_lancamento, dt_cadastro, dt_competencia, sn_pago, vl_pago, forma_de_pagamento_cd_forma_pgamento, tipo_lancamento_cd_tipo_lancamento, usuario_cd_usuario"
 				+ " FROM fatura.lancamento "
-				+ "where date_format(dt_cadastro,'%m') = (date_format(now(),'%m' ))  "
+				+ "where date_format(dt_competencia,'%m') = (date_format(CURDATE(),'%m' ))  "
 				+ "group by  ds_lancamento", nativeQuery = true)
 		List<Lancamento> findAllLancamentosDoMes();
 	

@@ -1,12 +1,24 @@
 package br.com.faturaweb.fatura.controller;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URLConnection;
+import java.nio.file.Files;
 import java.util.List;
 import java.util.Optional;
+
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -186,5 +198,67 @@ public class LancamentoController {
 		return "home/listar-lancamento";
 		}
 
+	@GetMapping("anexar/{id}")
+	public String anexar(@PathVariable Long id, Model model) {
+
+		Lancamento lancamento = lancamentoRepository.findByIdLancamento(id);
+
+		Optional<FormaDePagamento> formaDePagamento = formaDePagamentoRepository
+				.findById(lancamento.getFormaDePagamento().getCdFormaPgamento());
+
+		Optional<TipoLancamento> findBydsTipoLancamento = tipoLancamentoRepository
+				.findById(lancamento.getCdLancamento());
+
+		TipoLancamento tipoLancamento = tipoLancamentoRepository
+				.findTipoLancamentoId(lancamento.getTipoLancamento().getCdTipoLancamento());
+
+		Optional<Usuario> usuario = usuarioRepository.findById(5L);
+
+		LancamentoForm lf = new LancamentoForm();
+		lf.setCdLancamento(lancamento.getCdLancamento());
+		lf.setDsLancamento(lancamento.getDsLancamento());
+		lf.setDsFormaDePagamento(formaDePagamento.get().getDescricao());
+		lf.setSnPago(lancamento.getSnPago());
+		lf.setVlPago(lancamento.getVlPago());
+		List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentos();
+		model.addAttribute("lancamentos", lf);
+		model.addAttribute("formapagto", formaDePagamento.get());
+		model.addAttribute("tpLancamentos", tipoLancamento);
+		model.addAttribute("usuario", usuario.get());
+		model.addAttribute("cdLancamento",id);
+		return "home/form-lancamento-anexo";
+	}
+
+	@GetMapping("anexo/{id}")
+	public String exibirAnexo(@PathVariable Long id, HttpServletResponse response, HttpServletRequest request) throws IOException  {
+		Configuracoes config = configuracoesRepository.findConfiguracao();
+		Lancamento lancamento = lancamentoRepository.findByIdLancamento(id);
+		System.out.println(" Anexo: "+lancamento.getDsAnexo());
+		File file = new File(lancamento.getDsAnexo());
+
+		if (file.exists()) {
+			String mimeType = URLConnection.guessContentTypeFromName(file.getName());
+			System.out.println("Nome do Arquivo: " + file.getName());
+			System.out.println("Encontrei o arquivo");
+			if (lancamento.getDsAnexo().contains(file.getName())) {
+				System.out.println("A descrição contem");
+			}
+			System.out.println();
+			if (mimeType==null) {
+				mimeType = "application/octet-stream";
+			}
+			response.setContentType(mimeType);
+			response.setContentLength((int) file.length());
+			
+			InputStream input = new BufferedInputStream(new FileInputStream(file));
+			//FileCopyUtils.copy(input, response.getOutputStream());
+			ServletOutputStream outputStream = response.getOutputStream();
+			FileCopyUtils.copy(input,outputStream);
+		}else {
+			System.out.println("Arquivo não localizado!");
+		}
+		
+		return "teste";
+	}
 }
 
