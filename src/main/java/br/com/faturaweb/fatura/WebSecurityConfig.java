@@ -30,6 +30,7 @@ public class WebSecurityConfig  extends WebSecurityConfigurerAdapter 	{
 				http
 					.authorizeRequests()
 					.antMatchers("/listar").hasAnyRole("ADM")
+					.antMatchers("/getlogo").hasAnyRole("ADM")
 					.anyRequest().authenticated()
 					.and()
 					.formLogin(form -> form

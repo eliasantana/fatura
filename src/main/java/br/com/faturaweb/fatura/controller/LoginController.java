@@ -3,9 +3,14 @@ package br.com.faturaweb.fatura.controller;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import br.com.faturaweb.fatura.model.Configuracoes;
+import br.com.faturaweb.fatura.repository.ConfiguracoesRepository;
 
 @Controller
 public class LoginController {
@@ -22,7 +27,6 @@ public class LoginController {
 		
 		model.addAttribute("keyset",data.keySet());
 		model.addAttribute("values",data.values());
-		
 		
 		return "login";
 	}

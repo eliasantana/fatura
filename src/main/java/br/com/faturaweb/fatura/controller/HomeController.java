@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import br.com.faturaweb.fatura.form.LancamentoForm;
 import br.com.faturaweb.fatura.model.Configuracoes;
@@ -165,6 +166,7 @@ public class HomeController {
 			model.addAttribute("lctomes",findAllLancamentosDoMes.size());
 			List<Receita> receitaMesCorrente = receitaRepository.findAllReceitaMesCorrente();
 			model.addAttribute("receitamescorrente",receitaMesCorrente.size());
+			
 		return "home/dashboard";
 	}
 	
@@ -265,4 +267,12 @@ public String email() {
 	}
 	return "home/dashboard";
 }
+
+@GetMapping("getimagem")
+@ResponseBody
+public byte[] getlogo() {
+	Configuracoes config = configuracoesRepository.findConfiguracao();
+	return config.getLogo();
+}
+
 }

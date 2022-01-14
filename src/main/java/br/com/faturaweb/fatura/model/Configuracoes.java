@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
@@ -21,7 +22,8 @@ public class Configuracoes {
 	private String snNotificar;
 	private Integer nrDias;
 	private String dirImportacao;
-	
+	@Lob
+	private byte[] logo;
 	
 	public Configuracoes() {
 		
@@ -71,6 +73,14 @@ public class Configuracoes {
 		return dirImportacao;
 	}
 
+	public void setLogo(byte[] logo) {
+		this.logo = logo;
+	}
+	
+	public byte[] getLogo() {
+		return logo;
+	}
+	
 	@Override
 	public String toString() {
 		return "Configuracoes [cdConfiguracao=" + cdConfiguracao + ", snParcelado=" + snParcelado + ", snNotificar="
