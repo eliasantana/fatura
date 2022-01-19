@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head th:replace="~{fragmento :: head('SysFatura') }">
+ 		<meta charset="UTF-8">
+ 		<script src = "https://code.highcharts.com/highcharts.js" > </script>
+		<script src = "/js/highstock.js "></script>
+		<script src = "/js/highmaps.js "> </script>
+		
+  </head>
+<body>
+  <!-- Nav Bar -->
+    <nav th:replace="~{navfragment:: nav }"></nav>
+    
+    <div class="card mt-2">
+	  <div class="card-header">
+	    Cadastro de Contas
+	  </div>
+	  <div class="card-body">
+	  	<form method="post" action="/conta/salvar" enctype="multipart/form-data">
+	    <h5 class="card-title">Cadastro de Contas Bancárias</h5>
+	    <div class="alert alert-success" role="alert" th:if="${mensagem!=null}">
+		  Conta Salva com Sucesso!
+		</div>
+	    <div>
+	    	<label class="form-label">Código</label>
+	    	<input class="form-control" type="text" name="cdConta" th:value="${conta.cdConta}" readonly="readonly">
+	    </div>
+	    <div>
+	    	<label class="form-label" for="nragencia">Agência</label>
+	    	<input class="form-control" type="text" name="nrAgencia" id="nragencia" th:value="${conta.nrAgencia}">
+	    	<div id="nragencia" class="form-text">Informe o número da agênica com dígito ex:1703-3</div>
+	    </div>
+	    <div>
+	    	<label class="form-label" for="nrconta">Conta</label>
+	    	<input class="form-control" type="text" name="nrConta" id="nrconta" th:value="${conta.nrConta}">
+	    	<div id="nrconta" class="form-text">Número da Conta ex: 1007048-1</div>
+	    </div>
+	     <div>
+	    	<label class="form-label" for="saldo">Saldo</label>
+	    	<input class="form-control" type="text" name="saldo" id="saldo" th:value="${conta.saldo}">
+	    	<div id="saldo" class="form-text">Saldo atual</div>
+	    </div>
+	    <div>
+		  <label for="formFile" class="form-label">QRCode</label>
+		  <input class="form-control" type="file" id="formFile" name="file" >
+		</div>	
+		<div>
+			<button type="submit" class="btn btn-primary mt-2">Salvar</button>
+		</div>
+	    </form>
+	  </div>
+	  
+	</div>
+    
+    <table class="table table-striped table-hover" id="lancamentos">
+		<thead>
+		<tr>
+	    	<th scope="col">Conta</th>
+	    	<th scope="col">Agência</th>
+	    	<th scope="col">Saldo</th>
+	    	<th scope="col">QrCode</th>
+	    	<th scope="col">Ação</th>
+    	</tr>
+    	</thead>
+				<tbody>
+					<tr th:each="contas : ${contas}">
+						<td th:text="${contas.nrConta}"></td>
+						<td th:text="${contas.nrAgencia}"></td>
+						<td  th:text="${contas.saldo}"></td>
+						<td> <img th:src="|/conta/qrcode/${contas.cdConta}|"/></td>
+						<td>
+							<a class="btn btn-warning" href="/conta/alterar/" th:href="@{'/conta/alterar/' + ${contas.cdConta}}">Alterar</a>
+							<a class="btn btn-danger" href="/conta/excluir/" th:href="@{'/conta/excluir/' + ${contas.cdConta}}">Excluir</a>
+						</td>
+					</tr>
+				</tbody>
+		
+    </table>
+    
+    
+     <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+    <script src="../../assets/js/vendor/popper.min.js"></script>
+    <script src="../../dist/js/bootstrap.min.js"></script>
+    <!-- Jquery Data Tables-->
+    <script src="hhttps://cdnjs.com/libraries/jquery.mask"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.css"/>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.24/datatables.min.js"></script>
+
+    <!-- Icons -->
+    <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
+    <script>
+      feather.replace()
+    </script>
+	<!--  labels: labels:["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Dez"]-->
+     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+</body>
+
+</html>
