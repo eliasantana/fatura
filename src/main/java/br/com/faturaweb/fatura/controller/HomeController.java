@@ -3,6 +3,7 @@ package br.com.faturaweb.fatura.controller;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -22,16 +23,19 @@ import br.com.faturaweb.fatura.model.Configuracoes;
 import br.com.faturaweb.fatura.model.EnviaEmailThread;
 import br.com.faturaweb.fatura.model.FormaDePagamento;
 import br.com.faturaweb.fatura.model.Lancamento;
+import br.com.faturaweb.fatura.model.Menssageria;
 import br.com.faturaweb.fatura.model.Receita;
 import br.com.faturaweb.fatura.model.TipoLancamento;
 import br.com.faturaweb.fatura.model.Usuario;
 import br.com.faturaweb.fatura.repository.ConfiguracoesRepository;
 import br.com.faturaweb.fatura.repository.FormaDePagamentoRepository;
 import br.com.faturaweb.fatura.repository.LancamentoRepository;
+import br.com.faturaweb.fatura.repository.MensageriaRepository;
 import br.com.faturaweb.fatura.repository.ReceitaRepository;
 import br.com.faturaweb.fatura.repository.TipoLancamentoRepository;
 import br.com.faturaweb.fatura.repository.UsuarioRepository;
 import br.com.faturaweb.fatura.services.LancamentoServices;
+import br.com.faturaweb.fatura.services.MensageriaServices;
 import br.com.faturaweb.fatura.services.MetaService;
 import br.com.faturaweb.fatura.services.ReceitaServices;
 import br.com.faturaweb.fatura.services.AppServices;
@@ -59,7 +63,10 @@ public class HomeController {
 	AppServices appservices;
 	@Autowired
 	MetaService metaservice;
-		
+	@Autowired
+	MensageriaServices mensageriaservices;	
+	@Autowired
+	MensageriaRepository mensageriaRepository;
 	@GetMapping("/")
 	public String index(Model model) {
 		 List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentos();
@@ -173,7 +180,6 @@ public class HomeController {
 	@GetMapping(value = "/listar")
 	public String listar(Model model) {
 		List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentos();
-		System.out.println("listando");
 		model.addAttribute("lancamentos", lancamentos);
 		Configuracoes config = configuracoesRepository.findConfiguracao();
 		Integer nrDias = config.getNrDias();
@@ -181,20 +187,35 @@ public class HomeController {
 		List<Lancamento> lancamentosVencidos = lancamentoRepository.findVencidos0(nrDias);
 		
 		if (lancamentosVencidos.size() > 0 && snNotificar.equals("S")) {
-			StringBuilder sbw = new StringBuilder();
-			 sbw.append("Atenção!\n");
-			   for (Lancamento lancamento : lancamentosVencidos) {
-				   sbw.append("As depesas abaixo estão vencidas a pelo menos " + configuracoesRepository.findConfiguracao().getNrDias() + " dias! \n");
-				   sbw.append("\nDescrição: " + lancamento.getDsLancamento()+ "\n");
-				   sbw.append("\nVencimento: " + lancamento.getDtCompetencia() + "\n");
-				   sbw.append("\nValor: " + lancamento.getVlPago());
-			}			
-			   try {
-				appservices.sendEmai("eliasantana@gmail.com","Elias Santana" , "eliasantana@hotmail.com", "Elias Santana da Silva", "Contas Vencidas!", sbw);
-				System.out.println("E-mail enviado com sucesso!");
-			} catch (UnsupportedEncodingException e) {
-				System.out.println("Erro ao tentar enviar e-mail -> sendEmail ");
-				e.printStackTrace();
+			//Só enviará mensagens se aida não tiver atingido o limite diário configurado
+			if ( mensageriaservices.enviaMensagem()) {
+				StringBuilder sbw = new StringBuilder();
+				sbw.append("Atenção!\n");
+				for (Lancamento lancamento : lancamentosVencidos) {
+					sbw.append("As depesas abaixo estão vencidas a pelo menos " + configuracoesRepository.findConfiguracao().getNrDias() + " dias! \n");
+					sbw.append("\nDescrição: " + lancamento.getDsLancamento()+ "\n");
+					sbw.append("\nVencimento: " + lancamento.getDtCompetencia() + "\n");
+					sbw.append("\nValor: " + lancamento.getVlPago());
+				}			
+				try {
+					appservices.sendEmai("eliasantana@gmail.com","Elias Santana" , "eliasantana@hotmail.com", "Elias Santana da Silva", "Contas Vencidas!", sbw);
+					System.out.println("E-mail enviado com sucesso!");
+				} catch (UnsupportedEncodingException e) {
+					System.out.println("Erro ao tentar enviar e-mail -> sendEmail ");
+					e.printStackTrace();
+					
+					Menssageria menssageria = new Menssageria();
+					menssageria.setDestino("eliasantanasilva@gmail.com");
+					menssageria.setDtEnvio(LocalDateTime.now());
+					menssageria.setStatus("E");
+					mensageriaRepository.save(menssageria);
+				}
+				Menssageria menssageria = new Menssageria();
+				menssageria.setDestino("eliasantanasilva@gmail.com");
+				menssageria.setDtEnvio(LocalDateTime.now());
+				menssageria.setStatus("S");
+			
+				mensageriaRepository.save(menssageria);
 			}
 			
 		}
