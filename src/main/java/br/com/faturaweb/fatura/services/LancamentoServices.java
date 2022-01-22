@@ -32,16 +32,12 @@ public class LancamentoServices {
 					vlPago = lancamento.getVlPago();
 					nrParcela = qtParcela;
 					vlParcela = (vlPago.divide(new BigDecimal(nrParcela),MathContext.DECIMAL32));
-					
-					for (int i=0; i < nrParcela; i++) {
+					//Adicona a primeira parcela para o mês seguinte 
+					for (int i=1; i <= nrParcela; i++) {
 						Lancamento l = new Lancamento();
-						l.setDsLancamento(lancamento.getDsLancamento() + " "+ (i+1) +"/"+nrParcela);
+						l.setDsLancamento(lancamento.getDsLancamento() + " "+ (i) +"/"+nrParcela);
 						l.setDtCadastro(lancamento.getDtCadastro());
-						if(i==0) {
-							l.setDtCompetencia(lancamento.getDtCompetencia());							
-						}else {
-							l.setDtCompetencia(lancamento.getDtCompetencia().plusMonths(i));
-						}
+						l.setDtCompetencia(lancamento.getDtCompetencia().plusMonths(i)); // teste
 						l.setFormaDePagamento(lancamento.getFormaDePagamento());
 						l.setNrParcela(i+1);
 						l.setSnPago(lancamento.getSnPago());

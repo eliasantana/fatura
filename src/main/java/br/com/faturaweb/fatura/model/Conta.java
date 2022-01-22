@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.Table;
 
 @Entity
@@ -17,6 +18,8 @@ public class Conta {
 	private String nrConta;
 	private String nrAgencia;
 	private BigDecimal saldo;
+	@Lob
+	private byte[] qrcod;
 	
 	public Conta() {
 		
@@ -58,6 +61,14 @@ public class Conta {
 
 	public void setSaldo(BigDecimal saldo) {
 		this.saldo = saldo;
+	}
+	
+	public void setQrcod(byte[] qrcod) {
+		this.qrcod = qrcod;
+	}
+	
+	public byte[] getQrcod() {
+		return qrcod;
 	}
 
 	@Override

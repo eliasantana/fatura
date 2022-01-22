@@ -16,6 +16,7 @@
 		    <h5 class="card-title" th:text=" 'Código: ' + ${cdmeta}"></h5>
 		    <p class="card-text" th:text="'Meta: '+${nome_meta}"></p>
 		    <p th:text=" 'Conta: ' + ${conta.nrConta} + ' Agência: ' + ${conta.nrAgencia}+ ' Saldo: ' + ${conta.saldo}" style="font-size:30px;"></p>
+		    <div align="left"><img th:src="|/conta/qrcode/${conta.cdConta}|"/></div>
 		    <a href="/meta/listar" class="btn btn-success mb-2" > Voltar</a>
 		    <!-- Gráfico de Metas -->
 	         <figure class="highcharts-figure">
@@ -73,6 +74,7 @@
 		var  descricao=[[${descricao}]];
 		var  tituloGrafico=[[${titulo}]];
 		var  series2=[[${restante}]];
+		var  rounded = Math.round((series + Number.EPSILON) * 100) / 100; //arredondamento
 		Highcharts.chart('meta', {
 		    chart: {
 		        plotBackgroundColor: null,
@@ -80,7 +82,7 @@
 		        plotShadow: false
 		    },
 		    title: {
-		        text: tituloGrafico,
+		        text: rounded + '%',
 		        align: 'center',
 		        verticalAlign: 'middle',
 		        y: 60
