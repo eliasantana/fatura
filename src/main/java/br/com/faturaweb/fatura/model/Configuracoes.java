@@ -1,5 +1,7 @@
 package br.com.faturaweb.fatura.model;
 
+import java.util.Arrays;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -22,6 +24,8 @@ public class Configuracoes {
 	private String snNotificar;
 	private Integer nrDias;
 	private String dirImportacao;
+	private Integer nrMsgDiaria;
+
 	@Lob
 	private byte[] logo;
 	
@@ -81,12 +85,19 @@ public class Configuracoes {
 		return logo;
 	}
 	
+	public void setNrMsgDiaria(Integer nrMsgDiaria) {
+		this.nrMsgDiaria = nrMsgDiaria;
+	}
+	
+	public Integer getNrMsgDiaria() {
+		return nrMsgDiaria;
+	}
+
 	@Override
 	public String toString() {
 		return "Configuracoes [cdConfiguracao=" + cdConfiguracao + ", snParcelado=" + snParcelado + ", snNotificar="
-				+ snNotificar + ", nrDias=" + nrDias + ", dirImportacao=" + dirImportacao + "]";
+				+ snNotificar + ", nrDias=" + nrDias + ", dirImportacao=" + dirImportacao + ", nrMsgDiaria="
+				+ nrMsgDiaria + ", logo=" + Arrays.toString(logo) + "]";
 	}
-	
-	
 
 }

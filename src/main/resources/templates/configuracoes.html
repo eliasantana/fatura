@@ -52,8 +52,14 @@
 						<input type="checkbox" th:if="${config.snNotificar}=='N'" id="snEviar" th:value="N" name="snNotificar"/>
 						<input type="checkbox" th:if="${config.snNotificar}=='S'" id="snEviar" th:value="S" checked="checked" name="snNotificar"/>
 						<!-- <label for="nrDias">&nbsp;&nbsp;&nbsp;Número de Dias de Atrazo</label>	 -->
-						<label class="form-label" for="nrDias">Dias de Atrazo</label>						
-						<input type="number"  th:value="${config.nrDias}" id="nrDias" name="nrDias" size="2">
+											
+						<input type="number" class="form-control"  th:value="${config.nrDias}" id="nrDias" name="nrDias" size="2">
+						<div class="form-text">obs: Selecione a partir de quantos dias o sistema deverá notificar o usuário!</div>
+						<div>
+							<label class="form-label" for="msgDiaria">Quantidade de Mensagens Diária</label>
+							<input type="number" class="form-control" th:value="${config.nrMsgDiaria}" name="nrMsgDiaria" id="nrMsgDiaria" required="required"/>
+							<div class="form-text">obs: Defina a quantiade de Mensagens a serem enviadas diariamente!</div>
+						</div>
 						<div>
 						<label class="form-label" for="diretorio">Diretório de Importação</label>
 						<input type="text" class="form-control" id="diretorio" name="dirImportacao" th:value="${config.dirImportacao}">
@@ -83,16 +89,13 @@
 		</div><!-- Fim upLoad -->
 		
 		<div>
-				<div class="col">
+						<div class="col">
 						<button type="submit" class="btn btn-primary mt-5">Salvar</button>	
 						<a th:replace="~{btn_home_fragment::btn_home}">home</a>	
 						</div>	
-					
-					
-					<div  class="alert alert-primary mt-2" role="alert" th:if="${mensagem!=null}">
-						<h5 th:text="${mensagem}"></h5>
-					</div>
-		
+						<div  class="alert alert-primary mt-2" role="alert" th:if="${mensagem!=null}">
+							<h5 th:text="${mensagem}"></h5>
+						</div>
 		</div>
 	</div> <!-- Fim da row -->
 	</form>	
