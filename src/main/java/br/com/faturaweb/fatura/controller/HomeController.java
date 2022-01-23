@@ -289,7 +289,7 @@ public String email() {
 	return "home/dashboard";
 }
 
-@GetMapping("getimagem")
+@GetMapping("/getimagem")
 @ResponseBody
 public byte[] getlogo() {
 	Configuracoes config = configuracoesRepository.findConfiguracao();

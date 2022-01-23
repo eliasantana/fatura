@@ -44,10 +44,12 @@ public  RedirectView  salvar(Model model, Configuracoes formConfiguracoes, @Requ
    config.setNrDias(formConfiguracoes.getNrDias());
    config.setDirImportacao(formConfiguracoes.getDirImportacao().replaceAll("'\'", "'/'"));
    config.setLogo(file.getBytes());
+   config.setNrMsgDiaria(formConfiguracoes.getNrMsgDiaria());
    configuracoesRepository.save(config);
    config = configuracoesRepository.findConfiguracao();   
    model.addAttribute("msg","Configurações salvas com sucesso!");
    model.addAttribute("config",config);
+   
    RedirectView redirectView = new RedirectView("http://localhost:8080/configuracoes");
 	return	 redirectView;
 }
