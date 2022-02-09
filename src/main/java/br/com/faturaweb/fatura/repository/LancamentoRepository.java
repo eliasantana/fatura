@@ -18,7 +18,7 @@ public interface LancamentoRepository extends CrudRepository<Lancamento, Long> {
 		Lancamento findByIdLancamento(Long cdLancamento );
 		
 		//retorna os lancamentos do mês corrente
-		@Query(value = "SELECT cd_lancamento, ds_lancamento, dt_cadastro, dt_competencia, sn_pago, vl_pago, forma_de_pagamento_cd_forma_pgamento, tipo_lancamento_cd_tipo_lancamento, usuario_cd_usuario"
+		@Query(value = "SELECT *"
 				+ " FROM fatura.lancamento "
 				+ "where date_format(dt_competencia,'%m') = (date_format(CURDATE(),'%m' ))  "
 				+ "group by  ds_lancamento", nativeQuery = true)
@@ -55,4 +55,6 @@ public interface LancamentoRepository extends CrudRepository<Lancamento, Long> {
 		 * */
 		@Query(value="select * FROM FATURA.LANCAMENTO L WHERE timestampdiff(DAY, CURDATE(),L.DT_COMPETENCIA) <=:dias  AND SN_PAGO = 'NÃO'",nativeQuery = true)
 		List<Lancamento> findVencidos0(@Param(value = "dias") Integer dias);
+		
+	
 }

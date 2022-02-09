@@ -134,8 +134,10 @@ public String toString() {
 	return "Lancamento [cdLancamento=" + cdLancamento + ", dsLancamento=" + dsLancamento + ", usuario=" + usuario
 			+ ", dtCadastro=" + dtCadastro + ", tipoLancamento=" + tipoLancamento + ", snPago=" + snPago + ", vlPago="
 			+ vlPago + ", formaDePagamento=" + formaDePagamento + ", dtCompetencia=" + dtCompetencia + ", nrParcela="
-			+ nrParcela + ", dsAnexo=" + dsAnexo + "]";
+			+ nrParcela + "]";
 }
+
+
 	
 	
 
