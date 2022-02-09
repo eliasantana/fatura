@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -72,6 +73,8 @@ public class HomeController {
 		 List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentos();
 		 Integer dias = configuracoesRepository.findConfiguracao().getNrDias();
 		 List<Lancamento> lancamentosVencidos = lancamentoRepository.findVencidos0(dias);
+		 HashMap<String, BigDecimal> totalizacao = lancamentoServices.totalizacaoDespesaCategoria();
+		 
 		 //Formata data retorando apenas o mes ex: jan = 01
 		 DateTimeFormatter df = DateTimeFormatter.ofPattern("MM");
 		 //Variáveis para acumular os valores pagos 
@@ -161,7 +164,9 @@ public class HomeController {
 			model.addAttribute("grafico","column"); //Tipo do gráfico column - Gráfico de Colunas - bar - Gráfico de Barras
 			model.addAttribute("keysetreceitas",receitas.keySet());
 			model.addAttribute("valuesreceitas",receitas.values());
-			
+			model.addAttribute("keygrupodespesa",totalizacao.keySet());
+			model.addAttribute("grupovalues",totalizacao.values());
+			model.addAttribute("ano",LocalDate.now().getYear());
 			if (lancamentosVencidos.size()>0) {
 				model.addAttribute("mensagem", "Atenção! Você possui despesas não pagas!");
 			}else {

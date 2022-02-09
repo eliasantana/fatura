@@ -5,6 +5,7 @@ import java.math.MathContext;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.el.lang.ELArithmetic.BigDecimalDelegate;
@@ -12,13 +13,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.faturaweb.fatura.model.Lancamento;
+import br.com.faturaweb.fatura.model.TipoLancamento;
 import br.com.faturaweb.fatura.model.Usuario;
 import br.com.faturaweb.fatura.repository.LancamentoRepository;
+import br.com.faturaweb.fatura.repository.TipoLancamentoRepository;
 
 @Service
 public class LancamentoServices {
 	@Autowired
 	LancamentoRepository lancamentoRepository;
+	@Autowired
+	TipoLancamentoRepository tipoLancamentoRepository;
 	
 	public List<Lancamento>  parcelar(String snParcelar, Long cdUsuario, Integer qtParcela){
 			BigDecimal vlPago = new BigDecimal(0); 
@@ -49,6 +54,39 @@ public class LancamentoServices {
 					}
 			}
 			return listaDeLancamentos;
+	}
+	
+	/**
+	 * Retorna os laçamentos do mês atual totalizados por Tipo
+	 * @author elias
+	 * @since 08-02-2021
+	 * @return {@link HashMap}
+	 * */
+	public HashMap<String, BigDecimal> totalizacaoDespesaCategoria() {
+		 HashMap<String, BigDecimal> mapTotalizador = new HashMap<String, BigDecimal>();
+		    
+		    List<TipoLancamento> tiposLancamentos = tipoLancamentoRepository.findAllTipoLancamentos();
+		    List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentosDoMes();
+		 
+		    BigDecimal totalizador = new BigDecimal(0);
+		    
+		    for (TipoLancamento tipoLancamento : tiposLancamentos) {
+				
+		    	for (Lancamento lancamento : lancamentos) {
+		    		if (lancamento.getTipoLancamento().getCdTipoLancamento().equals(tipoLancamento.getCdTipoLancamento())) {
+		    			totalizador = totalizador.add(lancamento.getVlPago());
+		    		}
+		    	}
+		    	//Só adiciona o valor se ele for maior que zero
+		    	if (totalizador.compareTo(BigDecimal.ZERO)==1) {
+		    		mapTotalizador.put(tipoLancamento.getDsTipoLancamento(), totalizador);
+		    	}
+		    	totalizador = totalizador.ZERO;
+			}
+		    System.out.println(mapTotalizador.keySet());
+		    System.out.println(mapTotalizador.values());
+		
+		return mapTotalizador;
 	}
 	
 }
