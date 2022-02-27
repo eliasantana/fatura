@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<table>
+	<tr>
+		<td>
+		<h3>Relatório de Lancamentos por Categoria</h3>
+			<p>
+			Este relatório tem como objetivo demonstrar os gastos realizados durante o perídodo
+			<p th:text="'Competência:'+${competencia}">
+			Competência: 
+		</td>		
+	</tr>
+	<tr>
+		<td>
+			Despesas do Período
+		</td>		
+	</tr>
+	<tr>
+		<td>
+			<table border=1>
+				<tr>
+					<th>Grupo1</th>	<th>valor</th>			
+				</tr>
+				<tr>
+					<td>Despesas Escolares </td> <td>100,00</td>					
+				</tr>
+				<tr>
+					<td>Despesas Escolares </td> <td>100,00</td>					
+				</tr>
+				<tr>
+					<td>Despesas Escolares </td> <td>100,00</td>					
+				</tr>
+				<tr>
+					<td>Despesas Escolares </td> <td>100,00</td>					
+				</tr>
+				<tr>
+					<td>Despesas Escolares </td> <td>100,00</td>					
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+	
+	
+</body>
+
+</html>

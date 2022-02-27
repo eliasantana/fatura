@@ -1,5 +1,6 @@
 package br.com.faturaweb.fatura.controller;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -223,7 +224,19 @@ public class HomeController {
 				mensageriaRepository.save(menssageria);
 			}
 			
+			
 		}
+			//Gera arquivo pdf
+			System.out.println("Gerando arquivo PDF");
+			String fileIn = "src/main/resources/templates/home/listar-lancamento.html";		
+			String fileout = "C:\\sysfatura\\relatorios\\";
+			try {
+				appservices.geraPDF(fileIn, "teste.pdf", fileout);
+				System.out.println("Arquivo Gerado com sucesso! ");
+			} catch (IOException e) {
+				System.out.println("Erro ao tentar gerar o arquivo!");
+				e.printStackTrace();
+			}
 		
 		return "home/listar-lancamento";
 	}

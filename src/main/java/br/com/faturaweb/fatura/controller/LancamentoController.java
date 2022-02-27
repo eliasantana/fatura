@@ -37,6 +37,7 @@ import br.com.faturaweb.fatura.repository.LancamentoRepository;
 import br.com.faturaweb.fatura.repository.TipoLancamentoRepository;
 import br.com.faturaweb.fatura.repository.UsuarioRepository;
 import br.com.faturaweb.fatura.services.LancamentoServices;
+import br.com.faturaweb.fatura.services.ReportService;
 
 @Controller
 @EnableAutoConfiguration
@@ -54,6 +55,8 @@ public class LancamentoController {
 	UsuarioRepository usuarioRepository;
 	@Autowired
 	TipoLancamentoRepository tipoLancamentoRepository;
+	@Autowired
+	ReportService reportServices;
 	
 	@Autowired
 	LancamentoServices services;
@@ -259,6 +262,17 @@ public class LancamentoController {
 		}
 		
 		return "teste";
+	}
+	
+	@GetMapping("imprimir/{formato}")
+	public String geraRelatorio(@PathVariable String formato) {
+		String  mensagem = "";
+		try {
+			 mensagem = reportServices.exportReport("pdf","lancamento");
+		} catch (Exception e) {
+			mensagem = "Não foi possível gerar o relatório!";
+		}
+		return mensagem;
 	}
 }
 

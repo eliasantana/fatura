@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="r_lancamentos" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="89c55668-fa8d-4dd5-a279-be971fd64a96">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<field name="cdLancamento" class="java.lang.Long"/>
+	<field name="dsLancamento" class="java.lang.String"/>
+	<field name="dtCadastro" class="java.util.Date"/>
+	<field name="vlPago" class="java.math.BigDecimal"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="65" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="20" width="333" height="20" uuid="00a763dd-a919-46cb-adc7-5947139562e0"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[Relatório Mensal de Despesas]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="61" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="49" width="68" height="12" uuid="098b0e86-546f-40cb-9e62-b4469dd85c1c"/>
+				<textElement>
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Código]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="68" y="49" width="156" height="12" uuid="a0d2ed59-9b55-4ec0-8a35-bbdd19b0276a"/>
+				<textElement>
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Descrição]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="224" y="49" width="63" height="12" uuid="de3b4a61-9ad7-4847-b47a-b0d3327c7258"/>
+				<textElement>
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Data Cadastro]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="287" y="49" width="63" height="12" uuid="1edc72c6-345f-4a32-b49e-209626c48c25"/>
+				<textElement textAlignment="Right">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Valor Pago]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="16" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="68" height="13" uuid="fb0ecc83-d652-4242-af5d-7b57e3c23715"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cdLancamento}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="68" y="0" width="156" height="13" uuid="5bea1c7b-be97-47ea-9d43-bd4ddbf593ab"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dsLancamento}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="224" y="0" width="63" height="13" uuid="96a70453-e833-4ac7-9353-4bba87d9e85c"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dtCadastro}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="287" y="0" width="63" height="13" uuid="0d71f04d-7419-42c3-bf50-c0b296b7d262"/>
+				<textElement textAlignment="Right">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{vlPago}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

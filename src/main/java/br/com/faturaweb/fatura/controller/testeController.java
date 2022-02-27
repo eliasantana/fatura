@@ -1,12 +1,12 @@
 package br.com.faturaweb.fatura.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectOutputStream.PutField;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -22,7 +22,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.view.RedirectView;
 
-import com.fasterxml.jackson.databind.deser.std.NumberDeserializers.BigDecimalDeserializer;
+import com.itextpdf.html2pdf.HtmlConverter;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
 
 import br.com.faturaweb.fatura.model.Lancamento;
 import br.com.faturaweb.fatura.model.Teste;
@@ -30,6 +33,9 @@ import br.com.faturaweb.fatura.model.TipoLancamento;
 import br.com.faturaweb.fatura.repository.LancamentoRepository;
 import br.com.faturaweb.fatura.repository.TesteRepository;
 import br.com.faturaweb.fatura.repository.TipoLancamentoRepository;
+import br.com.faturaweb.fatura.services.AppServices;
+import br.com.faturaweb.fatura.services.ReportService;
+import net.sf.jasperreports.engine.JRException;
 
 @Controller
 public class testeController {
@@ -38,6 +44,10 @@ public class testeController {
 		LancamentoRepository r;
 		@Autowired
 		TesteRepository testeRepository;
+		@Autowired
+		AppServices services;
+		@Autowired
+		ReportService reportServices;
 		
 		@Autowired
 		TipoLancamentoRepository tipoLancamentoRepository;
@@ -72,6 +82,10 @@ public class testeController {
 			}
 		    System.out.println(mapTotalizador.keySet());
 		    System.out.println(mapTotalizador.values());
+		
+		    //C:\Users\elias\eclipse-workspace2021\fatura\src\main\resources\templates
+		  
+		    
 			return "teste";
 		}
 		
@@ -112,4 +126,32 @@ public class testeController {
 			System.out.println("Exibindo a imamgem");
 			return imagem.get().getAnexo();
 		}
-}
+		
+		@GetMapping("/getpdf")
+		public String  gettPDF (Model model ) {
+			System.out.println("Chamando o relatório");
+			try {
+				reportServices.exportReport("pdf","lancamento");
+			} catch (FileNotFoundException | JRException e) {
+				System.out.println(e.getStackTrace());
+				
+			}
+			return "r_lancamentos";
+		}
+		
+		@GetMapping("getpdf2")
+		public String  gettPDF2 ( ) throws IOException {
+			String path = "C:\\sysfatura\\relatorios\\teste.pdf";
+			try {
+			HtmlConverter.convertToPdf(new FileInputStream("src/main/resources/templates/listar.html"),
+					new FileOutputStream(new File(path)));
+			  System.out.println("Arquivo Criado com sucessos!");
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+			return "r_lancamentos";
+		}
+			
+			
+		}
+
