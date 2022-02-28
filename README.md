@@ -1,7 +1,7 @@
 <h1> Sysfatura fatura 💰</h1>
 <h3>Sistema de Controle de Despesas Pessoais</h3>
   
-Status: Em desenvolvimento ⚠️
+Status: <strong>Em desenvolvimento ⚠️ </strong>
 
 <h4>O que utilizo neste projeto</h4>
 <h5>No Back End</h5>
@@ -21,5 +21,5 @@ Status: Em desenvolvimento ⚠️
 </ul>
 <p>
 <h5>Objetivo</h5>  
-Este projeto nasceu da necessidade de por em prática os conceitos prendidos com as tecnologias acima e tabém da necessidade 
-da realização de um controle efetivo e eficaz das despesas pessoais.
+Este projeto nasceu da necessidade da realização de um controle efetivo e eficaz das despesas pessoais e também como incentivo para por
+em prática os conhecimentos obtidos nos estudos das tecnologias acima listadas.
