@@ -72,7 +72,19 @@
              <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item" href="/log/logs/0"><span data-feather="codesandbox"></span>Logs de Movimentação</a></li>
           </ul>
-        </li>       
+        </li>  
+        <!--  -->
+         <!-- Menu Relatórios-->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: white;">
+            <span data-feather="paperclip"></span>Relatórios 
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="/extrato/financeiro/01"><span data-feather="dollar-sign"></span>Extrato de Despesas</a></li>
+            <li><hr class="dropdown-divider"></li>            
+          </ul>
+        </li>   
+        <!--  -->     
       </ul>
       <form class="d-flex" th:action="@{/logout}">      
         <button class="btn btn-outline-success" type="submit">Sair</button>
