@@ -5,6 +5,7 @@ import java.util.List;
 import org.hibernate.annotations.Parameter;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import br.com.faturaweb.fatura.model.Lancamento;
 import io.lettuce.core.dynamic.annotation.Param;
@@ -17,12 +18,29 @@ public interface LancamentoRepository extends CrudRepository<Lancamento, Long> {
 		@Query("SELECT l from Lancamento l WHERE l.cdLancamento = :cdLancamento")
 		Lancamento findByIdLancamento(Long cdLancamento );
 		
-		//retorna os lancamentos do mês corrente
+		/**
+		 * @author elias
+		 * @since 04/12/2021
+		 * Retorna os lancamentos do mês/ano corrente
+		 * Obs: Atualmente utilizado para fornecer dados para o gráfico de totalização de Despesas exibido na DashBoard 
+		 * */
 		@Query(value = "SELECT *"
 				+ " FROM fatura.lancamento "
-				+ "where date_format(dt_competencia,'%m') = (date_format(CURDATE(),'%m' ))  "
+				+ "where date_format(dt_competencia,'%m%Y') = (date_format(CURDATE(),'%m%Y' ))  "
 				+ "group by  ds_lancamento", nativeQuery = true)
 		List<Lancamento> findAllLancamentosDoMes();
+		
+		/**
+		 * @author elias
+		 * @since 04/12/2021
+		 * Retorna os lancamentos do mês informado
+		 * Obs: Atualmente utilizado para fornecer dados para o gráfico de totalização de Despesas exibido na DashBoard 
+		 * */
+		@Query(value = "SELECT *"
+				+ " FROM fatura.lancamento "
+				+ "where date_format(dt_competencia,'%m%Y') =:mesano "
+				+ "group by  ds_lancamento", nativeQuery = true)
+		List<Lancamento> findAllLancamentosDoMes(String mesano);
 	
 		/**
 		 * Retorna todos os lancantos do ano corrente
@@ -56,5 +74,14 @@ public interface LancamentoRepository extends CrudRepository<Lancamento, Long> {
 		@Query(value="select * FROM FATURA.LANCAMENTO L WHERE timestampdiff(DAY, CURDATE(),L.DT_COMPETENCIA) <=:dias  AND SN_PAGO = 'NÃO'",nativeQuery = true)
 		List<Lancamento> findVencidos0(@Param(value = "dias") Integer dias);
 		
-	
+		/**
+		 * Retorna os lançamentos do ano corrente para o mês informado
+		 * @author elias
+		 * @since 04/12/2021
+		 * @return {@link List}
+		 * */
+		@Query(value = "SELECT * FROM fatura.lancamento "
+										+ "where date_format(dt_competencia,'%m%Y') =:mesano   order by tipo_lancamento_cd_tipo_lancamento"
+											,nativeQuery = true)
+		List<Lancamento> findLancamentosFuturos(String mesano);
 }

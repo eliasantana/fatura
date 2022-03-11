@@ -21,4 +21,6 @@ public interface TipoLancamentoRepository extends CrudRepository<TipoLancamento,
 	Optional<TipoLancamento> findBydsTipoLancamento(String dsTipoLancamento);
 	
 	Optional<TipoLancamento> findBycdTipoLancamento(Long cdTipoLancamento);
+	
+	
 }

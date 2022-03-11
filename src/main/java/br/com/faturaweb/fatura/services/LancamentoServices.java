@@ -89,4 +89,37 @@ public class LancamentoServices {
 		return mapTotalizador;
 	}
 	
+	/**
+	 * Retorna os laçamentos do mês atual totalizados por Tipo
+	 * @author elias
+	 * @since 08-02-2021
+	 * @return {@link HashMap}
+	 * */
+	public HashMap<String, BigDecimal> totalizacaoDespesaCategoria(String mesAno) {
+		 HashMap<String, BigDecimal> mapTotalizador = new HashMap<String, BigDecimal>();
+		    
+		    List<TipoLancamento> tiposLancamentos = tipoLancamentoRepository.findAllTipoLancamentos();
+		    List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentosDoMes(mesAno);
+		 
+		    BigDecimal totalizador = new BigDecimal(0);
+		    
+		    for (TipoLancamento tipoLancamento : tiposLancamentos) {
+				
+		    	for (Lancamento lancamento : lancamentos) {
+		    		if (lancamento.getTipoLancamento().getCdTipoLancamento().equals(tipoLancamento.getCdTipoLancamento())) {
+		    			totalizador = totalizador.add(lancamento.getVlPago());
+		    		}
+		    	}
+		    	//Só adiciona o valor se ele for maior que zero
+		    	if (totalizador.compareTo(BigDecimal.ZERO)==1) {
+		    		mapTotalizador.put(tipoLancamento.getDsTipoLancamento(), totalizador);
+		    	}
+		    	totalizador = totalizador.ZERO;
+			}
+		    System.out.println(mapTotalizador.keySet());
+		    System.out.println(mapTotalizador.values());
+		
+		return mapTotalizador;
+	}
+	
 }
