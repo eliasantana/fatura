@@ -30,16 +30,7 @@ public class ReportService {
 	LancamentoRepository lancamentoRepository;
 
 	public String exportReport(String formato, String relatorio) throws FileNotFoundException, JRException {
-		List<Lancamento> todosOsLancamentos = lancamentoRepository.findAllLancamentos();
-		File file =new File("src\\resources\\r_lancamentos.jrxml");
-		System.out.println(file.getAbsolutePath());
-	   JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
-	   JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(todosOsLancamentos);
-	   Map<String, Object> map = new HashMap<String, Object>();
-	   JasperPrint print = JasperFillManager.fillReport(jasperReport, map,dataSource);	   
-	   JasperExportManager.exportReportToPdfFile(file.getParent().toString(), "C:\sysfatura\\relatorios\\"+"teste.pdf");
-	   
-		System.out.println(file.getAbsolutePath());
+		
 		return "teste";
 	}
 }
