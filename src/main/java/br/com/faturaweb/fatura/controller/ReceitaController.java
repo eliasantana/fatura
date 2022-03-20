@@ -1,5 +1,6 @@
 package br.com.faturaweb.fatura.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,7 +29,6 @@ public class ReceitaController {
 	
 	@GetMapping("/listar")	
 	public String  listar(Model model) {
-		//List<Receita> receitas = receitaRepository.findAllList();
 		List<Receita> receitas = receitaRepository.findaAllReceitaAnoCorrente();
 		model.addAttribute("receitas",receitas);
 		return "home/receita-listar";
@@ -77,5 +77,26 @@ public class ReceitaController {
 		
 		return "home/receita";
 	}
-	
+	/**
+	 * Clona a última receita
+	 * @author elias
+	 * @since 20/03/2022
+	 * @return {@link RedirectView}
+	 * */
+	@GetMapping("/clonar")
+	public RedirectView clonaReceita() {
+		
+		Receita maxReceita = receitaRepository.findMaxReceita();
+		Receita r = new Receita();
+		r.setDesconto(maxReceita.getDesconto());
+		r.setDsReceita(maxReceita.getDsReceita());
+		r.setDtRecebimento(maxReceita.getDtRecebimento().plusMonths(1));
+		r.setSalBruto(maxReceita.getSalBruto());
+		r.setSalLiquido(maxReceita.getSalLiquido());
+		
+		receitaRepository.save(r);
+		RedirectView rw = new RedirectView();
+		rw.setUrl("http://localhost:8080/receita/listar");
+		return rw;
+	}
 	}
