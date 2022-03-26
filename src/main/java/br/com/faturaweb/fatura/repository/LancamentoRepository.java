@@ -27,7 +27,8 @@ public interface LancamentoRepository extends CrudRepository<Lancamento, Long> {
 		@Query(value = "SELECT *"
 				+ " FROM fatura.lancamento "
 				+ "where date_format(dt_competencia,'%m%Y') = (date_format(CURDATE(),'%m%Y' ))  "
-				+ "group by  ds_lancamento", nativeQuery = true)
+				+ "", nativeQuery = true)
+				// "group by  ds_lancamento", nativeQuery = true)
 		List<Lancamento> findAllLancamentosDoMes();
 		
 		/**
