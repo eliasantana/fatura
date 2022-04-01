@@ -121,5 +121,20 @@ public class LancamentoServices {
 		
 		return mapTotalizador;
 	}
+	/**
+	 * Retorna a totalização das despesas do mês corrrente
+	 * @author elias
+	 * @since 01/04/2022
+	 * @return {@link BigDecimal}
+	 * */
+	public BigDecimal getTotalLctoMes(String mesAno) {
+		BigDecimal total = BigDecimal.ZERO;
+		List<Lancamento> lctoDoMes = lancamentoRepository.findAllLancamentosDoMes(mesAno);
+		
+		for (int i=0; i < lctoDoMes.size(); i++){
+			total = total.add( lctoDoMes.get(i).getVlPago());
+		}
+		return total;
+	}
 	
 }

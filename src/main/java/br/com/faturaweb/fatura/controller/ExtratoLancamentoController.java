@@ -31,17 +31,17 @@ public class ExtratoLancamentoController {
 		int year = LocalDate.now().getYear();
 		mesAno =mesAno+  Integer.toString(year);
 		List<Lancamento> lctoFuturo = lctoRepository.findLancamentosFuturos(mesAno);
-		System.out.println(mesEano);
+	
 		HashMap<String, BigDecimal> totalizacaoDespesaCategoria = lctoServices.totalizacaoDespesaCategoria(mesAno);
-		
 		model.addAttribute("lcto",lctoFuturo);
 		model.addAttribute("totalizacao",totalizacaoDespesaCategoria.keySet().toArray());
 		model.addAttribute("valores",totalizacaoDespesaCategoria.values());
 		model.addAttribute("keygrupodespesa",totalizacaoDespesaCategoria.keySet());
 		model.addAttribute("grupovalues",totalizacaoDespesaCategoria.values());
-		String competencia =" Relatório de Despesas Competência - " + mesAno.substring(0,2).concat("/").concat(String.valueOf(year));
 		
+		String competencia =" Relatório de Despesas Competência - " + mesAno.substring(0,2).concat("/").concat(String.valueOf(year));
 		model.addAttribute("competencia",competencia);
+		model.addAttribute("total",lctoServices.getTotalLctoMes(mesAno));
 		return "extrato_lancamento";
 	}
 	
