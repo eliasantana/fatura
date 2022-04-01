@@ -57,7 +57,9 @@ public class LancamentoServices {
 	}
 	
 	/**
-	 * Retorna os laçamentos do mês atual totalizados por Tipo
+	 * Retorna os laçamentos do mês atual totalizados por Tipo,
+	 * Utilizando em: Extrato de Pagamento, index
+	 * Obs:Fornece dados para os gráficos
 	 * @author elias
 	 * @since 08-02-2021
 	 * @return {@link HashMap}

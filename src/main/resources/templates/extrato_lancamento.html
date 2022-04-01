@@ -45,7 +45,7 @@
 			<thead>
 						<th scope="col" >Código</th>
 						<th scope="col">Descrição</th>
-						<th scope="col" >Valor</th>
+						<th scope="col" style="text-align: right;">Valor</th>
 						<th scope="col" >Forma de Pagamento</th>
 						<th scope="col" >Tipo de Lançamento</th>											
 				</thead>
@@ -53,7 +53,7 @@
 					<tr th:each="lancamento : ${lcto}">
 						<td th:text="${lancamento.cdLancamento}"></td>
 						<td th:text="${lancamento.dsLancamento}"></td>
-						<td th:text="${lancamento.vlPago}"></td>
+						<td th:text="${#numbers.formatDecimal(lancamento.vlPago,1,2,'COMMA')}" style="text-align: right;"></td>
 						<td th:text="${lancamento.formaDePagamento.descricao}"></td>
 						<td th:text="${lancamento.tipoLancamento.dsTipoLancamento}"></td>
 						
@@ -74,8 +74,12 @@
 					<td th:text="Total"></td>
 				</tr>
 				<tr >						
+
 					<td th:each="valores : ${valores}" th:text="${valores}"></td>
 					<b><td th:text="${total}">0,00</td></strong></b>				
+
+					<td th:each="valores : ${valores}" th:text="${#numbers.formatDecimal(valores,1,2,'COMMA')}"></td>				
+
 				</tr>
 								
 			</table>
