@@ -56,6 +56,7 @@
 						<td th:text="${#numbers.formatDecimal(lancamento.vlPago,1,2,'COMMA')}" style="text-align: right;"></td>
 						<td th:text="${lancamento.formaDePagamento.descricao}"></td>
 						<td th:text="${lancamento.tipoLancamento.dsTipoLancamento}"></td>
+						
 					</tr>
 				</tbody>
 			</table>
@@ -70,9 +71,15 @@
 				<th>Despesa por Categoria</th>
 				<tr>
 					<td th:each="totalizacao : ${totalizacao}" th:text="${totalizacao}"></td>
+					<td th:text="Total"></td>
 				</tr>
 				<tr >						
+
+					<td th:each="valores : ${valores}" th:text="${valores}"></td>
+					<b><td th:text="${total}">0,00</td></strong></b>				
+
 					<td th:each="valores : ${valores}" th:text="${#numbers.formatDecimal(valores,1,2,'COMMA')}"></td>				
+
 				</tr>
 								
 			</table>
