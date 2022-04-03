@@ -36,7 +36,6 @@ public class ExtratoLancamentoController {
 		HashMap<String, BigDecimal> totalizacaoDespesaCategoria = lctoServices.totalizacaoDespesaCategoria(mesAno);
 
 		System.out.println(mesEano);
-		HashMap<String, BigDecimal> totalizacaoDespesaCategoria = lctoServices.totalizacaoDespesaCategoria(mesAno);
 	
 		
 
