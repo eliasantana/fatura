@@ -75,10 +75,10 @@
 				</tr>
 				<tr >						
 
-					<td th:each="valores : ${valores}" th:text="${valores}"></td>
-					<b><td th:text="${total}">0,00</td></strong></b>				
+					
 
 					<td th:each="valores : ${valores}" th:text="${#numbers.formatDecimal(valores,1,2,'COMMA')}"></td>				
+					<td th:text="${total}">0,00</td>			
 
 				</tr>
 								

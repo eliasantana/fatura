@@ -118,8 +118,7 @@ public class LancamentoServices {
 		    	}
 		    	totalizador = totalizador.ZERO;
 			}
-		    System.out.println(mapTotalizador.keySet());
-		    System.out.println(mapTotalizador.values());
+		    
 		
 		return mapTotalizador;
 	}
