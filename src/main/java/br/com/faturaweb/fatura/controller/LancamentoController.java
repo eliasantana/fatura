@@ -194,7 +194,8 @@ public class LancamentoController {
 		//RedirectView rw = new RedirectView("https://sysfaturaapp.herokuapp.com/listar"); 
 		Lancamento lancamento = lancamentoRepository.findByIdLancamento(id);
 		//List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentos();
-		List<Lancamento> lancamentos = lancamentoRepository.findLancamentosDoAno();
+		//List<Lancamento> lancamentos = lancamentoRepository.findLancamentosDoAno();
+		List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentosDoMes();
 		lancamento.setSnPago("SIM");
 		lancamentoRepository.save(lancamento);
 		model.addAttribute("lancamentos",lancamentos);

@@ -13,120 +13,62 @@
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </head>
 <body>
-	<img th:src="|/imagem/1|"/>
-	<form action="/teste/arquivo" method="post" enctype="multipart/form-data">
-		<div class="mb-3">
-		  <label for="formFile" class="form-label">Arquivo</label>
-		  <input class="form-control" type="file" id="formFile" name="file" >
-		</div>	
-		<div>
-			<button type="submit" class="btn btn-primary">Enviar</button>
-		</div>
-	</form>
+
+	
 	<div id="container" style="width:100%;height:400 px;"> </div>   
-	<script  th:inline="javascript">
-	
-	document.addEventListener('DOMContentLoaded', function () {
-		var  data=[[${values}]];
-		var  series=[[${keyset}]];
-		var  titulo=[[${titulo}]];
-		var  grafico=[[${grafico}]];
-        const chart = Highcharts.chart('container', {
-            chart: {
-                type: grafico
-            },
-            title: {
-                text: titulo
-            },
-            xAxis: {
-                categories:series
-            },
-            yAxis: {
-                title: {
-                    text: 'Faturamento em milhares R$'
-                }
-            },
-            series: [{
-                name: 'Meses',
-                data: data
-            }]
-        });
-    });
-	
-	</script> 
 	
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
 <script src="https://code.highcharts.com/modules/accessibility.js"></script>
 
 <figure class="highcharts-figure">
-    <div id="meta"></div>
+    <div id="totalizacao"></div>
     <p class="highcharts-description">
         
     </p>
 </figure>
+<div>
+	<script type="text/javascript">
+		var teste = [[${valores}]];
+		document.write(teste);
+	</script>
+</div>
 <!-- Gráfico de Metas -->
 <script th:inline="javascript">
-		
-		var  series=[[${andamento}]];
-		var  descricao=[[${descricao}]];
-		var  tituloGrafico=[[${titulo}]];
-		
-		Highcharts.chart('meta', {
-		    chart: {
-		        plotBackgroundColor: null,
-		        plotBorderWidth: 0,
-		        plotShadow: false
-		    },
-		    title: {
-		        text: tituloGrafico,
-		        align: 'center',
-		        verticalAlign: 'middle',
-		        y: 60
-		    },
-		    tooltip: {
-		        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-		    },
-		    accessibility: {
-		        point: {
-		            valueSuffix: '%'
-		        }
-		    },
-		    plotOptions: {
-		        pie: {
-		            dataLabels: {
-		                enabled: true,
-		                distance: -50,
-		                style: {
-		                    fontWeight: 'bold',
-		                    color: 'white'
-		                }
-		            },
-		            startAngle: -90,
-		            endAngle: 90,
-		            center: ['50%', '75%'],
-		            size: '110%'
-		        }
-		    },
-		    series: [{
-		        type: 'pie',
-		        name: 'Metas',
-		        innerSize: '50%',
-		        data: [
-		            ["Andamento", series],
-		            
-		            
-		            {
-		                name: descricao,
-		                y:100,
-		                dataLabels: {
-		                    enabled: false
-		                }
-		            }
-		        ]
-		    }]
-		});
+var data=[[${valores}]]
+Highcharts.chart('container', {
+    chart: {
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
+        type: 'pie'
+    },
+    title: {
+        text: 'Browser market shares in January, 2018'
+    },
+    tooltip: {
+        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+    },
+    accessibility: {
+        point: {
+            valueSuffix: '%'
+        }
+    },
+    plotOptions: {
+        pie: {
+            allowPointSelect: true,
+            cursor: 'pointer',
+            dataLabels: {
+                enabled: true,
+                format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+            }
+        }
+    },
+    series: [{
+      data:data
 
+    }]
+});
 </script>
 </body>
 </html>

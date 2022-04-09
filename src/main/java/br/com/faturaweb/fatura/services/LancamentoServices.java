@@ -6,7 +6,9 @@ import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.el.lang.ELArithmetic.BigDecimalDelegate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,8 +87,7 @@ public class LancamentoServices {
 		    	}
 		    	totalizador = totalizador.ZERO;
 			}
-		    System.out.println(mapTotalizador.keySet());
-		    System.out.println(mapTotalizador.values());
+		
 		
 		return mapTotalizador;
 	}
@@ -136,6 +137,25 @@ public class LancamentoServices {
 			total = total.add( lctoDoMes.get(i).getVlPago());
 		}
 		return total;
+	}
+	
+	public 	String getTotal(){
+		HashMap<String, BigDecimal> totalizacaoDespesaCategoria = totalizacaoDespesaCategoria();
+	
+		Set<String> keySet = totalizacaoDespesaCategoria.keySet();
+		  java.util.Collection<BigDecimal> values = totalizacaoDespesaCategoria.values();
+	    Iterator i = keySet.iterator();
+		Iterator<BigDecimal> ivalues = values.iterator();
+		String str = new String();
+	    while (i.hasNext()) {
+	    	str= str+"{ name : ' " +i.next() + " ' , y: " +ivalues.next() + " },";
+	    }
+	   
+	    str = " [ " + str.substring(0,str.length()-1) + " ]";
+	 
+	
+		
+	 return str;
 	}
 	
 }

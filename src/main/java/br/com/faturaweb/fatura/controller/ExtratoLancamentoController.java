@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import br.com.faturaweb.fatura.model.Conta;
 import br.com.faturaweb.fatura.model.Lancamento;
+import br.com.faturaweb.fatura.repository.ContaRepository;
 import br.com.faturaweb.fatura.repository.LancamentoRepository;
 import br.com.faturaweb.fatura.services.LancamentoServices;
 
@@ -25,13 +27,16 @@ public class ExtratoLancamentoController {
 	LancamentoRepository lctoRepository;
 	@Autowired
 	LancamentoServices lctoServices;
+	@Autowired
+	ContaRepository contaRepository;
+	
 	@GetMapping("/financeiro/{mesAno}")
 	public String extratoLancamento(@PathVariable String mesAno, Model model) {
 		String mesEano = null;
 		int year = LocalDate.now().getYear();
 		mesAno =mesAno+  Integer.toString(year);
 		List<Lancamento> lctoFuturo = lctoRepository.findLancamentosFuturos(mesAno);
-
+		List<Conta> contas = contaRepository.findcontas();
 	
 		HashMap<String, BigDecimal> totalizacaoDespesaCategoria = lctoServices.totalizacaoDespesaCategoria(mesAno);
 
@@ -48,6 +53,7 @@ public class ExtratoLancamentoController {
 		String competencia =" Relatório de Despesas Competência - " + mesAno.substring(0,2).concat("/").concat(String.valueOf(year));
 		model.addAttribute("competencia",competencia);
 		model.addAttribute("total",lctoServices.getTotalLctoMes(mesAno));
+		model.addAttribute("contas",contas);
 		return "extrato_lancamento";
 	}
 	
