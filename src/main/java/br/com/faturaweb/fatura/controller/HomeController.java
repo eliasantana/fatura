@@ -185,7 +185,8 @@ public class HomeController {
 	
 	@GetMapping(value = "/listar")
 	public String listar(Model model) {
-		List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentos();
+		//List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentos();
+		List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentosDoMes();
 		model.addAttribute("lancamentos", lancamentos);
 		Configuracoes config = configuracoesRepository.findConfiguracao();
 		Integer nrDias = config.getNrDias();
