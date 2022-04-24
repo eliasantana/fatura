@@ -35,6 +35,7 @@ public class Lancamento {
 	
 	private Integer nrParcela;
 	private String dsAnexo;
+	private String observacao;
 	
 	public Lancamento() {
 		this.nrParcela = 1;	   
@@ -129,16 +130,20 @@ public void setDsAnexo(String dsAnexo) {
 	this.dsAnexo = dsAnexo;
 }
 
+public String getObservacao() {
+	return observacao;
+}
+
+public void setObservacao(String observacao) {
+	this.observacao = observacao;
+}
+
 @Override
 public String toString() {
 	return "Lancamento [cdLancamento=" + cdLancamento + ", dsLancamento=" + dsLancamento + ", usuario=" + usuario
 			+ ", dtCadastro=" + dtCadastro + ", tipoLancamento=" + tipoLancamento + ", snPago=" + snPago + ", vlPago="
 			+ vlPago + ", formaDePagamento=" + formaDePagamento + ", dtCompetencia=" + dtCompetencia + ", nrParcela="
-			+ nrParcela + "]";
+			+ nrParcela + ", dsAnexo=" + dsAnexo + ", observacao=" + observacao + "]";
 }
-
-
-	
-	
 
 }

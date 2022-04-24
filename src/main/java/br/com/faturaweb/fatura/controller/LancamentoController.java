@@ -115,6 +115,7 @@ public class LancamentoController {
 			lancamento.setTipoLancamento(tipoLancamento);
 			lancamento.setUsuario(usuario.get());
 			lancamento.setVlPago(lancamentoForm.getVlPago());
+			lancamento.setObservacao(lancamentoForm.getObservacao());
 			lancamentoRepository.save(lancamento);
 			Lancamento findUltimoLancamentoUsuario = lancamentoRepository.findUltimoLancamentoUsuario(usuario.get().getCdUsuario());
 			System.out.println("Ultimo lancamento Localizado: " + findUltimoLancamentoUsuario.toString());
@@ -179,6 +180,7 @@ public class LancamentoController {
 		lf.setDsFormaDePagamento(formaDePagamento.get().getDescricao());
 		lf.setSnPago(lancamento.getSnPago());
 		lf.setVlPago(lancamento.getVlPago());
+		lf.setObservacao(lancamento.getObservacao());
 		List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentos();
 		model.addAttribute("lancamentos", lf);
 		model.addAttribute("formapagto", formaDePagamento.get());

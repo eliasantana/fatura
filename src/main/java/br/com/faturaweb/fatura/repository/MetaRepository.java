@@ -16,3 +16,5 @@ public interface MetaRepository extends CrudRepository<Meta, Long>{
 	List<Meta>findAllMetas();
 }
 
+
+
