@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import javax.swing.tree.AbstractLayoutCache;
 
+import org.hibernate.boot.model.source.internal.hbm.AbstractSingularAttributeSourceEmbeddedImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -69,7 +70,8 @@ public class ItMEtaController {
 		try {
 			Optional<Meta> meta = metaRepository.findById(itMeta.get(0).getMeta().getCdMeta());			
 			model.addAttribute("nome_meta",meta.get().getDescricao());
-			model.addAttribute("cdmeta",meta.get().getCdMeta());
+			//model.addAttribute("cdmeta",meta.get().getCdMeta());
+			model.addAttribute("cdmeta",id);
 			model.addAttribute("itens",itMeta);
 			model.addAttribute("restante",metaRestante);
 			// Dados do Gráfico 
@@ -79,7 +81,7 @@ public class ItMEtaController {
 			model.addAttribute("descricao"," Resta para a meta "+meta.get().getDescricao());
 		} catch (Exception e) {
 			model.addAttribute("nome_meta","Não há itens de  meta a serem exibidos!");
-			model.addAttribute("cdmeta","");
+			model.addAttribute("cdmeta",id);
 			model.addAttribute("itens",itMeta);
 		}
 		 model.addAttribute("conta",conta);
@@ -153,6 +155,29 @@ public class ItMEtaController {
 			model.addAttribute("andamento", andamentoMeta);
 			model.addAttribute("titulo", metaLocalizada.get().getDescricao());
 			model.addAttribute("descricao"," Resta para a meta "+metaLocalizada.get().getDescricao());
+		return rw;
+	}
+	/**
+	 * Regera os itens de meta excluíndo os ainda não creditados
+	 * */
+	
+	@GetMapping("/regerar/{id}")
+	public RedirectView reGerarMetaItMeta(@PathVariable Long id) {
+		System.out.println("1 - Recalculando Meta a Meta!");
+		RedirectView rw = new RedirectView("http://localhost:8080/itmeta/listar/"+id.toString());
+		
+		try {
+			Optional<Meta> metaLocalizada = metaRepository.findById(id);
+			Meta meta = metaLocalizada.get();
+			
+		    List<ItMeta> itensRecalculados = metaservices.reGeraItMeta(meta);
+		    itMetaRepository.saveAll(itensRecalculados);
+		    
+		    System.out.println("Itens recalculados salvos com sucesso!");
+		} catch (Exception e) {
+			System.out.println(e.getMessage() + "Erro ao regerar os itens de meta!");
+		}
+	
 		return rw;
 	}
 	

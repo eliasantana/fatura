@@ -18,6 +18,30 @@
 		    <p th:text=" 'Conta: ' + ${conta.nrConta} + ' Agência: ' + ${conta.nrAgencia}+ ' Saldo: ' + ${conta.saldo}" style="font-size:30px;"></p>
 		    <div align="left"><img th:src="|/conta/qrcode/${conta.cdConta}|"/></div>
 		    <a href="/meta/listar" class="btn btn-success mb-2" > Voltar</a>
+		    <!-- Modal de Confirmação -->
+		    	<!-- Button trigger modal -->
+				<button type="button" class="btn btn-warning mb-2" data-bs-toggle="modal" data-bs-target="#exampleModal">
+				  <span data-feather="dollar-sign"></span> Recalcular Meta
+				</button>
+						<!-- Modal -->
+						<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+						  <div class="modal-dialog modal-dialog-centered">
+						    <div class="modal-content">
+						      <div class="modal-header">
+						        <h5 class="modal-title" id="exampleModalLabel">Recalcular Meta</h5>
+						        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+						      </div>
+						      <div class="modal-body">
+						        Deseja realmente reacalcular a meta  [<span th:text="${nome_meta}"></span>] ?
+						      </div>
+						      <div class="modal-footer">
+						        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+						        <a href="/itmeta/regerar/" th:href="@{'/itmeta/regerar/'+${cdmeta}}" class="btn btn-danger">Recalcular</a>
+						      </div>
+						    </div>
+						  </div>
+						</div>
+					    <!-- Fim do Modal de Confirmação -->
 		    <!-- Gráfico de Metas -->
 	         <figure class="highcharts-figure">
 			    <div id="meta" style="width: 100%;"></div>

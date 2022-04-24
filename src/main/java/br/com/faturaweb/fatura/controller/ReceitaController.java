@@ -39,6 +39,7 @@ public class ReceitaController {
 	
 	Receita receita = new Receita();
 	model.addAttribute("receita",receita)	;
+	
 	 return "home/receita";
 		
 	}

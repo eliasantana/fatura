@@ -18,6 +18,7 @@ public class LancamentoForm {
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
 	private LocalDate dtCompetencia;
 	private  Integer nrParcelas;
+	private String observacao;
 	
 	public LancamentoForm() {
 		 this.dtCadastro = LocalDate.now();
@@ -28,7 +29,7 @@ public class LancamentoForm {
 
 	public LancamentoForm(Long cdLancamento, String dsLancamento, String usuario, LocalDate dtCadastro,
 			String dsTipoLancamento, String snPago, BigDecimal vlPago, String dsFormaDePagamento,
-			LocalDate dtCompetencia, Integer nrPArcelas) {
+			LocalDate dtCompetencia, Integer nrPArcelas, String observacao) {
 			super();
 			this.cdLancamento = cdLancamento;
 			this.dsLancamento = dsLancamento;
@@ -40,6 +41,7 @@ public class LancamentoForm {
 			this.dsFormaDePagamento = dsFormaDePagamento;
 			this.dtCompetencia = LocalDate.now();
 			this.nrParcelas = nrPArcelas;
+			this.observacao = observacao;
 	}
 
 
@@ -123,6 +125,13 @@ public class LancamentoForm {
 		return nrParcelas;
 	}
 
+	public void setObservacao(String observacao) {
+		this.observacao = observacao;
+	}
+	
+	public String getObservacao() {
+		return observacao;
+	}
 
 	@Override
 	public String toString() {
