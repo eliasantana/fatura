@@ -13,6 +13,7 @@ public interface ContaRepository extends CrudRepository<Conta,Long>{
 
 @Query("SELECT c from Conta c where c.nrConta =:nrConta")
  Optional<Conta>findConta(@Param(value = "nrConta") String nrConta);
+
 /**
  * Retornas todas as contas cadastradas
  * @author elias
@@ -20,4 +21,14 @@ public interface ContaRepository extends CrudRepository<Conta,Long>{
  * */
 @Query("SELECT c FROM Conta c")
 	List<Conta>findcontas();
+
+/**
+ * Retorna uma conta pelo id Informado
+ * @author elias
+ * @since 28/04/2022
+ * @return {@link Conta} - Conta
+ * */
+@Query(value = "SELECT * from  fatura.conta WHERE cd_conta=:id", nativeQuery = true)
+Conta findContaId (@Param(value = "id") Long id);
 }
+

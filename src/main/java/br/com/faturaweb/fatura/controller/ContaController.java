@@ -67,11 +67,14 @@ AppServices appservices;
 		return "conta";	
 	}
 	
-	@GetMapping("excluir/{id}")
-	public RedirectView excluirConta(@PathVariable Long Id) {
+	@GetMapping("/excluir/{id}")
+	public RedirectView  excluirConta(@PathVariable Long id, Model model) {
 		RedirectView rw = new RedirectView("http://localhost:8080/conta/listar");
-		Optional<Conta> conta = repository.findById(Id);
-		repository.delete(conta.get());
+		//Optional<Conta> conta = repository.findById(Id);
+		Conta conta = repository.findContaId(id);
+		repository.delete(conta);
+		
+		System.out.println(id.toString());
 		return rw;
 	}
 	
