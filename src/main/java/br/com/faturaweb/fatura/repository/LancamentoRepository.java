@@ -83,4 +83,15 @@ public interface LancamentoRepository extends CrudRepository<Lancamento, Long> {
 										+ "where date_format(dt_competencia,'%m%Y') =:mesano   order by tipo_lancamento_cd_tipo_lancamento"
 											,nativeQuery = true)
 		List<Lancamento> findLancamentosFuturos(String mesano);
+		
+		/**
+		 * Retorna os lancçamentos do Mês seguinte
+		 * @author elias
+		 * @since 27/04/2022
+		 * @return {@link List} - Lista de Lançamentos do Mês seguinte.
+		 * */
+		@Query(value="SELECT * FROM fatura.lancamento l "
+									+ "WHERE date_format(l.dt_competencia ,'%m%Y') = date_format((curdate() + interval 1 month),'%m%Y');",nativeQuery = true)
+		List<Lancamento> findLancamentoMesSeguinte();
+		
 }

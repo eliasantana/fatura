@@ -9,6 +9,7 @@ import javax.swing.tree.AbstractLayoutCache;
 
 import org.hibernate.boot.model.source.internal.hbm.AbstractSingularAttributeSourceEmbeddedImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.MethodIntrospector.MetadataLookup;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -56,6 +57,7 @@ public class ItMEtaController {
 	LogMovimentacaoFinanceiraRepository log;
 	@Autowired
 	MetaService metaservices;
+
 	
 	@GetMapping("listar/{id}")
 	public String listarItMeta(@PathVariable Long id, Model model) {
@@ -174,9 +176,17 @@ public class ItMEtaController {
 		    itMetaRepository.saveAll(itensRecalculados);
 		    
 		    System.out.println("Itens recalculados salvos com sucesso!");
+			LogMovimentacaoFinanceira log = new LogMovimentacaoFinanceira();
+			log.setDescricao("Recalculando itens da meta  " + meta.getCdMeta() + " - " +meta.getDescricao());
+			log.setDtMovimentacao(LocalDate.now());
+			log.setTpMovimentacao("R");
+			
+			this.log.save(log);
+			
 		} catch (Exception e) {
 			System.out.println(e.getMessage() + "Erro ao regerar os itens de meta!");
 		}
+		
 	
 		return rw;
 	}

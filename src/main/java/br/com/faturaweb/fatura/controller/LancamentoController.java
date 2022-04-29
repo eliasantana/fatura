@@ -120,33 +120,19 @@ public class LancamentoController {
 			Lancamento findUltimoLancamentoUsuario = lancamentoRepository.findUltimoLancamentoUsuario(usuario.get().getCdUsuario());
 			System.out.println("Ultimo lancamento Localizado: " + findUltimoLancamentoUsuario.toString());
 
-			List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentos();
+			//List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentos();
+			List<Lancamento> lancamentos = lancamentoRepository.findLancamentoMesSeguinte();
 			model.addAttribute("lancamentos", lancamentos);
 			
 			
 		return "home/listar-lancamento";
 	}
 
-	@GetMapping("/listar")
-	public String listar(Model model) {
-//    Método duplicado - Este método está sendo utilizado através do controller HomeController
-//		Configuracoes conf = configuracoesRepository.findConfiguracao();
-//		//Lançamentos do Ano
-//		List<Lancamento> lancamentos = lancamentoRepository.findLancamentosDoAno();
-//		System.out.println("listandox");
-//		model.addAttribute("lancamentos", lancamentos);
-//
-//		List<Lancamento> lancamentosVencidos = lancamentoRepository.findVencidos(conf.getNrDias());
-//		for (Lancamento lancamento : lancamentosVencidos) {
-//			System.out.println(lancamento.getCdLancamento());
-//		}
-//		
-		return "home/listar-lancamento";
-	}
 
 	@GetMapping("excluir/{id}")
 	public  RedirectView excluir(@PathVariable Long id, Model model) {
-		List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentos();
+		//List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentos();
+		List<Lancamento> lancamentos = lancamentoRepository.findLancamentoMesSeguinte();
 		model.addAttribute("lancamentos", lancamentos);
 		System.out.println("Excluindo lançamentos");
 		Optional<Lancamento> lancamentoLocalizado = lancamentoRepository.findById(id);
@@ -181,7 +167,6 @@ public class LancamentoController {
 		lf.setSnPago(lancamento.getSnPago());
 		lf.setVlPago(lancamento.getVlPago());
 		lf.setObservacao(lancamento.getObservacao());
-		List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentos();
 		model.addAttribute("lancamentos", lf);
 		model.addAttribute("formapagto", formaDePagamento.get());
 		model.addAttribute("tpLancamentos", tipoLancamento);
@@ -193,10 +178,8 @@ public class LancamentoController {
 	
 	@GetMapping("pagar/{id}")
 	public String pagar(@PathVariable Long id, Model model) {
-		//RedirectView rw = new RedirectView("https://sysfaturaapp.herokuapp.com/listar"); 
 		Lancamento lancamento = lancamentoRepository.findByIdLancamento(id);
-		//List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentos();
-		//List<Lancamento> lancamentos = lancamentoRepository.findLancamentosDoAno();
+		//List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentosDoMes();
 		List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentosDoMes();
 		lancamento.setSnPago("SIM");
 		lancamentoRepository.save(lancamento);
@@ -257,7 +240,6 @@ public class LancamentoController {
 			response.setContentLength((int) file.length());
 			
 			InputStream input = new BufferedInputStream(new FileInputStream(file));
-			//FileCopyUtils.copy(input, response.getOutputStream());
 			ServletOutputStream outputStream = response.getOutputStream();
 			FileCopyUtils.copy(input,outputStream);
 		}else {
