@@ -5,6 +5,7 @@ import java.math.MathContext;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.Period;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +16,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import com.google.common.net.PercentEscaper;
+import com.mysql.cj.log.Log;
+import com.mysql.cj.x.protobuf.MysqlxResultset.FetchSuspendedOrBuilder;
 
 import br.com.faturaweb.fatura.model.ItMeta;
 import br.com.faturaweb.fatura.model.Meta;
@@ -30,26 +33,42 @@ public class MetaService {
 	ItMetaRepository itMetaRepository;
 	
 	/**
-	 * Gera um item de meta para cada semana calculada.
+	 * Gera um item de meta semanal ou mensal de acordo com o tipo de meta.
 	 * @author elias
 	 * @param meta
 	 * @return {@link ArrayList}
 	 * */
 	public List<ItMeta>geraItMeta(Meta meta) {
-		 List<ItMeta> itensMeta = new ArrayList<ItMeta>();
-		 MathContext mt = new MathContext(0, RoundingMode.HALF_UP);
-		long totalDeDias = ChronoUnit .DAYS.between(meta.getDtInicio(), meta.getDtFim());
-		long totalSemanas = (totalDeDias/7);
-		BigDecimal vlParcela = meta.getVlMeta().divide(new BigDecimal(totalSemanas), mt.DECIMAL32);
-		System.out.println("Valor da Parcela: " + vlParcela);
-		System.out.println("Total de Semanas: "+ totalSemanas);
-		LocalDate dataMeta = meta.getDtInicio();
-		for (int i=1; i <= totalSemanas; i++) {
-			dataMeta = dataMeta.plusDays(7);
-			ItMeta it = new ItMeta(meta.getDescricao() + " - " + "Semana " + i +"/" + totalSemanas + " - " + dataMeta, i, vlParcela, meta);
-			itensMeta.add(it);
-		}
 		
+		List<ItMeta> itensMeta = new ArrayList<ItMeta>();
+		MathContext mt = new MathContext(0, RoundingMode.HALF_UP);
+		if (meta.getTpMeta().equals("M")){
+			//Meta Mensal
+			Long totalDeMes = ChronoUnit.MONTHS.between(meta.getDtInicio(), meta.getDtFim());
+			BigDecimal vlParcela = meta.getVlMeta().divide(new BigDecimal(totalDeMes), mt.DECIMAL32);
+			LocalDate dataMeta = meta.getDtInicio();
+			
+			//Gera os itens da meta
+			for (int i=1; i <= totalDeMes; i++) {
+				dataMeta = dataMeta.plusMonths(i);
+				ItMeta it = new ItMeta(meta.getDescricao() + " - " + "Mês " + i +"/" + totalDeMes + " - " + dataMeta, i, vlParcela, meta);
+				itensMeta.add(it);
+			}
+		}else {
+			//Meta Semanal
+		
+			long totalDeDias = ChronoUnit .DAYS.between(meta.getDtInicio(), meta.getDtFim());
+			long totalSemanas = (totalDeDias/7);
+			BigDecimal vlParcela = meta.getVlMeta().divide(new BigDecimal(totalSemanas), mt.DECIMAL32);
+			LocalDate dataMeta = meta.getDtInicio();
+			
+			//Gera os itens da meta
+			for (int i=1; i <= totalSemanas; i++) {
+				dataMeta = dataMeta.plusDays(7);
+				ItMeta it = new ItMeta(meta.getDescricao() + " - " + "Semana " + i +"/" + totalSemanas + " - " + dataMeta, i, vlParcela, meta);
+				itensMeta.add(it);
+			}
+		}
 			return itensMeta;
 	}
 	
@@ -64,36 +83,47 @@ public class MetaService {
 	public List<ItMeta>reGeraItMeta(Meta meta) {
 		List<ItMeta> itensMeta = new ArrayList<ItMeta>();
 		List<ItMeta> itensLocalizados = itMetaRepository.findAllItensMeta(meta.getCdMeta());
+		LocalDate dataMeta = LocalDate.now();
 		
 		if (itensLocalizados.size() > 0) { //Recalcula os itens da meta
 			
-				//Listando metas não pagas
-				List<ItMeta> findItMetas = itMetaRepository.findItNaoCreditado(meta.getCdMeta());
+				List<ItMeta> findItMetas = itMetaRepository.findItNaoCreditado(meta.getCdMeta()); //Listando metas não pagas
 			
 				BigDecimal diferenca = BigDecimal.ZERO;
 				BigDecimal totalMeta = BigDecimal.ZERO;
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/yyyy");
 				
-				//Excluíndo os itens de meta não pagos		
 				for (ItMeta itMeta : findItMetas) {
-					itMetaRepository.delete(itMeta);
+					itMetaRepository.delete(itMeta); //Excluíndo os itens de meta não pagos		
 				}
-				//Retorna o valor dos itens de meta já creditados 
-				BigDecimal totalCreditado = getTotalItMetaCreditada(meta);
-				//Calcula o novo valor a creditar
-				BigDecimal novoTotalAcreditar = meta.getVlMeta().subtract(totalCreditado);
+			
+				BigDecimal totalCreditado = getTotalItMetaCreditada(meta); 	//Retorna o valor dos itens de meta já creditados 
+				BigDecimal novoTotalAcreditar = meta.getVlMeta().subtract(totalCreditado); //Calcula o novo valor a creditar
 				MathContext mt = new MathContext(0, RoundingMode.HALF_UP);
-				//Calculando a diferença
-				diferenca = meta.getVlMeta().subtract(novoTotalAcreditar.add(totalCreditado));
-				 //Calcula a quantidade de dias entre a data atual e a data fim da meta
-				long totalDeDias = ChronoUnit .DAYS.between(LocalDate.now(), meta.getDtFim());
+			
+				diferenca = meta.getVlMeta().subtract(novoTotalAcreditar.add(totalCreditado)); 	//Calculando a diferença
+				long totalDeDias = ChronoUnit .DAYS.between(LocalDate.now(), meta.getDtFim()); //Calcula a quantidade de dias entre a data atual e a data fim da meta
 				long totalSemanas = (totalDeDias/7);
-				BigDecimal vlParcela = novoTotalAcreditar.divide(new BigDecimal(totalSemanas), mt.DECIMAL32);
-				LocalDate dataMeta = LocalDate.now();
-				System.out.println("Diferença : " + diferenca);
-				for (int i=1; i <= totalSemanas; i++) {
-					dataMeta = dataMeta.plusDays(7);
-					ItMeta it = new ItMeta(meta.getDescricao() + " - " + "Semana (R) " + i +"/" + totalSemanas + "  -  " + dataMeta, i, vlParcela, meta);
-					itensMeta.add(it);
+				long totalMes = (totalDeDias / 30);
+			
+				//Meta Mensal
+				if (meta.getTpMeta().equals("M")) {
+					BigDecimal vlParcela = novoTotalAcreditar.divide(new BigDecimal(totalMes), mt.DECIMAL32);
+					System.out.println("Diferença : " + diferenca);
+					for (int i=1; i <= totalMes; i++) {
+						dataMeta = dataMeta.plusMonths(i);
+						ItMeta it = new ItMeta(meta.getDescricao() + " - " + "Mês (R) " + i +"/" + totalMes + "  -  " + dataMeta.format(formatter), i, vlParcela, meta);
+						itensMeta.add(it);
+					}
+				}else { 
+					//Meta Semanal
+					BigDecimal vlParcela = novoTotalAcreditar.divide(new BigDecimal(totalSemanas), mt.DECIMAL32);
+					System.out.println("Diferença : " + diferenca);
+					for (int i=1; i <= totalSemanas; i++) {
+						dataMeta = dataMeta.plusDays(7);
+						ItMeta it = new ItMeta(meta.getDescricao() + " - " + "Semana (R) " + i +"/" + totalSemanas + "  -  " + dataMeta.format(formatter), i, vlParcela, meta);
+						itensMeta.add(it);
+					}
 				}
 		
 		} else { 

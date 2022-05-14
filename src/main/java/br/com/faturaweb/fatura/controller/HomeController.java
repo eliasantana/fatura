@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import br.com.faturaweb.fatura.form.LancamentoForm;
 import br.com.faturaweb.fatura.model.Configuracoes;
-import br.com.faturaweb.fatura.model.EnviaEmailThread;
 import br.com.faturaweb.fatura.model.FormaDePagamento;
 import br.com.faturaweb.fatura.model.Lancamento;
 import br.com.faturaweb.fatura.model.Menssageria;
@@ -36,11 +35,11 @@ import br.com.faturaweb.fatura.repository.MensageriaRepository;
 import br.com.faturaweb.fatura.repository.ReceitaRepository;
 import br.com.faturaweb.fatura.repository.TipoLancamentoRepository;
 import br.com.faturaweb.fatura.repository.UsuarioRepository;
+import br.com.faturaweb.fatura.services.AppServices;
 import br.com.faturaweb.fatura.services.LancamentoServices;
 import br.com.faturaweb.fatura.services.MensageriaServices;
 import br.com.faturaweb.fatura.services.MetaService;
 import br.com.faturaweb.fatura.services.ReceitaServices;
-import br.com.faturaweb.fatura.services.AppServices;
 @ComponentScan
 @Controller
 
