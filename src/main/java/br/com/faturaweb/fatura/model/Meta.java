@@ -32,6 +32,8 @@ public class Meta {
 	private String snAtivo;
 	@OneToOne	
 	private Conta conta;
+	private String tpMeta;
+	
 	
 	@OneToMany(cascade =  CascadeType.ALL, mappedBy =  "meta")
 	private List<ItMeta> itMeta = new ArrayList<ItMeta>();
@@ -39,7 +41,7 @@ public class Meta {
 		
 	}
 
-	public Meta(String descricao, LocalDate dtInicio, LocalDate dtFim, BigDecimal vlMeta, String snAtivo, Conta conta, ArrayList<ItMeta>itMeta) {
+	public Meta(String descricao, LocalDate dtInicio, LocalDate dtFim, BigDecimal vlMeta, String snAtivo, Conta conta, String tpMeta, ArrayList<ItMeta>itMeta) {
 		super();
 		this.descricao = descricao;
 		this.dtInicio = dtInicio;
@@ -48,6 +50,7 @@ public class Meta {
 		this.snAtivo = snAtivo;
 		this.conta = conta;
 		this.itMeta = itMeta;
+		this.tpMeta = tpMeta;
 	}
 
 	public Long getCdMeta() {
@@ -113,11 +116,21 @@ public class Meta {
 		return itMeta;
 	}
 
+	public void setTpMeta(String tpMeta) {
+		this.tpMeta = tpMeta;
+	}
+	
+	public String getTpMeta() {
+		return tpMeta;
+	}
+
 	@Override
 	public String toString() {
 		return "Meta [cdMeta=" + cdMeta + ", descricao=" + descricao + ", dtInicio=" + dtInicio + ", dtFim=" + dtFim
-				+ ", vlMeta=" + vlMeta + ", snAtivo=" + snAtivo + ", conta=" + conta + ", itMeta=" + itMeta + "]";
+				+ ", vlMeta=" + vlMeta + ", snAtivo=" + snAtivo + ", conta=" + conta + ", tpMeta=" + tpMeta
+				+ ", itMeta=" + itMeta + "]";
 	}
+	
 
 	
 	

@@ -7,11 +7,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,7 +44,7 @@ import net.sf.jasperreports.engine.JRException;
 
 @Controller
 
-public class testeController {
+public class TesteController {
 
 		@Autowired
 		LancamentoRepository r;
@@ -63,7 +66,30 @@ public class testeController {
 	public String apiltipolancnamento(Model model){
 		String valores = lctoServices.getTotal();
 		System.out.println(valores);
+		// Exemplo de Formatação de Data 
+		//Obtém LocalDate de hoje
+        LocalDate hoje = LocalDate.now();
+
+        System.out.println("LocalDate antes de formatar: " + hoje);
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+        String hojeFormatado = hoje.format(formatter);
+
+        System.out.println("LocalDate depois de formatar: " + hojeFormatado);
+
+        //Obtém LocalDateTime de agora
+        LocalDateTime agora = LocalDateTime.now();
+
+        System.out.println("LocalDateTime antes de formatar: " + agora);
+
+        formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+
+        String agoraFormatado = agora.format(formatter);
+
+        System.out.println("LocalDateTime depois de formatar: " + agoraFormatado);
 		model.addAttribute("valores",valores);
+		model.addAttribute("data",agora.format(formatter));
 		return  "teste";
 	}
 	
