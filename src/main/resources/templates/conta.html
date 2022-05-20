@@ -48,6 +48,48 @@
 			<button type="submit" class="btn btn-primary mt-2">Salvar</button>
 		</div>
 	    </form>
+	    
+	    <!-- Modal Excluir -->
+		<!-- Button trigger modal -->
+		<div style="float:right">
+				<button type="button" class="btn btn-success mt-2" data-bs-toggle="modal" data-bs-target="#debitaModal">
+				 		Creditar / Debitar
+				</button>
+				
+				<!-- Modal -->
+				<form method="post" action="/conta/movimentacao" id="movimentacao">
+				<div class="modal fade" id="debitaModal" tabindex="-1" aria-labelledby="debitaModal" aria-hidden="true">
+				  <div class="modal-dialog modal-dialog-centered">
+				    <div class="modal-content">
+				      <div class="modal-header">
+				        <h5 class="modal-title" id="debitaModal">Crédito / Débito </h5>
+				        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				      </div>
+				      <div class="modal-body">
+				      	 <label class="form-label">Selecione um conta</label>
+		        		 <select class="form-control" id="conta" name="conta">
+		        		 	<option th:each="contas : ${contas}" th:text="${contas.nrConta}" th:value="${contas.nrConta}"> </option>
+		        		 </select>
+		        		 <label class="form-label" >Valor</label>
+		        		 <input type="text" class="form-control mt-1" id="valor" name="valor" required="required">
+		        		 <label class="form-label">Tipo de Movimentação (Crédito / Débito)</label>
+		        		 <select class="form-control" id="operacao" name="operacao">
+		        		 	<option value="C">Crédito</option>
+		        		 	<option value="D">Débito</option>
+		        		 </select>
+				      </div>
+				      <div class="modal-footer">
+				        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+				        <button type="submit" class="btn btn-primary">Salvar</button>
+				      </div>
+				    </div>
+				  </div>
+				</div>
+				</form>
+				
+		</div>
+		<!-- Modal Excluir -->
+	    
 	  </div>
 	  
 	</div>
@@ -71,6 +113,7 @@
 						<td>
 							<a class="btn btn-warning" href="/conta/alterar/" th:href="@{'/conta/alterar/' + ${contas.cdConta}}">Alterar</a>
 							<a class="btn btn-danger" href="/conta/excluir/" th:href="@{'/conta/excluir/' + ${contas.cdConta}}">Excluir</a>
+							
 						</td>
 					</tr>
 				</tbody>

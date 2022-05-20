@@ -1,6 +1,7 @@
 package br.com.faturaweb.fatura.controller;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,6 +26,9 @@ import br.com.faturaweb.fatura.services.AppServices;
 public class ContaController {
 @Autowired
 ContaRepository repository;
+@Autowired
+AppServices services;
+
 @Autowired
 AppServices appservices;	
 	@GetMapping("listar")
@@ -75,6 +79,34 @@ AppServices appservices;
 		repository.delete(conta);
 		
 		System.out.println(id.toString());
+		return rw;
+	}
+	
+	@PostMapping("/creditar/{id}")
+	public void creditar( @PathVariable Long id, Model model, Conta conta ) {
+		  Conta contaLocalizada = repository.findContaId(id);
+		 
+	}
+	
+	@PostMapping("/movimentacao")
+	public RedirectView movimentacao(Model model, @RequestParam("valor") String valor, @RequestParam("conta") String conta, @RequestParam("operacao") String operacao) {
+		RedirectView rw = new RedirectView("http://localhost:8080/conta/listar");
+		Optional<Conta> contaLocalizada = repository.findConta(conta);
+		
+		valor = valor.replaceAll(",",".");
+		if (valor!=null) {
+			BigDecimal saldo = contaLocalizada.get().getSaldo();
+			Double vlr = Double.valueOf(valor);
+			BigDecimal vlr2 = BigDecimal.valueOf(vlr);
+			//D = Débito  C="Crédito"
+			if (operacao.equals("D")) 
+				saldo = saldo.subtract(vlr2);
+			else saldo = saldo.add(vlr2);
+			
+			Conta  novosaldo = contaLocalizada.get();
+			novosaldo.setSaldo(saldo);
+			repository.save(novosaldo);
+		}
 		return rw;
 	}
 	
