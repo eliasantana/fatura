@@ -22,4 +22,4 @@ Status: <strong>Em desenvolvimento ⚠️ </strong>
 <p>
 <h5>Objetivo</h5>  
 Este projeto nasceu da necessidade da realização de um controle efetivo e eficaz das despesas pessoais e também como incentivo para por
-em prática os conhecimentos obtidos nos estudos das tecnologias acima listadas.
+em prática os conhecimentos obtidos nos estudos das tecnologias acima listadas através do BootCamp GFT Starter #5.
