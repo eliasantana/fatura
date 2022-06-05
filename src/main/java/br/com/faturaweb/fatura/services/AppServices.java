@@ -45,12 +45,12 @@ public class AppServices {
 	 */
 	public void sendEmai(String origem, String origemNome, String destino, String destinoNome, String tiulo,
 			StringBuilder corpoDamensagem) throws UnsupportedEncodingException {
-
+	
 		final Email email = DefaultEmail.builder().from(new InternetAddress(origem, origemNome))
 				.to(Lists.newArrayList(new InternetAddress(destino, destinoNome))).subject(tiulo)
 				.body(corpoDamensagem.toString()).encoding("UTF-8").build();
-
-		emailService.send(email);
+		
+				emailService.send(email);
 	}
 
 	/**

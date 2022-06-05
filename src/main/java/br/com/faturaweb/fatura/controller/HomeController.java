@@ -14,6 +14,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -187,6 +188,22 @@ public class HomeController {
 		//List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentos();
 		List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentosDoMes();
 		model.addAttribute("lancamentos", lancamentos);
+		if ( mensageriaservices.enviaMensagem()) {
+			notificaUsuario();
+		}
+	
+		return "home/listar-lancamento";
+	}
+
+	/**
+	 * Notifica o usuário sobre  despesas vencidas 
+	 * @author elias
+	 * @since 05/06/2022
+	 * @param fixeRate = 600000 - Milisegundos
+	 * */
+	@Scheduled(fixedRate = 60000)
+	private void notificaUsuario() {
+		System.out.println("Executando a Thead!");
 		Configuracoes config = configuracoesRepository.findConfiguracao();
 		Integer nrDias = config.getNrDias();
 		String snNotificar = config.getSnNotificar();
@@ -216,29 +233,21 @@ public class HomeController {
 					menssageria.setStatus("E");
 					mensageriaRepository.save(menssageria);
 				}
+				
 				Menssageria menssageria = new Menssageria();
 				menssageria.setDestino("eliasantanasilva@gmail.com");
 				menssageria.setDtEnvio(LocalDateTime.now());
 				menssageria.setStatus("S");
 			
 				mensageriaRepository.save(menssageria);
+				
+				System.out.println("Processo de envio de e-mail realizado com sucesso!");
+			}else {
+				System.out.println("Quantidade de mensgem diária atingida");
 			}
 			
 			
 		}
-			//Gera arquivo pdf
-			System.out.println("Gerando arquivo PDF");
-			String fileIn = "src/main/resources/templates/home/listar-lancamento.html";		
-			String fileout = "C:\\sysfatura\\relatorios\\";
-			try {
-				appservices.geraPDF(fileIn, "teste.pdf", fileout);
-				System.out.println("Arquivo Gerado com sucesso! ");
-			} catch (IOException e) {
-				System.out.println("Erro ao tentar gerar o arquivo!");
-				e.printStackTrace();
-			}
-		
-		return "home/listar-lancamento";
 	}
 
 	@PostMapping("/salvar")
