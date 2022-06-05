@@ -314,4 +314,10 @@ public byte[] getlogo() {
 	return config.getLogo();
 }
 
+@GetMapping("/agenda")
+public String agenda() {
+	
+	return "agenda";
+}
+
 }
