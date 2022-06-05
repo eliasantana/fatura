@@ -4,6 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import it.ozimov.springboot.mail.configuration.EnableEmailTools;
 
@@ -11,6 +12,7 @@ import it.ozimov.springboot.mail.configuration.EnableEmailTools;
 @SpringBootApplication
 @EnableAutoConfiguration
 @EnableEmailTools
+@EnableScheduling
 public class FaturaApplication {
 
 	public static void main(String[] args) {
