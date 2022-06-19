@@ -5,6 +5,8 @@ import java.math.MathContext;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -14,9 +16,14 @@ import org.apache.el.lang.ELArithmetic.BigDecimalDelegate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.databind.deser.std.NumberDeserializers.BigDecimalDeserializer;
+import com.itextpdf.kernel.pdf.tagutils.IRoleMappingResolver;
+
+import br.com.faturaweb.fatura.model.FormaDePagamento;
 import br.com.faturaweb.fatura.model.Lancamento;
 import br.com.faturaweb.fatura.model.TipoLancamento;
 import br.com.faturaweb.fatura.model.Usuario;
+import br.com.faturaweb.fatura.repository.FormaDePagamentoRepository;
 import br.com.faturaweb.fatura.repository.LancamentoRepository;
 import br.com.faturaweb.fatura.repository.TipoLancamentoRepository;
 
@@ -26,6 +33,8 @@ public class LancamentoServices {
 	LancamentoRepository lancamentoRepository;
 	@Autowired
 	TipoLancamentoRepository tipoLancamentoRepository;
+	@Autowired
+	FormaDePagamentoRepository formaPagtoRepository;
 	
 	public List<Lancamento>  parcelar(String snParcelar, Long cdUsuario, Integer qtParcela){
 			BigDecimal vlPago = new BigDecimal(0); 
@@ -157,5 +166,39 @@ public class LancamentoServices {
 		
 	 return str;
 	}
+	
+	/**
+	 * Retorna a totalização dos lançamentos por Forma de Pagamento
+	 * @since 16/06/2022
+	 * @author elias.silva
+	 * @param mesAno - Mes ano  mm/AAAA
+	 * @return {@link HashMap} - HashMap <String, BigDecimal>
+	 * */
+	public HashMap<String, BigDecimal>getTotalizacaoDespesaFormaPagto(String mesAno){
+		
+		HashMap<String, BigDecimal> hashTotalizacao = new HashMap<String, BigDecimal>();
+		List<FormaDePagamento> formasDePagamento = formaPagtoRepository.findAllFormasDePagamento(); 
+		List<Lancamento> lancamentosDoMes = lancamentoRepository.findAllLancamentosDoMes(mesAno);
+		BigDecimal total = BigDecimal.ZERO;
+		
+		for (FormaDePagamento pagamentos : formasDePagamento) {
+			for (Lancamento lancamento : lancamentosDoMes) {
+				String pagtoDescricao = pagamentos.getDescricao();
+				String descricao = lancamento.getFormaDePagamento().getDescricao();
+					if (pagtoDescricao.equals(lancamento.getFormaDePagamento().getDescricao())) {
+						total = total.add(lancamento.getVlPago());
+					}				
+			}
+			if (total.compareTo(BigDecimal.ZERO)==1) {
+				hashTotalizacao.put(pagamentos.getDescricao(),total);
+			}
+			total = BigDecimal.ZERO;
+		}
+	 System.out.println("-------------Descrição --------------------");
+	 System.out.println(hashTotalizacao.keySet());
+	 System.out.println(hashTotalizacao.values());
+		return hashTotalizacao;
+	}
+	
 	
 }

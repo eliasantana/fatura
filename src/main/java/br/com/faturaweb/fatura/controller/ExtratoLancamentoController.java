@@ -37,18 +37,17 @@ public class ExtratoLancamentoController {
 		mesAno =mesAno+  Integer.toString(year);
 		List<Lancamento> lctoFuturo = lctoRepository.findLancamentosFuturos(mesAno);
 		List<Conta> contas = contaRepository.findcontas();
-	
-		HashMap<String, BigDecimal> totalizacaoDespesaCategoria = lctoServices.totalizacaoDespesaCategoria(mesAno);
-
-		System.out.println(mesEano);
-	
 		
+		HashMap<String, BigDecimal> totalizacaoDespesaCategoria = lctoServices.totalizacaoDespesaCategoria(mesAno);
+		HashMap<String, BigDecimal> totalDespesaFormaPagto = lctoServices.getTotalizacaoDespesaFormaPagto(mesAno);
 
 		model.addAttribute("lcto",lctoFuturo);
 		model.addAttribute("totalizacao",totalizacaoDespesaCategoria.keySet().toArray());
 		model.addAttribute("valores",totalizacaoDespesaCategoria.values());
-		model.addAttribute("keygrupodespesa",totalizacaoDespesaCategoria.keySet());
+		model.addAttribute("keygrupodespesa",totalizacaoDespesaCategoria.keySet().toArray());
 		model.addAttribute("grupovalues",totalizacaoDespesaCategoria.values());
+		model.addAttribute("keytotalformapagto",totalDespesaFormaPagto.keySet().toArray());
+		model.addAttribute("valorTotalformapagto",totalDespesaFormaPagto.values());
 		
 		String competencia =" Relatório de Despesas Competência - " + mesAno.substring(0,2).concat("/").concat(String.valueOf(year));
 		model.addAttribute("competencia",competencia);

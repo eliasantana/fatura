@@ -57,8 +57,7 @@ public class TesteController {
 		@Autowired
 		LancamentoServices lctoServices;
 		
-		@Autowired
-		AppServices services;
+	
 		@Autowired
 		ReportService reportServices;
 		
@@ -94,6 +93,8 @@ public class TesteController {
         System.out.println("LocalDateTime depois de formatar: " + agoraFormatado);
 		model.addAttribute("valores",valores);
 		model.addAttribute("data",agora.format(formatter));
+		
+		
 		
 		return  "teste";
 	}

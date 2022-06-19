@@ -270,7 +270,9 @@ public class HomeController {
 			lancamento.setTipoLancamento(tipoLancamento);
 			lancamento.setUsuario(usuario.get());
 			lancamento.setVlPago(lancamentoForm.getVlPago());
+			lancamento.setObservacao(lancamentoForm.getObservacao());
 		    lancamento.setNrParcela(1);
+		 
 			lancamentoRepository.save(lancamento);
 
 			List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentos();
