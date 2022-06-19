@@ -40,7 +40,7 @@
 		</div>					
 	</div>
 	<div class="row">
-		<div class="col-12">
+		<div class="col-12 ml-3">
 			<table class="table table-striped table-hover" id="lancamentos" style="width: 95%">
 			<thead>
 						<th scope="col" >Código</th>
@@ -65,10 +65,9 @@
 		
 	</div>
 	<div class="row">
-	<div class="col-12">
+		<div class="col-12">
 			<table class="table table-striped table-hover" id="categorias" style="width: 95%">
-				
-				<th>Despesa por Categoria</th>
+				<th>Totalização por Categoria</th>
 				<tr>
 					<td th:each="totalizacao : ${totalizacao}" th:text="${totalizacao}"></td>
 					<td th:text="Total"></td>
@@ -77,43 +76,54 @@
 					<td th:each="valores : ${valores}" th:text="${#numbers.formatDecimal(valores,1,2,'COMMA')}"></td>				
 					<td th:text="${total}">0,00</td>			
 				</tr>
-								
 			</table>
 		</div> 		
-		
-		</div>
-		
+	</div>
+	<!-- Totalização de Despesas por Forma de Pagamento -->
+	<div class="row">
+		<div class="col-12">
+			<table class="table table-striped table-hover" id="formapagto" style="width: 95%">
+				<th>Totalização por Forma de Pagamento</th>
+				<tr>
+					<td th:each="keytotalformapagto : ${keytotalformapagto}" th:text="${keytotalformapagto}"></td>
+					<td th:text="Total"></td>
+				</tr>
+				<tr >						
+					<td th:each="valorTotalformapagto : ${valorTotalformapagto}" th:text="${#numbers.formatDecimal(valorTotalformapagto,1,2,'COMMA')}"></td>				
+					<td th:text="${total}">0,00</td>				
+				</tr>
+			</table>
+		</div> 		
+	</div>
 </div>
-
 <div class="container">
-			<div class="row">
-				<div class="col">
-					<div id="grupoDespesa" style="width:100%;height:500 px;"></div>	
+	<div class="row">
+		<div class="col">
+			<div id="grupoDespesa" style="width:100%;height:500 px;"></div>	
+		</div>
+		<div class="col">
+			<div class="card">
+				  <h5 class="card-header">Contas Cadastradas</h5>
+				  <div class="card-body">
+				    <h5 class="card-title"></h5>
+				        <table style="width: 100%">
+					        <thead>
+					        	<th>Conta</th>
+					        	<th style="text-align: right;">Saldo</th>
+					        </thead>
+					        <tbody>							        
+					        	<tr th:each="contas : ${contas}">
+					        		<td th:text="${contas.nrConta}" ></td>
+					        		<td th:text="${#numbers.formatDecimal(contas.saldo,1,2,'COMMA')}" style="text-align: right;"></td>											        	
+					        	</tr>
+					        </tbody>						        
+				        </table>
+				        <p>	
+				    <a href="#" class="btn btn-primary mt-2">Ir para Contas</a>
+				  </div>
 				</div>
-				
-				<div class="col">
-					<div class="card">
-						  <h5 class="card-header">Contas Cadastradas</h5>
-						  <div class="card-body">
-						    <h5 class="card-title"></h5>
-						        <table style="width: 100%">
-							        <thead>
-							        	<th>Conta</th>
-							        	<th style="text-align: right;">Saldo</th>
-							        </thead>
-							        <tbody>							        
-							        	<tr th:each="contas : ${contas}">
-							        		<td th:text="${contas.nrConta}" ></td>
-							        		<td th:text="${#numbers.formatDecimal(contas.saldo,1,2,'COMMA')}" style="text-align: right;"></td>											        	
-							        	</tr>
-							        </tbody>						        
-						        </table>
-						        <p>	
-						    <a href="#" class="btn btn-primary mt-2">Ir para Contas</a>
-						  </div>
-						</div>
-				</div>
-			</div>
+		</div>
+	</div>
 </script>
  	 <!-- Script necessário para o funcionamento da NavBar-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
@@ -192,6 +202,30 @@
 	});
 
 </script>
+<!-- Tabela -->
+<!-- Paginação -->
+	<script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
+  	<script src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+
+ <script>
+  $(document).ready(function(){
+      $('#lancamentos').DataTable({
+        	"language": {
+                "lengthMenu": "Mostrando _MENU_ registros por página",
+                "zeroRecords": "Nada encontrado",
+                "info": "Mostrando página _PAGE_ de _PAGES_",
+                "infoEmpty": "Nenhum registro disponível",
+                "infoFiltered": "(filtrado de _MAX_ registros no total)"
+                
+            },
+            columnDefs: [ {
+	            targets: [ 0 ],
+	            orderData: [ 0, 3]
+	        }]
+      
+        });
+  });
+</script>  
 <!-- Fim  do  -->
 </body>
 </html>
