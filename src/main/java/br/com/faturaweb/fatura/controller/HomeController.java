@@ -73,11 +73,15 @@ public class HomeController {
 	public String index(Model model) {
 		 List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentos();
 		 Integer dias = configuracoesRepository.findConfiguracao().getNrDias();
-		 List<Lancamento> lancamentosVencidos = lancamentoRepository.findVencidos0(dias);
+		 List<Lancamento> lancamentosVencidos = lancamentoRepository.findVencidos(dias);
 		 HashMap<String, BigDecimal> totalizacao = lancamentoServices.totalizacaoDespesaCategoria();
-		 
+		  
 		 //Formata data retorando apenas o mes ex: jan = 01
 		 DateTimeFormatter df = DateTimeFormatter.ofPattern("MM");
+		 DateTimeFormatter df2 = DateTimeFormatter.ofPattern("MMYYYY");
+		 String mesAno = LocalDateTime.now().format(df2).toString();
+		 
+		 BigDecimal limiteCartao = lancamentoServices.getLimiteCartao(mesAno, "Crédito");
 		 //Variáveis para acumular os valores pagos 
 	 	BigDecimal janeiro = new BigDecimal(0);
 		BigDecimal fevereiro = new BigDecimal(0);
@@ -168,6 +172,8 @@ public class HomeController {
 			model.addAttribute("keygrupodespesa",totalizacao.keySet());
 			model.addAttribute("grupovalues",totalizacao.values());
 			model.addAttribute("ano",LocalDate.now().getYear());
+			model.addAttribute("limite","%");
+			model.addAttribute("limitecartao",limiteCartao);
 			if (lancamentosVencidos.size()>0) {
 				model.addAttribute("mensagem", "Atenção! Você possui despesas não pagas!");
 			}else {
@@ -207,7 +213,7 @@ public class HomeController {
 		Configuracoes config = configuracoesRepository.findConfiguracao();
 		Integer nrDias = config.getNrDias();
 		String snNotificar = config.getSnNotificar();
-		List<Lancamento> lancamentosVencidos = lancamentoRepository.findVencidos0(nrDias);
+		List<Lancamento> lancamentosVencidos = lancamentoRepository.findVencidos(nrDias);
 		
 		if (lancamentosVencidos.size() > 0 && snNotificar.equals("S")) {
 			//Só enviará mensagens se aida não tiver atingido o limite diário configurado

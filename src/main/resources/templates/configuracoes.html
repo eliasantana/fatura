@@ -27,6 +27,10 @@
 						  <option th:value="N" th:if="${config.snParcelado=='N'}" selected>Não</option>
 						  <option th:value="S" th:if="${config.snParcelado=='N'}" th:text="Sim">Sim</option>		  
 						</select>
+						<div>
+						<label class="form-label" for="limiteCartao">Teto de Gasto Cartão (limite)</label>
+							<input type="number" class="form-control" th:value="${config.limiteCartao}" id="limiteCartao" name="limiteCartao">
+						</div>
 						<!--  
 						<div class="col">
 						<button type="submit" class="btn btn-primary mt-5">Salvar</button>	
@@ -84,6 +88,10 @@
 						<div>
 							<img th:src="|getimagem|" width="100px" height="100px"/>
 						</div>
+						<div class="mb-3">
+					  		<label for="nmArquivo" class="form-label">Nome do Arquivo (Logo)</label>
+					 		 <input class="form-control" type="text" id="nmArquivo" name="nomeArquivo" th:value="${config.nomeArquivo}">
+						</div>	
 				</div>
 			</div>	
 		</div><!-- Fim upLoad -->
