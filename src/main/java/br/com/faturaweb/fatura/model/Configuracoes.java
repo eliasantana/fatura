@@ -1,5 +1,6 @@
 package br.com.faturaweb.fatura.model;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 
 import javax.persistence.Entity;
@@ -25,6 +26,8 @@ public class Configuracoes {
 	private Integer nrDias;
 	private String dirImportacao;
 	private Integer nrMsgDiaria;
+	private BigDecimal limiteCartao;
+	private String nomeArquivo;
 
 	@Lob
 	private byte[] logo;
@@ -92,12 +95,30 @@ public class Configuracoes {
 	public Integer getNrMsgDiaria() {
 		return nrMsgDiaria;
 	}
+	
+	public BigDecimal getLimiteCartao() {
+		return limiteCartao;
+	}
+	
+	public void setLimiteCartao(BigDecimal limiteCartao) {
+		this.limiteCartao = limiteCartao;
+	}
 
+	public void setNomeArquivo(String nomeArquivo) {
+		this.nomeArquivo = nomeArquivo;
+	}
+	
+	public String getNomeArquivo() {
+		return nomeArquivo;
+	}
+	
 	@Override
 	public String toString() {
 		return "Configuracoes [cdConfiguracao=" + cdConfiguracao + ", snParcelado=" + snParcelado + ", snNotificar="
 				+ snNotificar + ", nrDias=" + nrDias + ", dirImportacao=" + dirImportacao + ", nrMsgDiaria="
-				+ nrMsgDiaria + ", logo=" + Arrays.toString(logo) + "]";
+				+ nrMsgDiaria + ", limiteCartao=" + limiteCartao + ", logo=" + Arrays.toString(logo) + "]";
 	}
+
+	
 
 }

@@ -2,6 +2,7 @@ package br.com.faturaweb.fatura.controller;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,7 +19,9 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.view.RedirectView;
 
 import br.com.faturaweb.fatura.model.Conta;
+import br.com.faturaweb.fatura.model.LogMovimentacaoFinanceira;
 import br.com.faturaweb.fatura.repository.ContaRepository;
+import br.com.faturaweb.fatura.repository.LogMovimentacaoFinanceiraRepository;
 import br.com.faturaweb.fatura.services.AppServices;
 
 @Controller
@@ -31,6 +34,9 @@ AppServices services;
 
 @Autowired
 AppServices appservices;	
+@Autowired
+LogMovimentacaoFinanceiraRepository  logMovimentacaoRepository;
+
 	@GetMapping("listar")
 	public String conta(Model model) {
 		List<Conta> contas = repository.findcontas();
@@ -89,23 +95,45 @@ AppServices appservices;
 	}
 	
 	@PostMapping("/movimentacao")
-	public RedirectView movimentacao(Model model, @RequestParam("valor") String valor, @RequestParam("conta") String conta, @RequestParam("operacao") String operacao) {
+	public RedirectView movimentacao(Model model, @RequestParam("valor") String valor, 
+			@RequestParam("conta") String conta, 
+			@RequestParam("operacao") String operacao,
+			@RequestParam("motivo") String motivo) {
+		
 		RedirectView rw = new RedirectView("http://localhost:8080/conta/listar");
 		Optional<Conta> contaLocalizada = repository.findConta(conta);
-		
+		LogMovimentacaoFinanceira lmf = new LogMovimentacaoFinanceira();
 		valor = valor.replaceAll(",",".");
 		if (valor!=null) {
 			BigDecimal saldo = contaLocalizada.get().getSaldo();
 			Double vlr = Double.valueOf(valor);
 			BigDecimal vlr2 = BigDecimal.valueOf(vlr);
+			
 			//D = Débito  C="Crédito"
-			if (operacao.equals("D")) 
+			if (operacao.equals("D")) {
 				saldo = saldo.subtract(vlr2);
-			else saldo = saldo.add(vlr2);
+				lmf.setDescricao(motivo.toUpperCase());
+				lmf.setDtMovimentacao(LocalDate.now());
+				lmf.setNrConta(contaLocalizada.get().getNrConta());
+				lmf.setTpMovimentacao(operacao);
+				lmf.setUsuario("Elias");
+				lmf.setVlMovimentado(vlr2);
+				
+			}
+			else {
+				saldo = saldo.add(vlr2);
+				lmf.setDescricao(" incluir observação");
+				lmf.setDtMovimentacao(LocalDate.now());
+				lmf.setNrConta(contaLocalizada.get().getNrConta());
+				lmf.setTpMovimentacao(operacao);
+				lmf.setUsuario("Elias");
+				lmf.setVlMovimentado(vlr2);
+			}
 			
 			Conta  novosaldo = contaLocalizada.get();
 			novosaldo.setSaldo(saldo);
 			repository.save(novosaldo);
+			logMovimentacaoRepository.save(lmf);
 		}
 		return rw;
 	}

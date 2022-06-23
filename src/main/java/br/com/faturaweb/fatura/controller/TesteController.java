@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -95,7 +96,17 @@ public class TesteController {
 		model.addAttribute("data",agora.format(formatter));
 		
 		
+		//Teste de limite de gasto
+		BigDecimal limiteCartao = lctoServices.getLimiteCartao("072022","Crédito");
+		model.addAttribute("limite",limiteCartao);
+		System.out.println("------------- LIMITE ----------------");
+		System.out.println(limiteCartao);
 		
+		//Formatando data
+		LocalDate.now();
+		System.out.println("Data Atual " + LocalDate.now());
+		DateTimeFormatter 	df = DateTimeFormatter.ofPattern("MMYYYY");
+		System.out.println("Data Formatada " + LocalDate.now().format(df).toString());
 		return  "teste";
 	}
 	

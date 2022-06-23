@@ -1,8 +1,11 @@
 package br.com.faturaweb.fatura.controller;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Field;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,19 +37,26 @@ public String configuracoes(Model model) {
 
 @PostMapping("salvar")
 public  RedirectView  salvar(Model model, Configuracoes formConfiguracoes, @RequestParam("file") MultipartFile file) throws IOException {
-   Configuracoes config = configuracoesRepository.findConfiguracao();
+   
+	Configuracoes config = configuracoesRepository.findConfiguracao();
    config.setSnParcelado(formConfiguracoes.getSnParcelado());
    if (formConfiguracoes.getSnNotificar()==null) {
 	   config.setSnNotificar("N");
    }else {
 	   config.setSnNotificar("S");
    }   
+   
+   String nomeArquivoPostado = file.getOriginalFilename();
+      
    config.setNrDias(formConfiguracoes.getNrDias());
    config.setDirImportacao(formConfiguracoes.getDirImportacao().replaceAll("'\'", "'/'"));
    config.setLogo(file.getBytes());
    config.setNrMsgDiaria(formConfiguracoes.getNrMsgDiaria());
+   config.setLimiteCartao(formConfiguracoes.getLimiteCartao());
+   config.setNomeArquivo(nomeArquivoPostado);
    configuracoesRepository.save(config);
    config = configuracoesRepository.findConfiguracao();   
+   
    model.addAttribute("msg","Configurações salvas com sucesso!");
    model.addAttribute("config",config);
    

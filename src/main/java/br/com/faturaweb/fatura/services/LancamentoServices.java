@@ -13,16 +13,19 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.el.lang.ELArithmetic.BigDecimalDelegate;
+import org.hibernate.boot.model.source.internal.hbm.AbstractSingularAttributeSourceEmbeddedImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.deser.std.NumberDeserializers.BigDecimalDeserializer;
 import com.itextpdf.kernel.pdf.tagutils.IRoleMappingResolver;
 
+import br.com.faturaweb.fatura.model.Configuracoes;
 import br.com.faturaweb.fatura.model.FormaDePagamento;
 import br.com.faturaweb.fatura.model.Lancamento;
 import br.com.faturaweb.fatura.model.TipoLancamento;
 import br.com.faturaweb.fatura.model.Usuario;
+import br.com.faturaweb.fatura.repository.ConfiguracoesRepository;
 import br.com.faturaweb.fatura.repository.FormaDePagamentoRepository;
 import br.com.faturaweb.fatura.repository.LancamentoRepository;
 import br.com.faturaweb.fatura.repository.TipoLancamentoRepository;
@@ -35,6 +38,8 @@ public class LancamentoServices {
 	TipoLancamentoRepository tipoLancamentoRepository;
 	@Autowired
 	FormaDePagamentoRepository formaPagtoRepository;
+	@Autowired
+	ConfiguracoesRepository configuracaoRepository;
 	
 	public List<Lancamento>  parcelar(String snParcelar, Long cdUsuario, Integer qtParcela){
 			BigDecimal vlPago = new BigDecimal(0); 
@@ -194,11 +199,42 @@ public class LancamentoServices {
 			}
 			total = BigDecimal.ZERO;
 		}
-	 System.out.println("-------------Descrição --------------------");
-	 System.out.println(hashTotalizacao.keySet());
-	 System.out.println(hashTotalizacao.values());
-		return hashTotalizacao;
+	 		return hashTotalizacao;
 	}
 	
-	
+	/**
+	 *Retorna o percentual de gasto de a cordo com a forma de pagamento informada
+	 * @since 22/06/2022
+	 * @author elias.silva
+	 * @param mesAno - Mes ano  mm/AAAA
+	 * @param formaDePAgamento - Cartão, Dinheiro etc
+	 * @return {@link BigDecimal} - Percentual de Gasto
+	 * */
+	public BigDecimal getLimiteCartao(String mesAno, String formaDePAgamento){
+		Configuracoes configuracao = configuracaoRepository.findConfiguracao();
+		BigDecimal limite = configuracao.getLimiteCartao();
+		BigDecimal percent = BigDecimal.ZERO;
+		MathContext mtx = new  MathContext(2,RoundingMode.HALF_UP);
+		//Limite 1000 gasto de 1200
+		List<Lancamento> lancamentosDoMes = lancamentoRepository.findAllLancamentosDoMes(mesAno);
+		BigDecimal totalGasto = BigDecimal.ZERO;
+			for (Lancamento lancamento : lancamentosDoMes) {
+					if (formaDePAgamento.equals( lancamento.getFormaDePagamento().getDescricao())) {
+						totalGasto = totalGasto.add(lancamento.getVlPago());
+					}				
+			}
+			System.out.println("Total Gasto: " + totalGasto);
+			//Se o total for menor que o limite
+			if (totalGasto.compareTo(limite)==-1) {
+				System.out.println("Entrei aqui");
+				percent = (totalGasto.divide(limite,3,RoundingMode.FLOOR).multiply(BigDecimal.valueOf(100.0)));
+			}else {
+				//Retorna o percentual negativo quando o totalGasto for maior que o limite
+				BigDecimal diferenca = totalGasto.subtract(limite);
+				percent = (diferenca.divide(limite,3,RoundingMode.FLOOR).multiply(BigDecimal.valueOf(100.0)).multiply(BigDecimal.valueOf(-1)));
+			}
+			System.out.println("Percentual Calcualdo " + percent);
+			System.out.println("Limite " +limite);
+	 		return percent;
+	}
 }

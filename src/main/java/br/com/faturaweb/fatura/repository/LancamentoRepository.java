@@ -71,7 +71,7 @@ public interface LancamentoRepository extends CrudRepository<Lancamento, Long> {
 		 * @return {@link List} - Lista dos lançamentos vencidos
 		 * */
 		@Query(value="select * FROM FATURA.LANCAMENTO L WHERE timestampdiff(DAY, CURDATE(),L.DT_COMPETENCIA) <=:dias  AND SN_PAGO = 'NÃO'",nativeQuery = true)
-		List<Lancamento> findVencidos0(@Param(value = "dias") Integer dias);
+		List<Lancamento> findVencidos(@Param(value = "dias") Integer dias);
 		
 		/**
 		 * Retorna os lançamentos do ano corrente para o mês informado

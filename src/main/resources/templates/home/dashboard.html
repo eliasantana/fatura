@@ -75,6 +75,18 @@
 				 </div>
 			      <!-- Card1 -->
 			    </div>
+			    <!-- Limite cartão -->
+			    <div class="col-3 ml-2 mr-2 mt-2">
+			       <!-- Card1 -->
+			      <div class="card text-center" style="width: 18rem;">
+					  <div class="card-body">
+					    <h5 class="card-title">Limite de Gasto Cartão</h5>
+					    <p class="card-text"  th:if="${limitecartao < 0}"  th:style="${limitecartao < 0 ? 'color:red; font-size:50px;' : limitecartao > 70 ? 'color:orange; font-size:50px;' :'color: green; font-size:50px;'} "  th:text="${#numbers.formatDecimal(limitecartao,1,1,'COMMA')+'%'}">0</p>
+					 <!-- <p class="card-text"  th:if="${limitecartao < 0}"  th:style="${limitecartao < 0 ? 'color:red; font-size:50px;' : 'color: green; font-size:50px;'} "  th:text="${#numbers.formatDecimal(limitecartao,1,1,'COMMA')+'%'}">0</p> -->
+					  </div>
+				 </div>
+			      <!-- Card1 -->
+			    </div>
 			  </div>
 			</div>
         <!-- Fim da grid -->
