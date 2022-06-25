@@ -6,108 +6,103 @@
  <body>
  <!-- NavBar -->
  <nav th:replace="~{navfragment:: nav }"></nav>
- <!-- Configurações do Card -->
-<div class="container">
-	<div class="row">
-		<div class="col">
-			<div class="card">
-				  <div class="card-header">
-				  </div>
-				  <div class="card-body">
-				    <h5 class="card-title">Parcelar?</h5>
-				    <p class="card-text">Habilita/Desabilita Lançamentos Parcelados</p>
-				   
-				    <form action="/configuracoes/salvar" method="post" id="formulario" enctype="multipart/form-data">
-					   <label th:if="${config.cdConfiguracao}==null" for="cdConfiguracao">Código</label>
-					   <input th:if="${config.cdConfiguracao}==null" th:value="${config.cdConfiguracao}" type="text" name="cdConfiguracao" id="cdConfiguracao" class="form-control">
-					   <label for="snParcelar">Parcelar?</label>	  
-					   <select class="form-select" id="snParcelar" name="snParcelado">
-						  <option th:value="S" th:if="${config.snParcelado=='S'}" selected>Sim</option>
-						  <option th:value="N" th:if="${config.snParcelado=='S'}" th:text="Não">Não</option>	
-						  <option th:value="N" th:if="${config.snParcelado=='N'}" selected>Não</option>
-						  <option th:value="S" th:if="${config.snParcelado=='N'}" th:text="Sim">Sim</option>		  
-						</select>
-						<div>
-						<label class="form-label" for="limiteCartao">Teto de Gasto Cartão (limite)</label>
-							<input type="number" class="form-control" th:value="${config.limiteCartao}" id="limiteCartao" name="limiteCartao">
-						</div>
-						<!--  
-						<div class="col">
-						<button type="submit" class="btn btn-primary mt-5">Salvar</button>	
-						<a th:replace="~{btn_home_fragment::btn_home}">home</a>	
-						</div>	
-					
-					
-					<div  class="alert alert-primary mt-2" role="alert" th:if="${mensagem!=null}">
-						<h5 th:text="${mensagem}"></h5>
-					</div>-->
+ 
+ <!-- Tabs -->
+ <form action="/configuracoes/salvar" method="post" id="formulario" enctype="multipart/form-data">
+ <ul class="nav nav-pills mb-3 mt-3 ml-2" id="pills-tab" role="tablist">
+  <li class="nav-item" role="presentation">
+    <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">Financeiro</button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Notificação</button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-contact" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Configurações Gerais</button>
+  </li>
+</ul>
+<div class="tab-content" id="pills-tabContent">
+  <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+	<div class="card ml-3 mr-3">
+		  <div class="card-header"></div>
+		  <div class="card-body">
+		    <h5 class="card-title">Parcelar?</h5>
+		    <p class="card-text">Habilita/Desabilita Lançamentos Parcelados</p>
+			   <label th:if="${config.cdConfiguracao}==null" for="cdConfiguracao">Código</label>
+			   <input th:if="${config.cdConfiguracao}==null" th:value="${config.cdConfiguracao}" type="text" name="cdConfiguracao" id="cdConfiguracao" class="form-control">
+			   <label for="snParcelar">Parcelar?</label>	  
+			   <select class="form-select" id="snParcelar" name="snParcelado">
+				  <option th:value="S" th:if="${config.snParcelado=='S'}" selected>Sim</option>
+				  <option th:value="N" th:if="${config.snParcelado=='S'}" th:text="Não">Não</option>	
+				  <option th:value="N" th:if="${config.snParcelado=='N'}" selected>Não</option>
+				  <option th:value="S" th:if="${config.snParcelado=='N'}" th:text="Sim">Sim</option>		  
+				</select>
+				<div>
+					<label class="form-label" for="limiteCartao">Teto de Gasto Cartão (limite)</label>
+					<input type="number" class="form-control" th:value="${config.limiteCartao}" id="limiteCartao" name="limiteCartao">
 				</div>
-		</div>	
-	</div> 
-		
-		<div class="col"><!-- Envia e-mail -->
-			<div class="card">
-				  <div class="card-header">
-				  </div>
-				  <div class="card-body">
-				    <h5 class="card-title">Notificar via E-mail</h5>
-				    <p class="card-text">Notificar via e-mail o vencimento de Despesas</p>
-				  		<label for="snEviar">Notificar?</label>
-						<input type="checkbox" th:if="${config.snNotificar}=='N'" id="snEviar" th:value="N" name="snNotificar"/>
-						<input type="checkbox" th:if="${config.snNotificar}=='S'" id="snEviar" th:value="S" checked="checked" name="snNotificar"/>
-						<!-- <label for="nrDias">&nbsp;&nbsp;&nbsp;Número de Dias de Atrazo</label>	 -->
-											
-						<input type="number" class="form-control"  th:value="${config.nrDias}" id="nrDias" name="nrDias" size="2">
-						<div class="form-text">obs: Selecione a partir de quantos dias o sistema deverá notificar o usuário!</div>
-						<div>
-							<label class="form-label" for="msgDiaria">Quantidade de Mensagens Diária</label>
-							<input type="number" class="form-control" th:value="${config.nrMsgDiaria}" name="nrMsgDiaria" id="nrMsgDiaria" required="required"/>
-							<div class="form-text">obs: Defina a quantiade de Mensagens a serem enviadas diariamente!</div>
-						</div>
-						<div>
-						<label class="form-label" for="diretorio">Diretório de Importação</label>
-						<input type="text" class="form-control" id="diretorio" name="dirImportacao" th:value="${config.dirImportacao}">
-						<div class="form-text">obs: Utilize barras invertidas para informar o caminho</div>
-						</div>
-				</div>
-			</div>	
-		</div><!-- Fim Envia-Email -->
-		
-		<div class="col"><!-- Upload-->
-			<div class="card">
-				  <div class="card-header">
-				  </div>
-				  <div class="card-body">
-				    <h5 class="card-title">Logo do Sistema</h5>
-				    <p class="card-text">Imagem</p>
-				  		<label for="snEviar"></label>
-						<div class="mb-3">
-					  		<label for="formFile" class="form-label">Selecionar arquivo</label>
-					 		 <input class="form-control" type="file" id="formFile" name="file" >
-						</div>	
-						<div>
-							<img th:src="|getimagem|" width="100px" height="100px"/>
-						</div>
-						<div class="mb-3">
-					  		<label for="nmArquivo" class="form-label">Nome do Arquivo (Logo)</label>
-					 		 <input class="form-control" type="text" id="nmArquivo" name="nomeArquivo" th:value="${config.nomeArquivo}">
-						</div>	
-				</div>
-			</div>	
-		</div><!-- Fim upLoad -->
-		
-		<div>
-						<div class="col">
-						<button type="submit" class="btn btn-primary mt-5">Salvar</button>	
-						<a th:replace="~{btn_home_fragment::btn_home}">home</a>	
-						</div>	
-						<div  class="alert alert-primary mt-2" role="alert" th:if="${mensagem!=null}">
-							<h5 th:text="${mensagem}"></h5>
-						</div>
 		</div>
-	</div> <!-- Fim da row -->
-	</form>	
+	</div><!-- Fim do Card -->
+  
+  </div> <!-- ? -->
+  <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+  	<div class="card ml-3  mr-3">
+		  <div class="card-header">
+		  </div>
+		  <div class="card-body">
+		    <h5 class="card-title">Notificar via E-mail</h5>
+		    <p class="card-text">Notificar via e-mail o vencimento de Despesas</p>
+		  		<label for="snEviar">Notificar?</label>
+				<input type="checkbox" th:if="${config.snNotificar}=='N'" id="snEviar" th:value="N" name="snNotificar"/>
+				<input type="checkbox" th:if="${config.snNotificar}=='S'" id="snEviar" th:value="S" checked="checked" name="snNotificar"/>
+				<!-- <label for="nrDias">&nbsp;&nbsp;&nbsp;Número de Dias de Atrazo</label>	 -->
+				<input type="number" class="form-control"  th:value="${config.nrDias}" id="nrDias" name="nrDias" size="2">
+				<div class="form-text">obs: Selecione a partir de quantos dias o sistema deverá notificar o usuário!</div>
+				<div>
+					<label class="form-label" for="msgDiaria">Quantidade de Mensagens Diária</label>
+					<input type="number" class="form-control" th:value="${config.nrMsgDiaria}" name="nrMsgDiaria" id="nrMsgDiaria" required="required"/>
+					<div class="form-text">obs: Defina a quantiade de Mensagens a serem enviadas diariamente!</div>
+				</div>
+				<div>
+					<label class="form-label" for="diretorio">Diretório de Importação</label>
+					<input type="text" class="form-control" id="diretorio" name="dirImportacao" th:value="${config.dirImportacao}">
+					<div class="form-text">obs: Utilize barras invertidas para informar o caminho</div>
+				</div>
+			</div>
+		</div>
+  </div>
+  <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
+  	<div class="card ml-3  mr-3">
+		  <div class="card-header"></div>
+		  <div class="card-body">
+		    <h5 class="card-title">Logo do Sistema</h5>
+		    <p class="card-text"></p>
+		  		<label for="snEviar"></label>
+				<div class="mb-3">
+			  		<label for="formFile" class="form-label">Selecionar arquivo</label>
+			 		 <input class="form-control" type="file" id="formFile" name="file" >
+				</div>	
+				<div>
+					<img th:src="|getimagem|" width="100px" height="100px"/>
+				</div>
+				<div class="mb-3">
+			  		<label for="nmArquivo" class="form-label">Nome do Arquivo (Logo)</label>
+			 		 <input class="form-control" type="text" id="nmArquivo" name="nomeArquivo" th:value="${config.nomeArquivo}">
+				</div>	
+		</div>
+	</div>	
+  </div>
 </div>
+<div>
+	<div class="col">
+	<button type="submit" class="btn btn-primary mt-5">Salvar</button>	
+	<a th:replace="~{btn_home_fragment::btn_home}">home</a>	
+	</div>	
+	<div  class="alert alert-primary mt-2" role="alert" th:if="${mensagem!=null}">
+		<h5 th:text="${mensagem}"></h5>
+	</div>
+</div>
+
+</form>	
 </body>
 <script type="text/javascript">
 var myform = document.getElementById("formulario");
