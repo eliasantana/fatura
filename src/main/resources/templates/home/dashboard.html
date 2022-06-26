@@ -37,11 +37,11 @@
        	<div id="grupoDespesa" style="width:100%;height:500 px;"></div>
        	<!-- Fim do grupo de desepsas -->
         <!-- grid -->
-        	<div class="container">
+        	<div class="container-fluid">
 			  <div class="row">
-			    <div class="col-3 ml-2 mr-2">
+			    <div class="col mt-2">
 			      <!-- Card1 -->
-			      <div class="card text-center" style="width: 18rem;">
+			      <div class="card text-center">
 					  <div class="card-body">
 					    <h5 class="card-title">Metas Ativas</h5>
 					    <h6 class="card-subtitle mb-2 text-muted">Total</h6>
@@ -51,9 +51,9 @@
 				 </div>
 			      <!-- Card1 -->
 			    </div>
-			    <div class="col-3 ml-2 mr-2">
+			    <div class="col mt-2">
 			       <!-- Card1 -->
-			      <div class="card text-center" style="width: 18rem;">
+			      <div class="card text-center">
 					  <div class="card-body">
 					    <h5 class="card-title">Lançamentos do Mês</h5>
 					    <h6 class="card-subtitle mb-2 text-muted">Total</h6>
@@ -63,9 +63,9 @@
 				 </div>
 			      <!-- Card1 -->
 			    </div>
-			    <div class="col-3 ml-2 mr-2">
+			    <div class="col mt-2">
 			       <!-- Card1 -->
-			      <div class="card text-center" style="width: 18rem;">
+			      <div class="card text-center">
 					  <div class="card-body">
 					    <h5 class="card-title">Receitas do Mês</h5>
 					    <h6 class="card-subtitle mb-2 text-muted">Total</h6>
@@ -76,9 +76,9 @@
 			      <!-- Card1 -->
 			    </div>
 			    <!-- Limite cartão -->
-			    <div class="col-3 ml-2 mr-2 mt-2">
+			    <div class="col mt-2">
 			       <!-- Card1 -->
-			      <div class="card text-center" style="width: 18rem;">
+			      <div class="card text-center">
 					  <div class="card-body">
 					    <h5 class="card-title">Limite de Gasto Cartão</h5>
 					    <p class="card-text"  th:if="${limitecartao < 0}"  th:style="${limitecartao < 0 ? 'color:red; font-size:50px;' : limitecartao > 70 ? 'color:orange; font-size:50px;' :'color: green; font-size:50px;'} "  th:text="${#numbers.formatDecimal(limitecartao,1,1,'COMMA')+'%'}">0</p>
@@ -86,7 +86,7 @@
 					  </div>
 				 </div>
 			      <!-- Card1 -->
-			    </div>
+			    </div>1
 			  </div>
 			</div>
         <!-- Fim da grid -->
