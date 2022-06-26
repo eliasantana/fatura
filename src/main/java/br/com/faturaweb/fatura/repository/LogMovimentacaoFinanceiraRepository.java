@@ -15,7 +15,7 @@ public interface LogMovimentacaoFinanceiraRepository  extends CrudRepository<Log
 	 * @author elias
 	 * @since 25-02-2021	 * 
 	 * */
-	@Query(value="SELECT * FROM fatura.log_movimetacao_financeira",nativeQuery = true )
+	@Query(value="SELECT * FROM log_movimetacao_financeira",nativeQuery = true )
 	List<LogMovimentacaoFinanceira> findAllLogs();
 	/**
 	 * Retorna os logs do mes informado
@@ -23,7 +23,7 @@ public interface LogMovimentacaoFinanceiraRepository  extends CrudRepository<Log
 	 * @since 25/02/2022
 	 * @author elias 
 	 * */
-	@Query(value = "SELECT * FROM fatura.log_movimetacao_financeira "
+	@Query(value = "SELECT * FROM log_movimetacao_financeira "
 								 + " where date_format(dt_movimentacao,'%m')=:mes", nativeQuery = true)
 	List<LogMovimentacaoFinanceira> findAllLogsPorData(Integer  mes);
 	
