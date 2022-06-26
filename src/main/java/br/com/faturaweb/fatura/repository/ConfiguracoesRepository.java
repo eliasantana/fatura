@@ -8,7 +8,7 @@ import br.com.faturaweb.fatura.model.Configuracoes;
 public interface ConfiguracoesRepository  extends CrudRepository<Configuracoes, Long>{
 
 	//@Query("SELECT c FROM Configuracoes c")
-	@Query(value  = "SELECT *  FROM fatura.configuracao ",nativeQuery = true)
+	@Query(value  = "SELECT *  FROM configuracao ",nativeQuery = true)
 Configuracoes findConfiguracao();
 	
 }

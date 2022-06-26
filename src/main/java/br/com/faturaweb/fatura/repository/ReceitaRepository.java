@@ -19,7 +19,7 @@ public interface ReceitaRepository extends CrudRepository<Receita, Long>{
 	 * @since 04/12/2021
 	 * @return {@link List}
 	 * */
-	@Query(value = "select * from fatura.receita where date_format(dt_recebimento,'%Y') = date_format(curdate(),'%Y')",nativeQuery = true)
+	@Query(value = "select * from receita where date_format(dt_recebimento,'%Y') = date_format(curdate(),'%Y')",nativeQuery = true)
 	List<Receita> findaAllReceitaAnoCorrente();
 	/**
 	 * Retornas as receitas do mes Corrente
@@ -27,7 +27,7 @@ public interface ReceitaRepository extends CrudRepository<Receita, Long>{
 	 * @since 30-12-2021
 	 * @return {@link ArrayList}
 	 * */
-	@Query(value = "SELECT * FROM fatura.receita where date_format(dt_recebimento,'%m')=date_format( curdate(),'%m')",nativeQuery = true)
+	@Query(value = "SELECT * FROM receita where date_format(dt_recebimento,'%m')=date_format( curdate(),'%m')",nativeQuery = true)
 	List<Receita> findAllReceitaMesCorrente();
 	
 	/**
@@ -36,7 +36,7 @@ public interface ReceitaRepository extends CrudRepository<Receita, Long>{
 	 * @since 20/03/2022
 	 * @return {@link Receita}
 	 * */
-	@Query(value="select * from fatura.receita where dt_recebimento = (select max(dt_recebimento) dt_recebimento from fatura.receita)",nativeQuery = true)
+	@Query(value="select * from receita where dt_recebimento = (select max(dt_recebimento) dt_recebimento from fatura.receita)",nativeQuery = true)
 	Receita findMaxReceita();
 	
 }

@@ -9,7 +9,7 @@ import br.com.faturaweb.fatura.model.Menssageria;
 
 public interface MensageriaRepository extends CrudRepository<Menssageria, Long> {
 
-	@Query(value = "SELECT * FROM fatura.mensageria where date_format(DT_ENVIO, '%d/%m/%Y') = date_format(curdate(), '%d/%m/%Y') ", nativeQuery = true)
+	@Query(value = "SELECT * FROM mensageria where date_format(DT_ENVIO, '%d/%m/%Y') = date_format(curdate(), '%d/%m/%Y') ", nativeQuery = true)
 	List<Menssageria> findMensagensDia();
 	
 }

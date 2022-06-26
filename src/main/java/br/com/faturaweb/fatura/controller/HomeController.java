@@ -202,12 +202,12 @@ public class HomeController {
 	}
 
 	/**
-	 * Notifica o usuário sobre  despesas vencidas 
+	 * Notifica o usuário sobre  despesas vencidas a cada 2 horas
 	 * @author elias
 	 * @since 05/06/2022
-	 * @param fixeRate = 600000 - Milisegundos
+	 * @param fixeRate = 600000 - Milisegundos (1 Minuto) 7200000 (2h)
 	 * */
-	@Scheduled(fixedRate = 60000)
+	@Scheduled(fixedRate = 7200000)
 	private void notificaUsuario() {
 		System.out.println("Executando a Thead!");
 		Configuracoes config = configuracoesRepository.findConfiguracao();
