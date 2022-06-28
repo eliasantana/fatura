@@ -59,7 +59,8 @@ LogMovimentacaoFinanceiraRepository logServices;
 	
 	@PostMapping("/salvar")
 	public RedirectView salvar(Model model, Meta metaForm, Conta conta) {
-		RedirectView rw = new RedirectView("http://localhost:8080/meta/listar");
+		//RedirectView rw = new RedirectView("http://localhost:8080/meta/listar");
+		RedirectView rw = new RedirectView("/meta/listar");
 		List<Conta> contas = contaRepository.findcontas();
 		 List<Meta> metas = metaRepository.findAllMetas();
 		try {
