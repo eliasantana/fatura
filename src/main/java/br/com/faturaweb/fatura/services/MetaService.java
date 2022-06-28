@@ -45,6 +45,9 @@ public class MetaService {
 		if (meta.getTpMeta().equals("M")){
 			//Meta Mensal
 			Long totalDeMes = ChronoUnit.MONTHS.between(meta.getDtInicio(), meta.getDtFim());
+			if (totalDeMes==0) {
+				totalDeMes =1L;
+			}
 			BigDecimal vlParcela = meta.getVlMeta().divide(new BigDecimal(totalDeMes), mt.DECIMAL32);
 			LocalDate dataMeta = meta.getDtInicio();
 			
