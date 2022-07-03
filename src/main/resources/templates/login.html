@@ -22,14 +22,16 @@
 				<form name="f" th:action="@{/login}" method="post">
 					<fieldset>
 						<div>
-							<legend>Identificação do Usuario </legend>
+							<div>
+								<img th:src="|getimagem|" width="200px" height="200px"/>
+							</div>
 							
+							<legend>Identificação do Usuario </legend>
 						</div>
 						<div th:if="${param.error}" class="alert alert-error">Senha
 							Inválida</div>
 						<div th:if="${param.logout}" class="alert alert-success">
 							Você está desconectado</div>
-						<h1 class="h3 mb-3 fw-normal">Login</h1>
 						<label for="username" class="visually-hidden">Login</label> <input
 							type="text" id="username" name="username" class="form-control">
 						<label for="password" class="visually-hidden">Senha</label>
@@ -45,7 +47,7 @@
 								cadastrado</a>
 						</div>
 						<p class="mt-5 mb-3 text-muted">&copy; Elias - todos os
-							direitos reservados  build v.1.54</p>
+							direitos reservados  build v.1.56</p>
 					</fieldset>
 				</form>
 			</div>

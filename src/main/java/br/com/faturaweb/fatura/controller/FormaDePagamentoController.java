@@ -78,7 +78,7 @@ public class FormaDePagamentoController {
 
 		FormaDePagamento formaDePagamentoForm = new FormaDePagamento();
 		model.addAttribute(formaDePagamentoForm);
-		RedirectView redirectView = new RedirectView("http://localhost:8080/formapagto/listar");
+		RedirectView redirectView = new RedirectView("/formapagto/listar");
 
 		Optional<FormaDePagamento> formapagto = formaDePagamentoRepository.findById(id);
 		formaDePagamentoRepository.delete(formapagto.get());
