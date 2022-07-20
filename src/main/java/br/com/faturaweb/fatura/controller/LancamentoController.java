@@ -120,7 +120,6 @@ public class LancamentoController {
 			Lancamento findUltimoLancamentoUsuario = lancamentoRepository.findUltimoLancamentoUsuario(usuario.get().getCdUsuario());
 			System.out.println("Ultimo lancamento Localizado: " + findUltimoLancamentoUsuario.toString());
 
-			//List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentos();
 			List<Lancamento> lancamentos = lancamentoRepository.findLancamentoMesSeguinte();
 			model.addAttribute("lancamentos", lancamentos);
 			

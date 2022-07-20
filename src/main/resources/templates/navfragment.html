@@ -17,8 +17,7 @@
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
             <li><a class="dropdown-item" href="/lancamento/cadastro"><span data-feather="layers"></span>Cadastro</a></li>
             <li><a class="dropdown-item" href="/listar"><span data-feather="dollar-sign"></span>Listar Despesas</a></li>           
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#"><span data-feather="book-open"></span>Relatório de Despesas</a></li>
+            
           </ul>
         </li>
          <!-- Menu Receitas -->
@@ -30,8 +29,6 @@
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
             <li><a class="dropdown-item" href="/receita/cadastro"><span data-feather="layers"></span>Cadastro</a></li>
             <li><a class="dropdown-item" href="/receita/listar"><span data-feather="dollar-sign"></span>Listar Receitas</a></li>           
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#"><span data-feather="book-open"></span>Relatório de Receitas</a></li>
           </ul>
         </li>
          <!-- Menu Metas -->
@@ -45,43 +42,16 @@
            
           </ul>
         </li>
-       <!-- Menu Configurações-->
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: white;">
-            <span data-feather="settings"></span>Configurações 
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" href="#"><span data-feather="users"></span>Usuários</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="/usuario/cadastro">Cadastrar</a></li>
-            <li><a class="dropdown-item" href="/usuario/listar"></span>Exibir</a></li>
-            <li><hr class="dropdown-divider"></li> 
-            <li><a class="dropdown-item" href="#"><span data-feather="layers"></span>Tipo de Lançamento</a></li>
-            <li><a class="dropdown-item" href="/tipolancamento/cadastro">Cadastrar</a></li>
-            <li><a class="dropdown-item" href="/tipolancamento/listar">Exibir</a></li>
-            <li><hr class="dropdown-divider"></li> 
-            <li><a class="dropdown-item" href="#"><span data-feather="credit-card"></span>Forma de Pagamento</a></li>
-            <li><a class="dropdown-item" href="/formapagto/cadastrar">Cadastrar</a></li>
-            <li><a class="dropdown-item" href="/formapagto/listar">Exibir</a></li>
-            <li><hr class="dropdown-divider"></li>
-             <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="/configuracoes"><span data-feather="activity"></span>Configurações do Sistema</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#"><span data-feather="dollar-sign"></span>Contas</a></li>
-            <li><a class="dropdown-item" href="/conta/listar">Cadastrar</a></li>
-             <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="/log/logs/0"><span data-feather="codesandbox"></span>Logs de Movimentação</a></li>
-          </ul>
-        </li>  
-        <!--  -->
+       
          <!-- Menu Relatórios-->
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: white;">
             <span data-feather="paperclip"></span>Relatórios 
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" href="/extrato/financeiro/01"><span data-feather="dollar-sign"></span>Extrato de Despesas</a></li>
-            <li><hr class="dropdown-divider"></li>            
+            <li><a class="dropdown-item" href="/extrato/financeiro/01"><span data-feather="dollar-sign"></span>Relatório de Despesas</a></li>
+             <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="/log/logs/0"><span data-feather="codesandbox"></span>Relatório de Movimentação</a></li>       
           </ul>
         </li>   
          <!-- Menu Relatórios-->
@@ -91,10 +61,46 @@
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
             <li><a class="dropdown-item" href="/agenda"><span data-feather="calendar"></span>Consultar Agenda</a></li>
-            <li><hr class="dropdown-divider"></li>            
           </ul>
         </li>   
-        <!--  -->     
+        <!--  -->  
+        <!-- Menu Configurações-->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: white;">
+            <span data-feather="settings"></span>Configurações 
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="/usuario/cadastro"><span data-feather="users"></span>Usuários</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="/usuario/listar"></span>
+            	<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-person-badge" viewBox="0 0 16 16">
+				  <path d="M6.5 2a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1h-3zM11 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+				  <path d="M4.5 0A2.5 2.5 0 0 0 2 2.5V14a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2.5A2.5 2.5 0 0 0 11.5 0h-7zM3 2.5A1.5 1.5 0 0 1 4.5 1h7A1.5 1.5 0 0 1 13 2.5v10.795a4.2 4.2 0 0 0-.776-.492C11.392 12.387 10.063 12 8 12s-3.392.387-4.224.803a4.2 4.2 0 0 0-.776.492V2.5z"/>
+				</svg>	Listar Usuários</a>
+            
+            </li>
+            <li><hr class="dropdown-divider"></li> 
+            <li><a class="dropdown-item" href="/tipolancamento/cadastro"><span data-feather="layers"></span>Tipo de Lançamento</a></li>
+            <li><a class="dropdown-item" href="/tipolancamento/listar">
+            	<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-list-ul" viewBox="0 0 16 16">
+				  <path fill-rule="evenodd" d="M5 11.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm-3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/>
+				</svg> Listar Tipos de Lançamento</a>
+			</li>
+            <li><hr class="dropdown-divider"></li> 
+            <li><a class="dropdown-item" href="/formapagto/cadastrar"><span data-feather="credit-card"></span>Forma de Pagamento</a></li>
+            <li><a class="dropdown-item" href="/formapagto/listar">
+	            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-list-ul" viewBox="0 0 16 16">
+				  <path fill-rule="evenodd" d="M5 11.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm-3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/>
+				</svg>Listar formas de Pagamento</a>
+			</li>
+            <li><hr class="dropdown-divider"></li>
+             <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="/configuracoes"><span data-feather="activity"></span>Configurações do Sistema</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="/conta/listar"><span data-feather="dollar-sign"></span>Contas</a></li>            
+          </ul>
+        </li>  
+        <!--  -->   
       </ul>
       <form class="d-flex" th:action="@{/logout}">      
         <button class="btn btn-outline-success" type="submit">Sair</button>

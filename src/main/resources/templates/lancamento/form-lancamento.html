@@ -37,13 +37,15 @@
 						</div>
 						
 						<div class="col">
-							<label  class="form-label" for="tipolancamento">Tipo de Lançamento</label>
-							
+							<label  class="form-label" for="tipolancamento">Tipo de Lançamento</label>							
 							<select class="form-select" name="dsTipoLancamento">
 								<option th:each="tipolancamento : ${tpLancamentos}" th:text="${tipolancamento.dsTipoLancamento}">1</option>
-							</select>
-							
+							</select>							
 							<div id="formadepagamento" class="form-text">Ex: Crétido, Débito, Carteira</div>
+						</div>
+						<div class="col">
+							<label  class="form-label" for="dtCompetencia">Data de Compentência</label>	
+							<input  type="datetime-local" class="form-control" name="dtCompetencia" id="dtCompetencia" th:value="${lancamentos.dtCompetencia}" aria-describedby="dtCompetencia" />
 						</div>
 						<div class="col">
 						<label>Quantidade de Parcelas</label>

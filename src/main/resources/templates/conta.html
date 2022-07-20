@@ -26,6 +26,10 @@
 	    	<input class="form-control" type="text" name="cdConta" th:value="${conta.cdConta}" readonly="readonly">
 	    </div>
 	    <div>
+	    	<label class="form-label" for="nrconta">Banco</label>
+	    	<input class="form-control" type="text" name="dsConta" id="dsConta" th:value="${conta.dsConta}">
+	    	<div id="dsConta" class="form-text">Nome do Banco</div>
+	    	
 	    	<label class="form-label" for="nragencia">Agência</label>
 	    	<input class="form-control" type="text" name="nrAgencia" id="nragencia" th:value="${conta.nrAgencia}">
 	    	<div id="nragencia" class="form-text">Informe o número da agênica com dígito ex:1703-3</div>
@@ -68,7 +72,7 @@
 				      <div class="modal-body">
 				      	 <label class="form-label">Selecione um conta</label>
 		        		 <select class="form-control" id="conta" name="conta">
-		        		 	<option th:each="contas : ${contas}" th:text="${contas.nrConta}" th:value="${contas.nrConta}"> </option>
+		        		 	<option th:each="contas : ${contas}" th:text="${contas.nrConta} + ' - ' +${contas.dsConta}" th:value="${contas.nrConta}"> </option>
 		        		 </select>
 		        		 <label class="form-label" >Valor</label>
 		        		 <input type="text" class="form-control mt-1" id="valor" name="valor" required="required">
@@ -101,6 +105,7 @@
 		<tr>
 	    	<th scope="col">Conta</th>
 	    	<th scope="col">Agência</th>
+	    	<th scope="col">Descrição</th>
 	    	<th scope="col">Saldo</th>
 	    	<th scope="col">QrCode</th>
 	    	<th scope="col">Ação</th>
@@ -110,6 +115,7 @@
 					<tr th:each="contas : ${contas}">
 						<td th:text="${contas.nrConta}"></td>
 						<td th:text="${contas.nrAgencia}"></td>
+						<td  th:text="${contas.dsConta}"></td>
 						<td  th:text="${contas.saldo}"></td>
 						<td> <img th:src="|/conta/qrcode/${contas.cdConta}|" width="200px" height="200px"/></td>
 						<td>
