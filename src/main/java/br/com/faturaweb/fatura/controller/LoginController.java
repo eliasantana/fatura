@@ -11,9 +11,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import br.com.faturaweb.fatura.model.Configuracoes;
 import br.com.faturaweb.fatura.repository.ConfiguracoesRepository;
+import br.com.faturaweb.fatura.repository.UsuarioRepository;
 
 @Controller
 public class LoginController {
+
+@Autowired	
+UsuarioRepository UsuarioRepository;	
 	
 	@GetMapping("/login")
 	public String login(Model model) {

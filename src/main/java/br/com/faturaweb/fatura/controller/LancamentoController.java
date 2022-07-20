@@ -120,7 +120,6 @@ public class LancamentoController {
 			Lancamento findUltimoLancamentoUsuario = lancamentoRepository.findUltimoLancamentoUsuario(usuario.get().getCdUsuario());
 			System.out.println("Ultimo lancamento Localizado: " + findUltimoLancamentoUsuario.toString());
 
-			//List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentos();
 			List<Lancamento> lancamentos = lancamentoRepository.findLancamentoMesSeguinte();
 			model.addAttribute("lancamentos", lancamentos);
 			
@@ -139,8 +138,6 @@ public class LancamentoController {
 		lancamentoRepository.delete(lancamentoLocalizado.get());
 		System.out.println("Lançamento Excluído com sucesso!");
 		RedirectView rw = new RedirectView("/listar");
-		//RedirectView rw = new RedirectView("http://localhost:8080/listar");
-		//RedirectView rw = new RedirectView("https://sysfaturaapp.herokuapp.com/listar"); 
 		return rw;
 		
 	}

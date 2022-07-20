@@ -3,6 +3,7 @@ package br.com.faturaweb.fatura.repository;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
@@ -19,6 +20,10 @@ public interface UsuarioRepository extends CrudRepository<Usuario, Long>{
 
 	@Query("SELECT u from Usuario u")
 	List<Usuario> listarTodos();
+	
+
+	@Query(value = "SELECT * FROM  usuario WHERE nome=:nome AND senha = :senha AND sn_ativo = 'SIM' ",nativeQuery  = true)
+	Usuario findNomeSenha(String nome , String senha);
 	
 	
 }

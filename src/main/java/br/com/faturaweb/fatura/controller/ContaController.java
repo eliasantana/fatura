@@ -48,7 +48,7 @@ LogMovimentacaoFinanceiraRepository  logMovimentacaoRepository;
 	
 	@PostMapping("salvar")
 	public RedirectView salvar(Model model, Conta conta , @RequestParam("file") MultipartFile file) throws IOException {
-		RedirectView rw = new RedirectView("http://localhost:8080/conta/listar");
+		RedirectView rw = new RedirectView("/conta/listar");
 		conta.setQrcod(file.getBytes());
 		repository.save(conta);
 		return rw;
@@ -79,7 +79,7 @@ LogMovimentacaoFinanceiraRepository  logMovimentacaoRepository;
 	
 	@GetMapping("/excluir/{id}")
 	public RedirectView  excluirConta(@PathVariable Long id, Model model) {
-		RedirectView rw = new RedirectView("http://localhost:8080/conta/listar");
+		RedirectView rw = new RedirectView("/conta/listar");
 		//Optional<Conta> conta = repository.findById(Id);
 		Conta conta = repository.findContaId(id);
 		repository.delete(conta);
@@ -95,12 +95,13 @@ LogMovimentacaoFinanceiraRepository  logMovimentacaoRepository;
 	}
 	
 	@PostMapping("/movimentacao")
-	public RedirectView movimentacao(Model model, @RequestParam("valor") String valor, 
+	public RedirectView movimentacao(Model model, 
+			@RequestParam("valor") String valor, 
 			@RequestParam("conta") String conta, 
 			@RequestParam("operacao") String operacao,
 			@RequestParam("motivo") String motivo) {
 		
-		RedirectView rw = new RedirectView("http://localhost:8080/conta/listar");
+		RedirectView rw = new RedirectView("/conta/listar");
 		Optional<Conta> contaLocalizada = repository.findConta(conta);
 		LogMovimentacaoFinanceira lmf = new LogMovimentacaoFinanceira();
 		valor = valor.replaceAll(",",".");

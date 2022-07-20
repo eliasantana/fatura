@@ -60,7 +60,7 @@ public  RedirectView  salvar(Model model, Configuracoes formConfiguracoes, @Requ
    model.addAttribute("msg","Configurações salvas com sucesso!");
    model.addAttribute("config",config);
    
-   RedirectView redirectView = new RedirectView("http://localhost:8080/configuracoes");
+   RedirectView redirectView = new RedirectView("/configuracoes");
 	return	 redirectView;
 }
 

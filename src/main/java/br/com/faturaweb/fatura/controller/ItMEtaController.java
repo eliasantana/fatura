@@ -99,7 +99,7 @@ public class ItMEtaController {
 	 * */
 	@GetMapping("credita/{idMeta}/{idItMeta}")
 	public RedirectView creditar(@PathVariable Long idMeta, @PathVariable Long idItMeta, Model model) {
-		RedirectView rw = new RedirectView("http://localhost:8080/itmeta/listar/"+idMeta);
+		RedirectView rw = new RedirectView("/itmeta/listar/"+idMeta);
 		ItMeta itMeta = itMetaRepository.findItMetaId(idItMeta);
 		LogMovimentacaoFinanceira logMovimentacao = new LogMovimentacaoFinanceira();
 		LogMovimentacaoFinanceira logLancamentoCredito = new LogMovimentacaoFinanceira();
@@ -166,7 +166,7 @@ public class ItMEtaController {
 	@GetMapping("/regerar/{id}")
 	public RedirectView reGerarMetaItMeta(@PathVariable Long id) {
 		System.out.println("1 - Recalculando Meta a Meta!");
-		RedirectView rw = new RedirectView("http://localhost:8080/itmeta/listar/"+id.toString());
+		RedirectView rw = new RedirectView("/itmeta/listar/"+id.toString());
 		
 		try {
 			Optional<Meta> metaLocalizada = metaRepository.findById(id);

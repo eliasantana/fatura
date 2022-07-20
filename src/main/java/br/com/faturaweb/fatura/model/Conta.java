@@ -1,6 +1,7 @@
 package br.com.faturaweb.fatura.model;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,6 +19,8 @@ public class Conta {
 	private String nrConta;
 	private String nrAgencia;
 	private BigDecimal saldo;
+	private String dsConta;
+	
 	@Lob
 	private byte[] qrcod;
 	
@@ -25,10 +28,11 @@ public class Conta {
 		
 	}
 	
-	public Conta (String nrConta, String nrAgencia, BigDecimal saldo) {
+	public Conta (String nrConta, String nrAgencia, BigDecimal saldo, String dsConta) {
 			this.nrConta = nrConta;
 			this.nrAgencia = nrAgencia;
 			this.saldo = saldo;
+			this.dsConta = dsConta;
 	}
 
 	public Long getCdConta() {
@@ -70,12 +74,19 @@ public class Conta {
 	public byte[] getQrcod() {
 		return qrcod;
 	}
+public void setDsConta(String dsConta) {
+	this.dsConta = dsConta;
+}
 
-	@Override
-	public String toString() {
-		return "Conta [cdConta=" + cdConta + ", nrConta=" + nrConta + ", nrAgencia=" + nrAgencia + ", saldo=" + saldo
-				+ "]";
-	}
+public String getDsConta() {
+	return dsConta;
+}
+
+@Override
+public String toString() {
+	return "Conta [cdConta=" + cdConta + ", nrConta=" + nrConta + ", nrAgencia=" + nrAgencia + ", saldo=" + saldo
+			+ ", dsConta=" + dsConta + ", qrcod=" + Arrays.toString(qrcod) + "]";
+}
 	
 	
 	
