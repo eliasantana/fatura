@@ -1,6 +1,5 @@
 package br.com.faturaweb.fatura.controller;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -287,10 +286,13 @@ public class HomeController {
 			// Se lancamento Parcelado
 			if (config.getSnParcelado().toUpperCase().equals("S")) {
 				Lancamento ultimoLancamento = lancamentoRepository.findUltimoLancamentoUsuario(usuario.get().getCdUsuario());
-				List<Lancamento> parcelas = lancamentoServices.parcelar("S", usuario.get().getCdUsuario(), lancamentoForm.getNrParcelas());
+				String snNaCompetencia = config.getSnNaCompetencia();
+				if (snNaCompetencia==null) snNaCompetencia="N";
+				List<Lancamento> parcelas = lancamentoServices.parcelar("S", usuario.get().getCdUsuario(), lancamentoForm.getNrParcelas(),snNaCompetencia);
 					lancamentoRepository.saveAll(parcelas);
 				    lancamentoRepository.delete(ultimoLancamento);
-				    lancamentos = lancamentoRepository.findAllLancamentos();
+				    //lancamentos = lancamentoRepository.findAllLancamentos();
+				    lancamentos = lancamentoRepository.findAllLancamentosDoMes();
 				    
 					model.addAttribute("lancamentos", lancamentos);
 			}
