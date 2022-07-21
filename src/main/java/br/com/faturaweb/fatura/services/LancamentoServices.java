@@ -41,7 +41,7 @@ public class LancamentoServices {
 	@Autowired
 	ConfiguracoesRepository configuracaoRepository;
 	
-	public List<Lancamento>  parcelar(String snParcelar, Long cdUsuario, Integer qtParcela){
+	public List<Lancamento>  parcelar(String snParcelar, Long cdUsuario, Integer qtParcela, String primeiraParcelaNaCompetencia){
 			BigDecimal vlPago = new BigDecimal(0); 
 			Integer nrParcela = 0;
 			BigDecimal vlParcela = new BigDecimal(0);
@@ -58,7 +58,13 @@ public class LancamentoServices {
 						Lancamento l = new Lancamento();
 						l.setDsLancamento(lancamento.getDsLancamento() + " "+ (i) +"/"+nrParcela);
 						l.setDtCadastro(lancamento.getDtCadastro());
-						l.setDtCompetencia(lancamento.getDtCompetencia().plusMonths(i)); // teste
+						//Lança a primeira parcela na competencia atual somente se a configuração global estiver ligada sn_nacompetencia = 'S'
+						if (primeiraParcelaNaCompetencia.equals("S")) {
+							l.setDtCompetencia(lancamento.getDtCompetencia().plusMonths(i-1)); // lança a parcela no mês atual
+						}else{
+							l.setDtCompetencia(LocalDate.now());
+							l.setDtCompetencia(lancamento.getDtCompetencia().plusMonths(i)); // lança a primeira  parcela no mês seguinte 
+						}
 						l.setFormaDePagamento(lancamento.getFormaDePagamento());
 						l.setNrParcela(i+1);
 						l.setSnPago(lancamento.getSnPago());

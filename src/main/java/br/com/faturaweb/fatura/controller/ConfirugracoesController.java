@@ -36,7 +36,8 @@ public String configuracoes(Model model) {
 }
 
 @PostMapping("salvar")
-public  RedirectView  salvar(Model model, Configuracoes formConfiguracoes, @RequestParam("file") MultipartFile file) throws IOException {
+public  RedirectView  salvar(Model model, Configuracoes formConfiguracoes, 
+						@RequestParam("file") MultipartFile file) throws IOException {
    
 	Configuracoes config = configuracoesRepository.findConfiguracao();
    config.setSnParcelado(formConfiguracoes.getSnParcelado());
@@ -44,7 +45,8 @@ public  RedirectView  salvar(Model model, Configuracoes formConfiguracoes, @Requ
 	   config.setSnNotificar("N");
    }else {
 	   config.setSnNotificar("S");
-   }   
+   }
+   
    
    String nomeArquivoPostado = file.getOriginalFilename();
       
@@ -54,6 +56,7 @@ public  RedirectView  salvar(Model model, Configuracoes formConfiguracoes, @Requ
    config.setNrMsgDiaria(formConfiguracoes.getNrMsgDiaria());
    config.setLimiteCartao(formConfiguracoes.getLimiteCartao());
    config.setNomeArquivo(nomeArquivoPostado);
+   config.setSnNaCompetencia(formConfiguracoes.getSnNaCompetencia());
    configuracoesRepository.save(config);
    config = configuracoesRepository.findConfiguracao();   
    

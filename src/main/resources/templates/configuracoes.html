@@ -36,6 +36,17 @@
 				  <option th:value="N" th:if="${config.snParcelado=='N'}" selected>Não</option>
 				  <option th:value="S" th:if="${config.snParcelado=='N'}" th:text="Sim">Sim</option>		  
 				</select>
+				<div class="mb-2 mt-2">
+					<label class="form-label">Lançar na competênia?</label>
+						 <select class="form-select" id="snNaCompetencia" name="snNaCompetencia">
+							  <option th:value="S" th:if="${config.snNaCompetencia=='S'}" selected>Sim</option>
+							  <option th:value="N" th:if="${config.snNaCompetencia=='S'}" th:text="Não">Não</option>	
+							  <option th:value="N" th:if="${config.snNaCompetencia=='N'}" selected>Não</option>
+							  <option th:value="S" th:if="${config.snNaCompetencia=='N'}" th:text="Sim">Sim</option>		  
+						 </select>
+					 <div class="form-text">Adiciona a primeira parcela na competência atual</div>
+				</div>
+				
 				<div>
 					<label class="form-label" for="limiteCartao">Teto de Gasto Cartão (limite)</label>
 					<input type="number" class="form-control" th:value="${config.limiteCartao}" id="limiteCartao" name="limiteCartao">

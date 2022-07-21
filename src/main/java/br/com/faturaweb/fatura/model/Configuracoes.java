@@ -28,7 +28,8 @@ public class Configuracoes {
 	private Integer nrMsgDiaria;
 	private BigDecimal limiteCartao;
 	private String nomeArquivo;
-
+	private String snNaCompetencia; //Determina se a primeira parcela do parcelamento deverá ser na competência atual ou não.
+	
 	@Lob
 	private byte[] logo;
 	
@@ -110,6 +111,14 @@ public class Configuracoes {
 	
 	public String getNomeArquivo() {
 		return nomeArquivo;
+	}
+	
+	public void setSnNaCompetencia(String snNaCompetencia) {
+		this.snNaCompetencia = snNaCompetencia;
+	}
+	
+	public String getSnNaCompetencia() {
+		return snNaCompetencia;
 	}
 	
 	@Override
