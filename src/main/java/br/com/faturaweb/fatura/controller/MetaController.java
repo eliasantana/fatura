@@ -147,4 +147,30 @@ LogMovimentacaoFinanceiraRepository logServices;
 		return rw;
 	}
 	
+	/**
+	 * Encerra uma meta e exclui os itens não creditados
+	 * @param idMeta - Código da Meta 
+	 * @author elias
+	 * @since 21/07/2022
+	 * */	
+	@GetMapping("/encerrar/{idMeta}")
+	public RedirectView encerrarMeta(@PathVariable Long idMeta, Model model) {
+		RedirectView rw = new RedirectView("/meta/listar");
+		Optional<Meta> metaLocalizada = metaRepository.findById(idMeta);
+
+		if (metaLocalizada.isPresent()) {
+			Meta meta = metaLocalizada.get();
+			meta.setSnAtivo("N");
+			metaRepository.save(meta);
+
+			List<ItMeta> itensNaoCreditados = ItMetaRepository.findItNaoCreditado(idMeta);
+			ItMetaRepository.deleteAll(itensNaoCreditados);
+		}
+		
+		
+		List<Meta> metas = metaRepository.findAllMetas();
+		 model.addAttribute("metas",metas);
+		return rw;
+	}
+	
 }
