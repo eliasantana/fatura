@@ -83,6 +83,7 @@
 					    <h5 class="card-title">Limite de Gasto Cartão</h5>
 					    <h6 class="card-subtitle mb-2 text-muted">Competência</h6>
 					    <p class="card-text"  th:if="${limitecartao < 0}"  th:style="${limitecartao < 0 ? 'color:red; font-size:50px;' : limitecartao > 70 ? 'color:orange; font-size:50px;' :'color: green; font-size:50px;'} "  th:text="${#numbers.formatDecimal(limitecartao,1,1,'COMMA')+'%'}">0</p>
+					    <p class="card-text"  th:if="${limitecartao > 0}"  th:style="${limitecartao > 0 ? 'color:blue; font-size:50px;' : limitecartao > 70 ? 'color:orange; font-size:50px;' :'color: green; font-size:50px;'} "  th:text="${#numbers.formatDecimal(limitecartao,1,1,'COMMA')+'%'}">0</p>
 					  	<a href="#" class="card-link">Exibir Extrato</a>
 					  </div>
 				 </div>

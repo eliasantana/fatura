@@ -97,7 +97,8 @@ public class ReceitaController {
 		
 		receitaRepository.save(r);
 		RedirectView rw = new RedirectView();
-		rw.setUrl("http://localhost:8080/receita/listar");
+		//rw.setUrl("http://localhost:8080/receita/listar");
+		rw.setUrl("/receita/listar");
 		return rw;
 	}
 	}
