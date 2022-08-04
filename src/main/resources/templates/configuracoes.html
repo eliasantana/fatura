@@ -51,6 +51,15 @@
 					<label class="form-label" for="limiteCartao">Teto de Gasto Cartão (limite)</label>
 					<input type="number" class="form-control" th:value="${config.limiteCartao}" id="limiteCartao" name="limiteCartao">
 				</div>
+				
+				<div>
+					<label class="form-label">Conta de Origem</label>
+					<select class="form-select" id="nrContaOrigem" name="nrContaOrigem">
+						<option th:each ="contas: ${contas}" th:text="${contas.dsConta} + ' - ' + ${contas.nrConta} " th:value="${contas.nrConta}"></option>
+					</select>
+				</div>
+				<div class="form-text">Informe a conta de onde sairá o recurso</div>
+				
 		</div>
 	</div><!-- Fim do Card -->
   

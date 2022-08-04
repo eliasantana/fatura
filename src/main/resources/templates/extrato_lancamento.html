@@ -111,7 +111,7 @@
 						        </thead>
 						        <tbody>							        
 						        	<tr th:each="contas : ${contas}">
-						        		<td th:text="${contas.nrConta}" ></td>
+						        		<td th:text="${contas.dsConta}+ ' - ' + ${contas.nrConta}" ></td>
 						        		<td th:text="${#numbers.formatDecimal(contas.saldo,1,2,'COMMA')}" style="text-align: right;"></td>											        	
 						        	</tr>
 						        </tbody>						        

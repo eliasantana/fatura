@@ -5,8 +5,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.net.URLConnection;
 import java.nio.file.Files;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,13 +29,17 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import br.com.faturaweb.fatura.form.LancamentoForm;
 import br.com.faturaweb.fatura.model.Configuracoes;
+import br.com.faturaweb.fatura.model.Conta;
 import br.com.faturaweb.fatura.model.FormaDePagamento;
 import br.com.faturaweb.fatura.model.Lancamento;
+import br.com.faturaweb.fatura.model.LogMovimentacaoFinanceira;
 import br.com.faturaweb.fatura.model.TipoLancamento;
 import br.com.faturaweb.fatura.model.Usuario;
 import br.com.faturaweb.fatura.repository.ConfiguracoesRepository;
+import br.com.faturaweb.fatura.repository.ContaRepository;
 import br.com.faturaweb.fatura.repository.FormaDePagamentoRepository;
 import br.com.faturaweb.fatura.repository.LancamentoRepository;
+import br.com.faturaweb.fatura.repository.LogMovimentacaoFinanceiraRepository;
 import br.com.faturaweb.fatura.repository.TipoLancamentoRepository;
 import br.com.faturaweb.fatura.repository.UsuarioRepository;
 import br.com.faturaweb.fatura.services.LancamentoServices;
@@ -47,20 +53,20 @@ public class LancamentoController {
 
 	@Autowired
 	LancamentoRepository lancamentoRepository;
-
 	@Autowired
 	FormaDePagamentoRepository formaDePagamentoRepository;
-
 	@Autowired
 	UsuarioRepository usuarioRepository;
 	@Autowired
 	TipoLancamentoRepository tipoLancamentoRepository;
 	@Autowired
-	ReportService reportServices;
-	
+	ContaRepository contaRepository;
 	@Autowired
-	LancamentoServices services;
-	
+	LogMovimentacaoFinanceiraRepository logRepository;
+	@Autowired
+	ReportService reportServices;	
+	@Autowired
+	LancamentoServices services;	
 @Autowired
 	ConfiguracoesRepository configuracoesRepository;
 
@@ -181,6 +187,31 @@ public class LancamentoController {
 		List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentosDoMes();
 		lancamento.setSnPago("SIM");
 		lancamentoRepository.save(lancamento);
+		
+		if ("Débito".equals( lancamento.getFormaDePagamento().getDescricao())) {
+			//Creditar na conta informada
+			Configuracoes config = configuracoesRepository.findConfiguracao();
+			String nrContaOrigem = config.getNrContaOrigem();
+			Optional<Conta> contaLocalizada = contaRepository.findConta(nrContaOrigem);
+
+			if(contaLocalizada.isPresent()) {
+				Conta conta = contaLocalizada.get();				
+				BigDecimal novoSaldo = conta.getSaldo().subtract(lancamento.getVlPago());
+				conta.setSaldo(novoSaldo);
+				contaRepository.save(conta);
+				
+				LogMovimentacaoFinanceira log = new LogMovimentacaoFinanceira();
+				log.setDescricao("Pagamento " + lancamento.getDsLancamento() + "  Data:  " + LocalDate.now() + " Conta: "+conta.getNrConta() + " - " + conta.getDsConta());
+				log.setNrConta(conta.getNrConta());
+				log.setDtMovimentacao(LocalDate.now());
+				log.setTpMovimentacao("D");
+				log.setUsuario("Elias");
+				log.setVlMovimentado(lancamento.getVlPago());
+				logRepository.save(log);
+				
+			}
+			
+		}
 		model.addAttribute("lancamentos",lancamentos);
 		return "home/listar-lancamento";
 		}

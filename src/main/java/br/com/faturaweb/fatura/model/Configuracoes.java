@@ -29,6 +29,7 @@ public class Configuracoes {
 	private BigDecimal limiteCartao;
 	private String nomeArquivo;
 	private String snNaCompetencia; //Determina se a primeira parcela do parcelamento deverá ser na competência atual ou não.
+	private String nrContaOrigem; //Conta onde será debitado o valor para o lançamento do tipo Débito 
 	
 	@Lob
 	private byte[] logo;
@@ -119,6 +120,14 @@ public class Configuracoes {
 	
 	public String getSnNaCompetencia() {
 		return snNaCompetencia;
+	}
+	
+	public String getNrContaOrigem() {
+		return nrContaOrigem;
+	}
+	
+	public void setNrContaOrigem(String nrContaOrigem) {
+		this.nrContaOrigem = nrContaOrigem;
 	}
 	
 	@Override

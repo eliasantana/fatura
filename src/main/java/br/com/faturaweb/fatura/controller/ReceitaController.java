@@ -96,9 +96,9 @@ public class ReceitaController {
 		r.setSalLiquido(maxReceita.getSalLiquido());
 		
 		receitaRepository.save(r);
-		RedirectView rw = new RedirectView();
+		RedirectView rw = new RedirectView("/receita/listar");
 		//rw.setUrl("http://localhost:8080/receita/listar");
-		rw.setUrl("/receita/listar");
+		
 		return rw;
 	}
 	}
