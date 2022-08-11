@@ -54,8 +54,9 @@
 				
 				<div>
 					<label class="form-label">Conta de Origem</label>
+					<div th:text="${contaselecionada}"></div>
 					<select class="form-select" id="nrContaOrigem" name="nrContaOrigem">
-						<option th:each ="contas: ${contas}" th:text="${contas.dsConta} + ' - ' + ${contas.nrConta} " th:value="${contas.nrConta}"></option>
+						<option th:each ="contas: ${contas}" th:text="${contas.dsConta} + ' - ' + ${contas.nrConta} " th:value="${contas.nrConta}" th:selected="${contas.nrConta} == ${contaselecionada}"></option>
 					</select>
 				</div>
 				<div class="form-text">Informe a conta de onde sairá o recurso</div>
