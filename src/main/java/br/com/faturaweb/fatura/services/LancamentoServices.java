@@ -71,6 +71,7 @@ public class LancamentoServices {
 						l.setTipoLancamento(lancamento.getTipoLancamento());
 						l.setUsuario(lancamento.getUsuario());
 						l.setVlPago(vlParcela);
+						l.setObservacao(lancamento.getObservacao());
 						
 						listaDeLancamentos.add(l);
 					}

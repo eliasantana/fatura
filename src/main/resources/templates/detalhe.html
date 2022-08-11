@@ -1,0 +1,14 @@
+		<table width="100%">
+			<thead>
+				<th>Código</th>
+				<th>Descrição</th>
+				<th>Data de Cadastro</th>
+			</thead>
+			<tbody>
+				<tr th:each="tipos : ${tipos}">
+					<td th:text="${tipos.cdTipoLancamento}"></td>
+					<td th:text="${tipos.dsTipoLancamento}"></td>
+					<td th:text="${tipos.dtCadastro}"></td>
+				</tr>
+			</tbody>
+		</table>
