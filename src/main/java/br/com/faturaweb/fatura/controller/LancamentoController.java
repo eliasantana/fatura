@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.view.RedirectView;
 
 import br.com.faturaweb.fatura.form.LancamentoForm;
@@ -287,6 +288,20 @@ public class LancamentoController {
 			mensagem = "Não foi possível gerar o relatório!";
 		}
 		return mensagem;
+	}
+	
+	@GetMapping("/detalhe/{id}")
+	public String deTalheLancamento(Model model, @PathVariable  Long id) {
+		Lancamento l = lancamentoRepository.findByIdLancamento(id);
+		model.addAttribute("lancamento",l);
+		return "home/detalhe-lancamento";
+	}
+	
+	@GetMapping("/getimagem")
+	@ResponseBody
+	public byte[] getlogo() {
+		Configuracoes config = configuracoesRepository.findConfiguracao();
+		return config.getLogo();
 	}
 }
 

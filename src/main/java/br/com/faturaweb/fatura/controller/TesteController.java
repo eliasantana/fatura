@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.itextpdf.html2pdf.HtmlConverter;
@@ -57,7 +58,8 @@ public class TesteController {
 		TesteRepository testeRepository;
 		@Autowired
 		LancamentoServices lctoServices;
-		
+		@Autowired
+		TipoLancamentoRepository TipoLancamentoRepository;
 	
 		@Autowired
 		ReportService reportServices;
@@ -68,48 +70,24 @@ public class TesteController {
 
 	@GetMapping("/teste")
 	public String apiltipolancnamento(Model model){
-		String valores = lctoServices.getTotal();
-		System.out.println(valores);
-		// Exemplo de Formatação de Data 
-		//Obtém LocalDate de hoje
-        LocalDate hoje = LocalDate.now();
-
-        System.out.println("LocalDate antes de formatar: " + hoje);
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
-        String hojeFormatado = hoje.format(formatter);
-
-        System.out.println("LocalDate depois de formatar: " + hojeFormatado);
-
-        //Obtém LocalDateTime de agora
-        LocalDateTime agora = LocalDateTime.now();
-
-        System.out.println("LocalDateTime antes de formatar: " + agora);
-
-        formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-
-        String agoraFormatado = agora.format(formatter);
-
-        System.out.println("LocalDateTime depois de formatar: " + agoraFormatado);
-		model.addAttribute("valores",valores);
-		model.addAttribute("data",agora.format(formatter));
-		
-		
-		//Teste de limite de gasto
-		BigDecimal limiteCartao = lctoServices.getLimiteCartao("072022","Crédito");
-		model.addAttribute("limite",limiteCartao);
-		System.out.println("------------- LIMITE ----------------");
-		System.out.println(limiteCartao);
-		
-		//Formatando data
-		LocalDate.now();
-		System.out.println("Data Atual " + LocalDate.now());
-		DateTimeFormatter 	df = DateTimeFormatter.ofPattern("MMYYYY");
-		System.out.println("Data Formatada " + LocalDate.now().format(df).toString());
-		return  "teste";
+		model.addAttribute("mensagem","Conteudo muito importante!");
+		return "teste";
 	}
 	
+	@GetMapping("/sem-ajax")
+	public String semAjax(Model model) {
+		List<TipoLancamento> tipos = tipoLancamentoRepository.findAllTipoLancamentos();
+		model.addAttribute("tipos",tipos);		
+	return "teste";	
+	}
+	
+	@GetMapping("/com-ajax")
+	public String comAjax(Model model) {
+		List<TipoLancamento> tipos = tipoLancamentoRepository.findAllTipoLancamentos();
+		model.addAttribute("tipos",tipos);
+		
+	return"detalhe";	
+	}
 	
 	
 }
