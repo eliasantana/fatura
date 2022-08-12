@@ -11,8 +11,19 @@
 	rel="stylesheet"
 	integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU"
 	crossorigin="anonymous">
+	<style type="text/css">
+		body{
+			background-image: url('https://st2.depositphotos.com/3730721/7212/i/600/depositphotos_72121457-stock-photo-wide-angle-of-skyscraper-made.jpg');
+			background-size:cover;
+			background-repeat: no-repeat;
+			background-attachment: fixed;
+			background-size: 100% 100%;
+			
+		}
+		
+	</style>
 </head>
-<body>
+<body th:background="|getimagem|">
 	<div class="container-sm" style="position: absolute; height: 116px; top: 20px; width: 100%; left: 1px;">
 	<main class="form-signin">
 		
@@ -46,8 +57,8 @@
 							<a href="/cadusuario" style="color: black;">Não sou
 								cadastrado</a>
 						</div>
-						<p class="mt-5 mb-3 text-muted">&copy; Elias - todos os
-							direitos reservados  build v.1.63</p>
+						<p class="mt-5 mb-3">&copy; Elias - todos os
+							direitos reservados  build v.1.64</p>
 					</fieldset>
 				</form>
 			</div>
