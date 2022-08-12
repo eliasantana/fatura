@@ -36,8 +36,10 @@ private ContaRepository contaRepository;
 public String configuracoes(Model model) {
 	Configuracoes config = configuracoesRepository.findConfiguracao();
 	List<Conta> contas = contaRepository.findcontas();
+	
 	model.addAttribute("config",config);
 	model.addAttribute("contas",contas);
+	model.addAttribute("contaselecionada",config.getNrContaOrigem());
 	
 	return "configuracoes";
 	//return "/configuracoes";
@@ -60,7 +62,11 @@ public  RedirectView  salvar(Model model, Configuracoes formConfiguracoes,
       
    config.setNrDias(formConfiguracoes.getNrDias());
    config.setDirImportacao(formConfiguracoes.getDirImportacao().replaceAll("'\'", "'/'"));
-   config.setLogo(file.getBytes());
+   byte[] imagemForm = file.getBytes();
+   //Só adicionará a imagem se for informado no form.
+   if (imagemForm.length > 0) {
+	   config.setLogo(file.getBytes());
+   }
    config.setNrMsgDiaria(formConfiguracoes.getNrMsgDiaria());
    config.setLimiteCartao(formConfiguracoes.getLimiteCartao());
    config.setNomeArquivo(nomeArquivoPostado);
@@ -73,7 +79,6 @@ public  RedirectView  salvar(Model model, Configuracoes formConfiguracoes,
    model.addAttribute("contas",contas);
    model.addAttribute("config",config);
    
-  // RedirectView redirectView = new RedirectView("/configuracoes");
    RedirectView redirectView = new RedirectView("/configuracoes/listar");
 	return	 redirectView;
 }
