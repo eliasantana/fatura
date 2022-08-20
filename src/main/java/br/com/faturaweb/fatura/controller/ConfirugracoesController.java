@@ -19,9 +19,11 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import br.com.faturaweb.fatura.model.Configuracoes;
 import br.com.faturaweb.fatura.model.Conta;
+import br.com.faturaweb.fatura.model.Provisao;
 import br.com.faturaweb.fatura.repository.ConfiguracoesRepository;
 import br.com.faturaweb.fatura.repository.ContaRepository;
 import br.com.faturaweb.fatura.repository.LancamentoRepository;
+import br.com.faturaweb.fatura.repository.ProvisaoRepository;
 
 @Controller
 @RequestMapping("/configuracoes")
@@ -31,18 +33,22 @@ public class ConfirugracoesController {
 private ConfiguracoesRepository configuracoesRepository;
 @Autowired
 private ContaRepository contaRepository;
+@Autowired
+private ProvisaoRepository provisaoRepository;
 
 @GetMapping("/listar")
 public String configuracoes(Model model) {
 	Configuracoes config = configuracoesRepository.findConfiguracao();
+	
+	
 	List<Conta> contas = contaRepository.findcontas();
 	
 	model.addAttribute("config",config);
 	model.addAttribute("contas",contas);
 	model.addAttribute("contaselecionada",config.getNrContaOrigem());
 	
+	
 	return "configuracoes";
-	//return "/configuracoes";
 }
 
 @PostMapping("salvar")

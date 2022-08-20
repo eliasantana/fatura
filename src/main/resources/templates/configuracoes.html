@@ -54,7 +54,6 @@
 				
 				<div>
 					<label class="form-label">Conta de Origem</label>
-					<div th:text="${contaselecionada}"></div>
 					<select class="form-select" id="nrContaOrigem" name="nrContaOrigem">
 						<option th:each ="contas: ${contas}" th:text="${contas.dsConta} + ' - ' + ${contas.nrConta} " th:value="${contas.nrConta}" th:selected="${contas.nrConta} == ${contaselecionada}"></option>
 					</select>
@@ -63,7 +62,21 @@
 				
 		</div>
 	</div><!-- Fim do Card -->
-  
+	<!-- Card Provisionamento -->
+	<div class="card ml-1 mr-1 mt-3">
+		  <div class="card-header"></div>
+		  <div class="card-body">
+		    <h5 class="card-title">Provisionamento</h5>
+		    <p class="card-text">Confirguração do Provisionamento de Receita</p>
+				
+				<div class="mt-2">
+					<a href="/provisao/listar" th:href="@{'/provisao/listar'}" class="btn btn-primary">
+							<span class="material-icons-outlined">Configurar Provisionamento</span> 
+					</a>
+				</div>
+		</div>
+	</div><!-- Fim do Card -->	
+  	<!--  -->
   </div> <!-- ? -->
   <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
   	<div class="card ml-3  mr-3">
@@ -125,6 +138,27 @@
 
 </form>	
 </body>
+<script>
+  $(document).ready(function(){
+      $('#lancamentos').DataTable({
+        	"language": {
+                "lengthMenu": "Mostrando _MENU_ registros por página",
+                "zeroRecords": "Nada encontrado",
+                "info": "Mostrando página _PAGE_ de _PAGES_",
+                "infoEmpty": "Nenhum registro disponível",
+                "infoFiltered": "(filtrado de _MAX_ registros no total)"
+                
+            },
+            columnDefs: [ {
+	            targets: [ 0 ],
+	            orderData: [ 0, 3]
+	        }]
+      
+        });
+  });
+  
+ 
+  </script>
 <script type="text/javascript">
 var myform = document.getElementById("formulario");
 document.getElementById("flexSwitchCheckDefault").addEventListener("click", function () {
