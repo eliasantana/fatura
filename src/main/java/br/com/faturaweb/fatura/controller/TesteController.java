@@ -16,6 +16,7 @@ import java.util.Optional;
 
 import javax.sound.midi.Soundbank;
 
+import org.apache.commons.collections4.Put;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -87,6 +88,20 @@ public class TesteController {
 		model.addAttribute("tipos",tipos);
 		
 	return"detalhe";	
+	}
+	
+	/**
+	 * Chamando um procedimento de banco
+	 * */
+	@GetMapping("/prc1")
+	public String prc_teste() {
+		List<Lancamento> findLancamentoPrc = r.findLancamentoPrc(10);	
+		int qtdLancamentoLocalizados = findLancamentoPrc.size();
+		for (Lancamento lancamento : findLancamentoPrc) {
+			System.out.println(lancamento.getDsLancamento());
+		}
+		System.out.println("Lancamentos localizados" + qtdLancamentoLocalizados);
+		return "teste";
 	}
 	
 	

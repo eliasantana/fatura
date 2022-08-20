@@ -206,7 +206,7 @@ public class HomeController {
 	 * @since 05/06/2022
 	 * @param fixeRate = 600000 - Milisegundos (1 Minuto) 7200000 (2h)
 	 * */
-	@Scheduled(fixedRate = 7200000)
+	@Scheduled(fixedRate = 600000)
 	private void notificaUsuario() {
 		System.out.println("Executando a Thead!");
 		Configuracoes config = configuracoesRepository.findConfiguracao();
