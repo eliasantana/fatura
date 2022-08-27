@@ -24,6 +24,7 @@ import br.com.faturaweb.fatura.form.LancamentoForm;
 import br.com.faturaweb.fatura.model.Configuracoes;
 import br.com.faturaweb.fatura.model.FormaDePagamento;
 import br.com.faturaweb.fatura.model.Lancamento;
+import br.com.faturaweb.fatura.model.Lote;
 import br.com.faturaweb.fatura.model.Menssageria;
 import br.com.faturaweb.fatura.model.Receita;
 import br.com.faturaweb.fatura.model.TipoLancamento;
@@ -31,6 +32,7 @@ import br.com.faturaweb.fatura.model.Usuario;
 import br.com.faturaweb.fatura.repository.ConfiguracoesRepository;
 import br.com.faturaweb.fatura.repository.FormaDePagamentoRepository;
 import br.com.faturaweb.fatura.repository.LancamentoRepository;
+import br.com.faturaweb.fatura.repository.LoteRepository;
 import br.com.faturaweb.fatura.repository.MensageriaRepository;
 import br.com.faturaweb.fatura.repository.ReceitaRepository;
 import br.com.faturaweb.fatura.repository.TipoLancamentoRepository;
@@ -68,13 +70,16 @@ public class HomeController {
 	MensageriaServices mensageriaservices;	
 	@Autowired
 	MensageriaRepository mensageriaRepository;
+	@Autowired
+	LoteRepository loteRepository;
+	
 	@GetMapping("/")
 	public String index(Model model) {
 		 List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentos();
 		 Integer dias = configuracoesRepository.findConfiguracao().getNrDias();
 		 List<Lancamento> lancamentosVencidos = lancamentoRepository.findVencidos(dias);
 		 HashMap<String, BigDecimal> totalizacao = lancamentoServices.totalizacaoDespesaCategoria();
-		  
+		  String statusLote="F"; //Status Fechado como Default
 		 //Formata data retorando apenas o mes ex: jan = 01
 		 DateTimeFormatter df = DateTimeFormatter.ofPattern("MM");
 		 DateTimeFormatter df2 = DateTimeFormatter.ofPattern("MMYYYY");
@@ -184,19 +189,37 @@ public class HomeController {
 			model.addAttribute("lctomes",findAllLancamentosDoMes.size());
 			List<Receita> receitaMesCorrente = receitaRepository.findAllReceitaMesCorrente();
 			model.addAttribute("receitamescorrente",receitaMesCorrente.size());
-			
+			model.addAttribute("status",statusLote);
 		return "home/dashboard";
 	}
 	
 	@GetMapping(value = "/listar")
 	public String listar(Model model) {
+		 String status="F";
 		//List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentos();
 		List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentosDoMes();
+	
 		model.addAttribute("lancamentos", lancamentos);
+	
 		if ( mensageriaservices.enviaMensagem()) {
 			notificaUsuario();
 		}
-	
+		//Verifica lote da competencia
+		boolean existeLctoAberto = appservices.isLancamentoAberto(lancamentos);
+		try {
+			Lote findLoteCompetencia = loteRepository.findLoteCompetencia();
+			if (appservices.verificalote("A", findLoteCompetencia) && !existeLctoAberto){
+				status = findLoteCompetencia.getStatus();
+			}
+		} catch (Exception e) {
+			if (existeLctoAberto) {
+				status="F";
+			}
+			status="A";
+		}
+		
+		
+		model.addAttribute("status",status);
 		return "home/listar-lancamento";
 	}
 
@@ -206,7 +229,7 @@ public class HomeController {
 	 * @since 05/06/2022
 	 * @param fixeRate = 600000 - Milisegundos (1 Minuto) 7200000 (2h)
 	 * */
-	@Scheduled(fixedRate = 600000)
+	
 	private void notificaUsuario() {
 		System.out.println("Executando a Thead!");
 		Configuracoes config = configuracoesRepository.findConfiguracao();

@@ -66,7 +66,7 @@ public class ProvisaoController {
 		System.out.println(" Total Calculado -> " + totalPercent);
 		
 		BigDecimal max = new BigDecimal(100);
-		if ((totalPercent.compareTo(max)==0)) { // Se o total + o percentual informado for <=100%
+		if ((totalPercent.compareTo(max)<=0)) { // Se o total + o percentual informado for <=100%
 
 				  Provisao p = new Provisao();
 				  if (id!=null) {
@@ -100,6 +100,30 @@ public class ProvisaoController {
 		provisoes =  provisaoRepository.findAllProvisao();
 		model.addAttribute("contas",contas);
 		model.addAttribute("provisoes",provisoes);
+		
+		BigDecimal big10 = new BigDecimal(20);
+		BigDecimal big20 = new BigDecimal(100);
+
+		System.out.println(big10.compareTo(big20) < -1);  // false
+		System.out.println(big10.compareTo(big20) <= -1); // true
+		System.out.println(big10.compareTo(big20) == -1); // true
+		System.out.println(big10.compareTo(big20) >= -1); // true
+		System.out.println(big10.compareTo(big20) > -1);  // false
+		System.out.println(big10.compareTo(big20) != -1); // false
+
+		System.out.println(big10.compareTo(big20) < 0);   // true
+		System.out.println(big10.compareTo(big20) <= 0);  // true
+		System.out.println(big10.compareTo(big20) == 0);  // false
+		System.out.println(big10.compareTo(big20) >= 0);  // false
+		System.out.println(big10.compareTo(big20) > 0);   // false
+		System.out.println(big10.compareTo(big20) != 0);  // true
+
+		System.out.println(big10.compareTo(big20) < 1);   // true
+		System.out.println(big10.compareTo(big20) <= 1);  // true
+		System.out.println(big10.compareTo(big20) == 1);  // false
+		System.out.println(big10.compareTo(big20) >= 1);  // false
+		System.out.println(big10.compareTo(big20) > 1);   // false
+		System.out.println(big10.compareTo(big20) != 1);  // true
 		
 		return "provisao";
 	}

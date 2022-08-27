@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.util.List;
 
 import javax.mail.internet.InternetAddress;
 
@@ -17,8 +18,11 @@ import com.google.common.collect.Lists;
 import com.itextpdf.html2pdf.HtmlConverter;
 
 import br.com.faturaweb.fatura.model.Conta;
+import br.com.faturaweb.fatura.model.Lancamento;
+import br.com.faturaweb.fatura.model.Lote;
 import br.com.faturaweb.fatura.repository.ContaRepository;
 import br.com.faturaweb.fatura.repository.LancamentoRepository;
+import br.com.faturaweb.fatura.repository.LoteRepository;
 import it.ozimov.springboot.mail.model.Email;
 import it.ozimov.springboot.mail.model.defaultimpl.DefaultEmail;
 import it.ozimov.springboot.mail.service.EmailService;
@@ -30,6 +34,8 @@ public class AppServices {
 	public EmailService emailService;
 	@Autowired
 	ContaRepository contaRepository;
+	@Autowired
+	LancamentoRepository lancamentoRepository;
 
 	/**
 	 * Envia e-mail de texto simples
@@ -109,6 +115,41 @@ public class AppServices {
 			System.out.println("Erro ao tentar gerar o arquivo");
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * Verifica o status do lote
+	 * @since 21/08/2022
+	 * @author elias
+	 * @param lote - Lote Contábil
+	 * @param status - Status a ser verificado  A - Aberto - Fechado
+	 * */
+	public Boolean verificalote(String status, Lote lote) {
+		Boolean resp = false;
+		if (lote!=null) {
+			if (lote.getStatus().equals(status)) {
+				resp=true;
+			}		
+		}else {
+			resp=true;
+		}
+		return resp;
+	}
+
+	/**
+	 * Verifica se existe lancamentos não pagos
+	 * */
+	public boolean isLancamentoAberto(List<Lancamento>lancamentos) {
+	Boolean existe = false;
+	int snAberto = 0;	
+	for (Lancamento lancamento : lancamentos) {
+		if (lancamento.getSnPago().toUpperCase().equals("NÃO")) {
+			snAberto =snAberto +1; 
+		}
+	}
+	if (snAberto > 0) existe = true;
+		
+	return existe;
 	}
 	
 }

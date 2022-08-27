@@ -22,7 +22,7 @@ public class Lote {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long cdLote;
 	private String dsLote;
-	@DateTimeFormat(iso = ISO.DATE_TIME.DATE_TIME)
+	@DateTimeFormat(iso =DateTimeFormat.ISO.DATE_TIME)
 	private LocalDate competencia;
 	private Integer qtdLancamentos;
 	private BigDecimal vlTotalLote;
