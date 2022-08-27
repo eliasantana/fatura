@@ -123,7 +123,7 @@ LogMovimentacaoFinanceiraRepository  logMovimentacaoRepository;
 			}
 			else {
 				saldo = saldo.add(vlr2);
-				lmf.setDescricao(" incluir observação");
+				lmf.setDescricao(motivo);
 				lmf.setDtMovimentacao(LocalDate.now());
 				lmf.setNrConta(contaLocalizada.get().getNrConta());
 				lmf.setTpMovimentacao(operacao);

@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+ <head th:replace="~{fragmento :: head('Gerenciamento de Lote Contábil') }">   
+<meta charset="UTF-8">
+</head>
+<body>
+ <!-- Nav Bar -->
+    	<nav th:replace="~{navfragment:: nav }"></nav>
+<div class="container mb-3 mt-3">
+
+<!-- tabela lote -->
+<div>
+	<h3>Gerenciamento de Lotes Contábeis</h3>
+</div>
+<table id="tabelalotes" class="table table-striped" style="width:100%">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Lotes</th>
+                <th>Competência</th>
+                <th>Lancamentos</th>
+                <th>Total</th>
+                <th>Receita</th>
+                <th>Saldo</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+           <tr	th:each="l : ${lotes}">
+           		<td th:text="${l.cdLote}">&nbsp</td>
+           		<td th:text="${l.dsLote}"></td>
+           		<td th:text="${l.competencia}"></td>
+           		<td th:text="${l.qtdLancamentos}"></td>
+           		<td th:text="'R$'+${l.vlTotalLote}"></td>
+           		<td th:text="'R$'+${l.vlTotalReceita}"></td>
+           		<td th:text="'R$'+${l.vlSaldo}"></td>
+           		<td th:if="${l.status=='A'}" style="color:green; text-align: center;"> 						          		
+  							        			
+					<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-check-circle" viewBox="0 0 16 16">
+							  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+							  <path d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z"/>
+					</svg>
+					<a href="/lotecontabil/pesquisar/" th:href="@{'/lotecontabil/pesquisar/' + ${l.cdLote} + '/'+${l.dsLote}}" class="btn btn-success" data-toggle="tooltip" data-placement="top" title="Detalhe do Lote">
+						<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-card-checklist" viewBox="0 0 16 16">
+						  <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>
+						  <path d="M7 5.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 1 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0zM7 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 0 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0z"/>
+						</svg>
+											
+					</a>
+					
+           		</td>
+           		<td th:if="${l.status=='F'}" style="color:green; text-align: center;">
+           			<a href="/lotecontabil/pesquisar/" th:href="@{'/lotecontabil/pesquisar/' + ${l.cdLote} + '/'+${l.dsLote}}" class="btn btn-danger">           			
+					<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-x-circle-fill" viewBox="0 0 16 16">
+  							<path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/>
+					</svg>	 
+					</a>
+           		</td>
+           		
+        </tbody>
+        <tfoot>
+            <tr>
+                <th>#</th>
+                <th>Lotes</th>
+                <th>Competência</th>
+                <th>Lancamentos</th>
+                <th>Total</th>
+                <th>Receita</th>
+                <th>Saldo</th>
+                <th>Status</th>
+            </tr>
+        </tfoot>
+    </table>
+    <div th:if="${flag!=null}">
+    	<h4 th:text="'Detalhe do lote [ ' + ${desc} + ' ] '">Detalhe do Lote</h4>
+    </div>
+    <div th:if="${flag!=null}">
+    	<table id="tabelaitem" class="table table-striped" style="width:100%">
+        <thead>
+            <tr>
+                <th>Lancamento</th>
+                <th style="text-align:center;">Valor</th>                
+            </tr>
+        </thead>
+        <tbody>
+           <tr	th:each="it : ${itlote}">
+           		<td th:text="${it.lancamento.dsLancamento}" ></td>
+           		<td th:text="'R$ ' +${#numbers.formatDecimal(it.lancamento.vlPago,1,2,'COMMA')}" style="text-align: right;"></td>             		
+           </tr>		
+        </tbody>
+        <tfoot>
+            <tr>
+                <th>Lancamento</th>
+                <th>Valor</th>  
+            </tr>
+        </tfoot>
+    </table>
+    <!-- Teste -->
+    <div>
+    	<h4>Cálculo  da Provisão</h4> 
+    	<!-- Fechar lote  -->
+    	<a th:if="${status=='A'}" href="/lotecontabil/operacao/F" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="Fechar o lote">
+    		<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-lock-fill" viewBox="0 0 16 16">
+			  <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
+			</svg>
+    	</a>
+    	<a th:if="${status=='F'}" href="/lotecontabil/operacao/A" class="btn btn-success"  data-toggle="tooltip" data-placement="top" title="Abrir o lote">
+	    	<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-unlock-fill" viewBox="0 0 16 16">
+			  <path d="M11 1a2 2 0 0 0-2 2v4a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h5V3a3 3 0 0 1 6 0v4a.5.5 0 0 1-1 0V3a2 2 0 0 0-2-2z"/>
+			</svg>
+    	</a>
+    	<a th:if="${status=='F'}" href="/log/provisionar" th:href="@{/log/provisionar}" class="btn btn-warning disabled" >Cálculo da Provisão</a>
+    	<a th:if="${status=='A'}" href="/log/provisionar" th:href="@{/log/provisionar}" class="btn btn-warning " >Cálculo da Provisão</a>
+    </div>
+    <div>
+    	<table id="tabelaprovisoes" class="table table-striped" style="width:100%">
+        <thead>
+            <tr>
+                <th>Código</th>
+                <th>Competência</th>
+                <th>Conta</th>
+                <th>Valor</th>                     
+                <th style="text-align: right;">Creditado</th> 
+            </tr>
+        </thead>
+        <tbody>
+           <tr th:each="l : ${logprovisao}">
+           		<td th:text="${l.cdLogProvisao}"></td>
+           		<td th:text="${l.competencia}"></td>   
+           		<td th:text="${l.nrConta}"></td> 
+           		<td th:text="${#numbers.formatDecimal(l.vlProvisionado,1,4,'COMMA')}"></td>         
+           		<td th:if="${l.snCreditado}=='N'" style="text-align: right;">
+           			<a href="#" class="btn btn-danger">
+           			<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-x-circle-fill" viewBox="0 0 16 16">
+  							<path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/>
+					</svg>
+					</a>
+           		</td>
+           		        		
+           		<td th:if="${l.snCreditado}=='S'" style="text-align: right;">
+           			<a href="#" class="btn btn-success">
+           			<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-check-circle" viewBox="0 0 16 16">
+					  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+					  <path d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z"/>
+					</svg>
+					</a>
+           		</td>  
+           </tr>		
+        </tbody>
+        <tfoot>
+            <tr>
+                 <th>Código</th>
+                <th>Competência</th>
+                <th>Conta</th>
+                <th>Valor</th>     
+                <th style="text-align: right;">Creditado</th> 
+            </tr>
+        </tfoot>
+    </table>
+   
+</div>	
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+<!-- Adiciona a barra de pesquisa no data table -->
+<!-- Bibliotecas --> 
+
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.bootstrap5.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.print.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.colVis.min.js"></script>
+<!-- Fim  -->  
+<script type="text/javascript">
+$(document).ready(function() {
+    var table = $('#tabelalotes').DataTable( {
+        lengthChange: false,
+        buttons: [ 'copy', 'excel', 'pdf', 'colvis' ],
+        "language": {
+            "url": "//cdn.datatables.net/plug-ins/1.12.1/i18n/pt-BR.json"
+        }
+    } );
+ 
+    table.buttons().container()
+        .appendTo( '#example_wrapper .col-md-6:eq(0)' );
+} );
+</script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+    var table = $('#tabelaitem').DataTable( {
+        lengthChange: false,
+        buttons: [ 'copy', 'excel', 'pdf', 'colvis' ],
+        "language": {
+            "url": "//cdn.datatables.net/plug-ins/1.12.1/i18n/pt-BR.json"
+        }
+    } );
+ 
+    table.buttons().container()
+        .appendTo( '#example_wrapper .col-md-6:eq(0)' );
+} );
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function() {
+    var table = $('#tabelaprovisoes').DataTable( {
+        lengthChange: false,
+        buttons: [ 'copy', 'excel', 'pdf', 'colvis' ],
+        "language": {
+            "url": "//cdn.datatables.net/plug-ins/1.12.1/i18n/pt-BR.json"
+        }
+    } );
+ 
+    table.buttons().container()
+        .appendTo( '#example_wrapper .col-md-6:eq(0)' );
+} );
+
+</script>
+<!-- Ativa os Tooltips -->
+<script>
+$(function () {
+	  $('[data-toggle="tooltip"]').tooltip()
+	})
+</script>
+ 	 <!-- Script necessário para o funcionamento da NavBar-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+	<!-- Necessário para execição dos ícones feather-->
+    <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
+	<script>
+      feather.replace()
+    </script>
+</body>
+
+</html>

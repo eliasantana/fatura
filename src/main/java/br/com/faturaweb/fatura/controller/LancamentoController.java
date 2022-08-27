@@ -182,15 +182,15 @@ public class LancamentoController {
 	
 	
 	@GetMapping("pagar/{id}")
-	public String pagar(@PathVariable Long id, Model model) {
+	public RedirectView pagar(@PathVariable Long id, Model model) {
 		Lancamento lancamento = lancamentoRepository.findByIdLancamento(id);
-		//List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentosDoMes();
+		RedirectView rw = new RedirectView("/listar");
 		List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentosDoMes();
 		lancamento.setSnPago("SIM");
 		lancamentoRepository.save(lancamento);
 		
 		if ("Débito".equals( lancamento.getFormaDePagamento().getDescricao())) {
-			//Creditar na conta informada
+			//Debitar na conta informada
 			Configuracoes config = configuracoesRepository.findConfiguracao();
 			String nrContaOrigem = config.getNrContaOrigem();
 			Optional<Conta> contaLocalizada = contaRepository.findConta(nrContaOrigem);
@@ -214,7 +214,9 @@ public class LancamentoController {
 			
 		}
 		model.addAttribute("lancamentos",lancamentos);
-		return "home/listar-lancamento";
+		//return "home/listar-lancamento";
+		
+		return rw;
 		}
 
 	@GetMapping("anexar/{id}")

@@ -90,19 +90,7 @@ public class TesteController {
 	return"detalhe";	
 	}
 	
-	/**
-	 * Chamando um procedimento de banco
-	 * */
-	@GetMapping("/prc1")
-	public String prc_teste() {
-		List<Lancamento> findLancamentoPrc = r.findLancamentoPrc(10);	
-		int qtdLancamentoLocalizados = findLancamentoPrc.size();
-		for (Lancamento lancamento : findLancamentoPrc) {
-			System.out.println(lancamento.getDsLancamento());
-		}
-		System.out.println("Lancamentos localizados" + qtdLancamentoLocalizados);
-		return "teste";
-	}
+	
 	
 	
 }

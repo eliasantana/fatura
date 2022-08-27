@@ -105,11 +105,5 @@ public interface LancamentoRepository extends CrudRepository<Lancamento, Long> {
 		@Query(value="SELECT * FROM lancamento l "
 									+ "WHERE date_format(l.dt_competencia ,'%m%Y') = date_format((curdate() + interval 1 month),'%m%Y');",nativeQuery = true)
 		List<Lancamento> findLancamentoMesSeguinte();
-		
-		/**
-		 * Chamando um procedimento de banco via notação de query informando um parâmetro de entrada
-		 * 
-		 * */
-		@Query(value="CALL PRC_TESTE(:qtd)", nativeQuery = true)
-		List<Lancamento> findLancamentoPrc(@Param(value="qtd") int qtd);
+	
 }
