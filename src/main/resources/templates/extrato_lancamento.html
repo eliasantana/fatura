@@ -8,17 +8,22 @@
 <body>
 	<!-- Nav Bar -->
     <nav th:replace="~{navfragment:: nav }"></nav>
+	
 	<div class="row">
-		<div style="text-align: center;">
-			<h3 th:text="${competencia}"  >Relatório de Despesas - Competência</h3>
+		<div style="text-align: right;" class="mt-2">
+			<img th:src="|/getimagem|" width="100px" height="100px">
 		</div>
+		<div style="text-align: center;">
+			<h3 th:text="${competencia}">Relatório de Despesas - Competência</h3>
+		</div>
+		 
 		<div class="col-8 ml-5">
-			<label class="form-text">Competência</label>
 		</div>
 	</div>
 
-	<div class="col-8 mb-3 ml-5" >
+	<div class="col mb-3 ml-1" >
 		<form action="/extrato/financeiro/">
+			<label class="form-text">Selecione um Competência</label> 
 			<select class="form-select " id="meses">
 					<option value="0">Nenhum</option>
 					<option value="01">Janeiro</option>
@@ -34,10 +39,8 @@
 					<option value="11">Novembro</option>
 					<option value="12">Dezembro</option>				
 			</select>
-		</form>
-		<div class="5 mt-1">
-			<button class="btn btn-primary" onclick="window.print()">Imprimir</button>
-		</div>					
+		</form>	
+		
 	</div>
 	<div class="row">
 		<div class="col ml-3 mr-3">
@@ -117,7 +120,7 @@
 						        </tbody>						        
 					        </table>
 					        <p>	
-					    <a href="#" class="btn btn-primary mt-2">Ir para Contas</a>
+					    <a href="/conta/listar" class="btn btn-primary mt-2">Ir para Contas</a>
 					  </div>
 					</div>
 			</div>
@@ -140,7 +143,7 @@
 <script th:inline="javascript">
 	var keyvalor=[[${grupovalues}]];
 	var keygrupos=[[${keygrupodespesa}]];
-	var ano=[[${ano}]]
+	var ano=[[${ano}]];
 	Highcharts.chart('grupoDespesa', {
 	    chart: {
 	        type: 'bar'
@@ -224,6 +227,8 @@
         });
   });
 </script>  
+
+
 <!-- Fim  do  -->
 </body>
 </html>

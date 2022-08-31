@@ -89,7 +89,8 @@
 								<tr th:each="p : ${provisoes}">
 									<td th:text="${p.dsProvisao}">Despesas de Emergência</td> 
 									<td th:text="${#numbers.formatDecimal(p.percentual*100,1,0,'COMMA')} + '%'">20%</td>
-									<td th:text="${p.nrConta}">Itaú</td>
+									<!-- <td th:text="${p.nrConta}">Itaú</td> -->
+										<td th:each="c : ${contas}" th:if="${p.nrConta}==${c.nrConta}" th:text="${c.dsConta} + ' ' + ${c.nrConta}"></td>
 									
 									<td>
 										<a href="/provisao/editar/" th:href="@{/provisao/editar/} + ${p.cdProvisao}" class="btn btn-warning">Editar</a>

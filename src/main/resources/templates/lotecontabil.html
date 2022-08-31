@@ -99,6 +99,10 @@
     <div>
     	<h4>Cálculo  da Provisão</h4> 
     	<!-- Fechar lote  -->
+    	
+    	<a th:if="${status=='F'}" href="/log/provisionar" th:href="@{/log/provisionar}" class="btn btn-warning disabled" >Cálculo da Provisão</a>
+    	<a th:if="${status=='A'}" href="/log/provisionar/" th:href="@{/log/provisionar}" class="btn btn-warning " >Cálculo da Provisão</a>
+    	<a th:if="${status=='A'}" href="/log/creditar/" th:href="@{/log/creditar}" class="btn btn-danger" >Creditar Todos</a>
     	<a th:if="${status=='A'}" href="/lotecontabil/operacao/F" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="Fechar o lote">
     		<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-lock-fill" viewBox="0 0 16 16">
 			  <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
@@ -109,8 +113,6 @@
 			  <path d="M11 1a2 2 0 0 0-2 2v4a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h5V3a3 3 0 0 1 6 0v4a.5.5 0 0 1-1 0V3a2 2 0 0 0-2-2z"/>
 			</svg>
     	</a>
-    	<a th:if="${status=='F'}" href="/log/provisionar" th:href="@{/log/provisionar}" class="btn btn-warning disabled" >Cálculo da Provisão</a>
-    	<a th:if="${status=='A'}" href="/log/provisionar" th:href="@{/log/provisionar}" class="btn btn-warning " >Cálculo da Provisão</a>
     </div>
     <div>
     	<table id="tabelaprovisoes" class="table table-striped" style="width:100%">
@@ -127,16 +129,17 @@
            <tr th:each="l : ${logprovisao}">
            		<td th:text="${l.cdLogProvisao}"></td>
            		<td th:text="${l.competencia}"></td>   
-           		<td th:text="${l.nrConta}"></td> 
-           		<td th:text="${#numbers.formatDecimal(l.vlProvisionado,1,4,'COMMA')}"></td>         
+           		<!-- <td th:text="${l.nrConta}"></td>  -->
+           		<td th:each="c : ${contas}" th:if="${c.nrConta}==${l.nrConta}"  th:text="${c.dsConta} + ' '+ ${c.nrConta}"></td> 
+           		<td th:text="${#numbers.formatDecimal(l.vlProvisionado,1,2,'COMMA')}"></td>         
            		<td th:if="${l.snCreditado}=='N'" style="text-align: right;">
            			<a href="#" class="btn btn-danger">
            			<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-x-circle-fill" viewBox="0 0 16 16">
   							<path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/>
 					</svg>
 					</a>
-           		</td>
-           		        		
+           		</td>           		
+           		          		        		
            		<td th:if="${l.snCreditado}=='S'" style="text-align: right;">
            			<a href="#" class="btn btn-success">
            			<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-check-circle" viewBox="0 0 16 16">

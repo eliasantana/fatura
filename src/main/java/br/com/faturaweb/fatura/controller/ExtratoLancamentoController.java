@@ -11,9 +11,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import br.com.faturaweb.fatura.model.Configuracoes;
 import br.com.faturaweb.fatura.model.Conta;
 import br.com.faturaweb.fatura.model.Lancamento;
+import br.com.faturaweb.fatura.repository.ConfiguracoesRepository;
 import br.com.faturaweb.fatura.repository.ContaRepository;
 import br.com.faturaweb.fatura.repository.LancamentoRepository;
 import br.com.faturaweb.fatura.services.LancamentoServices;
@@ -29,6 +32,8 @@ public class ExtratoLancamentoController {
 	LancamentoServices lctoServices;
 	@Autowired
 	ContaRepository contaRepository;
+	@Autowired
+	ConfiguracoesRepository configuracoesRepository;
 	
 	@GetMapping("/financeiro/{mesAno}")
 	public String extratoLancamento(@PathVariable String mesAno, Model model) {
@@ -56,5 +61,10 @@ public class ExtratoLancamentoController {
 		return "extrato_lancamento";
 	}
 	
-
+	@GetMapping("/getimagem")
+	@ResponseBody
+	public byte[] getlogo() {
+		Configuracoes config = configuracoesRepository.findConfiguracao();
+		return config.getLogo();
+	}
 }

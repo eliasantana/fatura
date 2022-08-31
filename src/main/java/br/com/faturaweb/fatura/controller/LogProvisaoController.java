@@ -95,4 +95,26 @@ List<LogProvisao>logProvisoes = new ArrayList<LogProvisao>();
 	
 	return rw;
 }
+
+/**
+ * Muda o status dos valores provisionados
+ * */
+@GetMapping("/creditar")
+public RedirectView creditarProvisionamento() {
+	RedirectView rw = new RedirectView("/lotecontabil/pesquisar");
+	List<LogProvisao> provisoesDaCompetencia = logProvisaoRepository.findAllLogProvisaoDaCompetencia();
+	List<LogProvisao>listaDeProvisoes = new ArrayList<LogProvisao>();
+	if (!loteRepository.findLoteCompetencia().getStatus().equals("F")) {
+		if (provisoesDaCompetencia.size() >0) {
+			for (LogProvisao logProvisao : provisoesDaCompetencia) {
+				logProvisao.setSnCreditado("S");
+				listaDeProvisoes.add(logProvisao);
+			}
+	}
+		logProvisaoRepository.saveAll(listaDeProvisoes);
+		
+	}
+	return rw;
+}
+
 }
