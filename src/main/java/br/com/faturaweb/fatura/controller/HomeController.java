@@ -178,8 +178,12 @@ public class HomeController {
 			model.addAttribute("ano",LocalDate.now().getYear());
 			model.addAttribute("limite","%");
 			model.addAttribute("limitecartao",limiteCartao);
+			StringBuilder sb = new StringBuilder();
 			if (lancamentosVencidos.size()>0) {
-				model.addAttribute("mensagem", "Atenção! Você possui despesas não pagas!");
+				for (Lancamento lancamento2 : lancamentosVencidos) {
+					sb.append(lancamento2.getDsLancamento()+" - ");
+				}
+				model.addAttribute("mensagem", " Atenção! Você possui despesas não pagas! " + sb.toString());
 			}else {
 				model.addAttribute("mesagem",null);
 			}
@@ -200,10 +204,10 @@ public class HomeController {
 		List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentosDoMes();
 	
 		model.addAttribute("lancamentos", lancamentos);
-	
-		if ( mensageriaservices.enviaMensagem()) {
-			notificaUsuario();
-		}
+	//Analisar
+//		if ( mensageriaservices.enviaMensagem()) {
+//			notificaUsuario();
+//		}
 		//Verifica lote da competencia
 		boolean existeLctoAberto = appservices.isLancamentoAberto(lancamentos);
 		try {

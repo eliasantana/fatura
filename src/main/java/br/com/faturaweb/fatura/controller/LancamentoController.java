@@ -41,6 +41,7 @@ import br.com.faturaweb.fatura.repository.ContaRepository;
 import br.com.faturaweb.fatura.repository.FormaDePagamentoRepository;
 import br.com.faturaweb.fatura.repository.LancamentoRepository;
 import br.com.faturaweb.fatura.repository.LogMovimentacaoFinanceiraRepository;
+import br.com.faturaweb.fatura.repository.LoteRepository;
 import br.com.faturaweb.fatura.repository.TipoLancamentoRepository;
 import br.com.faturaweb.fatura.repository.UsuarioRepository;
 import br.com.faturaweb.fatura.services.LancamentoServices;
@@ -65,6 +66,8 @@ public class LancamentoController {
 	@Autowired
 	LogMovimentacaoFinanceiraRepository logRepository;
 	@Autowired
+	LoteRepository loteRepository;
+	@Autowired
 	ReportService reportServices;	
 	@Autowired
 	LancamentoServices services;	
@@ -73,7 +76,7 @@ public class LancamentoController {
 
 	@GetMapping("cadastro")
 	public String cadastrar(Model model) {
-		
+		String status = loteRepository.findLoteCompetencia().getStatus();
 		try {
 			Lancamento lancamento = new Lancamento();
 			LancamentoForm lf = new LancamentoForm();
@@ -87,6 +90,8 @@ public class LancamentoController {
 			model.addAttribute("formapagto", formasDePagamento);
 			model.addAttribute("tpLancamentos", tiposDeLancamento);
 			model.addAttribute("usuario", usuario.get());
+			model.addAttribute("status",status);
+			if(status.equals("F")) model.addAttribute("mensagem","Lançamento não permitido! O lote da competencia está fechado!");
 			
 		} catch (Exception e) {
 			e.getMessage();

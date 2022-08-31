@@ -13,10 +13,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.view.RedirectView;
 
+import br.com.faturaweb.fatura.model.Conta;
 import br.com.faturaweb.fatura.model.ItLote;
 import br.com.faturaweb.fatura.model.LogProvisao;
 import br.com.faturaweb.fatura.model.Lote;
 import br.com.faturaweb.fatura.model.Provisao;
+import br.com.faturaweb.fatura.repository.ContaRepository;
 import br.com.faturaweb.fatura.repository.ItLoteRepository;
 import br.com.faturaweb.fatura.repository.LogProvisaoRepository;
 import br.com.faturaweb.fatura.repository.LoteRepository;
@@ -33,6 +35,8 @@ public class LoteContabilController {
 	ProvisaoRepository provisaoRepository;
 	@Autowired
 	LogProvisaoRepository logProvisaoRepository;
+	@Autowired
+	ContaRepository contaRepository;
 	
 	@GetMapping(value = {"/pesquisar","/pesquisar/{flag}/{desc}"})
 	public String pesquisar(Model model, 
@@ -42,6 +46,7 @@ public class LoteContabilController {
 		List<Provisao> provisoesDaCompetencia = provisaoRepository.findAllProvisao();
 		List<LogProvisao> logProvisao = logProvisaoRepository.findAllLogProvisaoDaCompetencia();
 		List<Lote> lotes = loterepository.findAllLote();
+		List<Conta> contasLocalizadas = contaRepository.findcontas();
 		if (lotes.size()>0) {
 			Lote loteDaCompetencia = loterepository.findLoteCompetencia();
 			model.addAttribute("status",loteDaCompetencia.getStatus());
@@ -53,6 +58,7 @@ public class LoteContabilController {
 			List<ItLote> itensDoLote = itloteRepository.findAllItLote(id);
 			model.addAttribute("itlote", itensDoLote);
 			model.addAttribute("desc",desc);
+			model.addAttribute("contas",contasLocalizadas);
 		}else {
 			List<ItLote> listaVazia = new ArrayList<ItLote>();
 			ItLote loteVazio = new ItLote();
@@ -90,6 +96,6 @@ public class LoteContabilController {
 		return rw;
 	}
 	
-	
+
 
 }
