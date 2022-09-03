@@ -61,11 +61,13 @@
 							<td th:text="${logmovimentacaofinanceira.nrConta}"></td>
 							<td th:if="${logmovimentacaofinanceira.tpMovimentacao}=='C'" th:text="Crédito"></td>
 							<td th:if="${logmovimentacaofinanceira.tpMovimentacao}=='D'" th:text="Débito"></td>
+							<td th:if="${logmovimentacaofinanceira.tpMovimentacao}=='T'" th:text="Transferência"></td>
 							<td th:text="${usuario}"></td>
 							<td th:text="${#numbers.formatDecimal(logmovimentacaofinanceira.vlMovimentado,1,2,'COMMA')}"></td>
 						</tr>
+						
 					</tbody>
-				
+					
     			</table>
     		</div>
     	</div>

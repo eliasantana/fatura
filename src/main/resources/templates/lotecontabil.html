@@ -99,9 +99,10 @@
     <div>
     	<h4>Cálculo  da Provisão</h4> 
     	<!-- Fechar lote  -->
+    	<p th:text="'Teste' + ${status}"></p>
+    	<a th:if="${status=='F'}" href="/log/provisionar" th:href="@{/log/provisionar/}" class="btn btn-warning disabled" >Cálculo da Provisão</a>
+    	<a th:if="${status=='A'}" href="/log/provisionar" th:href="@{/log/provisionar/}" class="btn btn-warning" >Cálculo da Provisão</a>
     	
-    	<a th:if="${status=='F'}" href="/log/provisionar" th:href="@{/log/provisionar}" class="btn btn-warning disabled" >Cálculo da Provisão</a>
-    	<a th:if="${status=='A'}" href="/log/provisionar/" th:href="@{/log/provisionar}" class="btn btn-warning " >Cálculo da Provisão</a>
     	<a th:if="${status=='A'}" href="/log/creditar/" th:href="@{/log/creditar}" class="btn btn-danger" >Creditar Todos</a>
     	<a th:if="${status=='A'}" href="/lotecontabil/operacao/F" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="Fechar o lote">
     		<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-lock-fill" viewBox="0 0 16 16">

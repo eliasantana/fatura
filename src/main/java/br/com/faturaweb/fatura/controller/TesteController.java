@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.nio.file.spi.FileSystemProvider;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -102,7 +103,32 @@ public class TesteController {
 	return"detalhe";	
 	}
 	
-	
+	@GetMapping("/compare")
+	public String compare() {
+		
+		BigDecimal b1 = new BigDecimal(100);  // =0 <> -1    a > b = 1   (a = b) = 0   a <> b = -1
+		BigDecimal saque = new BigDecimal(-110);
+		
+		System.out.println("Resultado "+b1.compareTo(saque));
+		System.out.println("Comparando com zero "+b1.compareTo(BigDecimal.ZERO));
+		
+		System.out.println("Origem :" + b1);
+		System.out.println("Destino:  " + saque);
+		
+		if (saque.compareTo(BigDecimal.ZERO)==1) {
+			if (b1.compareTo(saque)>-1) {
+				System.out.println("Debida");
+			}else {
+				System.err.println("Saldo insuficiente");
+			}
+		}else {
+			System.err.println("Valor inválido");
+		}
+		
+			
+		
+		return "teste";
+	}
 	
 	
 }

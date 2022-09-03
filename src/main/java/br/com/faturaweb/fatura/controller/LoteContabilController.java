@@ -67,6 +67,7 @@ public class LoteContabilController {
 				competenciaLote = dsLote.substring(dsLote.length()-6);
 				List<LogProvisao> logProvisaoLocalizado = logProvisaoRepository.findLogProvisaoDaCompetencia(competenciaLote);
 				model.addAttribute("logprovisao",logProvisaoLocalizado);
+				model.addAttribute("status",lote.get().getStatus());
 			}else {
 				model.addAttribute("logprovisao",logProvisao);
 			}
