@@ -139,4 +139,14 @@ LogMovimentacaoFinanceiraRepository  logMovimentacaoRepository;
 		return rw;
 	}
 	
+	@GetMapping("/transferir")
+	public String transferir(
+							@RequestParam(name = "ctaOrigem") String ctaOrigem,
+							@RequestParam(name = "ctaDestino") String ctaDestino						
+					) {
+		System.out.println(ctaOrigem);
+		System.out.println(ctaDestino);
+		return "teste";
+	}
+	
 }

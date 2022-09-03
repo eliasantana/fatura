@@ -116,7 +116,7 @@
 						<td th:text="${contas.nrConta}"></td>
 						<td th:text="${contas.nrAgencia}"></td>
 						<td  th:text="${contas.dsConta}"></td>
-						<td  th:text="${contas.saldo}"></td>
+						<td  th:text="${#numbers.formatDecimal(contas.saldo,1,2,'COMMA')}"></td>
 						<td> <img th:src="|/conta/qrcode/${contas.cdConta}|" width="200px" height="200px"/></td>
 						<td>
 							<a class="btn btn-warning" href="/conta/alterar/" th:href="@{'/conta/alterar/' + ${contas.cdConta}}">Alterar</a>

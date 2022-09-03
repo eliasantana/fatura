@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -47,18 +48,33 @@ public class LoteContabilController {
 		List<LogProvisao> logProvisao = logProvisaoRepository.findAllLogProvisaoDaCompetencia();
 		List<Lote> lotes = loterepository.findAllLote();
 		List<Conta> contasLocalizadas = contaRepository.findcontas();
-		if (lotes.size()>0) {
-			Lote loteDaCompetencia = loterepository.findLoteCompetencia();
-			model.addAttribute("status",loteDaCompetencia.getStatus());
+		String competenciaLote = null;
+		if (lotes.size()>0 ) {
+			if ( loterepository.findLoteCompetencia()!=null) {
+				Lote loteDaCompetencia = loterepository.findLoteCompetencia();
+				model.addAttribute("status",loteDaCompetencia.getStatus());
+			}
 		}else {
 			model.addAttribute("status","F");
 		}
 		if (flag!=null) {
 			long id = Long.parseLong(flag);
 			List<ItLote> itensDoLote = itloteRepository.findAllItLote(id);
+			Optional<Lote> lote = loterepository.findById(id);
+			if(lote.isPresent()) {
+				String dsLote = lote.get().getDsLote();
+				dsLote =  dsLote.replace(" ", "");
+				competenciaLote = dsLote.substring(dsLote.length()-6);
+				List<LogProvisao> logProvisaoLocalizado = logProvisaoRepository.findLogProvisaoDaCompetencia(competenciaLote);
+				model.addAttribute("logprovisao",logProvisaoLocalizado);
+			}else {
+				model.addAttribute("logprovisao",logProvisao);
+			}
+				
 			model.addAttribute("itlote", itensDoLote);
 			model.addAttribute("desc",desc);
 			model.addAttribute("contas",contasLocalizadas);
+			
 		}else {
 			List<ItLote> listaVazia = new ArrayList<ItLote>();
 			ItLote loteVazio = new ItLote();
@@ -68,7 +84,7 @@ public class LoteContabilController {
 		
 		model.addAttribute("lotes",lotes);
 		model.addAttribute("flag",flag);
-	    model.addAttribute("logprovisao",logProvisao);
+	    //model.addAttribute("logprovisao",logProvisao);
 		return "lotecontabil";
 	}
 	

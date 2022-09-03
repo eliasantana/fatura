@@ -39,9 +39,11 @@ import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
 
 import br.com.faturaweb.fatura.model.Lancamento;
+import br.com.faturaweb.fatura.model.LogProvisao;
 import br.com.faturaweb.fatura.model.Teste;
 import br.com.faturaweb.fatura.model.TipoLancamento;
 import br.com.faturaweb.fatura.repository.LancamentoRepository;
+import br.com.faturaweb.fatura.repository.LogProvisaoRepository;
 import br.com.faturaweb.fatura.repository.TesteRepository;
 import br.com.faturaweb.fatura.repository.TipoLancamentoRepository;
 import br.com.faturaweb.fatura.services.AppServices;
@@ -67,11 +69,20 @@ public class TesteController {
 		
 		@Autowired
 		TipoLancamentoRepository tipoLancamentoRepository;
+		@Autowired
+		LogProvisaoRepository logprovRepository;
 		
 
 	@GetMapping("/teste")
 	public String apiltipolancnamento(Model model){
 		model.addAttribute("mensagem","Conteudo muito importante!");
+		
+		String str="FECHAMENTO CONTABIL - 082022";
+		str = str.replace(" " ,"" );
+		str = str.substring(str.length()-6);
+		System.out.println(" texto "+str);
+		
+		
 		return "teste";
 	}
 	
@@ -86,6 +97,7 @@ public class TesteController {
 	public String comAjax(Model model) {
 		List<TipoLancamento> tipos = tipoLancamentoRepository.findAllTipoLancamentos();
 		model.addAttribute("tipos",tipos);
+		
 		
 	return"detalhe";	
 	}
