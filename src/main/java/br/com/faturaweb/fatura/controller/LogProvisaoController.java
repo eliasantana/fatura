@@ -109,6 +109,7 @@ public RedirectView creditarProvisionamento() {
 			for (LogProvisao logProvisao : provisoesDaCompetencia) {
 				logProvisao.setSnCreditado("S");
 				listaDeProvisoes.add(logProvisao);
+			   //Creditar valores nas contas informadas	
 			}
 	}
 		logProvisaoRepository.saveAll(listaDeProvisoes);

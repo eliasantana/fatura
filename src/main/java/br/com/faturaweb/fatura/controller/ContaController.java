@@ -3,6 +3,7 @@ package br.com.faturaweb.fatura.controller;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,6 +24,7 @@ import br.com.faturaweb.fatura.model.LogMovimentacaoFinanceira;
 import br.com.faturaweb.fatura.repository.ContaRepository;
 import br.com.faturaweb.fatura.repository.LogMovimentacaoFinanceiraRepository;
 import br.com.faturaweb.fatura.services.AppServices;
+import br.com.faturaweb.fatura.services.ContaServices;
 
 @Controller
 @RequestMapping("/conta")
@@ -31,9 +33,10 @@ public class ContaController {
 ContaRepository repository;
 @Autowired
 AppServices services;
-
 @Autowired
 AppServices appservices;	
+@Autowired
+ContaServices contaServices;
 @Autowired
 LogMovimentacaoFinanceiraRepository  logMovimentacaoRepository;
 
@@ -43,6 +46,7 @@ LogMovimentacaoFinanceiraRepository  logMovimentacaoRepository;
 		Conta conta = new Conta();
 		model.addAttribute("conta",conta);
 		model.addAttribute("contas",contas);
+		model.addAttribute("erro",null);
 		return "conta";	
 	}
 	
@@ -60,7 +64,6 @@ LogMovimentacaoFinanceiraRepository  logMovimentacaoRepository;
 		Optional<Conta> conta = repository.findById(id);
 		
 			return conta.get().getQrcod();		
-		
 	}
 	
 	@GetMapping("alterar/{id}")
@@ -70,10 +73,10 @@ LogMovimentacaoFinanceiraRepository  logMovimentacaoRepository;
 			List<Conta> contas = repository.findcontas();
 			model.addAttribute("conta",conta.get());
 			model.addAttribute("contas",contas);
+			model.addAttribute("erro","Conta não localizada!");
 		} catch (Exception e) {
 			System.out.println("Conta não localizada!");
 		}
-		
 		return "conta";	
 	}
 	
@@ -91,7 +94,6 @@ LogMovimentacaoFinanceiraRepository  logMovimentacaoRepository;
 	@PostMapping("/creditar/{id}")
 	public void creditar( @PathVariable Long id, Model model, Conta conta ) {
 		  Conta contaLocalizada = repository.findContaId(id);
-		 
 	}
 	
 	@PostMapping("/movimentacao")
@@ -139,14 +141,39 @@ LogMovimentacaoFinanceiraRepository  logMovimentacaoRepository;
 		return rw;
 	}
 	
-	@GetMapping("/transferir")
-	public String transferir(
-							@RequestParam(name = "ctaOrigem") String ctaOrigem,
-							@RequestParam(name = "ctaDestino") String ctaDestino						
+	@PostMapping("/transferir")
+	public String transferir(Model model,
+							@RequestParam(name = "ctaorigem") String ctaorigem,
+							@RequestParam(name = "ctadestino") String ctadestino, 
+							@RequestParam(name = "vlr") String vlr,
+							@RequestParam(name = "motivo") String motivo
+							
 					) {
-		System.out.println(ctaOrigem);
-		System.out.println(ctaDestino);
-		return "teste";
+		System.out.println("Origem "+ctaorigem);
+		System.out.println("Destino " +ctadestino);
+		System.out.println("vls " +vlr);
+		System.out.println("motivo " +motivo);
+		ArrayList<Conta> contas = new ArrayList<Conta>();
+		List<Conta> listaDeContas= repository.findcontas();
+		Conta conta = new Conta();
+		vlr=vlr.replace(",", ".");
+		String msgTransacao = contaServices.validaTransacao (ctaorigem, ctadestino, vlr);
+		boolean contains = msgTransacao.contains("sucesso") ;
+		
+		if (contains) {
+			contaServices.transfere(contas, ctaorigem, ctadestino, vlr);
+			model.addAttribute("conta",conta);
+			model.addAttribute("contas",listaDeContas);
+			model.addAttribute("mensagem","O valor "+ vlr +  " foi  transferido com sucesso para a conta " + ctadestino);
+			model.addAttribute("erro",null);
+		}else {
+			model.addAttribute("conta",conta);
+			model.addAttribute("contas",listaDeContas);
+			model.addAttribute("erro",msgTransacao);
+		}
+			
+		return "conta";
 	}
+
 	
 }
