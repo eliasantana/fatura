@@ -1,5 +1,6 @@
 package br.com.faturaweb.fatura.controller;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -24,6 +25,7 @@ import br.com.faturaweb.fatura.repository.ItLoteRepository;
 import br.com.faturaweb.fatura.repository.LogProvisaoRepository;
 import br.com.faturaweb.fatura.repository.LoteRepository;
 import br.com.faturaweb.fatura.repository.ProvisaoRepository;
+import br.com.faturaweb.fatura.services.LoteServices;
 
 @Controller
 @RequestMapping("/lotecontabil")
@@ -38,6 +40,8 @@ public class LoteContabilController {
 	LogProvisaoRepository logProvisaoRepository;
 	@Autowired
 	ContaRepository contaRepository;
+	@Autowired
+	LoteServices loteServices;
 	
 	@GetMapping(value = {"/pesquisar","/pesquisar/{flag}/{desc}"})
 	public String pesquisar(Model model, 
@@ -49,6 +53,8 @@ public class LoteContabilController {
 		List<Lote> lotes = loterepository.findAllLote();
 		List<Conta> contasLocalizadas = contaRepository.findcontas();
 		String competenciaLote = null;
+		BigDecimal totalizacaoDoLote = BigDecimal.ZERO;
+		BigDecimal totalizacaoProvisaoCompetencia = BigDecimal.ZERO;
 		if (lotes.size()>0 ) {
 			if ( loterepository.findLoteCompetencia()!=null) {
 				Lote loteDaCompetencia = loterepository.findLoteCompetencia();
@@ -60,12 +66,15 @@ public class LoteContabilController {
 		if (flag!=null) {
 			long id = Long.parseLong(flag);
 			List<ItLote> itensDoLote = itloteRepository.findAllItLote(id);
+			totalizacaoDoLote = loteServices.getTotalizacaoItLote(itensDoLote);
 			Optional<Lote> lote = loterepository.findById(id);
 			if(lote.isPresent()) {
 				String dsLote = lote.get().getDsLote();
 				dsLote =  dsLote.replace(" ", "");
 				competenciaLote = dsLote.substring(dsLote.length()-6);
 				List<LogProvisao> logProvisaoLocalizado = logProvisaoRepository.findLogProvisaoDaCompetencia(competenciaLote);
+				totalizacaoProvisaoCompetencia= loteServices.totalizaLogProvisao(logProvisaoLocalizado);
+				model.addAttribute("totallogprovisao",totalizacaoProvisaoCompetencia);
 				model.addAttribute("logprovisao",logProvisaoLocalizado);
 				model.addAttribute("status",lote.get().getStatus());
 			}else {
@@ -85,6 +94,9 @@ public class LoteContabilController {
 		
 		model.addAttribute("lotes",lotes);
 		model.addAttribute("flag",flag);
+		model.addAttribute("totalizacaodolote",totalizacaoDoLote);
+		model.addAttribute("totallogprovisao",totalizacaoProvisaoCompetencia);
+		model.addAttribute("provisao",provisoesDaCompetencia);
 	    //model.addAttribute("logprovisao",logProvisao);
 		return "lotecontabil";
 	}

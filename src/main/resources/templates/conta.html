@@ -143,7 +143,7 @@
 		        		 	<option th:each="contas2 : ${contas}" th:text="${contas2.nrConta} + ' - ' +${contas2.dsConta}" th:value="${contas2.nrConta}"> </option>
 		        		 </select>
 		        		 <label class="form-label" >Valor R$</label>
-		        		 <input type="number" class="form-control mt-1" id="vlr" name="vlr" required="required">
+		        		 <input type="number" class="form-control mt-1" id="vlr" name="vlr" step="0.01" required="required">
 		        		 <label class="form-label" >Descrição</label>
 		        		 <textarea class="form-control mt-1" id="motivo" name="motivo" required="required"></textarea>
 				      </div>

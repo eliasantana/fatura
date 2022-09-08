@@ -30,6 +30,12 @@ public class Configuracoes {
 	private String nomeArquivo;
 	private String snNaCompetencia; //Determina se a primeira parcela do parcelamento deverá ser na competência atual ou não.
 	private String nrContaOrigem; //Conta onde será debitado o valor para o lançamento do tipo Débito 
+	private String emailOrigem;
+	private String emailDestino;
+	private String nmOrigem;
+	private String nmDestino;
+	private String tituloMsgEmailDestino;
+	
 	
 	@Lob
 	private byte[] logo;
@@ -129,14 +135,57 @@ public class Configuracoes {
 	public void setNrContaOrigem(String nrContaOrigem) {
 		this.nrContaOrigem = nrContaOrigem;
 	}
-	
+
+	public String getEmailOrigem() {
+		return emailOrigem;
+	}
+
+	public void setEmailOrigem(String emailOrigem) {
+		this.emailOrigem = emailOrigem;
+	}
+
+	public String getEmailDestino() {
+		return emailDestino;
+	}
+
+	public void setEmailDestino(String emailDestino) {
+		this.emailDestino = emailDestino;
+	}
+
+	public String getNmOrigem() {
+		return nmOrigem;
+	}
+
+	public void setNmOrigem(String nmOrigem) {
+		this.nmOrigem = nmOrigem;
+	}
+
+	public String getNmDestino() {
+		return nmDestino;
+	}
+
+	public void setNmDestino(String nmDestino) {
+		this.nmDestino = nmDestino;
+	}
+
+	public String getTituloMsgEmailDestino() {
+		return tituloMsgEmailDestino;
+	}
+
+	public void setTituloMsgEmailDestino(String tituloMsgEmailDestino) {
+		this.tituloMsgEmailDestino = tituloMsgEmailDestino;
+	}
+
 	@Override
 	public String toString() {
 		return "Configuracoes [cdConfiguracao=" + cdConfiguracao + ", snParcelado=" + snParcelado + ", snNotificar="
 				+ snNotificar + ", nrDias=" + nrDias + ", dirImportacao=" + dirImportacao + ", nrMsgDiaria="
-				+ nrMsgDiaria + ", limiteCartao=" + limiteCartao + ", logo=" + Arrays.toString(logo) + "]";
+				+ nrMsgDiaria + ", limiteCartao=" + limiteCartao + ", nomeArquivo=" + nomeArquivo + ", snNaCompetencia="
+				+ snNaCompetencia + ", nrContaOrigem=" + nrContaOrigem + ", emailOrigem=" + emailOrigem
+				+ ", emailDestino=" + emailDestino + ", nmOrigem=" + nmOrigem + ", nmDestino=" + nmDestino
+				+ ", tituloMsgEmailDestino=" + tituloMsgEmailDestino + ", logo=" + Arrays.toString(logo) + "]";
 	}
-
+	
 	
 
 }

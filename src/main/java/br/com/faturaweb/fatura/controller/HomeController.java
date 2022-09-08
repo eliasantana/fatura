@@ -204,10 +204,7 @@ public class HomeController {
 		List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentosDoMes();
 	
 		model.addAttribute("lancamentos", lancamentos);
-	//Analisar
-//		if ( mensageriaservices.enviaMensagem()) {
-//			notificaUsuario();
-//		}
+	
 		//Verifica lote da competencia
 		boolean existeLctoAberto = appservices.isLancamentoAberto(lancamentos);
 		try {
@@ -221,65 +218,8 @@ public class HomeController {
 			}
 			status="A";
 		}
-		
-		
 		model.addAttribute("status",status);
 		return "home/listar-lancamento";
-	}
-
-	/**
-	 * Notifica o usuário sobre  despesas vencidas a cada 2 horas
-	 * @author elias
-	 * @since 05/06/2022
-	 * @param fixeRate = 600000 - Milisegundos (1 Minuto) 7200000 (2h)
-	 * */
-	
-	private void notificaUsuario() {
-		System.out.println("Executando a Thead!");
-		Configuracoes config = configuracoesRepository.findConfiguracao();
-		Integer nrDias = config.getNrDias();
-		String snNotificar = config.getSnNotificar();
-		List<Lancamento> lancamentosVencidos = lancamentoRepository.findVencidos(nrDias);
-		
-		if (lancamentosVencidos.size() > 0 && snNotificar.equals("S")) {
-			//Só enviará mensagens se aida não tiver atingido o limite diário configurado
-			if ( mensageriaservices.enviaMensagem()) {
-				StringBuilder sbw = new StringBuilder();
-				sbw.append("Atenção!\n");
-				for (Lancamento lancamento : lancamentosVencidos) {
-					sbw.append("As depesas abaixo estão vencidas a pelo menos " + configuracoesRepository.findConfiguracao().getNrDias() + " dias! \n");
-					sbw.append("\nDescrição: " + lancamento.getDsLancamento()+ "\n");
-					sbw.append("\nVencimento: " + lancamento.getDtCompetencia() + "\n");
-					sbw.append("\nValor: " + lancamento.getVlPago());
-				}			
-				try {
-					appservices.sendEmai("eliasantana@gmail.com","Elias Santana" , "eliasantana@hotmail.com", "Elias Santana da Silva", "Contas Vencidas!", sbw);
-					System.out.println("E-mail enviado com sucesso!");
-				} catch (UnsupportedEncodingException e) {
-					System.out.println("Erro ao tentar enviar e-mail -> sendEmail ");
-					e.printStackTrace();
-					
-					Menssageria menssageria = new Menssageria();
-					menssageria.setDestino("eliasantanasilva@gmail.com");
-					menssageria.setDtEnvio(LocalDateTime.now());
-					menssageria.setStatus("E");
-					mensageriaRepository.save(menssageria);
-				}
-				
-				Menssageria menssageria = new Menssageria();
-				menssageria.setDestino("eliasantanasilva@gmail.com");
-				menssageria.setDtEnvio(LocalDateTime.now());
-				menssageria.setStatus("S");
-			
-				mensageriaRepository.save(menssageria);
-				
-				System.out.println("Processo de envio de e-mail realizado com sucesso!");
-			}else {
-				System.out.println("Quantidade de mensgem diária atingida");
-			}
-			
-			
-		}
 	}
 
 	@PostMapping("/salvar")
@@ -345,7 +285,7 @@ public String email() {
 		assunto.append("Valor:");
 		assunto.append("120,00");
 		
-		appservices.sendEmai("eliasantanasilva@gmail.com", "Elias", "eliasantana@hotmail.com", "Elias Hotmail", "Teste2", assunto);
+		appservices.sendEmai("elias1576c41@elias1576.c41.integrator.host", "Sysfaturaweb", "eliasantana@hotmail.com", "Elias Hotmail", "Teste2", assunto);
 	} catch (UnsupportedEncodingException e) {
 		
 		e.printStackTrace();

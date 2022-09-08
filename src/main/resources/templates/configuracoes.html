@@ -101,6 +101,33 @@
 					<input type="text" class="form-control" id="diretorio" name="dirImportacao" th:value="${config.dirImportacao}">
 					<div class="form-text">obs: Utilize barras invertidas para informar o caminho</div>
 				</div>
+				<!-- Email -->
+				<div>
+					<label class="form-label" for="titulo">Titulo da Mensagem</label>
+					<input type="text" class="form-control" id="titulo" name="tituloMsgEmailDestino" th:value="${config.tituloMsgEmailDestino}">
+					<div class="form-text">obs: Informe o Titulo da Mensagem</div>
+				</div>
+				<div>
+					<label class="form-label" for="nmorigem">Descrição do E-mail de Origem</label>
+					<input type="text" class="form-control" id="nmorigem" name="nmOrigem" th:value="${config.nmOrigem}">
+					<div class="form-text">obs: Informe o nome a ser exibido no e-mail de Origem</div>
+				</div>
+				<div>
+					<label class="form-label" for="emailorigem">Mensageria (E-mail de origem)</label>
+					<input type="email" class="form-control" id="emailorigem" name="emailOrigem" th:value="${config.emailOrigem}">
+					<div class="form-text">obs: Informe o e-mail de saida do seu provedor</div>
+				</div>
+				<div>
+					<label class="form-label" for="nmdestino">Descrição do E-mail de Destino</label>
+					<input type="text" class="form-control" id="nmdestino" name="nmDestino" th:value="${config.nmDestino}">
+					<div class="form-text">obs: Informe o nome a ser exibido no e-mail de Destino</div>
+				</div>
+				<div>
+					<label class="form-label" for="emaildestino">Mensageria (E-mail de Destino)</label>
+					<input type="email" class="form-control" id="emaildestino" name="emailDestino" th:value="${config.emailDestino}">
+					<div class="form-text">obs: Informe o e-mail para onde a mensagem será envida!</div>
+				</div>
+				
 			</div>
 		</div>
   </div>
