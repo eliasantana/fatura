@@ -78,8 +78,8 @@
     	<table id="tabelaitem" class="table table-striped" style="width:100%">
         <thead>
             <tr>
-                <th>Lancamento</th>
-                <th style="text-align:center;">Valor</th>                
+                <th>Lancamentos do Lote</th>
+                <th style="text-align:right;">Valor</th>                
             </tr>
         </thead>
         <tbody>
@@ -90,16 +90,17 @@
         </tbody>
         <tfoot>
             <tr>
-                <th>Lancamento</th>
-                <th>Valor</th>  
+            	
+                <th></th>
+                
+				<th th:text="'R$ '+${#numbers.formatDecimal(totalizacaodolote,1,2,'COMMA')}" style="text-align: right;">Total</th>    
             </tr>
         </tfoot>
     </table>
     <!-- Teste -->
     <div>
-    	<h4>Cálculo  da Provisão</h4> 
+    	
     	<!-- Fechar lote  -->
-    	<p th:text="'Teste' + ${status}"></p>
     	<a th:if="${status=='F'}" href="/log/provisionar" th:href="@{/log/provisionar/}" class="btn btn-warning disabled" >Cálculo da Provisão</a>
     	<a th:if="${status=='A'}" href="/log/provisionar" th:href="@{/log/provisionar/}" class="btn btn-warning" >Cálculo da Provisão</a>
     	
@@ -115,15 +116,18 @@
 			</svg>
     	</a>
     </div>
-    <div>
+    <div><p>
+   		 <h4>Cálculo  da Provisão</h4> 
+    </div>
     	<table id="tabelaprovisoes" class="table table-striped" style="width:100%">
         <thead>
             <tr>
                 <th>Código</th>
                 <th>Competência</th>
                 <th>Conta</th>
-                <th>Valor</th>                     
+                <th>Descrição</th>
                 <th style="text-align: right;">Creditado</th> 
+                <th style="text-align: right;">Valor</th>                     
             </tr>
         </thead>
         <tbody>
@@ -132,7 +136,7 @@
            		<td th:text="${l.competencia}"></td>   
            		<!-- <td th:text="${l.nrConta}"></td>  -->
            		<td th:each="c : ${contas}" th:if="${c.nrConta}==${l.nrConta}"  th:text="${c.dsConta} + ' '+ ${c.nrConta}"></td> 
-           		<td th:text="${#numbers.formatDecimal(l.vlProvisionado,1,2,'COMMA')}"></td>         
+           		<td th:each="p : ${provisao}" th:if="${p.cdProvisao}==${l.cdProvisao}" th:text="${p.dsProvisao}"></td>
            		<td th:if="${l.snCreditado}=='N'" style="text-align: right;">
            			<a href="#" class="btn btn-danger">
            			<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-x-circle-fill" viewBox="0 0 16 16">
@@ -149,20 +153,21 @@
 					</svg>
 					</a>
            		</td>  
+           		<td th:text="${#numbers.formatDecimal(l.vlProvisionado,1,2,'COMMA')}" style="text-align: right;"></td>         
            </tr>		
         </tbody>
         <tfoot>
             <tr>
-                 <th>Código</th>
-                <th>Competência</th>
-                <th>Conta</th>
-                <th>Valor</th>     
-                <th style="text-align: right;">Creditado</th> 
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th style="text-align: right;"></th> 
+                <th th:text="' R$ '+${#numbers.formatDecimal(totallogprovisao,1,2,'COMMA')}" style="text-align: right;">Valor</th>     
             </tr>
         </tfoot>
     </table>
    
-</div>	
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>

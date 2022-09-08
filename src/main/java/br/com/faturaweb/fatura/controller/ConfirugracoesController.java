@@ -78,6 +78,12 @@ public  RedirectView  salvar(Model model, Configuracoes formConfiguracoes,
    config.setNomeArquivo(nomeArquivoPostado);
    config.setSnNaCompetencia(formConfiguracoes.getSnNaCompetencia());
    config.setNrContaOrigem(formConfiguracoes.getNrContaOrigem());
+   config.setEmailDestino(formConfiguracoes.getEmailDestino());
+   config.setEmailOrigem(formConfiguracoes.getEmailOrigem());
+   config.setNmDestino(formConfiguracoes.getNmDestino());
+   config.setNmOrigem(formConfiguracoes.getNmOrigem());
+   config.setTituloMsgEmailDestino(formConfiguracoes.getTituloMsgEmailDestino());
+   
    configuracoesRepository.save(config);
    config = configuracoesRepository.findConfiguracao();   
    

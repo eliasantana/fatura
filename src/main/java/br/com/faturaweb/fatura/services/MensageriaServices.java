@@ -22,11 +22,11 @@ public class MensageriaServices {
 	 * @since 22-01-2022
 	 * @author elias
 	 * */
-	public  Boolean enviaMensagem() {
+	public  Boolean enviarMensagem( Configuracoes config) {
 		Boolean resp = false;
-		Configuracoes configuracao = configRepository.findConfiguracao();
+		//Configuracoes configuracao = configRepository.findConfiguracao();
 		List<Menssageria> msgEnviadas = mensageriaRepository.findMensagensDia();
-			if (msgEnviadas.size() < configuracao.getNrMsgDiaria() ) {
+			if (msgEnviadas.size() < config.getNrMsgDiaria() ) {
 				resp = true;		}		
 		return resp;
 	}

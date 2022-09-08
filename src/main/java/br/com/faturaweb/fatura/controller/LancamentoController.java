@@ -49,7 +49,7 @@ import br.com.faturaweb.fatura.services.ReportService;
 
 @Controller
 @EnableAutoConfiguration
-@RequestMapping("lancamento")
+@RequestMapping("/lancamento")
 
 public class LancamentoController {
 
@@ -74,9 +74,14 @@ public class LancamentoController {
 @Autowired
 	ConfiguracoesRepository configuracoesRepository;
 
-	@GetMapping("cadastro")
+	@GetMapping("/cadastro")
 	public String cadastrar(Model model) {
-		String status = loteRepository.findLoteCompetencia().getStatus();
+		String status = "A";
+		try {
+			 status = loteRepository.findLoteCompetencia().getStatus();			
+		} catch (Exception e) {
+			System.out.println("Não há lote aberto na competencia!");
+		}
 		try {
 			Lancamento lancamento = new Lancamento();
 			LancamentoForm lf = new LancamentoForm();
@@ -140,7 +145,7 @@ public class LancamentoController {
 	}
 
 
-	@GetMapping("excluir/{id}")
+	@GetMapping("/excluir/{id}")
 	public  RedirectView excluir(@PathVariable Long id, Model model) {
 		//List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentos();
 		List<Lancamento> lancamentos = lancamentoRepository.findLancamentoMesSeguinte();
@@ -154,7 +159,7 @@ public class LancamentoController {
 		
 	}
 
-	@GetMapping("alterar/{id}")
+	@GetMapping("/alterar/{id}")
 	public String alterar(@PathVariable Long id, Model model) {
 
 		Lancamento lancamento = lancamentoRepository.findByIdLancamento(id);
@@ -186,7 +191,7 @@ public class LancamentoController {
 	}
 	
 	
-	@GetMapping("pagar/{id}")
+	@GetMapping("/pagar/{id}")
 	public RedirectView pagar(@PathVariable Long id, Model model) {
 		Lancamento lancamento = lancamentoRepository.findByIdLancamento(id);
 		RedirectView rw = new RedirectView("/listar");
@@ -309,6 +314,18 @@ public class LancamentoController {
 	public byte[] getlogo() {
 		Configuracoes config = configuracoesRepository.findConfiguracao();
 		return config.getLogo();
+	}
+	
+	@GetMapping("/transferir/{id}")
+	public RedirectView transferir(@PathVariable  Long id) {
+		RedirectView rw = new RedirectView("/listar");
+		Lancamento lancamentoLocalizado = lancamentoRepository.findByIdLancamento(id);
+		LocalDate novaCompetencia = LocalDate.now().plusMonths(1L);
+		if (lancamentoLocalizado.getSnPago().toUpperCase().equals("NÃO")) {
+			lancamentoLocalizado.setDtCompetencia(novaCompetencia);
+			lancamentoRepository.save(lancamentoLocalizado);
+		}
+		return rw;
 	}
 }
 
