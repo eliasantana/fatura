@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.faturaweb.fatura.model.ItLote;
 import br.com.faturaweb.fatura.model.LogProvisao;
+import br.com.faturaweb.fatura.model.Lote;
 
 @Service
 public class LoteServices {
@@ -34,5 +35,21 @@ public BigDecimal totalizaLogProvisao(List<LogProvisao> logProvisaoDaCompetencia
 	}
 	return total;
 }
-	
+/**
+ * Retorana a totalização dosaldo dos lotes Gerados
+ * @author elias
+ * @since 08-09-2922
+ * @param lotes
+ * */	
+
+public BigDecimal getTotalizaLotes(List<Lote> lotes) {
+	BigDecimal total = BigDecimal.ZERO;
+	if (lotes.size() > 0) {
+		for (Lote lote : lotes) {
+			total = total.add(lote.getVlSaldo());
+		}
+	}
+	return total;
+}
+
 }

@@ -55,10 +55,12 @@ public class LoteContabilController {
 		String competenciaLote = null;
 		BigDecimal totalizacaoDoLote = BigDecimal.ZERO;
 		BigDecimal totalizacaoProvisaoCompetencia = BigDecimal.ZERO;
+		BigDecimal totalSaldoLotesGerados = BigDecimal.ZERO;
 		if (lotes.size()>0 ) {
 			if ( loterepository.findLoteCompetencia()!=null) {
 				Lote loteDaCompetencia = loterepository.findLoteCompetencia();
 				model.addAttribute("status",loteDaCompetencia.getStatus());
+			    totalSaldoLotesGerados = loteServices.getTotalizaLotes(lotes);
 			}
 		}else {
 			model.addAttribute("status","F");
@@ -97,6 +99,7 @@ public class LoteContabilController {
 		model.addAttribute("totalizacaodolote",totalizacaoDoLote);
 		model.addAttribute("totallogprovisao",totalizacaoProvisaoCompetencia);
 		model.addAttribute("provisao",provisoesDaCompetencia);
+		model.addAttribute("totalsaldolote",totalSaldoLotesGerados);
 	    //model.addAttribute("logprovisao",logProvisao);
 		return "lotecontabil";
 	}

@@ -21,7 +21,7 @@
                 <th>Lancamentos</th>
                 <th>Total</th>
                 <th>Receita</th>
-                <th>Saldo</th>
+                <th style="text-align: right;"> Saldo</th>
                 <th>Status</th>
             </tr>
         </thead>
@@ -33,7 +33,7 @@
            		<td th:text="${l.qtdLancamentos}"></td>
            		<td th:text="'R$'+${l.vlTotalLote}"></td>
            		<td th:text="'R$'+${l.vlTotalReceita}"></td>
-           		<td th:text="'R$'+${l.vlSaldo}"></td>
+           		<td th:text="'R$'+${l.vlSaldo}" style="text-align: right;"></td>
            		<td th:if="${l.status=='A'}" style="color:green; text-align: center;"> 						          		
   							        			
 					<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-check-circle" viewBox="0 0 16 16">
@@ -61,13 +61,13 @@
         <tfoot>
             <tr>
                 <th>#</th>
-                <th>Lotes</th>
-                <th>Competência</th>
-                <th>Lancamentos</th>
-                <th>Total</th>
-                <th>Receita</th>
-                <th>Saldo</th>
-                <th>Status</th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th th:text="' R$ '+${totalsaldolote}" style="text-align: right;">Saldo</th>
+                <th></th>
             </tr>
         </tfoot>
     </table>
