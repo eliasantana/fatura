@@ -73,17 +73,15 @@ public class TesteController {
 		@Autowired
 		LogProvisaoRepository logprovRepository;
 		
-
+		
 	@GetMapping("/teste")
 	public String apiltipolancnamento(Model model){
 		model.addAttribute("mensagem","Conteudo muito importante!");
-		
-		String str="FECHAMENTO CONTABIL - 082022";
-		str = str.replace(" " ,"" );
-		str = str.substring(str.length()-6);
-		System.out.println(" texto "+str);
-		
-		
+			
+		DateTimeFormatter df = DateTimeFormatter.ofPattern("MM");
+		   String strMes = LocalDate.now().format(df).toString();
+	 	   String strAno = String.valueOf(LocalDate.now().getYear());
+		  System.out.println(strMes.concat(strAno));
 		return "teste";
 	}
 	

@@ -6,6 +6,8 @@ import java.lang.reflect.Field;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,18 +37,13 @@ private ConfiguracoesRepository configuracoesRepository;
 private ContaRepository contaRepository;
 @Autowired
 private ProvisaoRepository provisaoRepository;
-
 @GetMapping("/listar")
 public String configuracoes(Model model) {
 	Configuracoes config = configuracoesRepository.findConfiguracao();
-	
-	
 	List<Conta> contas = contaRepository.findcontas();
-	
 	model.addAttribute("config",config);
 	model.addAttribute("contas",contas);
 	model.addAttribute("contaselecionada",config.getNrContaOrigem());
-	
 	
 	return "configuracoes";
 }
