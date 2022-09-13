@@ -291,16 +291,6 @@ public class LancamentoController {
 		return "teste";
 	}
 	
-	@GetMapping("imprimir/{formato}")
-	public String geraRelatorio(@PathVariable String formato) {
-		String  mensagem = "";
-		try {
-			 mensagem = reportServices.exportReport("pdf","lancamento");
-		} catch (Exception e) {
-			mensagem = "Não foi possível gerar o relatório!";
-		}
-		return mensagem;
-	}
 	
 	@GetMapping("/detalhe/{id}")
 	public String deTalheLancamento(Model model, @PathVariable  Long id) {

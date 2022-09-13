@@ -26,11 +26,33 @@
 	<div>
 		<h3 th:text="${mensagem}"></h3>
 	</div>
-	<div class="mt-2 mb-2"><h2>Tipos de Lançamentos</h2></div>
+	<div class="mt-2 mb-2"><h2 th:text="${conexao}"></h2></div>
 	<div id="div-tabela">
-		
+	<a href="/relatorio/pdf/" th:href="@{/relatorio/pdf/(code='lancamentos',acao='v' )}">Abrir Relatório</a>
+	<a href="/relatorio/pdf/" th:href="@{/relatorio/pdf/(code='lancamentos',acao='d' )}">Abrir Relatório</a>
+	
+	<form action="/relatorio/filtro" method="get">
+			<select name="competencia" id="competencia">
+				<option value="todos" >Todos</option>
+				<option value="01" >Janeiro</option>
+				<option value="01" >Janeiro</option>
+				<option value="02" >Fevereiro</option>
+				<option value="03" >Março</option>
+				<option value="04" >Abril</option>
+				<option value="05" >Maio</option>
+				<option value="06" >Junho</option>
+				<option value="07" >Julho</option>
+				<option value="08" >Agosto</option>
+				<option value="09" >Setembro</option>
+				<option value="10" >Outubro</option>
+				<option value="11" >Novembo</option>
+				<option value="12" >Dezembro</option>
+			</select>
+	<button type="submit">Enviar</button>
+	
+	</form>
+	
 	</div>
-	<!-- Paginação -->
 	<script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
   	<script src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
 
