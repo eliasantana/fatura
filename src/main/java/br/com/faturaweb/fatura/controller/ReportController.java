@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.view.RedirectView;
 
+import br.com.faturaweb.fatura.model.Configuracoes;
+import br.com.faturaweb.fatura.repository.ConfiguracoesRepository;
 import br.com.faturaweb.fatura.services.ReportService;
 import net.sf.jasperreports.engine.JRException;
 
@@ -27,6 +29,7 @@ public class ReportController {
 private Connection connection;
 @Autowired
 ReportService services;
+
 
 @GetMapping("/conexao")
 public String report(Model model) {
@@ -85,8 +88,6 @@ public String reportFiltro(Model model,
 	    	services.addParam("CF_COMPETENCIA", " DATE_FORMAT(dt_competencia,'%m%Y') ");
 	    	services.addParam("CF_WHERE", "AND CD_LANCAMENTO = CD_LANCAMENTO" );
 	    }
-	    
-	   
 	    
 	    try {
 	    	

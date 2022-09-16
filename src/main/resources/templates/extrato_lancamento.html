@@ -117,6 +117,10 @@
 						        		<td th:text="${contas.dsConta}+ ' - ' + ${contas.nrConta}" ></td>
 						        		<td th:text="${#numbers.formatDecimal(contas.saldo,1,2,'COMMA')}" style="text-align: right;"></td>											        	
 						        	</tr>
+						        	<tr>
+						        		<td style="font-weight: bold;">Total</td>
+						        		<td th:text="${#numbers.formatDecimal(saldoGeral,1,2,'COMMA')}" style="text-align: right; font-weight: bold;"></td>
+						        	</tr>
 						        </tbody>						        
 					        </table>
 					        <p>	

@@ -19,6 +19,7 @@ import br.com.faturaweb.fatura.model.Lancamento;
 import br.com.faturaweb.fatura.repository.ConfiguracoesRepository;
 import br.com.faturaweb.fatura.repository.ContaRepository;
 import br.com.faturaweb.fatura.repository.LancamentoRepository;
+import br.com.faturaweb.fatura.services.ContaServices;
 import br.com.faturaweb.fatura.services.LancamentoServices;
 
 @Controller
@@ -33,16 +34,17 @@ public class ExtratoLancamentoController {
 	@Autowired
 	ContaRepository contaRepository;
 	@Autowired
+	ContaServices contaServices;
+	@Autowired
 	ConfiguracoesRepository configuracoesRepository;
 	
 	@GetMapping("/financeiro/{mesAno}")
 	public String extratoLancamento(@PathVariable String mesAno, Model model) {
-		String mesEano = null;
 		int year = LocalDate.now().getYear();
 		mesAno =mesAno+  Integer.toString(year);
 		List<Lancamento> lctoFuturo = lctoRepository.findLancamentosFuturos(mesAno);
 		List<Conta> contas = contaRepository.findcontas();
-		
+		BigDecimal saldoGeral = contaServices.getSaldoGeral(contas);
 		HashMap<String, BigDecimal> totalizacaoDespesaCategoria = lctoServices.totalizacaoDespesaCategoria(mesAno);
 		HashMap<String, BigDecimal> totalDespesaFormaPagto = lctoServices.getTotalizacaoDespesaFormaPagto(mesAno);
 
@@ -53,6 +55,7 @@ public class ExtratoLancamentoController {
 		model.addAttribute("grupovalues",totalizacaoDespesaCategoria.values());
 		model.addAttribute("keytotalformapagto",totalDespesaFormaPagto.keySet().toArray());
 		model.addAttribute("valorTotalformapagto",totalDespesaFormaPagto.values());
+		model.addAttribute("saldoGeral",saldoGeral);
 		
 		String competencia =" Relatório de Despesas Competência - " + mesAno.substring(0,2).concat("/").concat(String.valueOf(year));
 		model.addAttribute("competencia",competencia);

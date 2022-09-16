@@ -39,10 +39,12 @@ import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
 
+import br.com.faturaweb.fatura.model.Configuracoes;
 import br.com.faturaweb.fatura.model.Lancamento;
 import br.com.faturaweb.fatura.model.LogProvisao;
 import br.com.faturaweb.fatura.model.Teste;
 import br.com.faturaweb.fatura.model.TipoLancamento;
+import br.com.faturaweb.fatura.repository.ConfiguracoesRepository;
 import br.com.faturaweb.fatura.repository.LancamentoRepository;
 import br.com.faturaweb.fatura.repository.LogProvisaoRepository;
 import br.com.faturaweb.fatura.repository.TesteRepository;
@@ -72,7 +74,8 @@ public class TesteController {
 		TipoLancamentoRepository tipoLancamentoRepository;
 		@Autowired
 		LogProvisaoRepository logprovRepository;
-		
+		@Autowired
+		ConfiguracoesRepository config;
 		
 	@GetMapping("/teste")
 	public String apiltipolancnamento(Model model){
@@ -82,6 +85,9 @@ public class TesteController {
 		   String strMes = LocalDate.now().format(df).toString();
 	 	   String strAno = String.valueOf(LocalDate.now().getYear());
 		  System.out.println(strMes.concat(strAno));
+		  
+		  Configuracoes configuracao = config.findConfiguracao();
+		  System.out.println(configuracao.getDirRelatorio());
 		return "teste";
 	}
 	

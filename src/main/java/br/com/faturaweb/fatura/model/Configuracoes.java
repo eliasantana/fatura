@@ -35,7 +35,7 @@ public class Configuracoes {
 	private String nmOrigem;
 	private String nmDestino;
 	private String tituloMsgEmailDestino;
-	
+	private String dirRelatorio;
 	
 	@Lob
 	private byte[] logo;
@@ -176,6 +176,14 @@ public class Configuracoes {
 		this.tituloMsgEmailDestino = tituloMsgEmailDestino;
 	}
 
+	public void setDirRelatorio(String dirRelatorio) {
+		this.dirRelatorio = dirRelatorio;
+	}
+	
+	public String getDirRelatorio() {
+		return dirRelatorio;
+	}
+
 	@Override
 	public String toString() {
 		return "Configuracoes [cdConfiguracao=" + cdConfiguracao + ", snParcelado=" + snParcelado + ", snNotificar="
@@ -183,9 +191,8 @@ public class Configuracoes {
 				+ nrMsgDiaria + ", limiteCartao=" + limiteCartao + ", nomeArquivo=" + nomeArquivo + ", snNaCompetencia="
 				+ snNaCompetencia + ", nrContaOrigem=" + nrContaOrigem + ", emailOrigem=" + emailOrigem
 				+ ", emailDestino=" + emailDestino + ", nmOrigem=" + nmOrigem + ", nmDestino=" + nmDestino
-				+ ", tituloMsgEmailDestino=" + tituloMsgEmailDestino + ", logo=" + Arrays.toString(logo) + "]";
+				+ ", tituloMsgEmailDestino=" + tituloMsgEmailDestino + ", dirRelatorio=" + dirRelatorio + ", logo="
+				+ Arrays.toString(logo) + "]";
 	}
-	
-	
 
 }

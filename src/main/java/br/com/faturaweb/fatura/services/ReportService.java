@@ -16,6 +16,8 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
 
+import br.com.faturaweb.fatura.model.Configuracoes;
+import br.com.faturaweb.fatura.repository.ConfiguracoesRepository;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -26,7 +28,11 @@ public class ReportService {
 
 	@Autowired
 	Connection connection;
-	private static  final String JASPER_DIREOTIRO= "classpath:reports/";
+	
+	@Autowired
+	ConfiguracoesRepository configuracoesRepository;
+	
+	private  String JASPER_DIRETORIO="";
 	private static  final String JASPER_PREFIXO= "rel-";
 	private static  final String JASPER_SUFIXO= ".jasper";
 	
@@ -37,8 +43,10 @@ public class ReportService {
 	}
 	
 	public byte[] exportarPDF (String code) throws FileNotFoundException, JRException {
+	Configuracoes config = configuracoesRepository.findConfiguracao();	
+		JASPER_DIRETORIO = config.getDirRelatorio();
 		byte[] bytes = null;
-		File file = ResourceUtils.getFile(JASPER_DIREOTIRO.concat(JASPER_PREFIXO).concat(code).concat(JASPER_SUFIXO));
+		File file = ResourceUtils.getFile(JASPER_DIRETORIO.concat(JASPER_PREFIXO).concat(code).concat(JASPER_SUFIXO));
 		JasperPrint print = JasperFillManager.fillReport(file.getAbsolutePath(), params, connection);
 		bytes = JasperExportManager.exportReportToPdf(print);
 		return bytes;
