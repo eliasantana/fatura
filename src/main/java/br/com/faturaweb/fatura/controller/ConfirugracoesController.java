@@ -80,7 +80,7 @@ public  RedirectView  salvar(Model model, Configuracoes formConfiguracoes,
    config.setNmDestino(formConfiguracoes.getNmDestino());
    config.setNmOrigem(formConfiguracoes.getNmOrigem());
    config.setTituloMsgEmailDestino(formConfiguracoes.getTituloMsgEmailDestino());
-   
+   config.setDirRelatorio(formConfiguracoes.getDirRelatorio());
    configuracoesRepository.save(config);
    config = configuracoesRepository.findConfiguracao();   
    

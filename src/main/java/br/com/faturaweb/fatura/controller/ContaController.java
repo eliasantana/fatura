@@ -43,10 +43,12 @@ LogMovimentacaoFinanceiraRepository  logMovimentacaoRepository;
 	@GetMapping("listar")
 	public String conta(Model model) {
 		List<Conta> contas = repository.findcontas();
+		BigDecimal saldoGeral = contaServices.getSaldoGeral(contas);
 		Conta conta = new Conta();
 		model.addAttribute("conta",conta);
 		model.addAttribute("contas",contas);
 		model.addAttribute("erro",null);
+		model.addAttribute("saldogeral",saldoGeral);
 		return "conta";	
 	}
 	

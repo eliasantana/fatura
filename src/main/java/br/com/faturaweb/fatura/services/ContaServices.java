@@ -3,8 +3,10 @@ package br.com.faturaweb.fatura.services;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
+import org.bouncycastle.pqc.math.linearalgebra.BigEndianConversions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -118,5 +120,21 @@ ContaServices contaServices;
 		logMovimentacao.save(log);
 		
 	}
-	
+	/**
+	 * Totaliza o saldo de todas as contas cadastradas
+	 * @author elias
+	 * @since 16/09/2022
+	 * @param contas - Lista com todas as contas cadastradas
+	 * */
+	public BigDecimal getSaldoGeral(List<Conta> contas) {
+		BigDecimal total = BigDecimal.ZERO;
+		
+		if (contas.size()>0) {
+			for (Conta conta : contas) {
+				total = total.add(conta.getSaldo());
+			}
+		}
+			
+		return total;
+	}
 }
