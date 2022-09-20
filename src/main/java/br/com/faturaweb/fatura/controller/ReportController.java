@@ -161,7 +161,7 @@ public void imprimir(
 
 			 	    services.addParam("COMPETENCIA", strMes.concat("/").concat(strAno));
 			    	services.addParam("CF_COMPETENCIA",  strMes.concat(strAno));
-			    	services.addParam("CF_WHERE", "AND CD_LANCAMENTO = CD_LANCAMENTO" );
+			    	services.addParam("CF_WHERE", "AND l.CD_LANCAMENTO = l.CD_LANCAMENTO" );
 				 	services.imprime(nmRelatorio, acao,response);
 				 	break;
 		
@@ -170,32 +170,32 @@ public void imprimir(
 			       services.addParam("COMPETENCIA", competencia.concat("/").concat(strAno));
 			      
 			       if (competencia.equals("0")||  competencia==null) {
-			    	   cfWhere = cfWhere.concat(" AND DATE_FORMAT(dt_competencia,'%m%Y') = DATE_FORMAT(dt_competencia,'%m%Y') ");
+			    	   cfWhere = cfWhere.concat(" AND l.DATE_FORMAT(dt_competencia,'%m%Y') = l.DATE_FORMAT(dt_competencia,'%m%Y') ");
 			    	   cfFiltro = cfFiltro.concat(" Competência: Todas " );
-			    	   services.addParam("CF_COMPETENCIA", "  DATE_FORMAT(dt_competencia,'%m%Y')  ");
+			    	   services.addParam("CF_COMPETENCIA", "  l.DATE_FORMAT(dt_competencia,'%m%Y')  ");
 			       }else {
 			    	   cfFiltro = cfFiltro.concat(" Competência:  " +  competencia.concat(strAno));
 			    	   services.addParam("CF_COMPETENCIA", competencia.concat(strAno));
 			       }
 			       if (formapagto.equals("0")) {
 			    	   cfFiltro = cfFiltro.concat(" Forma de Pagamento:  Todas");
-			    	   cfWhere=  cfWhere.concat(" AND forma_de_pagamento_cd_forma_pgamento = forma_de_pagamento_cd_forma_pgamento");
+			    	   cfWhere=  cfWhere.concat(" AND l.forma_de_pagamento_cd_forma_pgamento = l.forma_de_pagamento_cd_forma_pgamento");
 			       }else {
-			    	   cfWhere = cfWhere.concat( " AND forma_de_pagamento_cd_forma_pgamento =" + formapagto);
+			    	   cfWhere = cfWhere.concat( " AND l.forma_de_pagamento_cd_forma_pgamento =" + formapagto);
 			    	   cfFiltro = cfFiltro.concat(" Forma de Pagamento:  " + formapagto);
 			       }
 			      if(tppagto.equals("0")) {
-			    	  cfWhere =cfWhere.concat(" AND tipo_lancamento_cd_tipo_lancamento = tipo_lancamento_cd_tipo_lancamento ");
+			    	  cfWhere =cfWhere.concat(" AND l.tipo_lancamento_cd_tipo_lancamento = l.tipo_lancamento_cd_tipo_lancamento ");
 			    	  cfFiltro = cfFiltro.concat(" Tipo de Pagamento : Todos ");
 			      }else{
-			    	  cfWhere = cfWhere.concat(" AND tipo_lancamento_cd_tipo_lancamento =  " + tppagto); 
+			    	  cfWhere = cfWhere.concat(" AND l.tipo_lancamento_cd_tipo_lancamento =  " + tppagto); 
 			    	  cfFiltro = cfFiltro.concat("  Tipo de Pagamento:  " + tppagto);
 			      }
 			      if(periodoini.isEmpty() && periodofim.isEmpty()) {
-			    	  cfWhere =cfWhere.concat("  and dt_competencia  = dt_competencia ");
+			    	  cfWhere =cfWhere.concat("  and l.dt_competencia  = l.dt_competencia ");
 			    	  cfFiltro = cfFiltro.concat("  Período:  Todos ");
 			      }else {
-			    	  cfWhere=cfWhere.concat(" AND  dt_competencia between  '"+periodoini + "' AND  '"+ periodofim+"'");
+			    	  cfWhere=cfWhere.concat(" AND  l.dt_competencia between  '"+periodoini + "' AND  '"+ periodofim+"'");
 			    	  cfFiltro = cfFiltro.concat("  Período:  Data Inicial: " + periodoini + " Período Final: " + periodofim);
 			      }
 			      services.addParam("CF_WHERE", cfWhere);
