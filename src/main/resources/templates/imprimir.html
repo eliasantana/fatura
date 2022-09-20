@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmento :: head('Impressão de Relatório - Listar') }">
+
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://code.highcharts.com/highcharts.js "></script>
+<script src="/js/highstock.js "></script>
+<script src="/js/highmaps.js "></script>
+<!-- Required meta tags -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+	
+<body>
+<!-- Nav Bar -->
+    <nav th:replace="~{navfragment:: nav }"></nav>
+<div class="container">
+	<div class="row mt-3">
+		<div class="col">
+			<h3>Impressão de Relatórios</h3>
+		</div>
+	</div>
+	<form action="/relatorio/imprimir" method="get">
+		<div class="row">
+			<div class="col">
+				<label class="form-label">Selecione um relatório</label>
+				<select class="form-select" id="nmRelatorio" name="nmrelatorio">
+					<option value="relatoriocomfiltro">Relatório de Lancamento</option>
+				</select>
+			</div>
+			<div class="col">
+				<label class="form-label">Forma de Visualização</label>
+				<select class="form-select" id="acao" name="acao">
+					<option value="d">Download</option>
+					<option value="v">Visualizar</option>
+				</select>
+			</div>
+			
+			<div class="col">
+				<label class="form-label">Competência</label> 
+				<select class="form-select" id="mesano" name="competencia">
+						<option value="0">Nenhum</option>
+						<option value="01">Janeiro</option>
+						<option value="02">Fevereiro</option>
+						<option value="03">Março</option>
+						<option value="04">Abril</option>
+						<option value="05">Maio</option>
+						<option value="06">Junho</option>
+						<option value="07">Julho</option>
+						<option value="08">Agosto</option>
+						<option value="09">Setembro</option>
+						<option value="10">Outubro</option>
+						<option value="11">Novembro</option>
+						<option value="12">Dezembro</option>				
+				</select>
+			</div>
+		</div>
+		<div class="row">
+			 <!-- Campos filtro -->
+			<div class="col"> 
+				<label class="form-label">Forma de Pagamento</label>
+				<select class="form-select " id="formaPagto" name="formapagto">
+				<option value="0">Todos</option> 
+						<option th:each="f :${formapagto}" th:text="${f.descricao}" th:value="${f.cdFormaPgamento}"></option>
+				</select>
+			</div>
+			<div class="col">
+					<label class="form-label">Tipo de Pagametno</label> 
+					<select class="form-select " id="tppagto" name="tppagto">
+							<option value="0">Todos</option>
+							<option th:each="tl: ${tl}" th:text="${tl.dsTipoLancamento}" th:value="${tl.cdTipoLancamento}">
+					</select>
+			</div>
+		</div>
+		<div class="row">	
+			<div class="col">
+					<label class="form-label">Período Inicial</label> 
+					<input type="date" class="form-control" id="periodoini" name="periodoini">
+			</div>
+			<div class="col">
+					<label class="form-label">Período Final</label> 
+					<input type="date" class="form-control"  id="periodofim" name="periodofim">
+			</div>
+		    <div class="modal-footer">
+		       <button type="submit" class="btn btn-primary">Imprimir</button>
+		       <button type="button" class="btn btn-secondary" onClick="window.close()" data-bs-dismiss="modal">Fechar</button>
+		     </div>
+		</div>
+	</form>
+</div>
+	
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+  <!-- Icons -->
+    <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
+    <script>
+      feather.replace()
+    </script>
+</body>
+</html>
