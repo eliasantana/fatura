@@ -49,9 +49,11 @@
             <span data-feather="paperclip"></span>Relatórios 
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" href="/extrato/financeiro/01"><span data-feather="dollar-sign"></span>Relatório de Despesas</a></li>
+            <li><a class="dropdown-item" href="/extrato/financeiro" th:href="@{'/extrato/financeiro?mesAno=01'}"><span data-feather="dollar-sign"></span>Relatório de Despesas</a></li>
              <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="/log/logs/0"><span data-feather="codesandbox"></span>Relatório de Movimentação</a></li>       
+            <li><a class="dropdown-item" href="/log/logs/0"><span data-feather="codesandbox"></span>Relatório de Movimentação</a></li>  
+              <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="/relatorio/telaimprimir" target="_blanck"><span data-feather="printer"></span>Imprimir</a></li>       
           </ul>
         </li>   
          <!-- Menu Relatórios-->

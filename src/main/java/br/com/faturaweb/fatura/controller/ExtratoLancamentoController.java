@@ -5,20 +5,26 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import br.com.faturaweb.fatura.model.Configuracoes;
 import br.com.faturaweb.fatura.model.Conta;
+import br.com.faturaweb.fatura.model.FormaDePagamento;
 import br.com.faturaweb.fatura.model.Lancamento;
+import br.com.faturaweb.fatura.model.TipoLancamento;
 import br.com.faturaweb.fatura.repository.ConfiguracoesRepository;
 import br.com.faturaweb.fatura.repository.ContaRepository;
+import br.com.faturaweb.fatura.repository.FormaDePagamentoRepository;
 import br.com.faturaweb.fatura.repository.LancamentoRepository;
+import br.com.faturaweb.fatura.repository.TipoLancamentoRepository;
 import br.com.faturaweb.fatura.services.ContaServices;
 import br.com.faturaweb.fatura.services.LancamentoServices;
 
@@ -37,17 +43,25 @@ public class ExtratoLancamentoController {
 	ContaServices contaServices;
 	@Autowired
 	ConfiguracoesRepository configuracoesRepository;
+	@Autowired
+	FormaDePagamentoRepository formaPagtoRepository;
+	@Autowired
+	TipoLancamentoRepository tipoLancamentoRepository;
 	
-	@GetMapping("/financeiro/{mesAno}")
-	public String extratoLancamento(@PathVariable String mesAno, Model model) {
+	@GetMapping("/financeiro")
+	public String extratoLancamento(@RequestParam  String mesAno, 
+															
+															Model model) {
+		//public String extratoLancamento(@PathVariable String mesAno, Model model) {
 		int year = LocalDate.now().getYear();
 		mesAno =mesAno+  Integer.toString(year);
+		List<FormaDePagamento> formaDePagamentos = formaPagtoRepository.findAllFormasDePagamento();
 		List<Lancamento> lctoFuturo = lctoRepository.findLancamentosFuturos(mesAno);
 		List<Conta> contas = contaRepository.findcontas();
+		List<TipoLancamento> tiposLancamento = tipoLancamentoRepository.findAllTipoLancamentos();
 		BigDecimal saldoGeral = contaServices.getSaldoGeral(contas);
 		HashMap<String, BigDecimal> totalizacaoDespesaCategoria = lctoServices.totalizacaoDespesaCategoria(mesAno);
 		HashMap<String, BigDecimal> totalDespesaFormaPagto = lctoServices.getTotalizacaoDespesaFormaPagto(mesAno);
-
 		model.addAttribute("lcto",lctoFuturo);
 		model.addAttribute("totalizacao",totalizacaoDespesaCategoria.keySet().toArray());
 		model.addAttribute("valores",totalizacaoDespesaCategoria.values());
@@ -56,11 +70,15 @@ public class ExtratoLancamentoController {
 		model.addAttribute("keytotalformapagto",totalDespesaFormaPagto.keySet().toArray());
 		model.addAttribute("valorTotalformapagto",totalDespesaFormaPagto.values());
 		model.addAttribute("saldoGeral",saldoGeral);
+		model.addAttribute("formapagto",formaDePagamentos);
+		model.addAttribute("tl",tiposLancamento);
 		
 		String competencia =" Relatório de Despesas Competência - " + mesAno.substring(0,2).concat("/").concat(String.valueOf(year));
 		model.addAttribute("competencia",competencia);
 		model.addAttribute("total",lctoServices.getTotalLctoMes(mesAno));
-		model.addAttribute("contas",contas);
+		model.addAttribute("contas",contas); 
+		
+		
 		return "extrato_lancamento";
 	}
 	

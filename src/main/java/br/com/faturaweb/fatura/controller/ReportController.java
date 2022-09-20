@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -18,7 +19,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.view.RedirectView;
 
 import br.com.faturaweb.fatura.model.Configuracoes;
+import br.com.faturaweb.fatura.model.FormaDePagamento;
+import br.com.faturaweb.fatura.model.TipoLancamento;
 import br.com.faturaweb.fatura.repository.ConfiguracoesRepository;
+import br.com.faturaweb.fatura.repository.FormaDePagamentoRepository;
+import br.com.faturaweb.fatura.repository.TipoLancamentoRepository;
 import br.com.faturaweb.fatura.services.ReportService;
 import net.sf.jasperreports.engine.JRException;
 
@@ -30,6 +35,10 @@ private Connection connection;
 @Autowired
 ReportService services;
 
+@Autowired
+FormaDePagamentoRepository formaPagtoRepository;
+@Autowired
+TipoLancamentoRepository tipoLancamentoRepository;
 
 @GetMapping("/conexao")
 public String report(Model model) {
@@ -120,34 +129,95 @@ public String reportFiltro(Model model,
 }
 /**
  * Fachada para impressão de relatórios
+ * @param nmRelatorio - Nome do Relório
+ * @param acao - Determina se o relatório deverá Abrir em Tela ou Fazer download do PDF (V -> Tela D-Download)
+ * @param formapagto = Forma de Pagamento
+ * @param tppagto - Tipo de Pagamento
+ * @param periodoini - Início do Período
+ * @param periodofim - Fim do período
+ * @param competencia - A competêncai desejada no formado mmyyyy
  * */
 @GetMapping("/imprimir")
 public void imprimir(
 										@RequestParam(name="nmrelatorio") String  nmRelatorio,
 										@RequestParam(name="acao") String  acao,
+										@RequestParam (name = "formapagto", required = false)String formapagto,
+										@RequestParam(name = "tppagto", required = false)String tppagto,
+										@RequestParam(name = "periodoini", required = false) String periodoini,
+										@RequestParam(name = "periodofim", required = false)String periodofim,
+										@RequestParam(name = "competencia", required = false)String competencia,
 										HttpServletResponse response
 									) {
 	
 	DateTimeFormatter df = DateTimeFormatter.ofPattern("MM");
-	
-	switch (nmRelatorio) {
+	 String cfWhere="";
+	 String cfFiltro="Filtro: ";
+	 String strMes = LocalDate.now().format(df).toString();
+	 String strAno = String.valueOf(LocalDate.now().getYear());
+
+	 switch (nmRelatorio) {
 		case  "relatoriodacompetencia":
 			 	    nmRelatorio = "lancamentos";
-			 	    
-			 	   String strMes = LocalDate.now().format(df).toString();
-			 	   String strAno = String.valueOf(LocalDate.now().getYear());
-			 	  
+
 			 	    services.addParam("COMPETENCIA", strMes.concat("/").concat(strAno));
 			    	services.addParam("CF_COMPETENCIA",  strMes.concat(strAno));
 			    	services.addParam("CF_WHERE", "AND CD_LANCAMENTO = CD_LANCAMENTO" );
 				 	services.imprime(nmRelatorio, acao,response);
-			break;
-	
+				 	break;
+		
+		case "relatoriocomfiltro":
+			       nmRelatorio = "lancamentos";
+			       services.addParam("COMPETENCIA", competencia.concat("/").concat(strAno));
+			      
+			       if (competencia.equals("0")||  competencia==null) {
+			    	   cfWhere = cfWhere.concat(" AND DATE_FORMAT(dt_competencia,'%m%Y') = DATE_FORMAT(dt_competencia,'%m%Y') ");
+			    	   cfFiltro = cfFiltro.concat(" Competência: Todas " );
+			    	   services.addParam("CF_COMPETENCIA", "  DATE_FORMAT(dt_competencia,'%m%Y')  ");
+			       }else {
+			    	   cfFiltro = cfFiltro.concat(" Competência:  " +  competencia.concat(strAno));
+			    	   services.addParam("CF_COMPETENCIA", competencia.concat(strAno));
+			       }
+			       if (formapagto.equals("0")) {
+			    	   cfFiltro = cfFiltro.concat(" Forma de Pagamento:  Todas");
+			    	   cfWhere=  cfWhere.concat(" AND forma_de_pagamento_cd_forma_pgamento = forma_de_pagamento_cd_forma_pgamento");
+			       }else {
+			    	   cfWhere = cfWhere.concat( " AND forma_de_pagamento_cd_forma_pgamento =" + formapagto);
+			    	   cfFiltro = cfFiltro.concat(" Forma de Pagamento:  " + formapagto);
+			       }
+			      if(tppagto.equals("0")) {
+			    	  cfWhere =cfWhere.concat(" AND tipo_lancamento_cd_tipo_lancamento = tipo_lancamento_cd_tipo_lancamento ");
+			    	  cfFiltro = cfFiltro.concat(" Tipo de Pagamento : Todos ");
+			      }else{
+			    	  cfWhere = cfWhere.concat(" AND tipo_lancamento_cd_tipo_lancamento =  " + tppagto); 
+			    	  cfFiltro = cfFiltro.concat("  Tipo de Pagamento:  " + tppagto);
+			      }
+			      if(periodoini.isEmpty() && periodofim.isEmpty()) {
+			    	  cfWhere =cfWhere.concat("  and dt_competencia  = dt_competencia ");
+			    	  cfFiltro = cfFiltro.concat("  Período:  Todos ");
+			      }else {
+			    	  cfWhere=cfWhere.concat(" AND  dt_competencia between  '"+periodoini + "' AND  '"+ periodofim+"'");
+			    	  cfFiltro = cfFiltro.concat("  Período:  Data Inicial: " + periodoini + " Período Final: " + periodofim);
+			      }
+			      services.addParam("CF_WHERE", cfWhere);
+			      services.addParam("CF_FILTRO",cfFiltro);
+			      System.out.println(cfWhere);
+			      services.imprime(nmRelatorio, acao, response);
+			      
+			      
+			     break;
+			     
 		default:
 			break;
 		}
 	
 }
-
+@GetMapping("/telaimprimir")
+public String telaImprimir(Model model) {	
+	List<FormaDePagamento> formaDePagamentos = formaPagtoRepository.findAllFormasDePagamento();
+	List<TipoLancamento> tiposLancamento = tipoLancamentoRepository.findAllTipoLancamentos();
+	model.addAttribute("formapagto",formaDePagamentos);
+	model.addAttribute("tl",tiposLancamento);
+	return "imprimir";
+}
 
 }
