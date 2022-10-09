@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -23,11 +24,13 @@ import com.itextpdf.kernel.pdf.tagutils.IRoleMappingResolver;
 import br.com.faturaweb.fatura.model.Configuracoes;
 import br.com.faturaweb.fatura.model.FormaDePagamento;
 import br.com.faturaweb.fatura.model.Lancamento;
+import br.com.faturaweb.fatura.model.Lote;
 import br.com.faturaweb.fatura.model.TipoLancamento;
 import br.com.faturaweb.fatura.model.Usuario;
 import br.com.faturaweb.fatura.repository.ConfiguracoesRepository;
 import br.com.faturaweb.fatura.repository.FormaDePagamentoRepository;
 import br.com.faturaweb.fatura.repository.LancamentoRepository;
+import br.com.faturaweb.fatura.repository.LoteRepository;
 import br.com.faturaweb.fatura.repository.TipoLancamentoRepository;
 
 @Service
@@ -243,5 +246,27 @@ public class LancamentoServices {
 			System.out.println("Percentual Calcualdo " + percent);
 			System.out.println("Limite " +limite);
 	 		return percent;
+	}
+/**
+ * Valida o lote e o lancamento, permitindo apenas lançamento com data máxima retroativa a um mês.
+ * Caso o lote esteja fechado o lançamento será adicionado na próxma competência.
+ * @author elias
+ * @param lancamento - Lançamento 
+ * @param loteRepository - LoteRepository 
+ * @return {@link Lancamento} - Lançamento com nova Competência.
+ * */
+	public Lancamento validaLoteLancamento(Lancamento lancamento, LoteRepository loteRepository) {
+		Lote  loteCompetencia = loteRepository.findLoteCompetencia();
+		if (loteCompetencia.getStatus().equals("A")) {
+			LocalDate mesAtual = LocalDate.now();
+			LocalDate mesLancamento = lancamento.getDtCompetencia();
+			int total = mesAtual.getMonthValue() -  mesLancamento.getMonthValue();
+			if (total > 1) {
+				lancamento.setDtCompetencia(LocalDate.now().minusMonths(1));
+			}
+		}else {
+			lancamento.setDtCompetencia(LocalDate.now());
+		}
+		return lancamento;
 	}
 }

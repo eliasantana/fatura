@@ -79,15 +79,7 @@ public class TesteController {
 		
 	@GetMapping("/teste")
 	public String apiltipolancnamento(Model model){
-		model.addAttribute("mensagem","Conteudo muito importante!");
-			
-		DateTimeFormatter df = DateTimeFormatter.ofPattern("MM");
-		   String strMes = LocalDate.now().format(df).toString();
-	 	   String strAno = String.valueOf(LocalDate.now().getYear());
-		  System.out.println(strMes.concat(strAno));
-		  
-		  Configuracoes configuracao = config.findConfiguracao();
-		  System.out.println(configuracao.getDirRelatorio());
+		
 		return "teste";
 	}
 	
