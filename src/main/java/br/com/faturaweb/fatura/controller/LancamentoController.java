@@ -73,12 +73,21 @@ public class LancamentoController {
 	LancamentoServices services;	
 @Autowired
 	ConfiguracoesRepository configuracoesRepository;
-
+/**
+ * Só libera o cadastro quando sn_lancarNaCompetencia='N' das configuações Gerais habilitado 
+ * */
 	@GetMapping("/cadastro")
 	public String cadastrar(Model model) {
 		String status = "A";
+		String msg="";
 		try {
-			 status = loteRepository.findLoteCompetencia().getStatus();			
+			 status = loteRepository.findLoteCompetencia().getStatus();
+			 Configuracoes config = configuracoesRepository.findConfiguracao();
+			 if(status.equals("F") && config.getSnNaCompetencia().equals("S")) {
+				 msg="Lote fechado! Não é possível lancar Despesa nesta Competência!";
+			 }else {
+				 status="A";
+			 }
 		} catch (Exception e) {
 			System.out.println("Não há lote aberto na competencia!");
 		}
@@ -96,8 +105,7 @@ public class LancamentoController {
 			model.addAttribute("tpLancamentos", tiposDeLancamento);
 			model.addAttribute("usuario", usuario.get());
 			model.addAttribute("status",status);
-			if(status.equals("F")) model.addAttribute("mensagem","Lançamento não permitido! O lote da competencia está fechado!");
-			
+			model.addAttribute("menssagem",msg);
 		} catch (Exception e) {
 			e.getMessage();
 		}
@@ -105,7 +113,7 @@ public class LancamentoController {
 		
 		return "lancamento/form-lancamento";
 	}
-
+//Método não utilizado excluir depois
 	@PostMapping("/salvar")
 	public String salvar(LancamentoForm lancamentoForm, Model model) {
 		Optional<FormaDePagamento> findByDescricaoFormaDePagamento = formaDePagamentoRepository
@@ -113,8 +121,6 @@ public class LancamentoController {
 		FormaDePagamento formadepagamento = findByDescricaoFormaDePagamento.get();
 		Configuracoes config = configuracoesRepository.findConfiguracao();
 		
-		System.out.println(formadepagamento.getDescricao());
-		//Lancamento lancamento = new Lancamento();
 		Optional<Lancamento> lancamentoLocalizado = lancamentoRepository.findById(lancamentoForm.getCdLancamento());
 		
 		Lancamento lancamento = lancamentoLocalizado.get();

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.mysql.cj.x.protobuf.MysqlxCrud.Collection;
 
@@ -41,6 +42,7 @@ public class ApiController {
 	}
 	
 	@GetMapping("/tipolancamento")
+	@ResponseBody
 	public List<TipoLancamento> getTipoLancamento(){
 		
 		return tiposRepository.findAllTipoLancamentos();

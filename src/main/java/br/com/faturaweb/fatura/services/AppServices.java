@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 import javax.mail.internet.InternetAddress;
 
@@ -17,9 +18,11 @@ import org.springframework.stereotype.Service;
 import com.google.common.collect.Lists;
 import com.itextpdf.html2pdf.HtmlConverter;
 
+import br.com.faturaweb.fatura.model.Configuracoes;
 import br.com.faturaweb.fatura.model.Conta;
 import br.com.faturaweb.fatura.model.Lancamento;
 import br.com.faturaweb.fatura.model.Lote;
+import br.com.faturaweb.fatura.repository.ConfiguracoesRepository;
 import br.com.faturaweb.fatura.repository.ContaRepository;
 import br.com.faturaweb.fatura.repository.LancamentoRepository;
 import br.com.faturaweb.fatura.repository.LoteRepository;
@@ -36,7 +39,8 @@ public class AppServices {
 	ContaRepository contaRepository;
 	@Autowired
 	LancamentoRepository lancamentoRepository;
-
+	@Autowired
+	ConfiguracoesRepository configGeraisRepository;
 	/**
 	 * Envia e-mail de texto simples
 	 * 
@@ -151,5 +155,25 @@ public class AppServices {
 		
 	return existe;
 	}
-	
+/**
+ * Debida valor na conta de Origem
+ * @since 01/10/2022
+ * @author elias
+ * @param valor - Valor a ser Debitado na conta informada
+ * */
+	public void debitaNaOrigem(BigDecimal valor) {
+		Configuracoes configuracoesGerais = configGeraisRepository.findConfiguracao();
+		Optional<Conta> contaOrigem = contaRepository.findConta(configuracoesGerais.getNrContaOrigem());
+		if (contaOrigem.isPresent()) {
+			BigDecimal saldo = contaOrigem.get().getSaldo();
+				if (valor.compareTo(BigDecimal.ZERO) < 0) { // Valor Negativo
+					System.out.println("Valor Inálido!  O Valor negativo não é válido!");
+				} else if (valor.compareTo(saldo) == 1) {
+					System.out.println("Saldo Insuficienete ->" + saldo);
+				} else {
+					contaOrigem.get().setSaldo(saldo.subtract(valor));
+				}
+			
+		}
+	}
 }

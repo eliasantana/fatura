@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.view.RedirectView;
 
+import br.com.faturaweb.fatura.model.Configuracoes;
 import br.com.faturaweb.fatura.model.Conta;
 import br.com.faturaweb.fatura.model.FormaDePagamento;
 import br.com.faturaweb.fatura.model.ItMeta;
@@ -26,6 +27,7 @@ import br.com.faturaweb.fatura.model.LogMovimentacaoFinanceira;
 import br.com.faturaweb.fatura.model.Meta;
 import br.com.faturaweb.fatura.model.TipoLancamento;
 import br.com.faturaweb.fatura.model.Usuario;
+import br.com.faturaweb.fatura.repository.ConfiguracoesRepository;
 import br.com.faturaweb.fatura.repository.ContaRepository;
 import br.com.faturaweb.fatura.repository.FormaDePagamentoRepository;
 import br.com.faturaweb.fatura.repository.ItMetaRepository;
@@ -58,7 +60,8 @@ public class ItMEtaController {
 	LogMovimentacaoFinanceiraRepository log;
 	@Autowired
 	MetaService metaservices;
-
+	@Autowired
+    ConfiguracoesRepository configRepository;
 	
 	@GetMapping("listar/{id}")
 	public String listarItMeta(@PathVariable Long id, Model model) {
@@ -110,12 +113,14 @@ public class ItMEtaController {
 		BigDecimal totalItMeta = metaservices.totalizaItMeta(itemCreditados);
 		
 	   BigDecimal andamentoMeta = metaservices.andamentoMeta(metaLocalizada.get(), totalItMeta);
-		//Valia o id informadoé igual ao localizado
+		//Valia o id informado é igual ao localizado
 		if (itMeta.getCdItMeta()!=null) {
 			//Localizando a conta  conta
 			 Conta conta = itMeta.getMeta().getConta();
 			 //Credita o valor do item da meta (Valor Semanal)
 			appServices.credita(conta, itMeta.getVlrSemana());
+			//Debitando o valor na conta de origem			
+			appServices.debitaNaOrigem(itMeta.getVlrSemana());
 			//Gerando log da movimentação
 			logMovimentacao.setDescricao("Creditando valor em " + conta.getNrConta()  +" Ag. " + conta.getNrAgencia() );
 			logMovimentacao.setNrConta(conta.getNrConta()  );

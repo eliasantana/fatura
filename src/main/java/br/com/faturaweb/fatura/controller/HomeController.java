@@ -73,6 +73,7 @@ public class HomeController {
 	MensageriaRepository mensageriaRepository;
 	@Autowired
 	LoteRepository loteRepository;
+	
 	@GetMapping("/")
 	public String index(Model model) {
 		 List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentos();
@@ -244,7 +245,8 @@ public class HomeController {
 			lancamento.setVlPago(lancamentoForm.getVlPago());
 			lancamento.setObservacao(lancamentoForm.getObservacao());
 		    lancamento.setNrParcela(1);
-		 
+		    //Colocar lancamento para a próxima competência caso o lote esteja fechado
+		   Lancamento lancamentoValidado  = lancamentoServices.validaLoteLancamento(lancamento, loteRepository);
 			lancamentoRepository.save(lancamento);
 
 			List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentos();
@@ -275,17 +277,17 @@ public class HomeController {
 //Excluir após os testes
 @GetMapping("email")
 public String email() {
-	
+	Configuracoes config = configuracoesRepository.findConfiguracao();
 	System.out.println("enviando e-mail");
 	try {
 		StringBuilder assunto = new StringBuilder();
-		assunto.append("Os seguintes títulos abaixo estão com vencimento próximo:\n");
-		assunto.append("Descrição:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n");
+		assunto.append("Teste de Envio:\n");
+		assunto.append("Teste de Envio de mensagem\n");
 		assunto.append("Vencimento:"+"12/12/2021\n");
 		assunto.append("Valor:");
-		assunto.append("120,00");
+		assunto.append("0,00");
 		
-		appservices.sendEmai("elias1576c41@elias1576.c41.integrator.host", "Sysfaturaweb", "eliasantana@hotmail.com", "Elias Hotmail", "Teste2", assunto);
+		appservices.sendEmai(config.getEmailOrigem(), config.getNmOrigem() ,config.getEmailDestino(), config.getNmDestino(), config.getTituloMsgEmailDestino(), assunto);
 	} catch (UnsupportedEncodingException e) {
 		
 		e.printStackTrace();

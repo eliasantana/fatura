@@ -125,6 +125,7 @@
 				<div>
 					<label class="form-label" for="emaildestino">Mensageria (E-mail de Destino)</label>
 					<input type="email" class="form-control" id="emaildestino" name="emailDestino" th:value="${config.emailDestino}">
+					<a href="/email" class="btn btn-primary mt-2">Testar Envio</a>
 					<div class="form-text">obs: Informe o e-mail para onde a mensagem será envida!</div>
 				</div>
 				
@@ -151,8 +152,8 @@
 				</div>	
 				<div class="mb-3">
 			  		<label for="nmArquivo" class="form-label">Cainho pasta Relatórios</label>
-			 		 <input class="form-control" type="text" id="dirRelatorio" name="dirRelatorio" th:value="${config.dirRelatorio}">
 					<div class="form-text">obs: Informe o diretório destinado aos relatórios</div>
+			 		<input class="form-control" type="text" id="dirRelatorio" name="dirRelatorio" th:value="${config.dirRelatorio}">
 				</div>	
 		</div>
 	</div>	
