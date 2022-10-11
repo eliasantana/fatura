@@ -165,7 +165,7 @@ public class HomeController {
 			dados.put("Novembro", novembro);
 			dados.put("Dezembro", dezembro);
 			
-		    Map<String, BigDecimal> receitas = services.totalizaReceita(receitaRepository.findAllList());
+		    Map<String, BigDecimal> receitas = services.totalizaReceita(receitaRepository.findaAllReceitaAnoCorrente());
 			
 			//Adicionando a view os valores acumuladods
 			model.addAttribute("keyset",dados.keySet()); // Meses

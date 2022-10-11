@@ -170,9 +170,9 @@ public void imprimir(
 			       services.addParam("COMPETENCIA", competencia.concat("/").concat(strAno));
 			      
 			       if (competencia.equals("0")||  competencia==null) {
-			    	   cfWhere = cfWhere.concat(" AND l.DATE_FORMAT(dt_competencia,'%m%Y') = l.DATE_FORMAT(dt_competencia,'%m%Y') ");
+			    	   cfWhere = cfWhere.concat(" AND DATE_FORMAT(l.dt_competencia,'%m%Y') = DATE_FORMAT(l.dt_competencia,'%m%Y') ");
 			    	   cfFiltro = cfFiltro.concat(" Competência: Todas " );
-			    	   services.addParam("CF_COMPETENCIA", "  l.DATE_FORMAT(dt_competencia,'%m%Y')  ");
+			    	   services.addParam("CF_COMPETENCIA", "  DATE_FORMAT(l.dt_competencia,'%m%Y')  ");
 			       }else {
 			    	   cfFiltro = cfFiltro.concat(" Competência:  " +  competencia.concat(strAno));
 			    	   services.addParam("CF_COMPETENCIA", competencia.concat(strAno));
