@@ -21,7 +21,9 @@ import br.com.faturaweb.fatura.model.Receita;
 import br.com.faturaweb.fatura.repository.ConfiguracoesRepository;
 import br.com.faturaweb.fatura.repository.ContaRepository;
 import br.com.faturaweb.fatura.repository.LogMovimentacaoFinanceiraRepository;
+import br.com.faturaweb.fatura.repository.LoteRepository;
 import br.com.faturaweb.fatura.repository.ReceitaRepository;
+import br.com.faturaweb.fatura.services.AppServices;
 import br.com.faturaweb.fatura.services.ReceitaServices;
 
 @Controller
@@ -38,20 +40,45 @@ public class ReceitaController {
 	ReceitaServices services;
 	@Autowired
 	ConfiguracoesRepository configuracoesRepository;
+	@Autowired
+	AppServices appServices;
+	@Autowired
+	LoteRepository loteRepository;
 	
 	@GetMapping("/listar")	
 	public String  listar(Model model) {
 		List<Receita> receitas = receitaRepository.findaAllReceitaAnoCorrente();
+		
+		Boolean loteFechado = appServices.verificalote("F", loteRepository.findLoteCompetencia());
+		String msg= null;
+		String statusLote=null;
+		if (loteFechado) {
+			msg="Lote Fechado! Não é possivel - Excluir / Alterar ou Salvar uma Receita"
+					+ "Ação: Reabra o lote contábil!!!";
+			statusLote="F";
+		}else 
+			statusLote="A";
+		{}
+		
 		model.addAttribute("receitas",receitas);
+		model.addAttribute("mensagem",msg);
+		model.addAttribute("statuslote",statusLote);
 		return "home/receita-listar";
 	}
 	
 	@GetMapping("/cadastro")
 	public String cadastrar(Model model) {
-	
+	String statuslote=null;
+	String mensagem=null;
 	Receita receita = new Receita();
 	model.addAttribute("receita",receita)	;
 	
+	if (appServices.verificalote("F", loteRepository.findLoteCompetencia())) {
+		statuslote="F";
+		mensagem="Lote da competência fechado!Não será possível adicionar uma nova Receita!";
+	}
+	model.addAttribute("statuslote",statuslote);
+	model.addAttribute("menssagem",mensagem);
 	 return "home/receita";
 		
 	}
@@ -120,7 +147,6 @@ public class ReceitaController {
 		}
 		if (receita.get().getCdReceita()!=null){
 			receitaRepository.delete(receita.get());
-			
 		}
 		
 		
@@ -141,19 +167,22 @@ public class ReceitaController {
 	 * @since 20/03/2022
 	 * @return {@link RedirectView}
 	 * */
-	@GetMapping("/clonar")
-	public RedirectView clonaReceita() {
+	@GetMapping("/clonar/{id}")
+	public RedirectView clonaReceita(@PathVariable Long id) {
 		Configuracoes config = configuracoesRepository.findConfiguracao();
 		Optional<Conta> contaLocalizada = contaRepository.findConta(config.getNrContaOrigem());
 		LogMovimentacaoFinanceira log = new LogMovimentacaoFinanceira();
 		
-		Receita maxReceita = receitaRepository.findMaxReceita();
 		Receita r = new Receita();
-		r.setDesconto(maxReceita.getDesconto());
-		r.setDsReceita(maxReceita.getDsReceita());
-		r.setDtRecebimento(maxReceita.getDtRecebimento().plusMonths(1));
-		r.setSalBruto(maxReceita.getSalBruto());
-		r.setSalLiquido(maxReceita.getSalLiquido());
+		 Optional<Receita> receitaOptional = receitaRepository.findById(id);
+		if(receitaOptional.isPresent()) {
+			Receita receita = receitaOptional.get();
+			r.setDesconto(receita.getDesconto());
+			r.setDsReceita(receita.getDsReceita());
+			r.setDtRecebimento(LocalDate.now().plusMonths(1));
+			r.setSalBruto(receita.getSalBruto());
+			r.setSalLiquido(receita.getSalLiquido());
+		}
 		
 		receitaRepository.save(r);
 		

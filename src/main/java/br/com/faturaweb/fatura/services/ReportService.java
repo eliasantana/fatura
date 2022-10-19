@@ -32,6 +32,7 @@ public class ReportService {
 	@Autowired
 	ConfiguracoesRepository configuracoesRepository;
 	
+	
 	private  String JASPER_DIRETORIO="";
 	private static  final String JASPER_PREFIXO= "rel-";
 	private static  final String JASPER_SUFIXO= ".jasper";
@@ -48,7 +49,7 @@ public class ReportService {
 		byte[] bytes = null;
 		File file = ResourceUtils.getFile(JASPER_DIRETORIO.concat(JASPER_PREFIXO).concat(code).concat(JASPER_SUFIXO));
 		JasperPrint print = JasperFillManager.fillReport(file.getAbsolutePath(), params, connection);
-		bytes = JasperExportManager.exportReportToPdf(print);
+		bytes = JasperExportManager.exportReportToPdf(print);		
 		return bytes;
 	}
 
@@ -78,7 +79,7 @@ public class ReportService {
 				response.getOutputStream().write(relPDF);
 				response.getOutputStream().flush();
 				response.getOutputStream().close();
-			
+				
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

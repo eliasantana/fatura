@@ -15,6 +15,7 @@
 		<div class="card mt-1">
 			<div class="card-body">
 				<h5 class="card-title">Cadastro de Receitas</h5>
+				<p th:text="${menssagen}"></p>
 				<p class="card-texte">
 				<div class="card-container">
 					<form method="post" action="/receita/salvar">
@@ -75,7 +76,7 @@
 						      </div>
 						      <div class="modal-footer">
 						        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-						        <button type="submit" class="btn btn-primary">Salvar</button>	
+						        <button type="submit" th:if="${statuslote='F'}" class="btn btn-primary" disabled="disabled">Salvar</button>
 						      </div>
 						    </div>
 						  </div>

@@ -82,12 +82,25 @@
 			<div class="col">
 					<label class="form-label">Período Final</label> 
 					<input type="date" class="form-control"  id="periodofim" name="periodofim">
-			</div>
-		    <div class="modal-footer">
+			</div>	
+		</div>
+		<div class="row">		
+			<div class="col mt-3">
+				<label class="form-label">Ordenar por</label>
+				<select class="form-select" id="ordenacao" name="ordenacao">
+						<option value="FP">Forma de Pagamento</option>
+						<option value="TP">Tipo de Pagametno</option>
+						<option value="DE">Descrição</option>
+						<option value="CO">Competência</option>
+						<option value="ST">Status</option>
+						<option value="VL">Valor</option>
+				</select>			
+			</div>	
+		</div>
+		<div class="modal-footer">
 		       <button type="submit" class="btn btn-primary">Imprimir</button>
 		       <button type="button" class="btn btn-secondary" onClick="window.close()" data-bs-dismiss="modal">Fechar</button>
 		     </div>
-		</div>
 	</form>
 </div>
 	

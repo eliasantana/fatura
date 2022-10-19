@@ -21,11 +21,6 @@ public class ReceitaServices {
 	 * */	
 	public Map<String, BigDecimal> totalizaReceita(List<Receita> receitas) {
 		
-		System.out.println("Quantidade de Despesas: " +receitas.size());
-		for (Receita receita : receitas) {
-			 System.out.println(receita.getDsReceita() + " - " + receita.getSalLiquido() + " Data: " + receita.getDtRecebimento()  );
-		}
-		
 		 DateTimeFormatter df = DateTimeFormatter.ofPattern("MM");
 		 Map<String, BigDecimal>dadosReceita = new LinkedHashMap<String, BigDecimal>();
 		 	//Meses do ano 
@@ -79,7 +74,6 @@ public class ReceitaServices {
 						break;
 					case "11":
 						nov = nov.add(receita.getSalLiquido());
-						System.out.println("Nov"+nov);
 						break;
 					case "12":
 						dez = dez.add(receita.getSalLiquido());
@@ -102,7 +96,6 @@ public class ReceitaServices {
 					dadosReceita.put("dezembro", dez);
 					
 				}
-				System.out.println("Total Dezembro"+dez);
 			}
 			return dadosReceita;
 			

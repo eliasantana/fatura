@@ -76,10 +76,12 @@ public class TesteController {
 		LogProvisaoRepository logprovRepository;
 		@Autowired
 		ConfiguracoesRepository config;
+		@Autowired
+		AppServices appServices;
 		
 	@GetMapping("/teste")
 	public String apiltipolancnamento(Model model){
-		
+		appServices.renomeiaArquivo("imprimir.pdf","relatorio.pdf");
 		return "teste";
 	}
 	
