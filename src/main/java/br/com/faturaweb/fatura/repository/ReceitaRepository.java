@@ -30,13 +30,5 @@ public interface ReceitaRepository extends CrudRepository<Receita, Long>{
 	@Query(value = "SELECT * FROM receita where date_format(dt_recebimento,'%m')=date_format( curdate(),'%m')",nativeQuery = true)
 	List<Receita> findAllReceitaMesCorrente();
 	
-	/**
-	 * Retorna a última receita adicionada 
-	 * @author elias
-	 * @since 20/03/2022
-	 * @return {@link Receita}
-	 * */
-	@Query(value="select * from receita where dt_recebimento = (select max(dt_recebimento) dt_recebimento from fatura.receita)",nativeQuery = true)
-	Receita findMaxReceita();
-	
+		
 }

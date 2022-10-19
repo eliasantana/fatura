@@ -127,7 +127,16 @@ public class LoteContabilController {
 		}
 		return rw;
 	}
-	
-
+/**
+ * Reprocessa o lote contábil da competencia
+ * @author elias
+ * @since - 12/10/2022
+ * */	
+@GetMapping("/reprocessar")
+public RedirectView reprocessar() {
+	RedirectView rw = new RedirectView("/lotecontabil/pesquisar");
+			loterepository.reprocessar();
+	return rw;		
+}
 
 }
