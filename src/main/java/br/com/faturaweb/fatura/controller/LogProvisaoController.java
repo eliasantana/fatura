@@ -3,10 +3,12 @@ package br.com.faturaweb.fatura.controller;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,12 +18,18 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.view.RedirectView;
 
+import br.com.faturaweb.fatura.model.Conta;
+import br.com.faturaweb.fatura.model.LogMovimentacaoFinanceira;
 import br.com.faturaweb.fatura.model.LogProvisao;
 import br.com.faturaweb.fatura.model.Lote;
 import br.com.faturaweb.fatura.model.Provisao;
+import br.com.faturaweb.fatura.repository.ContaRepository;
+import br.com.faturaweb.fatura.repository.LogMovimentacaoFinanceiraRepository;
 import br.com.faturaweb.fatura.repository.LogProvisaoRepository;
 import br.com.faturaweb.fatura.repository.LoteRepository;
 import br.com.faturaweb.fatura.repository.ProvisaoRepository;
+import br.com.faturaweb.fatura.services.AppServices;
+import br.com.faturaweb.fatura.services.LogProvisaoServices;
 
 @Controller
 @RequestMapping("/log")
@@ -33,21 +41,28 @@ public class LogProvisaoController {
 	ProvisaoRepository provisaoRepository;
 	@Autowired
 	LogProvisaoRepository logProvisaoRepository;
-	
-	
+	@Autowired
+	LogMovimentacaoFinanceiraRepository logMovimentacaofinanceiraRepository;
+	@Autowired
+	ContaRepository contaRepository;
+	@Autowired
+	AppServices appService;
+	@Autowired
+	LogProvisaoServices logProvServices;
+
 @GetMapping(value = "/provisionar")	
 public RedirectView provisionar(Model model, @PathVariable(name = "msg", required = false) String smg) {
-Lote loteLocalizado = loteRepository.findLoteCompetencia();
-RedirectView rw = new RedirectView("/lotecontabil/pesquisar/");
-
-List<LogProvisao> provisoesDaCompetencia = logProvisaoRepository.findAllLogProvisaoDaCompetencia();
-//Verifica se o lote está aberto
-if (loteLocalizado.getStatus().equals("A")) {
+	Lote loteLocalizado = loteRepository.findLoteCompetencia();
+	RedirectView rw = new RedirectView("/lotecontabil/pesquisar/");
 	
-List<LogProvisao> logProvisaoCompetencia = logProvisaoRepository.findAllLogProvisaoDaCompetencia();
-if (logProvisaoCompetencia.size() >0) logProvisaoRepository.deleteAll(logProvisaoCompetencia);
-List<Provisao> provisoes = provisaoRepository.findAllProvisao();
-List<LogProvisao>logProvisoes = new ArrayList<LogProvisao>();
+	List<LogProvisao> provisoesDaCompetencia = logProvisaoRepository.findAllLogProvisaoDaCompetencia();
+	//Verifica se o lote está aberto
+	if (loteLocalizado.getStatus().equals("A")) {
+		
+	List<LogProvisao> logProvisaoCompetencia = logProvisaoRepository.findAllLogProvisaoDaCompetencia();
+	if (logProvisaoCompetencia.size() >0) logProvisaoRepository.deleteAll(logProvisaoCompetencia);
+	List<Provisao> provisoes = provisaoRepository.findAllProvisao();
+	List<LogProvisao>logProvisoes = new ArrayList<LogProvisao>();
 
 	if (loteLocalizado!=null && provisoes.size() >0) {
 		BigDecimal vlSaldo = loteLocalizado.getVlSaldo();
@@ -96,26 +111,12 @@ List<LogProvisao>logProvisoes = new ArrayList<LogProvisao>();
 	return rw;
 }
 
-/**
- * Muda o status dos valores provisionados
- * */
 @GetMapping("/creditar")
 public RedirectView creditarProvisionamento() {
 	RedirectView rw = new RedirectView("/lotecontabil/pesquisar");
-	List<LogProvisao> provisoesDaCompetencia = logProvisaoRepository.findAllLogProvisaoDaCompetencia();
-	List<LogProvisao>listaDeProvisoes = new ArrayList<LogProvisao>();
-	if (!loteRepository.findLoteCompetencia().getStatus().equals("F")) {
-		if (provisoesDaCompetencia.size() >0) {
-			for (LogProvisao logProvisao : provisoesDaCompetencia) {
-				logProvisao.setSnCreditado("S");
-				listaDeProvisoes.add(logProvisao);
-			   //Creditar valores nas contas informadas	
-			}
-	}
-		logProvisaoRepository.saveAll(listaDeProvisoes);
-		
-	}
+	logProvServices.creditarTodasAsProvisoes();
 	return rw;
 }
+
 
 }

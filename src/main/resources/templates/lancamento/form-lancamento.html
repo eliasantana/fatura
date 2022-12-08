@@ -37,6 +37,14 @@
 						</div>
 						
 						<div class="col">
+							<label  class="form-label" for="cartao">Cartão</label>
+							<select class="form-select" name="dsCartao">
+								<option th:each="cartoes: ${cartao}" th:text="${cartoes.dsCartao}"></option>
+							</select>
+							<div id="cartao" class="form-text">Selecione um Cartão</div>
+						</div>
+						
+						<div class="col">
 							<label  class="form-label" for="tipolancamento">Tipo de Lançamento</label>							
 							<select class="form-select" name="dsTipoLancamento">
 								<option th:each="tipolancamento : ${tpLancamentos}" th:text="${tipolancamento.dsTipoLancamento}">1</option>

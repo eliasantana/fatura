@@ -117,10 +117,10 @@ public class LoteContabilController {
 		return rw;
 	}
 	
-	@GetMapping("/operacao/{operacao}")
-	public RedirectView fechaLoteContabil(@PathVariable(name = "operacao") String operacao) {
+	@GetMapping("/operacao/{operacao}/{nrlote}")
+	public RedirectView fechaLoteContabil(@PathVariable(name = "operacao") String operacao, @PathVariable(name ="nrlote" ) Long nrlote) {
 		RedirectView rw = new RedirectView("/lotecontabil/pesquisar");
-		Lote loteDaCompetencia = loterepository.findLoteCompetencia();
+		Lote loteDaCompetencia = loterepository.findLoteCompetencia(nrlote);
 		if (loteDaCompetencia!=null) {
 			loteDaCompetencia.setStatus(operacao);
 			loterepository.save(loteDaCompetencia);

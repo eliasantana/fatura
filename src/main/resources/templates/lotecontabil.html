@@ -2,6 +2,7 @@
 <html>
  <head th:replace="~{fragmento :: head('Gerenciamento de Lote Contábil') }">   
 <meta charset="UTF-8">
+
 </head>
 <body>
  <!-- Nav Bar -->
@@ -12,6 +13,7 @@
 <div>
 	<h3>Gerenciamento de Lotes Contábeis</h3>
 </div>
+
 <table id="tabelalotes" class="table table-striped" style="width:100%">
         <thead>
             <tr>
@@ -41,21 +43,42 @@
 							  <path d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z"/>
 					</svg>
 					<a href="/lotecontabil/pesquisar/" th:href="@{'/lotecontabil/pesquisar/' + ${l.cdLote} + '/'+${l.dsLote}}" class="btn btn-success" data-toggle="tooltip" data-placement="top" title="Detalhe do Lote">
+						<!--  -->
 						<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-card-checklist" viewBox="0 0 16 16">
 						  <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>
 						  <path d="M7 5.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 1 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0zM7 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 0 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0z"/>
 						</svg>
 											
 					</a>
+					<a th:if="${l.status=='A'}" href="/lotecontabil/operacao/F/" th:href="@{'/lotecontabil/operacao/F/'+${l.cdLote}}" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="Fechar o lote">
+			    		<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-lock-fill" viewBox="0 0 16 16">
+						  <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
+						</svg>
+		    		</a>
+           		</td>
+           		
+           		<td th:if="${l.status=='F'}" style="color:green; text-align: center;">
+           		
+           		<a href="/relatorio/imprimir/" th:href="@{/relatorio/imprimir/(nmrelatorio='lotecontabil',acao='v',lote=${l.cdLote},competencia=${#temporals.format(l.competencia,'MMyyyy')})}" class="btn btn-danger">
+					
+					<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-filetype-pdf" viewBox="0 0 16 16">
+					  <path fill-rule="evenodd" d="M14 4.5V14a2 2 0 0 1-2 2h-1v-1h1a1 1 0 0 0 1-1V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v9H2V2a2 2 0 0 1 2-2h5.5L14 4.5ZM1.6 11.85H0v3.999h.791v-1.342h.803c.287 0 .531-.057.732-.173.203-.117.358-.275.463-.474a1.42 1.42 0 0 0 .161-.677c0-.25-.053-.476-.158-.677a1.176 1.176 0 0 0-.46-.477c-.2-.12-.443-.179-.732-.179Zm.545 1.333a.795.795 0 0 1-.085.38.574.574 0 0 1-.238.241.794.794 0 0 1-.375.082H.788V12.48h.66c.218 0 .389.06.512.181.123.122.185.296.185.522Zm1.217-1.333v3.999h1.46c.401 0 .734-.08.998-.237a1.45 1.45 0 0 0 .595-.689c.13-.3.196-.662.196-1.084 0-.42-.065-.778-.196-1.075a1.426 1.426 0 0 0-.589-.68c-.264-.156-.599-.234-1.005-.234H3.362Zm.791.645h.563c.248 0 .45.05.609.152a.89.89 0 0 1 .354.454c.079.201.118.452.118.753a2.3 2.3 0 0 1-.068.592 1.14 1.14 0 0 1-.196.422.8.8 0 0 1-.334.252 1.298 1.298 0 0 1-.483.082h-.563v-2.707Zm3.743 1.763v1.591h-.79V11.85h2.548v.653H7.896v1.117h1.606v.638H7.896Z"/>
+					</svg>
+				</a>
+           			<a href="/lotecontabil/pesquisar/" th:href="@{'/lotecontabil/pesquisar/' + ${l.cdLote} + '/'+${l.dsLote}}" class="btn btn-warning">           			
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="25" height="25" fill="currentColor" >
+							<path d="M256 512c141.4 0 256-114.6 256-256S397.4 0 256 0S0 114.6 0 256S114.6 512 256 512zM216 336h24V272H216c-13.3 0-24-10.7-24-24s10.7-24 24-24h48c13.3 0 24 10.7 24 24v88h8c13.3 0 24 10.7 24 24s-10.7 24-24 24H216c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-144c-17.7 0-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32s-14.3 32-32 32z"/>
+						</svg>
+					</a>
+					<!-- Fechar ou abrir lote -->
+		    		<a th:if="${l.status=='F'}" href="/lotecontabil/operacao/A/" th:href="@{'/lotecontabil/operacao/A/'+${l.cdLote}}" class="btn btn-success"  data-toggle="tooltip" data-placement="top" title="Abrir o lote">
+				    	<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-unlock-fill" viewBox="0 0 16 16">
+						  <path d="M11 1a2 2 0 0 0-2 2v4a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h5V3a3 3 0 0 1 6 0v4a.5.5 0 0 1-1 0V3a2 2 0 0 0-2-2z"/>
+						</svg>
+    				</a>				
 					
            		</td>
-           		<td th:if="${l.status=='F'}" style="color:green; text-align: center;">
-           			<a href="/lotecontabil/pesquisar/" th:href="@{'/lotecontabil/pesquisar/' + ${l.cdLote} + '/'+${l.dsLote}}" class="btn btn-danger">           			
-					<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-x-circle-fill" viewBox="0 0 16 16">
-  							<path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/>
-					</svg>	 
-					</a>
-           		</td>
+           		
            		
         </tbody>
         <tfoot>
@@ -99,28 +122,43 @@
     </table>
     <!-- Teste -->
     <div>
+   			
+			
+			<!-- Modal de Confirmação Creditar Todos-->
+			<div class="modal fade" id="creditarTodos" tabindex="-1" aria-labelledby="creditarTodosLabel" aria-hidden="true">
+			  <div class="modal-dialog modal-dialog-centered">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <h5 class="modal-title" id="creditarTodosLabel">Creditar Todos</h5>
+			        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			      </div>
+			      <div class="modal-body">
+			        Deseja Realmente Creditar todos os valores?
+			      </div>
+			      <div class="modal-footer">
+			        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancela</button>
+			        <a th:if="${status=='A'}" href="/log/creditar/" th:href="@{/log/creditar}" class="btn btn-danger" >Confirma</a>
+			        
+			      </div>
+			    </div>
+			  </div>
+			</div>
     	
     	<!-- Fechar lote  -->
     	<a th:if="${status=='F'}" href="/log/provisionar" th:href="@{/log/provisionar/}" class="btn btn-warning disabled" >Cálculo da Provisão</a>
     	<a th:if="${status=='A'}" href="/log/provisionar" th:href="@{/log/provisionar/}" class="btn btn-warning" >Cálculo da Provisão</a>
-    	<a th:if="${status=='A'}" href="/log/creditar/" th:href="@{/log/creditar}" class="btn btn-danger" >Creditar Todos</a>
-    	<a th:if="${status=='A'}" href="/lotecontabil/operacao/F" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="Fechar o lote">
-    		<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-lock-fill" viewBox="0 0 16 16">
-			  <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
-			</svg>
-    	</a>
-    	<a th:if="${status=='F'}" href="/lotecontabil/operacao/A" class="btn btn-success"  data-toggle="tooltip" data-placement="top" title="Abrir o lote">
-	    	<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-unlock-fill" viewBox="0 0 16 16">
-			  <path d="M11 1a2 2 0 0 0-2 2v4a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h5V3a3 3 0 0 1 6 0v4a.5.5 0 0 1-1 0V3a2 2 0 0 0-2-2z"/>
-			</svg>
-    	</a>
+    	 <!-- Button trigger modal -->
+			<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#creditarTodos">
+			  Creditar Todos
+			</button>
+    	
     	<a th:if="${status=='A'}" href="/lotecontabil/reprocessar" class="btn btn-success"  data-toggle="tooltip" data-placement="top" title="Reprocessar Lote">
 	    	<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
 			  <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
 			  <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
 			</svg>
     	</a>
-    	<a th:if="${status=='F'}" href="/lotecontabil/reprocessar" class="btn btn-success disabled"  data-toggle="tooltip" data-placement="top" title="Lote estã Fechado!">
+    	<a th:if="${status=='F'}" href="/lotecontabil/reprocessar" class="btn btn-success disabled"  data-toggle="tooltip" data-placement="top" title="Lote estão Fechado!">
 	    	<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
 			  <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
 			  <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
@@ -179,7 +217,7 @@
         </tfoot>
     </table>
    
-
+<script src="https://kit.fontawesome.com/fee473cd4b.js" crossorigin="anonymous"></script>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>

@@ -28,6 +28,7 @@ public class WebSecurityConfig  extends WebSecurityConfigurerAdapter 	{
 					.authorizeRequests()
 					.antMatchers("/listar").hasAnyRole("ADM")	
 					.antMatchers(HttpMethod.GET, "/getimagem").permitAll( )// Liberando a requisição da imagem na página de login
+					.antMatchers(HttpMethod.GET, "/cartao/getimagem/").permitAll( )// Liberando a requisição da imagem na página de login
 					.antMatchers(HttpMethod.GET, "/api").permitAll( )//Liberando endPoint
 					
 					.and()

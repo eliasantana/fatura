@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Repository;
 import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,6 +30,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.view.RedirectView;
 
 import br.com.faturaweb.fatura.form.LancamentoForm;
+import br.com.faturaweb.fatura.model.Cartao;
 import br.com.faturaweb.fatura.model.Configuracoes;
 import br.com.faturaweb.fatura.model.Conta;
 import br.com.faturaweb.fatura.model.FormaDePagamento;
@@ -36,6 +38,7 @@ import br.com.faturaweb.fatura.model.Lancamento;
 import br.com.faturaweb.fatura.model.LogMovimentacaoFinanceira;
 import br.com.faturaweb.fatura.model.TipoLancamento;
 import br.com.faturaweb.fatura.model.Usuario;
+import br.com.faturaweb.fatura.repository.CartaoRepository;
 import br.com.faturaweb.fatura.repository.ConfiguracoesRepository;
 import br.com.faturaweb.fatura.repository.ContaRepository;
 import br.com.faturaweb.fatura.repository.FormaDePagamentoRepository;
@@ -68,6 +71,8 @@ public class LancamentoController {
 	@Autowired
 	LoteRepository loteRepository;
 	@Autowired
+	CartaoRepository cartaoRepository;
+	@Autowired
 	ReportService reportServices;	
 	@Autowired
 	LancamentoServices services;	
@@ -92,6 +97,7 @@ public class LancamentoController {
 			System.out.println("Não há lote aberto na competencia!");
 		}
 		try {
+			List<Cartao> listaCartoes = cartaoRepository.findAllCartoes();
 			Lancamento lancamento = new Lancamento();
 			LancamentoForm lf = new LancamentoForm();
 			Usuario u = new Usuario();
@@ -106,6 +112,8 @@ public class LancamentoController {
 			model.addAttribute("usuario", usuario.get());
 			model.addAttribute("status",status);
 			model.addAttribute("menssagem",msg);
+			model.addAttribute("cartao",listaCartoes);
+			
 		} catch (Exception e) {
 			e.getMessage();
 		}
@@ -113,7 +121,7 @@ public class LancamentoController {
 		
 		return "lancamento/form-lancamento";
 	}
-//Método não utilizado excluir depois
+//Método chamado através da página de alteação de lancamento
 	@PostMapping("/salvar")
 	public String salvar(LancamentoForm lancamentoForm, Model model) {
 		Optional<FormaDePagamento> findByDescricaoFormaDePagamento = formaDePagamentoRepository
@@ -121,6 +129,7 @@ public class LancamentoController {
 		FormaDePagamento formadepagamento = findByDescricaoFormaDePagamento.get();
 		Configuracoes config = configuracoesRepository.findConfiguracao();
 		
+		Optional<Lancamento> lancamentoAnterior = lancamentoRepository.findById(lancamentoForm.getCdLancamento());
 		Optional<Lancamento> lancamentoLocalizado = lancamentoRepository.findById(lancamentoForm.getCdLancamento());
 		
 		Lancamento lancamento = lancamentoLocalizado.get();
@@ -128,7 +137,14 @@ public class LancamentoController {
 				.findBydsTipoLancamento(lancamentoForm.getDsTipoLancamento());
 		TipoLancamento tipoLancamento = findBydsTipoLancamento.get();
 		Optional<Usuario> usuario = usuarioRepository.findById(5L);		
-			
+		Optional<Cartao> cartaoLocalizado = cartaoRepository.findBydsCartao(lancamentoForm.getDsCartao());
+		//Se nenhum cartao for selecionado será aplicado o cartão padrão
+			if (cartaoLocalizado.isPresent()) {
+				lancamento.setCartao(cartaoLocalizado.get());
+			}else {
+				Optional<Cartao> cartaoPadrao = cartaoRepository.findBydsCartao("nenhum");
+				lancamento.setCartao(cartaoPadrao.get());
+			}
 			lancamento.setCdLancamento(lancamentoForm.getCdLancamento());
 			lancamento.setDsLancamento(lancamentoForm.getDsLancamento());
 			lancamento.setDtCadastro(lancamentoForm.getDtCadastro());

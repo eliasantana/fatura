@@ -18,11 +18,12 @@
 				<thead>
 					<tr>
 						<th scope="col" >Código</th>
-						<th scope="col">Descrição</th>
+						<th scope="col" >Descrição</th>
 						<th scope="col" >Vencimento</th>
 						<th scope="col" >Pago</th>
 						<th scope="col" >Valor</th>
 						<th scope="col" >Forma de Pagamento</th>
+						<th scope="col" >Cartão</th>
 						<th scope="col" >Tipo de Lançamento</th>
 						<th scope="col" >Detalhe</th>
 						<th scope="col" >Ação</th>							
@@ -31,10 +32,10 @@
 				<tbody>
 					<tr th:each="lancamento : ${lancamentos}">
 						<th scope="row" th:text="${lancamento.cdLancamento}">-</th>
-						<td th:text="${lancamento.dsLancamento}">					
+						<td th:text="${lancamento.dsLancamento}"></td>					
 						
 						<!-- <td th:text="${#temporals.format(lancamento.dtCadastro, 'dd/MM/yyyy')}"> -->
-						<td th:text="${#temporals.format(lancamento.dtCompetencia, 'dd/MM/yyyy')}"> 
+						<td th:text="${#temporals.format(lancamento.dtCompetencia, 'dd/MM/yyyy')}"></td> 
 						<td th:if="${lancamento.snPago}=='SIM'" th:text="${lancamento.snPago}">-</td>
 						<td th:if="${lancamento.snPago}=='Não'">
 								<a href="/lancamento/pagar/" th:href="@{'/lancamento/pagar/'  + ${lancamento.cdLancamento}}" class="btn btn-success">Pagar</a>
@@ -43,8 +44,11 @@
 								  <path fill-rule="evenodd" d="M6.95.435c.58-.58 1.52-.58 2.1 0l6.515 6.516c.58.58.58 1.519 0 2.098L9.05 15.565c-.58.58-1.519.58-2.098 0L.435 9.05a1.482 1.482 0 0 1 0-2.098L6.95.435Zm1.385 6.547.8 1.386a.25.25 0 0 0 .451-.039l1.06-2.882a.25.25 0 0 0-.192-.333l-3.026-.523a.25.25 0 0 0-.26.371l.667 1.154-.621.373A2.5 2.5 0 0 0 6 8.632V11h1V8.632a1.5 1.5 0 0 1 .728-1.286l.607-.364Z"/>
 								</svg></a>
 						</td>
-						<td th:text="${#numbers.formatDecimal(lancamento.vlPago,1,2,'COMMA')}" >
-						<td th:text="${lancamento.formaDePagamento.descricao}">-</td>
+						<td th:text="${#numbers.formatDecimal(lancamento.vlPago,1,2,'COMMA')}" ></td>
+						<td th:text="${lancamento.formaDePagamento.descricao}"></td>
+						<td th:if="${lancamento.cartao.cdCartao}!=null">
+							<img alt="" width="40px" height="40px" th:src="|/cartao/getimagem/${lancamento.cartao.cdCartao}|"/>
+						</td>
 						<td th:text="${lancamento.tipoLancamento.dsTipoLancamento}">-</td>
 						<!-- <td th:text="${lancamento.usuario.login}">-</td> -->
 						<td>

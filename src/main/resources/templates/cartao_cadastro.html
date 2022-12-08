@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org">
+ <head th:replace="~{fragmento :: head('Cartao') }">   
+ <meta name="viewport" content="width=device-width">
+<meta charset="UTF-8">
+	
+</head>
+<body>
+	<!-- Nav Bar -->
+    <nav th:replace="~{navfragment:: nav }"></nav>
+	<div class="container-fluid">
+		<div class="card mt-1">
+			<div class="card-header">Cadastro de Cartâo de Crédito</div>
+			<div class="card-body">
+				<h5 class="card-title" >Cartão</h5>				
+				<div></div>
+				<p class="card-text">
+				<div class="container">
+					<form method="post" action="/cartao/salvar" enctype="multipart/form-data">
+						<div class="col">
+											
+							<label class="form-label" for="cdCartao">ID</label>
+							<input type="text" class="form-control" name="cdCartao" id="cdCartao" aria-describedby="cdcartao" th:value="${cartao.cdCartao}" readonly="readonly"/>
+							<div id="idcartao" class="form-text">Código interno</div>
+
+							<label  class="form-label" for="dsCartao">Nome Cartão</label>
+							<input  type="text" class="form-control" name="dsCartao" id="dsCartao" aria-describedby="dscartao" th:value="${cartao.dsCartao}" required="required"/>
+							<div  id="nomecartao" class="form-text">Nome do Cartão</div>
+																		
+							<label  class="form-label" for="dtvencimento">Vencimento Carão</label>
+							<input  type="datetime-local" class="form-control" name="dtVencimento" id="dtvencimento" aria-describedby="dtvencimento" th:value="${cartao.dtVencimento}" required="required"/>
+							<div  id="dtvencimento" class="form-text">Selecione a Data de Vencimento do Catão</div>
+							
+							<label  class="form-label" for="limite">Limite do Cartão</label>
+							<input  type="number" step="0.01" class="form-control" name="limite" id="limite" aria-describedby="limite" th:value="${cartao.limite}" required="required"/>
+							<div  id="dtvencimento" class="form-text">Selecione a Data de Vencimento do Catão</div>
+							
+							<label class="form-label" for="logo">Logo do Cartão</label>
+							<input type="file" class="form-control" name="file">
+							<div id="logo"></div>
+							
+							<div class="mt-3" th:if="${cartao.cdCartao}!=null">
+								<img alt="" width="80px" height="80px" th:src="|/cartao/getimagem/${cartao.cdCartao}|">
+							</div>
+							
+						</div>						
+						<a href="/" class="btn btn-success mt-5">Home
+					    	<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-house-door" viewBox="0 0 16 16">
+					 				 <path d="M8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4.5a.5.5 0 0 0 .5-.5v-4h2v4a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146zM2.5 14V7.707l5.5-5.5 5.5 5.5V14H10v-4a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v4H2.5z"/>
+							</svg>
+					    </a>
+						<button type="submit" class="btn btn-primary mt-5">Cadastrar</button>
+					</form>	
+					<table id="tbcartoes" class="table table-striped mt-5" style="width:100%">
+							<tr>
+								<th>Código</th>
+								<th>Descrição</th>
+								<th>Logo</th>
+								<th>Vencimento</th>
+								<th>Limite</th>
+								<th>Ação</th>
+							</tr>
+						
+							<tr th:each="lista :${listacartao}">
+								<td th:text="${lista.cdCartao}"></td>
+								<td th:text="${lista.dsCartao}"></td>
+								<td>
+									<img alt="" width="80px" height="80px" th:src="|/cartao/getimagem/${lista.cdCartao}|">
+								</td>
+								<td th:text="${#temporals.format(lista.dtVencimento,'dd/MM/yyyy')}"></td>
+								<td th:text="${#numbers.formatDecimal(lista.limite,1,2,'COMMA')}"></td>
+								<td>
+								<a href="/cartao/alterar/" th:href="@{'/cartao/alterar/' + ${lista.cdCartao}}"  class="btn btn-warning">
+									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+									  <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+									  <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+									</svg>
+								Editar
+								</a> 
+								<a href="/cartao/excluir/" th:href="@{'/cartao/excluir/' + ${lista.cdCartao}}" class="btn btn-danger">
+									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+							  <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
+							</svg> Excluir
+								</a>
+								<td>
+							</tr>														
+					</table>		
+								
+				</div>
+			</div>
+		</div>
+	
+	</div>
+	<!-- Paginação -->
+	<script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
+  	<script src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+
+ 
+ 	 <!-- Script necessário para o funcionamento da NavBar-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+	<!-- Necessário para execição dos ícones feather-->
+    <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
+	<script>
+      feather.replace()
+    </script>
+   
+ <script>
+
+  $(document).ready(function () {
+      $('#tbcartoes').DataTable();
+  });
+ 
+  </script>
+</body>
+		
+</html>
+
