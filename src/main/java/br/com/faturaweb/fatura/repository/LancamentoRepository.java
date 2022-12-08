@@ -1,7 +1,9 @@
 package br.com.faturaweb.fatura.repository;
 
+import java.math.BigDecimal;
 import java.util.List;
 
+import org.apache.el.lang.ELArithmetic.BigDecimalDelegate;
 import org.hibernate.annotations.Parameter;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -105,5 +107,11 @@ public interface LancamentoRepository extends CrudRepository<Lancamento, Long> {
 		@Query(value="SELECT * FROM lancamento l "
 									+ "WHERE date_format(l.dt_competencia ,'%m%Y') = date_format((curdate() + interval 1 month),'%m%Y');",nativeQuery = true)
 		List<Lancamento> findLancamentoMesSeguinte();
+
+		/**
+		 * Retornas os demias lançamentos 
+		 * */
+		@Query(value = "select * from lancamento where ds_lancamento like %:pdslancamento% and vl_pago = :pvalorpago",nativeQuery = true)
+		List<Lancamento> findDemiasLancamento(String pdslancamento, BigDecimal pvalorpago);
 	
 }

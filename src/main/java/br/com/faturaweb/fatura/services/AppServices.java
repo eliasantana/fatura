@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -141,9 +142,7 @@ public class AppServices {
 			if (lote.getStatus().equals(status)) {
 				resp = true;
 			}
-		} else {
-			resp = true;
-		}
+		} 
 		return resp;
 	}
 
@@ -265,12 +264,22 @@ public class AppServices {
 	 */
 	public void imprmirRelatorio(String nmRelatorio, String strMes, String strAno, String orderBy,
 		HttpServletResponse response, String acao, String formapagto, String tppagto, String periodoini,
-		String periodofim, String competencia) {
+		String periodofim, String competencia, String nrLote) {
 		
 		String cfWhere = "";
 		String cfFiltro = "Filtro: ";
 		
 		switch (nmRelatorio) {
+		
+		case "lotecontabil":
+			nmRelatorio="relFechamentoContabil";
+			services.removeParam();
+			services.addParam("COMPETENCIA", competencia);
+			services.addParam("PCD_LOTE",nrLote);			
+			services.imprime(nmRelatorio, acao, response);
+		break;	
+			
+		
 		case "relatoriodacompetencia":
 			nmRelatorio = "lancamentos";
 

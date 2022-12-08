@@ -1,5 +1,6 @@
 package br.com.faturaweb.fatura.repository;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -8,6 +9,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.web.bind.annotation.PathVariable;
+
+import com.google.common.base.Optional;
 
 import br.com.faturaweb.fatura.model.Lancamento;
 import br.com.faturaweb.fatura.model.Lote;
@@ -32,6 +35,12 @@ public interface LoteRepository extends CrudRepository<Lote, Long> {
 	@Query(value = "SELECT * FROM lote WHERE DATE_FORMAT(COMPETENCIA,'%m%Y') = DATE_FORMAT(curdate(),'%m%Y') ",nativeQuery = true)
 	 Lote findLoteCompetencia();
 	
+	/**
+	 * Retora lote selecionado 
+	 * 	 * */
+	@Query(value = "SELECT * FROM lote WHERE cd_lote = :cdlote",nativeQuery = true)
+	 Lote findLoteCompetencia(Long cdlote);
+		
 	/**
 	 * Retora lote da competencia informada
 	 * */

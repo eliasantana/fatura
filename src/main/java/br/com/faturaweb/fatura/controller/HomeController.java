@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import br.com.faturaweb.fatura.form.LancamentoForm;
+import br.com.faturaweb.fatura.model.Cartao;
 import br.com.faturaweb.fatura.model.Configuracoes;
 import br.com.faturaweb.fatura.model.FormaDePagamento;
 import br.com.faturaweb.fatura.model.Lancamento;
@@ -30,6 +31,7 @@ import br.com.faturaweb.fatura.model.Menssageria;
 import br.com.faturaweb.fatura.model.Receita;
 import br.com.faturaweb.fatura.model.TipoLancamento;
 import br.com.faturaweb.fatura.model.Usuario;
+import br.com.faturaweb.fatura.repository.CartaoRepository;
 import br.com.faturaweb.fatura.repository.ConfiguracoesRepository;
 import br.com.faturaweb.fatura.repository.FormaDePagamentoRepository;
 import br.com.faturaweb.fatura.repository.LancamentoRepository;
@@ -57,6 +59,8 @@ public class HomeController {
 	TipoLancamentoRepository tipoLancamentoRepository;
 	@Autowired
 	ReceitaRepository receitaRepository;
+	@Autowired
+	CartaoRepository cartaoRepository;
 	@Autowired
 	ReceitaServices services;
 	@Autowired
@@ -200,17 +204,16 @@ public class HomeController {
 	
 	@GetMapping(value = "/listar")
 	public String listar(Model model) {
-		 String status="F";
-		//List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentos();
+		 String status="A";
 		List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentosDoMes();
-	
+		
 		model.addAttribute("lancamentos", lancamentos);
 	
 		//Verifica lote da competencia
 		boolean existeLctoAberto = appservices.isLancamentoAberto(lancamentos);
 		try {
 			Lote findLoteCompetencia = loteRepository.findLoteCompetencia();
-			if (appservices.verificalote("A", findLoteCompetencia) && !existeLctoAberto){
+			if (appservices.verificalote("F", findLoteCompetencia) && !existeLctoAberto){
 				status = findLoteCompetencia.getStatus();
 			}
 		} catch (Exception e) {
@@ -234,6 +237,12 @@ public class HomeController {
 		TipoLancamento tipoLancamento = findBydsTipoLancamento.get();
 		Optional<Usuario> usuario = usuarioRepository.findById(5L);		
 		Configuracoes config = configuracoesRepository.findConfiguracao();		
+			Optional<Cartao> cartaoLocalizado = cartaoRepository.findBydsCartao(lancamentoForm.getDsCartao());
+			Cartao c = new Cartao();
+			if (cartaoLocalizado.isPresent()) {
+				c.setCdCartao(cartaoLocalizado.get().getCdCartao());
+				lancamento.setCartao(c);
+			}
 			lancamento.setCdLancamento(lancamentoForm.getCdLancamento());
 			lancamento.setDsLancamento(lancamentoForm.getDsLancamento());
 			lancamento.setDtCadastro(lancamentoForm.getDtCadastro());
@@ -260,7 +269,6 @@ public class HomeController {
 				List<Lancamento> parcelas = lancamentoServices.parcelar("S", usuario.get().getCdUsuario(), lancamentoForm.getNrParcelas(),snNaCompetencia);
 					lancamentoRepository.saveAll(parcelas);
 				    lancamentoRepository.delete(ultimoLancamento);
-				    //lancamentos = lancamentoRepository.findAllLancamentos();
 				    lancamentos = lancamentoRepository.findAllLancamentosDoMes();
 				    
 					model.addAttribute("lancamentos", lancamentos);

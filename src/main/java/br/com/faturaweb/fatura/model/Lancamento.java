@@ -32,10 +32,12 @@ public class Lancamento {
 	private FormaDePagamento formaDePagamento;
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
 	private LocalDate dtCompetencia;
-	
+	@ManyToOne
+	private Cartao cartao;
 	private Integer nrParcela;
 	private String dsAnexo;
 	private String observacao;
+	
 	
 	public Lancamento() {
 		this.nrParcela = 1;	   
@@ -136,6 +138,14 @@ public String getObservacao() {
 
 public void setObservacao(String observacao) {
 	this.observacao = observacao;
+}
+
+public void setCartao(Cartao cartao) {
+	this.cartao = cartao;
+}
+
+public Cartao getCartao() {
+	return cartao;
 }
 
 @Override

@@ -140,6 +140,7 @@ public String reportFiltro(Model model,
  * @param periodoini - Início do Período
  * @param periodofim - Fim do período
  * @param competencia - A competêncai desejada no formado mmyyyy
+ * @param nrLote - Número do lote
  * */
 @GetMapping("/imprimir")
 public void imprimir(
@@ -151,6 +152,7 @@ public void imprimir(
 										@RequestParam(name = "periodofim", required = false)String periodofim,
 										@RequestParam(name = "competencia", required = false)String competencia,
 										@RequestParam(name = "ordenacao", required = false)String ordenacao,
+										@RequestParam(name = "lote", required = false)String nrLote,
 										
 										HttpServletResponse response
 									) {	
@@ -159,8 +161,8 @@ public void imprimir(
 									 String strAno = String.valueOf(LocalDate.now().getYear());
 									
 									 String orderBy = appServices.getOrdenacao(ordenacao);
-									  appServices.imprmirRelatorio(nmRelatorio, strMes, strAno,orderBy, response,acao,formapagto,tppagto,periodoini,periodofim,competencia);
-									  appServices.renomeiaArquivo("imprimir.pdf", nmRelatorio.concat(strAno).concat("-").concat(strMes).concat(".pdf"));
+									  appServices.imprmirRelatorio(nmRelatorio, strMes, strAno,orderBy, response,acao,formapagto,tppagto,periodoini,periodofim,competencia, nrLote);
+									//  appServices.renomeiaArquivo("imprimir.pdf", nmRelatorio.concat(strAno).concat("-").concat(strMes).concat(".pdf"));
 									  
 }
 

@@ -19,6 +19,7 @@ public class LancamentoForm {
 	private LocalDate dtCompetencia;
 	private  Integer nrParcelas;
 	private String observacao;
+	private String dsCartao;
 	
 	public LancamentoForm() {
 		 this.dtCadastro = LocalDate.now();
@@ -29,7 +30,7 @@ public class LancamentoForm {
 
 	public LancamentoForm(Long cdLancamento, String dsLancamento, String usuario, LocalDate dtCadastro,
 			String dsTipoLancamento, String snPago, BigDecimal vlPago, String dsFormaDePagamento,
-			LocalDate dtCompetencia, Integer nrPArcelas, String observacao) {
+			LocalDate dtCompetencia, Integer nrPArcelas, String observacao, String dsCartao) {
 			super();
 			this.cdLancamento = cdLancamento;
 			this.dsLancamento = dsLancamento;
@@ -42,6 +43,7 @@ public class LancamentoForm {
 			this.dtCompetencia = LocalDate.now();
 			this.nrParcelas = nrPArcelas;
 			this.observacao = observacao;
+			this.dsCartao = dsCartao;
 	}
 
 
@@ -131,6 +133,14 @@ public class LancamentoForm {
 	
 	public String getObservacao() {
 		return observacao;
+	}
+	
+	public String getDsCartao() {
+		return dsCartao;
+	}
+	
+	public void setDsCartao(String dsCartao) {
+		this.dsCartao = dsCartao;
 	}
 
 	@Override

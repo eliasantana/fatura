@@ -39,6 +39,7 @@ import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
 
+import br.com.faturaweb.fatura.form.LancamentoForm;
 import br.com.faturaweb.fatura.model.Configuracoes;
 import br.com.faturaweb.fatura.model.Lancamento;
 import br.com.faturaweb.fatura.model.LogProvisao;
@@ -73,15 +74,26 @@ public class TesteController {
 		@Autowired
 		TipoLancamentoRepository tipoLancamentoRepository;
 		@Autowired
+		LancamentoRepository lancamentoRepository;
+		@Autowired
 		LogProvisaoRepository logprovRepository;
 		@Autowired
 		ConfiguracoesRepository config;
 		@Autowired
 		AppServices appServices;
+		@Autowired
+		LancamentoServices lancamentoServices;
 		
 	@GetMapping("/teste")
 	public String apiltipolancnamento(Model model){
-		appServices.renomeiaArquivo("imprimir.pdf","relatorio.pdf");
+		LancamentoForm lancamentoForm = new LancamentoForm();
+		lancamentoForm.setVlPago(new BigDecimal(100));
+		lancamentoForm.setDsLancamento("DESPESAS PARCELADAS SEM CARTÃO");
+		
+		Optional<Lancamento> findById = lancamentoRepository.findById(684L);
+		Lancamento lancamentoLocalizado = findById.get();
+		
+		lancamentoServices.alterarTodos(lancamentoForm,lancamentoLocalizado);
 		return "teste";
 	}
 	

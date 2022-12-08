@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.apache.el.lang.ELArithmetic.BigDecimalDelegate;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.deser.std.NumberDeserializers.BigDecimalDeserializer;
 import com.itextpdf.kernel.pdf.tagutils.IRoleMappingResolver;
 
+import br.com.faturaweb.fatura.form.LancamentoForm;
 import br.com.faturaweb.fatura.model.Configuracoes;
 import br.com.faturaweb.fatura.model.FormaDePagamento;
 import br.com.faturaweb.fatura.model.Lancamento;
@@ -61,6 +63,7 @@ public class LancamentoServices {
 						Lancamento l = new Lancamento();
 						l.setDsLancamento(lancamento.getDsLancamento() + " "+ (i) +"/"+nrParcela);
 						l.setDtCadastro(lancamento.getDtCadastro());
+						l.setCartao(lancamento.getCartao());
 						//Lança a primeira parcela na competencia atual somente se a configuração global estiver ligada sn_nacompetencia = 'S'
 						if (primeiraParcelaNaCompetencia.equals("S")) {
 							l.setDtCompetencia(lancamento.getDtCompetencia().plusMonths(i-1)); // lança a parcela no mês atual
@@ -256,17 +259,61 @@ public class LancamentoServices {
  * @return {@link Lancamento} - Lançamento com nova Competência.
  * */
 	public Lancamento validaLoteLancamento(Lancamento lancamento, LoteRepository loteRepository) {
-		Lote  loteCompetencia = loteRepository.findLoteCompetencia();
-		if (loteCompetencia.getStatus().equals("A")) {
-			LocalDate mesAtual = LocalDate.now();
-			LocalDate mesLancamento = lancamento.getDtCompetencia();
-			int total = mesAtual.getMonthValue() -  mesLancamento.getMonthValue();
-			if (total > 1) {
-				lancamento.setDtCompetencia(LocalDate.now().minusMonths(1));
+		try {
+			Lote  loteCompetencia = loteRepository.findLoteCompetencia();
+			if (loteCompetencia.getStatus().equals("A")) {
+				LocalDate mesAtual = LocalDate.now();
+				LocalDate mesLancamento = lancamento.getDtCompetencia();
+				int total = mesAtual.getMonthValue() -  mesLancamento.getMonthValue();
+				if (total > 1) {
+					lancamento.setDtCompetencia(LocalDate.now().minusMonths(1));
+				}
+			}else {
+				lancamento.setDtCompetencia(LocalDate.now());
 			}
-		}else {
+	
+		} catch (Exception e) {
 			lancamento.setDtCompetencia(LocalDate.now());
 		}
-		return lancamento;
+				return lancamento;
 	}
+/**
+ * Altera todos os lancamentos se existirem 
+ * @since 19/11/2022
+ * @author elias
+ * @param lancamentoForm - Lançamento com as alterações da página 
+ * @param lancamentoLocalizado - Lancamento Original Localizado
+ * */
+public void alterarTodos(LancamentoForm lancamentoForm, Lancamento lancamentoLocalizado ) {
+	
+	System.out.println(lancamentoLocalizado.getDsLancamento());
+	int length = lancamentoLocalizado.getDsLancamento().length();
+	String dsLancamento = lancamentoLocalizado.getDsLancamento().substring(0,length-4);
+	
+	BigDecimal vlPago = lancamentoLocalizado.getVlPago();
+	List<Lancamento> listaDemaisLancamentos = lancamentoRepository.findDemiasLancamento(dsLancamento, vlPago);
+	List<Lancamento>listaLancamentosAlterarados = new ArrayList<Lancamento>();
+	if (listaDemaisLancamentos.size()>1) {
+		for (Lancamento lancamento2 : listaDemaisLancamentos) {
+			String controle = lancamento2.getDsLancamento().substring(length-4);
+			
+			Lancamento lancamentoAlterado = new Lancamento();
+			lancamentoAlterado = lancamento2;
+			lancamentoAlterado.setDsLancamento(lancamentoForm.getDsLancamento()+" " +controle);
+			Optional<FormaDePagamento> formaPagtoLocalizado = formaPagtoRepository.findByDescricaoFormaDePagamento(lancamentoForm.getDsFormaDePagamento());
+			lancamentoAlterado.setFormaDePagamento(formaPagtoLocalizado.get());
+			Optional<TipoLancamento> tipoLancamentoLocalizado = tipoLancamentoRepository.findBydsTipoLancamento(lancamentoForm.getDsTipoLancamento());
+			lancamentoAlterado.setTipoLancamento(tipoLancamentoLocalizado.get());
+			lancamentoAlterado.setSnPago(lancamentoForm.getSnPago());
+			lancamentoAlterado.setVlPago(lancamentoForm.getVlPago());
+			lancamentoAlterado.setObservacao(lancamentoForm.getDsLancamento());
+			listaLancamentosAlterarados.add(lancamentoAlterado);
+				
+		}
+		
+		lancamentoRepository.saveAll(listaDemaisLancamentos);
+		
+	}
+	
+}
 }
