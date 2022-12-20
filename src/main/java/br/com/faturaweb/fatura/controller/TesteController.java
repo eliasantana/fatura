@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,6 +41,7 @@ import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
 
 import br.com.faturaweb.fatura.form.LancamentoForm;
+import br.com.faturaweb.fatura.model.AnoLancamento;
 import br.com.faturaweb.fatura.model.Configuracoes;
 import br.com.faturaweb.fatura.model.Lancamento;
 import br.com.faturaweb.fatura.model.LogProvisao;
@@ -86,14 +88,19 @@ public class TesteController {
 		
 	@GetMapping("/teste")
 	public String apiltipolancnamento(Model model){
-		LancamentoForm lancamentoForm = new LancamentoForm();
-		lancamentoForm.setVlPago(new BigDecimal(100));
-		lancamentoForm.setDsLancamento("DESPESAS PARCELADAS SEM CARTÃO");
+		Iterable<Lancamento> listaDeLancamento = lancamentoRepository.findAll();
 		
-		Optional<Lancamento> findById = lancamentoRepository.findById(684L);
-		Lancamento lancamentoLocalizado = findById.get();
+		AnoLancamento anoLancamento  = new AnoLancamento();
+		for (Lancamento lancamento : listaDeLancamento) {
+				
+				anoLancamento.addAno(lancamento.getDtCompetencia().getYear());
+		}
 		
-		lancamentoServices.alterarTodos(lancamentoForm,lancamentoLocalizado);
+		anoLancamento.addAno(2023);
+		
+		System.out.println(anoLancamento.getListAno().toString());
+		
+		
 		return "teste";
 	}
 	

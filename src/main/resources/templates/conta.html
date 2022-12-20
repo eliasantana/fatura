@@ -96,14 +96,14 @@
 				      	 <label class="form-label">Selecione uma conta</label>
 		        		 <select class="form-control" id="conta" name="conta">
 		        		 	<option th:each="contas : ${contas}" th:text="${contas.nrConta} + ' - ' +${contas.dsConta}" th:value="${contas.nrConta}"> </option>
+		        		 </select>		        		 
+		        		 <label class="form-label">Tipo de Movimentação (Crédito / Débito)</label>
+		        		 <select class="form-control" id="operacao" name="operacao">
+		        		 	<option value="D">Débito</option>
+		        		 	<option value="C">Crédito</option>
 		        		 </select>
 		        		 <label class="form-label" >Valor</label>
 		        		 <input type="text" class="form-control mt-1" id="valor" name="valor" required="required">
-		        		 <label class="form-label">Tipo de Movimentação (Crédito / Débito)</label>
-		        		 <select class="form-control" id="operacao" name="operacao">
-		        		 	<option value="C">Crédito</option>
-		        		 	<option value="D">Débito</option>
-		        		 </select>
 		        		 <label class="form-label" >Motivo</label>
 		        		 <textarea class="form-control mt-1" id="motivo" name="motivo" required="required"></textarea>
 				      </div>

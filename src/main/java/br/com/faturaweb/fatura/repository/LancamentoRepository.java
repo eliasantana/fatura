@@ -114,4 +114,5 @@ public interface LancamentoRepository extends CrudRepository<Lancamento, Long> {
 		@Query(value = "select * from lancamento where ds_lancamento like %:pdslancamento% and vl_pago = :pvalorpago",nativeQuery = true)
 		List<Lancamento> findDemiasLancamento(String pdslancamento, BigDecimal pvalorpago);
 	
+		
 }

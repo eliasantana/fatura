@@ -75,7 +75,7 @@ LogMovimentacaoFinanceiraRepository  logMovimentacaoRepository;
 			List<Conta> contas = repository.findcontas();
 			model.addAttribute("conta",conta.get());
 			model.addAttribute("contas",contas);
-			model.addAttribute("erro","Conta não localizada!");
+			model.addAttribute("erro",null);
 		} catch (Exception e) {
 			System.out.println("Conta não localizada!");
 		}
