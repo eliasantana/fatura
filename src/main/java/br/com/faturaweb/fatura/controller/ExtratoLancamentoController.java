@@ -18,6 +18,7 @@ import br.com.faturaweb.fatura.model.Conta;
 import br.com.faturaweb.fatura.model.FormaDePagamento;
 import br.com.faturaweb.fatura.model.Lancamento;
 import br.com.faturaweb.fatura.model.TipoLancamento;
+import br.com.faturaweb.fatura.projection.AnoLancamentoProjection;
 import br.com.faturaweb.fatura.repository.ConfiguracoesRepository;
 import br.com.faturaweb.fatura.repository.ContaRepository;
 import br.com.faturaweb.fatura.repository.FormaDePagamentoRepository;
@@ -48,15 +49,14 @@ public class ExtratoLancamentoController {
 	
 	@GetMapping("/financeiro")
 	public String extratoLancamento(@RequestParam  String mesAno, 
-															
-															Model model) {
-		//public String extratoLancamento(@PathVariable String mesAno, Model model) {
-		int year = LocalDate.now().getYear();
-		mesAno =mesAno+  Integer.toString(year);
+																@RequestParam (name = "anolancamento", required = false) String anolancamento  , Model  model) {
+		if (anolancamento==null) anolancamento = Integer.toString(LocalDate.now().getYear());
+		mesAno =mesAno+anolancamento;
 		List<FormaDePagamento> formaDePagamentos = formaPagtoRepository.findAllFormasDePagamento();
 		List<Lancamento> lctoFuturo = lctoRepository.findLancamentosFuturos(mesAno);
 		List<Conta> contas = contaRepository.findcontas();
 		List<TipoLancamento> tiposLancamento = tipoLancamentoRepository.findAllTipoLancamentos();
+		List<AnoLancamentoProjection> anosLancamento = lctoServices.getAnosLancamento();
 		BigDecimal saldoGeral = contaServices.getSaldoGeral(contas);
 		HashMap<String, BigDecimal> totalizacaoDespesaCategoria = lctoServices.totalizacaoDespesaCategoria(mesAno);
 		HashMap<String, BigDecimal> totalDespesaFormaPagto = lctoServices.getTotalizacaoDespesaFormaPagto(mesAno);
@@ -71,11 +71,13 @@ public class ExtratoLancamentoController {
 		model.addAttribute("formapagto",formaDePagamentos);
 		model.addAttribute("tl",tiposLancamento);
 		
-		String competencia =" Relatório de Despesas Competência - " + mesAno.substring(0,2).concat("/").concat(String.valueOf(year));
+		String competencia =" Relatório de Despesas Competência - " + mesAno.substring(0,2).concat("/").concat(mesAno.substring(2,6));
 		model.addAttribute("competencia",competencia);
 		model.addAttribute("total",lctoServices.getTotalLctoMes(mesAno));
 		model.addAttribute("contas",contas); 
+		model.addAttribute("anosLancamento",anosLancamento);
 		
+		System.out.println(mesAno);
 		
 		return "extrato_lancamento";
 	}

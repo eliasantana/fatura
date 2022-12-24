@@ -3,7 +3,7 @@ package br.com.faturaweb.fatura.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AnoLancamento {
+public class AnoLancamento extends Lancamento {
 		private Integer ano;
 		
 		List<Integer> anos = new ArrayList<Integer>();
