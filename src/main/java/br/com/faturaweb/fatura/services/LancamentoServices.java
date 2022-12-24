@@ -29,6 +29,7 @@ import br.com.faturaweb.fatura.model.Lancamento;
 import br.com.faturaweb.fatura.model.Lote;
 import br.com.faturaweb.fatura.model.TipoLancamento;
 import br.com.faturaweb.fatura.model.Usuario;
+import br.com.faturaweb.fatura.projection.AnoLancamentoProjection;
 import br.com.faturaweb.fatura.repository.ConfiguracoesRepository;
 import br.com.faturaweb.fatura.repository.FormaDePagamentoRepository;
 import br.com.faturaweb.fatura.repository.LancamentoRepository;
@@ -286,37 +287,45 @@ public class LancamentoServices {
  * */
 public void alterarTodos(LancamentoForm lancamentoForm, Lancamento lancamentoLocalizado ) {
 	
-	System.out.println(lancamentoLocalizado.getDsLancamento());
-	int length = lancamentoLocalizado.getDsLancamento().length();
-	String dsLancamento = lancamentoLocalizado.getDsLancamento().substring(0,length-4);
-	
-	BigDecimal vlPago = lancamentoLocalizado.getVlPago();
-	List<Lancamento> listaDemaisLancamentos = lancamentoRepository.findDemiasLancamento(dsLancamento, vlPago);
-	List<Lancamento>listaLancamentosAlterarados = new ArrayList<Lancamento>();
-	if (listaDemaisLancamentos.size()>1) {
-		for (Lancamento lancamento2 : listaDemaisLancamentos) {
-			String controle = lancamento2.getDsLancamento().substring(length-4);
-			
-			Lancamento lancamentoAlterado = new Lancamento();
-			lancamentoAlterado = lancamento2;
-			lancamentoAlterado.setDsLancamento(lancamentoForm.getDsLancamento()+" " +controle);
-			Optional<FormaDePagamento> formaPagtoLocalizado = formaPagtoRepository.findByDescricaoFormaDePagamento(lancamentoForm.getDsFormaDePagamento());
-			lancamentoAlterado.setFormaDePagamento(formaPagtoLocalizado.get());
-			Optional<TipoLancamento> tipoLancamentoLocalizado = tipoLancamentoRepository.findBydsTipoLancamento(lancamentoForm.getDsTipoLancamento());
-			lancamentoAlterado.setTipoLancamento(tipoLancamentoLocalizado.get());
-			lancamentoAlterado.setSnPago(lancamentoForm.getSnPago());
-			lancamentoAlterado.setVlPago(lancamentoForm.getVlPago());
-			lancamentoAlterado.setObservacao(lancamentoForm.getDsLancamento());
-			listaLancamentosAlterarados.add(lancamentoAlterado);
+		System.out.println(lancamentoLocalizado.getDsLancamento());
+		int length = lancamentoLocalizado.getDsLancamento().length();
+		String dsLancamento = lancamentoLocalizado.getDsLancamento().substring(0,length-4);
+		
+		BigDecimal vlPago = lancamentoLocalizado.getVlPago();
+		List<Lancamento> listaDemaisLancamentos = lancamentoRepository.findDemiasLancamento(dsLancamento, vlPago);
+		List<Lancamento>listaLancamentosAlterarados = new ArrayList<Lancamento>();
+		if (listaDemaisLancamentos.size()>1) {
+			for (Lancamento lancamento2 : listaDemaisLancamentos) {
+				String controle = lancamento2.getDsLancamento().substring(length-4);
 				
-		}
-		
-		lancamentoRepository.saveAll(listaDemaisLancamentos);
-		
+				Lancamento lancamentoAlterado = new Lancamento();
+				lancamentoAlterado = lancamento2;
+				lancamentoAlterado.setDsLancamento(lancamentoForm.getDsLancamento()+" " +controle);
+				Optional<FormaDePagamento> formaPagtoLocalizado = formaPagtoRepository.findByDescricaoFormaDePagamento(lancamentoForm.getDsFormaDePagamento());
+				lancamentoAlterado.setFormaDePagamento(formaPagtoLocalizado.get());
+				Optional<TipoLancamento> tipoLancamentoLocalizado = tipoLancamentoRepository.findBydsTipoLancamento(lancamentoForm.getDsTipoLancamento());
+				lancamentoAlterado.setTipoLancamento(tipoLancamentoLocalizado.get());
+				lancamentoAlterado.setSnPago(lancamentoForm.getSnPago());
+				lancamentoAlterado.setVlPago(lancamentoForm.getVlPago());
+				lancamentoAlterado.setObservacao(lancamentoForm.getDsLancamento());
+				listaLancamentosAlterarados.add(lancamentoAlterado);
+					
+			}		
+			lancamentoRepository.saveAll(listaDemaisLancamentos);
 	}
 	
 }
 
+/**
+ * Retorna os anos que possuem Lançamentos 
+ * @author elias
+ * @since 24/12/2022
+ * Utilizado: Extrato de Pagamento
+ * */
+public List<AnoLancamentoProjection> getAnosLancamento() {
+	List<AnoLancamentoProjection> findAnosDeLancamento = lancamentoRepository.findAnosDeLancamento();
+	return findAnosDeLancamento;
+}
 
 
 }

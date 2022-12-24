@@ -15,6 +15,7 @@ import it.ozimov.springboot.mail.configuration.EnableEmailTools;
 @EnableEmailTools
 @EnableScheduling
 @EnableCaching
+
 public class FaturaApplication {
 
 	public static void main(String[] args) {

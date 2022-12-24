@@ -11,10 +11,13 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.sound.midi.Soundbank;
 
@@ -47,6 +50,7 @@ import br.com.faturaweb.fatura.model.Lancamento;
 import br.com.faturaweb.fatura.model.LogProvisao;
 import br.com.faturaweb.fatura.model.Teste;
 import br.com.faturaweb.fatura.model.TipoLancamento;
+import br.com.faturaweb.fatura.projection.AnoLancamentoProjection;
 import br.com.faturaweb.fatura.repository.ConfiguracoesRepository;
 import br.com.faturaweb.fatura.repository.LancamentoRepository;
 import br.com.faturaweb.fatura.repository.LogProvisaoRepository;
@@ -88,19 +92,7 @@ public class TesteController {
 		
 	@GetMapping("/teste")
 	public String apiltipolancnamento(Model model){
-		Iterable<Lancamento> listaDeLancamento = lancamentoRepository.findAll();
-		
-		AnoLancamento anoLancamento  = new AnoLancamento();
-		for (Lancamento lancamento : listaDeLancamento) {
 				
-				anoLancamento.addAno(lancamento.getDtCompetencia().getYear());
-		}
-		
-		anoLancamento.addAno(2023);
-		
-		System.out.println(anoLancamento.getListAno().toString());
-		
-		
 		return "teste";
 	}
 	

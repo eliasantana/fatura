@@ -3,6 +3,8 @@ package br.com.faturaweb.fatura.repository;
 import java.math.BigDecimal;
 import java.util.List;
 
+import javax.persistence.NamedNativeQuery;
+
 import org.apache.el.lang.ELArithmetic.BigDecimalDelegate;
 import org.hibernate.annotations.Parameter;
 import org.springframework.data.jpa.repository.Modifying;
@@ -10,7 +12,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import br.com.faturaweb.fatura.model.AnoLancamento;
 import br.com.faturaweb.fatura.model.Lancamento;
+import br.com.faturaweb.fatura.projection.AnoLancamentoProjection;
 import io.lettuce.core.dynamic.annotation.Param;
 
 public interface LancamentoRepository extends CrudRepository<Lancamento, Long> {
@@ -114,5 +118,9 @@ public interface LancamentoRepository extends CrudRepository<Lancamento, Long> {
 		@Query(value = "select * from lancamento where ds_lancamento like %:pdslancamento% and vl_pago = :pvalorpago",nativeQuery = true)
 		List<Lancamento> findDemiasLancamento(String pdslancamento, BigDecimal pvalorpago);
 	
-		
+		/*
+		 * Retorna os anos que possuem lancamanentos cadastrados
+		 * */
+		@Query(value = " SELECT distinct date_format(dt_competencia,'%Y') ano FROM lancamento; ",nativeQuery = true)
+		List<AnoLancamentoProjection> findAnosDeLancamento();
 }
