@@ -45,12 +45,15 @@ import com.itextpdf.layout.Document;
 
 import br.com.faturaweb.fatura.form.LancamentoForm;
 import br.com.faturaweb.fatura.model.AnoLancamento;
+import br.com.faturaweb.fatura.model.Chave;
+import br.com.faturaweb.fatura.model.ChaveConfig;
 import br.com.faturaweb.fatura.model.Configuracoes;
 import br.com.faturaweb.fatura.model.Lancamento;
 import br.com.faturaweb.fatura.model.LogProvisao;
 import br.com.faturaweb.fatura.model.Teste;
 import br.com.faturaweb.fatura.model.TipoLancamento;
 import br.com.faturaweb.fatura.projection.AnoLancamentoProjection;
+import br.com.faturaweb.fatura.repository.ChaveRepository;
 import br.com.faturaweb.fatura.repository.ConfiguracoesRepository;
 import br.com.faturaweb.fatura.repository.LancamentoRepository;
 import br.com.faturaweb.fatura.repository.LogProvisaoRepository;
@@ -89,10 +92,12 @@ public class TesteController {
 		AppServices appServices;
 		@Autowired
 		LancamentoServices lancamentoServices;
+		@Autowired
+		ChaveRepository chaveRepository;
 		
 	@GetMapping("/teste")
 	public String apiltipolancnamento(Model model){
-				
+		
 		return "teste";
 	}
 	
