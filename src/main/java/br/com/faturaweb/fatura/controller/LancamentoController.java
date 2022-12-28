@@ -31,6 +31,8 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import br.com.faturaweb.fatura.form.LancamentoForm;
 import br.com.faturaweb.fatura.model.Cartao;
+import br.com.faturaweb.fatura.model.Chave;
+import br.com.faturaweb.fatura.model.ChaveConfig;
 import br.com.faturaweb.fatura.model.Configuracoes;
 import br.com.faturaweb.fatura.model.Conta;
 import br.com.faturaweb.fatura.model.FormaDePagamento;
@@ -39,6 +41,7 @@ import br.com.faturaweb.fatura.model.LogMovimentacaoFinanceira;
 import br.com.faturaweb.fatura.model.TipoLancamento;
 import br.com.faturaweb.fatura.model.Usuario;
 import br.com.faturaweb.fatura.repository.CartaoRepository;
+import br.com.faturaweb.fatura.repository.ChaveRepository;
 import br.com.faturaweb.fatura.repository.ConfiguracoesRepository;
 import br.com.faturaweb.fatura.repository.ContaRepository;
 import br.com.faturaweb.fatura.repository.FormaDePagamentoRepository;
@@ -76,13 +79,22 @@ public class LancamentoController {
 	ReportService reportServices;	
 	@Autowired
 	LancamentoServices services;	
-@Autowired
+	@Autowired
 	ConfiguracoesRepository configuracoesRepository;
+	@Autowired
+	ChaveRepository chaveRepository;
 /**
  * Só libera o cadastro quando sn_lancarNaCompetencia='N' das configuações Gerais habilitado 
  * */
 	@GetMapping("/cadastro")
 	public String cadastrar(Model model) {
+		//Obtem o valor da chave
+		Optional<ChaveConfig> chave = chaveRepository.findChaveConfigByDescricao(Chave.SN_CAD_DESPESA_INICIO.toString());
+		String valorChave=null;
+		if (chave.isPresent()) {
+		  valorChave = chave.get().getValor();
+		}
+		
 		String status = "A";
 		String msg="";
 		try {
@@ -113,6 +125,7 @@ public class LancamentoController {
 			model.addAttribute("status",status);
 			model.addAttribute("menssagem",msg);
 			model.addAttribute("cartao",listaCartoes);
+			model.addAttribute("chave",valorChave);
 			
 		} catch (Exception e) {
 			e.getMessage();
