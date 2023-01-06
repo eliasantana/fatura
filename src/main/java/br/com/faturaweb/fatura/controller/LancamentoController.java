@@ -16,6 +16,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.hibernate.internal.build.AllowSysOut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Controller;
@@ -352,5 +353,27 @@ public class LancamentoController {
 		}
 		return rw;
 	}
+	
+	@GetMapping("/pagartodos")
+	public RedirectView pagarTodos() {
+		
+		RedirectView rw = new RedirectView("/listar");
+		Optional<FormaDePagamento> forma = formaDePagamentoRepository.findByDescricaoFormaDePagamento("Crédito");
+		
+		if(forma.isPresent()) {
+			Long cdFromapagto = forma.get().getCdFormaPgamento();
+			List<Lancamento> lancamentosDoMes = lancamentoRepository.findLancamentoPorFormaDePagamento(cdFromapagto);
+			if(lancamentosDoMes.size() >0) {
+				for (Lancamento lancamento : lancamentosDoMes) {
+					lancamento.setSnPago("SIM");
+				}
+			}
+			
+			lancamentoRepository.saveAll(lancamentosDoMes);
+		}
+		
+		return rw;
+	}
+
 }
 
