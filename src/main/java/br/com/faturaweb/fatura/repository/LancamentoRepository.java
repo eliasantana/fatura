@@ -123,4 +123,16 @@ public interface LancamentoRepository extends CrudRepository<Lancamento, Long> {
 		 * */
 		@Query(value = " SELECT distinct date_format(dt_competencia,'%Y') ano FROM lancamento; ",nativeQuery = true)
 		List<AnoLancamentoProjection> findAnosDeLancamento();
+		
+		/**
+		 * Retorna os lançamentos da competência por tipo de pagamennto
+		 * @author elias
+		 * @since 05-01-2022
+		 * @param cdformapagamento - Código da forma de pagamento a ser localizada	
+		 * */
+		@Modifying
+		@Query(value = "SELECT *"
+				+ " FROM lancamento "
+				+ " where date_format(dt_competencia,'%m%Y') = (date_format(CURDATE(),'%m%Y' ))  and forma_de_pagamento_cd_forma_pgamento =:cdformapagamento ", nativeQuery = true)
+		List<Lancamento> findLancamentoPorFormaDePagamento(Long cdformapagamento);
 }
