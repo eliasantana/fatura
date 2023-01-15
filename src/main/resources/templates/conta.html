@@ -138,7 +138,7 @@
 		        		 <select class="form-control" id="ctaorigem" name="ctaorigem">
 		        		 	<option th:each="contas : ${contas}" th:text="${contas.nrConta} + ' - ' +${contas.dsConta}" th:value="${contas.nrConta}"> </option>
 		        		 </select>
-		        		  <label class="form-label">Conta de Origem</label>
+		        		  <label class="form-label">Conta de Destino</label>
 		        		 <select class="form-control" id="ctadestino" name="ctadestino">
 		        		 	<option th:each="contas2 : ${contas}" th:text="${contas2.nrConta} + ' - ' +${contas2.dsConta}" th:value="${contas2.nrConta}"> </option>
 		        		 </select>
