@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.view.RedirectView;
 
+import br.com.faturaweb.fatura.model.Cartao;
 import br.com.faturaweb.fatura.model.Configuracoes;
 import br.com.faturaweb.fatura.model.Conta;
 import br.com.faturaweb.fatura.model.FormaDePagamento;
@@ -142,7 +143,11 @@ public class ItMEtaController {
 			lancamento.setFormaDePagamento(formaPagto.get());
 			lancamento.setNrParcela(1);
 			lancamento.setSnPago("SIM"); //Pago
-			Optional<TipoLancamento> tl = tipoLancamentoRepository.findBycdTipoLancamento(15L);
+			//Optional<TipoLancamento> tl = tipoLancamentoRepository.findBycdTipoLancamento(36L); // 36-Metas
+			Optional<TipoLancamento> tl = tipoLancamentoRepository.findBydsTipoLancamento("Metas");
+		    Cartao cartao = new Cartao();
+		    cartao.setCdCartao(1L);//Nenhum
+			lancamento.setCartao(cartao);
 			lancamento.setTipoLancamento(tl.get());
 			Usuario u = new Usuario();
 			u.setCdUsuario(5L);

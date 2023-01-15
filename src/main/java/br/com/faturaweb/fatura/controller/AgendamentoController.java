@@ -57,17 +57,19 @@ public class AgendamentoController {
 				//Preparando para adicionar a mensagem
 				StringBuilder sbw = new StringBuilder();
 				sbw.append("Atenção!\n");
+				sbw.append("As despesas abaixo estão vencidas à pelo menos " + configuracoesRepository.findConfiguracao().getNrDias() + " dias! \n");
+				sbw.append("SysfaturaWeb - Sistema  de Controle Financeiro Pessoal");
+				sbw.append("\n\n\n");
+				sbw.append("\n\n\nData e Hoda do Envio: : " + LocalDateTime.now());
+				sbw.append("---------------------------------------------------------------------------");
+				
 				for (Lancamento lancamento : lancamentosVencidos) {
-					sbw.append("As despesas abaixo estão vencidas à pelo menos " + configuracoesRepository.findConfiguracao().getNrDias() + " dias! \n");
 					sbw.append("\nDescrição: " + lancamento.getDsLancamento()+ "\n");
 					sbw.append("\nVencimento: " + lancamento.getDtCompetencia() + "\n");
 					sbw.append("\nValor: " + lancamento.getVlPago());					
 					sbw.append("\n\n\n");
-					sbw.append("-----------------------------------------------------------------------------------------------------------");
-					sbw.append("SysfaturaWeb - Sistema  de Controle Financeiro Pessoal");
-					sbw.append("\n\n\n");
-					sbw.append("\n\n\nData e Hoda do Envio: : " + LocalDateTime.now());
-					sbw.append("-----------------------------------------------------------------------------------------------------------");
+					sbw.append("---------------------------------------------------------------------");
+					
 				}			
 				try {
 					appservices.sendEmai(config.getEmailOrigem(), config.getNmOrigem() ,config.getEmailDestino(), config.getNmDestino(), config.getTituloMsgEmailDestino(), sbw);
