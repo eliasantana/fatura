@@ -13,6 +13,7 @@ public interface ChaveRepository extends CrudRepository<ChaveConfig, Long> {
 
 	@Query(value = "SELECT * FROM chave_config where chave = :chave",nativeQuery = true)
 	Optional<ChaveConfig> findChaveConfigByDescricao(String chave);
+
 	
 	
 }
