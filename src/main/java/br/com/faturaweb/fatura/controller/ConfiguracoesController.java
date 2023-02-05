@@ -1,14 +1,9 @@
 package br.com.faturaweb.fatura.controller;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.Field;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,15 +16,13 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import br.com.faturaweb.fatura.model.Configuracoes;
 import br.com.faturaweb.fatura.model.Conta;
-import br.com.faturaweb.fatura.model.Provisao;
 import br.com.faturaweb.fatura.repository.ConfiguracoesRepository;
 import br.com.faturaweb.fatura.repository.ContaRepository;
-import br.com.faturaweb.fatura.repository.LancamentoRepository;
 import br.com.faturaweb.fatura.repository.ProvisaoRepository;
 
 @Controller
 @RequestMapping("/configuracoes")
-public class ConfirugracoesController {
+public class ConfiguracoesController {
 
 @Autowired	
 private ConfiguracoesRepository configuracoesRepository;
