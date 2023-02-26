@@ -29,153 +29,71 @@ import br.com.faturaweb.fatura.services.ContaServices;
 @Controller
 @RequestMapping("/conta")
 public class ContaController {
-@Autowired
-ContaRepository repository;
-@Autowired
-AppServices services;
-@Autowired
-AppServices appservices;	
-@Autowired
-ContaServices contaServices;
-@Autowired
-LogMovimentacaoFinanceiraRepository  logMovimentacaoRepository;
+	
+	@Autowired
+	ContaServices contaServices;
+	
 
 	@GetMapping("listar")
 	public String conta(Model model) {
-		List<Conta> contas = repository.findcontas();
-		BigDecimal saldoGeral = contaServices.getSaldoGeral(contas);
-		Conta conta = new Conta();
-		model.addAttribute("conta",conta);
-		model.addAttribute("contas",contas);
-		model.addAttribute("erro",null);
-		model.addAttribute("saldogeral",saldoGeral);
-		return "conta";	
-	}
-	
-	@PostMapping("salvar")
-	public RedirectView salvar(Model model, Conta conta , @RequestParam("file") MultipartFile file) throws IOException {
-		RedirectView rw = new RedirectView("/conta/listar");
-		conta.setQrcod(file.getBytes());
-		repository.save(conta);
-		return rw;
-	}
-	
-	@GetMapping("/qrcode/{id}")
-	@ResponseBody
-	public byte[] getImagem(@PathVariable Long id) {	
-		Optional<Conta> conta = repository.findById(id);
-		
-			return conta.get().getQrcod();		
-	}
-	
-	@GetMapping("alterar/{id}")
-	public String alterar(@PathVariable Long id, Model model) {
-		try {
-			Optional<Conta> conta = repository.findById(id);
-			List<Conta> contas = repository.findcontas();
-			model.addAttribute("conta",conta.get());
-			model.addAttribute("contas",contas);
-			model.addAttribute("erro",null);
-		} catch (Exception e) {
-			System.out.println("Conta não localizada!");
-		}
-		return "conta";	
-	}
-	
-	@GetMapping("/excluir/{id}")
-	public RedirectView  excluirConta(@PathVariable Long id, Model model) {
-		RedirectView rw = new RedirectView("/conta/listar");
-		//Optional<Conta> conta = repository.findById(Id);
-		Conta conta = repository.findContaId(id);
-		repository.delete(conta);
-		
-		System.out.println(id.toString());
-		return rw;
-	}
-	
-	@PostMapping("/creditar/{id}")
-	public void creditar( @PathVariable Long id, Model model, Conta conta ) {
-		  Conta contaLocalizada = repository.findContaId(id);
-	}
-	
-	@PostMapping("/movimentacao")
-	public RedirectView movimentacao(Model model, 
-			@RequestParam("valor") String valor, 
-			@RequestParam("conta") String conta, 
-			@RequestParam("operacao") String operacao,
-			@RequestParam("motivo") String motivo) {
-		
-		RedirectView rw = new RedirectView("/conta/listar");
-		Optional<Conta> contaLocalizada = repository.findConta(conta);
-		LogMovimentacaoFinanceira lmf = new LogMovimentacaoFinanceira();
-		valor = valor.replaceAll(",",".");
-		if (valor!=null) {
-			BigDecimal saldo = contaLocalizada.get().getSaldo();
-			Double vlr = Double.valueOf(valor);
-			BigDecimal vlr2 = BigDecimal.valueOf(vlr);
-			
-			//D = Débito  C="Crédito"
-			if (operacao.equals("D")) {
-				saldo = saldo.subtract(vlr2);
-				lmf.setDescricao(motivo.toUpperCase());
-				lmf.setDtMovimentacao(LocalDate.now());
-				lmf.setNrConta(contaLocalizada.get().getNrConta());
-				lmf.setTpMovimentacao(operacao);
-				lmf.setUsuario("Elias");
-				lmf.setVlMovimentado(vlr2);
-				
-			}
-			else {
-				saldo = saldo.add(vlr2);
-				lmf.setDescricao(motivo);
-				lmf.setDtMovimentacao(LocalDate.now());
-				lmf.setNrConta(contaLocalizada.get().getNrConta());
-				lmf.setTpMovimentacao(operacao);
-				lmf.setUsuario("Elias");
-				lmf.setVlMovimentado(vlr2);
-			}
-			
-			Conta  novosaldo = contaLocalizada.get();
-			novosaldo.setSaldo(saldo);
-			repository.save(novosaldo);
-			logMovimentacaoRepository.save(lmf);
-		}
-		return rw;
-	}
-	
-	@PostMapping("/transferir")
-	public String transferir(Model model,
-							@RequestParam(name = "ctaorigem") String ctaorigem,
-							@RequestParam(name = "ctadestino") String ctadestino, 
-							@RequestParam(name = "vlr") String vlr,
-							@RequestParam(name = "motivo") String motivo
-							
-					) {
-		System.out.println("Origem "+ctaorigem);
-		System.out.println("Destino " +ctadestino);
-		System.out.println("vls " +vlr);
-		System.out.println("motivo " +motivo);
-		ArrayList<Conta> contas = new ArrayList<Conta>();
-		List<Conta> listaDeContas= repository.findcontas();
-		Conta conta = new Conta();
-		vlr=vlr.replace(",", ".");
-		String msgTransacao = contaServices.validaTransacao (ctaorigem, ctadestino, vlr);
-		boolean contains = msgTransacao.contains("sucesso") ;
-		
-		if (contains) {
-			contaServices.transfere(contas, ctaorigem, ctadestino, vlr);
-			model.addAttribute("conta",conta);
-			model.addAttribute("contas",listaDeContas);
-			model.addAttribute("mensagem","O valor "+ vlr +  " foi  transferido com sucesso para a conta " + ctadestino);
-			model.addAttribute("erro",null);
-		}else {
-			model.addAttribute("conta",conta);
-			model.addAttribute("contas",listaDeContas);
-			model.addAttribute("erro",msgTransacao);
-		}
-			
+		contaServices.listar(model);
+
 		return "conta";
 	}
 
-	
+	@PostMapping("salvar")
+	public RedirectView salvar(Model model, Conta conta, @RequestParam("file") MultipartFile file) throws IOException {
+		RedirectView rw = contaServices.salvar(model, conta, file);
+
+		return rw;
+	}
+
+	@GetMapping("/qrcode/{id}")
+	@ResponseBody
+	public byte[] getImagem(@PathVariable Long id) {
+		Optional<Conta> conta = contaServices.getImagem(id);
+
+		return conta.get().getQrcod();
+	}
+
+	@GetMapping("alterar/{id}")
+	public String alterar(@PathVariable Long id, Model model) {
+		contaServices.alterar(id, model);
+
+		return "conta";
+	}
+
+	@GetMapping("/excluir/{id}")
+	public RedirectView excluirConta(@PathVariable Long id, Model model) {
+		RedirectView rw = contaServices.excluir(id, model);
+
+
+		return rw;
+	}
+
+	@PostMapping("/creditar/{id}")
+	public void creditar(@PathVariable Long id, Model model, Conta conta) {
+		Conta contaLocalizada  = contaServices.creditar(id, model, conta);
+	}
+
+	@PostMapping("/movimentacao")
+	public RedirectView movimentacao(Model model, @RequestParam("valor") String valor,
+			@RequestParam("conta") String conta, @RequestParam("operacao") String operacao,
+			@RequestParam("motivo") String motivo) {
+		RedirectView rw = contaServices.movimentacao(model, valor, conta, operacao, motivo);
+
+		return rw;
+	}
+
+	@PostMapping("/transferir")
+	public String transferir(Model model, @RequestParam(name = "ctaorigem") String ctaorigem,
+			@RequestParam(name = "ctadestino") String ctadestino, @RequestParam(name = "vlr") String vlr,
+			@RequestParam(name = "motivo") String motivo
+
+	) {
+		contaServices.trasferir(ctaorigem, ctadestino, vlr, motivo, model);
+
+		return "conta";
+	}
+
 }
