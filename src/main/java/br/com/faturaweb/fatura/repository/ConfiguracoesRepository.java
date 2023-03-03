@@ -1,6 +1,5 @@
 package br.com.faturaweb.fatura.repository;
 
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 

@@ -1,9 +1,7 @@
 package br.com.faturaweb.fatura.controller;
 
 import java.io.UnsupportedEncodingException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +43,7 @@ public class AgendamentoController {
 	 * */
 	@Scheduled( fixedRate = HORA*2)
 	private void notificacaoDeContasVencidas() {
+	
 		System.out.println("Início da Execução: " + LocalDateTime.now());
 		Configuracoes config = configuracoesRepository.findConfiguracao();
 		Integer nrDias = config.getNrDias();
