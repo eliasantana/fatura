@@ -1,8 +1,5 @@
 package br.com.faturaweb.fatura.controller;
 
-import java.util.List;
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,78 +15,48 @@ import org.springframework.web.servlet.view.RedirectView;
 import com.itextpdf.io.IOException;
 
 import br.com.faturaweb.fatura.model.Cartao;
-import br.com.faturaweb.fatura.repository.CartaoRepository;
+import br.com.faturaweb.fatura.services.CartaoServices;
 
 @Controller
 @RequestMapping("/cartao")
 public class CartaoController {
 
 	@Autowired
-	CartaoRepository cartaoReopsitory;
-	
-	
+	CartaoServices services;
+
 	@GetMapping("/cadastro")
 	public String cartacao(Model model, Cartao cartaoForm) {
-		List<Cartao> listaCartoes = cartaoReopsitory.findAllCartoes();
-		Cartao c = new Cartao();
-		model.addAttribute("cartao",c);
-		model.addAttribute("listacartao",listaCartoes);
+		services.listar(model, cartaoForm);
 		return "cartao_cadastro";
-		
+
 	}
-	
+
 	@PostMapping("salvar")
-	public String salvar(Model model, Cartao cartaoForm, @RequestParam ("file") MultipartFile  file) throws IOException{
-	
-		byte[] imagem;
-		try {
-			imagem = file.getBytes();
-			if(imagem.length > 0) {
-				cartaoForm.setLogoCartao(imagem);
-				cartaoForm.setNmArquivoLogo(file.getOriginalFilename());
-			}else {
-				System.out.println("Arquivo não recebido");
-			}
-		} catch (java.io.IOException e) {
-			e.printStackTrace();
-		}
-		cartaoReopsitory.save(cartaoForm);
-		List<Cartao> listaCartoes = cartaoReopsitory.findAllCartoes();
-		model.addAttribute("cartao", new Cartao());
-		model.addAttribute("listacartao",listaCartoes);
-	return "cartao_cadastro";
-	
+	public String salvar(Model model, Cartao cartaoForm, @RequestParam("file") MultipartFile file) throws IOException {
+		services.salvar(model, cartaoForm, file);
+		return "cartao_cadastro";
+
 	}
-	
+
 	@GetMapping("/excluir/{id}")
 	public RedirectView excluir(@PathVariable Long id) {
-		RedirectView rw = new RedirectView("/cartao/cadastro");
-		Optional<Cartao> cartaoLocalizado = cartaoReopsitory.findById(id);
-		if (cartaoLocalizado.isPresent()) {
-			cartaoReopsitory.delete(cartaoLocalizado.get());			
-		}
-		
+		RedirectView rw = services.excluir(id);
 		return rw;
 	}
-	
+
 	@GetMapping("/alterar/{id}")
 	public String alterar(@PathVariable Long id, Model model, Cartao cartao) {
-		List<Cartao> listaDeCartoes = cartaoReopsitory.findAllCartoes();
-		Optional<Cartao> cartaoLocalizado = cartaoReopsitory.findById(id);
-		model.addAttribute("listacartao",listaDeCartoes);
-		model.addAttribute("cartao",cartaoLocalizado.get());
-				
+		services.alterar(id, model, cartao);
 		return "cartao_cadastro";
 	}
-	
+
 	@GetMapping("/getimagem/{id}")
 	@ResponseBody
 	public byte[] getLogoCartao(@PathVariable Long id) {
-		Optional<Cartao> cartaoLocalizado = cartaoReopsitory.findById(id);
-		Cartao cartao = cartaoLocalizado.get();
-		return cartao.getLogoCartao(); 
+		Cartao cartao = services.getImagem(id);
+//		Optional<Cartao> cartaoLocalizado = cartaoReopsitory.findById(id);
+//		Cartao cartao = cartaoLocalizado.get();
+		return cartao.getLogoCartao();
 	}
-	
-	
-	
+
 }
