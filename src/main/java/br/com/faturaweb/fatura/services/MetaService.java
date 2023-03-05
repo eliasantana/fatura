@@ -226,6 +226,8 @@ public class MetaService {
 	public void listar(Model model, Meta meta) {
 		List<Conta> contas = contaRepository.findcontas();
 		List<Meta> metas = metaRepository.findAllMetas();
+		BigDecimal totalGeralItMeta = totalGeralItMeta(metas);
+		System.out.println("Total geral -> " + totalGeralItMeta);
 		Conta c = new Conta();
 		Meta m = new Meta();
 		m.setConta(c);
@@ -234,8 +236,32 @@ public class MetaService {
 		model.addAttribute(c);
 		model.addAttribute("mensagem", null);
 		model.addAttribute("metas", metas);
+		model.addAttribute("totalgeral",totalGeralItMeta);
 	}
 
+
+/**
+ * Totaliza os itens de meta da compentência
+ * @author elias
+ * @since 05-03-2023
+ * @param metas
+ * */
+	private BigDecimal totalGeralItMeta(List<Meta> metas) {
+		BigDecimal total = BigDecimal.ZERO;
+		if (metas.size() >0) {
+			for (Meta meta : metas) {
+				 ItMeta itMeta = itMetaRepository.getValorItMeta(meta.getCdMeta());
+				total = total.add(itMeta.getVlrSemana());
+			}
+		}
+		return total;
+	}
+	/**
+	 *Salva uma meta
+	 * 
+	 * @author Elias
+	 * @since 25/02/2022
+	 */
 	public RedirectView salvar(Model model, Meta metaForm, Conta conta) {
 		RedirectView rw = new RedirectView("/meta/listar");
 		List<Conta> contas = contaRepository.findcontas();
