@@ -1,5 +1,6 @@
 package br.com.faturaweb.fatura.repository;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.Query;
@@ -49,4 +50,15 @@ public interface ItMetaRepository extends CrudRepository<ItMeta, Long> {
    * */
   @Query(value="SELECT * FROM it_meta WHERE meta_cd_meta = :cdMeta", nativeQuery = true)
   List<ItMeta> findAllItensMeta(@Param (value = "cdMeta") Long cdMeta);
+  /**
+   * Retorna o primeiro valor da meta não creditada
+   * @since 05/03/2023
+   * @author elias
+   * @return  {@link BigDecimal} - Valor da MEta
+   * */
+  @Query(value ="select  *  from it_meta "
+  		+ " where nr_semana in (select min(nr_semana) nr_semana from it_meta where meta_cd_meta =:cdmeta  and sn_creditado = 'N') "
+  		+ " and sn_creditado = 'N' and meta_cd_meta = :cdmeta", nativeQuery = true )
+ ItMeta  getValorItMeta(@Param(value = "cdmeta") Long cdmeta);
+  
 }
