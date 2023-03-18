@@ -48,6 +48,13 @@
 					<select class="form-select" id="anolancamento" name="anolancamento" required="required">
 							<option th:each="ano: ${anosLancamento} " th:text="${ano.ano}"></option>
 					</select>
+			</div>	
+			<div class="col">
+					<label class="form-label">Tipo de Relatório</label> 
+					<select class="form-select" id="tprelatorio" name="tprelatorio">
+							<option value="M" selected="selected">Mensal</option>
+							<option value="A">Anual</option>
+					</select>
 			</div>			
 			<div class="col">
 					<!-- Button trigger modal -->

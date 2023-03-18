@@ -53,6 +53,23 @@ public interface LancamentoRepository extends CrudRepository<Lancamento, Long> {
 				+ "where date_format(dt_competencia,'%m%Y') =:mesano "
 				, nativeQuery = true)
 		List<Lancamento> findAllLancamentosDoMes(String mesano);
+		
+		/**
+		 * @author elias
+		 * @since 04/12/2021
+		 * Retorna os lancamentos do mês informado
+		 * Obs: Atualmente utilizado para fornecer dados para o gráfico de totalização de Despesas exibido na DashBoard 
+		 * */
+		@Modifying
+//		@Query(value = "SELECT *"
+//				+ " FROM lancamento "
+//				+ "where date_format(dt_competencia,'%m%Y') =:mesano "
+//				+ "group by  ds_lancamento", nativeQuery = true)
+		@Query(value = "SELECT *"
+				+ " FROM lancamento "
+				+ "where date_format(dt_competencia,'%Y') =:ano "
+				, nativeQuery = true)
+		List<Lancamento> findAllLancamentosDoAno(String ano);
 	
 		/**
 		 * Retorna todos os lancantos do ano corrente
@@ -100,6 +117,11 @@ public interface LancamentoRepository extends CrudRepository<Lancamento, Long> {
 										+ "where date_format(dt_competencia,'%m%Y') =:mesano   order by tipo_lancamento_cd_tipo_lancamento"
 											,nativeQuery = true)
 		List<Lancamento> findLancamentosFuturos(String mesano);
+		@Modifying
+		@Query(value = "SELECT * FROM lancamento "
+										+ "where date_format(dt_competencia,'%Y') =:ano   order by tipo_lancamento_cd_tipo_lancamento"
+											,nativeQuery = true)
+		List<Lancamento> findLancamentosAnual(String ano);
 		
 		/**
 		 * Retorna os lancçamentos do Mês seguinte

@@ -162,9 +162,14 @@ public class LancamentoServices {
 	 */
 	public HashMap<String, BigDecimal> totalizacaoDespesaCategoria(String mesAno) {
 		HashMap<String, BigDecimal> mapTotalizador = new HashMap<String, BigDecimal>();
-
+		List<Lancamento> lancamentos = new ArrayList<>();		
 		List<TipoLancamento> tiposLancamentos = tipoLancamentoRepository.findAllTipoLancamentos();
-		List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentosDoMes(mesAno);
+		//Se mes ano for menor que 6 dígitos. Busca os lançamentos do ano
+		if (mesAno.length()<6) {
+			lancamentos = lancamentoRepository.findAllLancamentosDoAno(mesAno);			
+		}else {
+			lancamentos = lancamentoRepository.findAllLancamentosDoMes(mesAno);			
+		}
 
 		BigDecimal totalizador = new BigDecimal(0);
 
@@ -194,8 +199,12 @@ public class LancamentoServices {
 	 */
 	public BigDecimal getTotalLctoMes(String mesAno) {
 		BigDecimal total = BigDecimal.ZERO;
-		List<Lancamento> lctoDoMes = lancamentoRepository.findAllLancamentosDoMes(mesAno);
-
+		List<Lancamento> lctoDoMes = new ArrayList<>();
+		if(mesAno.length() < 6) {
+			lctoDoMes = lancamentoRepository.findAllLancamentosDoAno(mesAno);
+		}else {
+			lctoDoMes = lancamentoRepository.findAllLancamentosDoMes(mesAno);
+		}
 		for (int i = 0; i < lctoDoMes.size(); i++) {
 			total = total.add(lctoDoMes.get(i).getVlPago());
 		}
@@ -231,7 +240,12 @@ public class LancamentoServices {
 
 		HashMap<String, BigDecimal> hashTotalizacao = new HashMap<String, BigDecimal>();
 		List<FormaDePagamento> formasDePagamento = formaPagtoRepository.findAllFormasDePagamento();
-		List<Lancamento> lancamentosDoMes = lancamentoRepository.findAllLancamentosDoMes(mesAno);
+		List<Lancamento> lancamentosDoMes = new ArrayList<>();
+		if (mesAno.length()<6) {
+			lancamentosDoMes = lancamentoRepository.findAllLancamentosDoAno(mesAno);
+		}else {
+			lancamentosDoMes = lancamentoRepository.findAllLancamentosDoMes(mesAno);
+		}
 		BigDecimal total = BigDecimal.ZERO;
 
 		for (FormaDePagamento pagamentos : formasDePagamento) {
