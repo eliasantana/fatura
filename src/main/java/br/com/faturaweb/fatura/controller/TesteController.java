@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -97,6 +98,22 @@ public class TesteController {
 		
 	@GetMapping("/teste")
 	public String apiltipolancnamento(Model model){
+		ChaveConfig chave1 = new ChaveConfig();
+		
+		chave1.setChave(Chave.TESTE1);
+		chave1.setDtCriacao(LocalDate.now());
+		chave1.setDescricao("Teste de Criação de Chaves");
+		chave1.setValor("S");
+		
+		ChaveConfig chave2 = new ChaveConfig();
+		chave2.setChave(Chave.SN_CAD_DESPESA_INICIO);
+		chave2.setDtCriacao(LocalDate.now());
+		chave2.setDescricao("Teste de Criação de Chaves");
+		chave2.setValor("S");
+		List<ChaveConfig>listaDeChaves = new ArrayList<>();
+		listaDeChaves.add(chave1);
+		listaDeChaves.add(chave2);
+		chaveRepository.saveAll(listaDeChaves);
 		
 		return "teste";
 	}

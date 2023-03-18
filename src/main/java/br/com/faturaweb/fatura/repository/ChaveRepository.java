@@ -1,5 +1,6 @@
 package br.com.faturaweb.fatura.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.Query;
@@ -14,6 +15,8 @@ public interface ChaveRepository extends CrudRepository<ChaveConfig, Long> {
 	@Query(value = "SELECT * FROM chave_config where chave = :chave",nativeQuery = true)
 	Optional<ChaveConfig> findChaveConfigByDescricao(String chave);
 
+	@Query(value = "SELECT * FROM chave_config ", nativeQuery = true)
+	List<ChaveConfig>listarTodas();
 	
 	
 }
