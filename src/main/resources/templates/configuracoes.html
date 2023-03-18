@@ -1,283 +1,416 @@
 <!DOCTYPE html>
 <html>
 <head th:replace="~{fragmento :: head('SysFatura') }">
- 	 <meta charset="UTF-8">
- 	 <!-- Imports Jquery necessários para o JTable -->
-	 	 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-		<script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
-		<script src="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css"></script>
-		<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css">
-		<link href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
- 	 <!--  -->
-  </head>
- <body>
- <!-- NavBar -->
- <nav th:replace="~{navfragment:: nav }"></nav>
- 
- <!-- Tabs -->
- <form action="/configuracoes/salvar" method="post" id="formulario" enctype="multipart/form-data">
- <ul class="nav nav-pills mb-3 mt-3 ml-2" id="pills-tab" role="tablist">
-  <li class="nav-item" role="presentation">
-    <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">Financeiro</button>
-  </li>
-  <li class="nav-item" role="presentation">
-    <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Notificação</button>
-  </li>
-  <li class="nav-item" role="presentation">
-    <button class="nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-contact" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Configurações Gerais</button>
-  </li>
-</ul>
-<div class="tab-content" id="pills-tabContent">
-  <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
-	<div class="card ml-3 mr-3">
-		  <div class="card-header"></div>
-		  <div class="card-body">
-		    <h5 class="card-title">Parcelar?</h5>
-		    <p class="card-text">Habilita/Desabilita Lançamentos Parcelados</p>
-			   <label th:if="${config.cdConfiguracao}==null" for="cdConfiguracao">Código</label>
-			   <input th:if="${config.cdConfiguracao}==null" th:value="${config.cdConfiguracao}" type="text" name="cdConfiguracao" id="cdConfiguracao" class="form-control">
-			   <label for="snParcelar">Parcelar?</label>	  
-			   <select class="form-select" id="snParcelar" name="snParcelado">
-				  <option th:value="S" th:if="${config.snParcelado=='S'}" selected>Sim</option>
-				  <option th:value="N" th:if="${config.snParcelado=='S'}" th:text="Não">Não</option>	
-				  <option th:value="N" th:if="${config.snParcelado=='N'}" selected>Não</option>
-				  <option th:value="S" th:if="${config.snParcelado=='N'}" th:text="Sim">Sim</option>		  
-				</select>
-				<div class="mb-2 mt-2">
-					<label class="form-label">Lançar na competênia?</label>
-						 <select class="form-select" id="snNaCompetencia" name="snNaCompetencia">
-							  <option th:value="S" th:if="${config.snNaCompetencia=='S'}" selected>Sim</option>
-							  <option th:value="N" th:if="${config.snNaCompetencia=='S'}" th:text="Não">Não</option>	
-							  <option th:value="N" th:if="${config.snNaCompetencia=='N'}" selected>Não</option>
-							  <option th:value="S" th:if="${config.snNaCompetencia=='N'}" th:text="Sim">Sim</option>		  
-						 </select>
-					 <div class="form-text">Adiciona a primeira parcela na competência atual</div>
-				</div>
-				
-				<div>
-					<label class="form-label" for="limiteCartao">Teto de Gasto Cartão (limite)</label>
-					<input type="number" class="form-control" th:value="${config.limiteCartao}" id="limiteCartao" name="limiteCartao">
-				</div>
-				
-				<div>
-					<label class="form-label">Conta de Origem</label>
-					<select class="form-select" id="nrContaOrigem" name="nrContaOrigem">
-						<option th:each ="contas: ${contas}" th:text="${contas.dsConta} + ' - ' + ${contas.nrConta} " th:value="${contas.nrConta}" th:selected="${contas.nrConta} == ${contaselecionada}"></option>
-					</select>
-				</div>
-				<div class="form-text">Informe a conta de onde sairá o recurso</div>
-				
-		</div>
-	</div><!-- Fim do Card -->
-	<!-- Card Provisionamento -->
-	<div class="card ml-1 mr-1 mt-3">
-		  <div class="card-header"></div>
-		  <div class="card-body">
-		    <h5 class="card-title">Provisionamento</h5>
-		    <p class="card-text">Confirguração do Provisionamento de Receita</p>
-				
-				<div class="mt-2">
-					<a href="/provisao/listar" th:href="@{'/provisao/listar'}" class="btn btn-primary">
-							<span class="material-icons-outlined">Configurar Provisionamento</span> 
-					</a>
-				</div>
-		</div>
-	</div><!-- Fim do Card -->	
-  	<!--  -->
-  </div> <!-- ? -->
-  <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
-  	<div class="card ml-3  mr-3">
-		  <div class="card-header">
-		  </div>
-		  <div class="card-body">
-		    <h5 class="card-title">Notificar via E-mail</h5>
-		    <p class="card-text">Notificar via e-mail o vencimento de Despesas</p>
-		  		<label for="snEviar">Notificar?</label>
-				<input type="checkbox" th:if="${config.snNotificar}=='N'" id="snEviar" th:value="N" name="snNotificar"/>
-				<input type="checkbox" th:if="${config.snNotificar}=='S'" id="snEviar" th:value="S" checked="checked" name="snNotificar"/>
-				<!-- <label for="nrDias">&nbsp;&nbsp;&nbsp;Número de Dias de Atrazo</label>	 -->
-				<input type="number" class="form-control"  th:value="${config.nrDias}" id="nrDias" name="nrDias" size="2">
-				<div class="form-text">obs: Selecione a partir de quantos dias o sistema deverá notificar o usuário!</div>
-				<div>
-					<label class="form-label" for="msgDiaria">Quantidade de Mensagens Diária</label>
-					<input type="number" class="form-control" th:value="${config.nrMsgDiaria}" name="nrMsgDiaria" id="nrMsgDiaria" required="required"/>
-					<div class="form-text">obs: Defina a quantiade de Mensagens a serem enviadas diariamente!</div>
-				</div>
-				<div>
-					<label class="form-label" for="diretorio">Diretório de Importação</label>
-					<input type="text" class="form-control" id="diretorio" name="dirImportacao" th:value="${config.dirImportacao}">
-					<div class="form-text">obs: Utilize barras invertidas para informar o caminho</div>
-				</div>
-				<!-- Email -->
-				<div>
-					<label class="form-label" for="titulo">Titulo da Mensagem</label>
-					<input type="text" class="form-control" id="titulo" name="tituloMsgEmailDestino" th:value="${config.tituloMsgEmailDestino}">
-					<div class="form-text">obs: Informe o Titulo da Mensagem</div>
-				</div>
-				<div>
-					<label class="form-label" for="nmorigem">Descrição do E-mail de Origem</label>
-					<input type="text" class="form-control" id="nmorigem" name="nmOrigem" th:value="${config.nmOrigem}">
-					<div class="form-text">obs: Informe o nome a ser exibido no e-mail de Origem</div>
-				</div>
-				<div>
-					<label class="form-label" for="emailorigem">Mensageria (E-mail de origem)</label>
-					<input type="email" class="form-control" id="emailorigem" name="emailOrigem" th:value="${config.emailOrigem}">
-					<div class="form-text">obs: Informe o e-mail de saida do seu provedor</div>
-				</div>
-				<div>
-					<label class="form-label" for="nmdestino">Descrição do E-mail de Destino</label>
-					<input type="text" class="form-control" id="nmdestino" name="nmDestino" th:value="${config.nmDestino}">
-					<div class="form-text">obs: Informe o nome a ser exibido no e-mail de Destino</div>
-				</div>
-				<div>
-					<label class="form-label" for="emaildestino">Mensageria (E-mail de Destino)</label>
-					<input type="email" class="form-control" id="emaildestino" name="emailDestino" th:value="${config.emailDestino}">
-					<a href="/email" class="btn btn-primary mt-2">Testar Envio</a>
-					<div class="form-text">obs: Informe o e-mail para onde a mensagem será envida!</div>
-				</div>
-				
-			</div>
-		</div>
-  </div>
-  <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
-  	<div class="card ml-3  mr-3">
-		  <div class="card-header"></div>
-		  <div class="card-body">
-		    <h5 class="card-title">Logo do Sistema</h5>
-		    <p class="card-text"></p>
-		  		<label for="snEviar"></label>
-				<div class="mb-3">
-			  		<label for="formFile" class="form-label">Selecionar arquivo</label>
-			 		 <input class="form-control" type="file" id="formFile" name="file" >
-				</div>	
-				<div>
-					<img th:src="|getimagem|" width="100px" height="100px"/>
-				</div>
-				<div class="mb-3">
-			  		<label for="nmArquivo" class="form-label">Nome do Arquivo (Logo)</label>
-			 		 <input class="form-control" type="text" id="nmArquivo" name="nomeArquivo" th:value="${config.nomeArquivo}">
-				</div>	
-				<div class="mb-3">
-			  		<label for="nmArquivo" class="form-label">Cainho pasta Relatórios</label>
-					<div class="form-text">obs: Informe o diretório destinado aos relatórios</div>
-			 		<input class="form-control" type="text" id="dirRelatorio" name="dirRelatorio" th:value="${config.dirRelatorio}">
-				</div>	
-		</div>
-	</div>	
-	<!-- Card Configurações Gerais -->
-	<div class="card ml-3  mr-3 mt-3">
-		  <div class="card-header"><h3>Chaves de Configuração</h3></div>
-		  <div class="card-body">
-		    <h5 class="card-title">Chaves</h5>
-		    <p class="card-text"></p>
-		  		<label for="snEviar"></label>
-				<div class="mb-3">
-			  		<table id="chaves" class="display" style="width:100%">
-					        <thead>
-					            <tr>
-					            	<th>Chave</th>
-					                <th>Descrição</th>
-					                <th>Valor</th>
-					                <th>Data de Criação</th>
-					            </tr>
-					        </thead>
-					        <tfoot>
-					            <tr>
-					            	<th>chave</th>
-					               <th>descricao</th>
-					                <th>valor</th>
-					                <th>dtCriacao</th>
-					            </tr>
-					        </tfoot>
-					    </table>
-				</div>
-	</div>	
-	
-	<!-- Fim do Card Configurações Gerais -->
-  </div>
-</div>
-<div>
-	<div class="col">
-	<button type="submit" class="btn btn-primary mt-5">Salvar</button>	
-	<a th:replace="~{btn_home_fragment::btn_home}">home</a>	
-	</div>	
-	<div  class="alert alert-primary mt-2" role="alert" th:if="${mensagem!=null}">
-		<h5 th:text="${mensagem}"></h5>
-	</div>
-</div>
-</form>	
-
-<!-- Scripts para o JTable -->
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-<!-- Adiciona a barra de pesquisa no data table -->
-<!-- Bibliotecas --> 
-
+<meta charset="UTF-8">
+<!-- Imports Jquery necessários para o JTable -->
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-<script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap5.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.bootstrap5.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-<script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.print.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.colVis.min.js"></script>
-<!-- url: 'https://elias1576.c41.integrator.host/api/tipolancamento', -->
-<script>
+<script
+	src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+<script
+	src="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css"></script>
+<link
+	href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css">
+<link
+	href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
+<!--  -->
+</head>
+<body>
+	<!-- NavBar -->
+	<nav th:replace="~{navfragment:: nav }"></nav>
 
-$(document).ready(function () {
-    $('#chaves').DataTable({
-        ajax: {
-        	url: 'http://localhost:8080/chaves/listar',
-        	dataSrc:''
-        },
-        columns: [
-        	 {data: 'chave' },
-            { data: 'descricao' },
-            { data: 'valor' },
-            { data: 'dtCriacao' }
-        ],
-    });
-});
-</script>
-<!-- Fim Script Data Table-->
+	<!-- Tabs -->
+	<form action="/configuracoes/salvar" method="post" id="formulario"
+		enctype="multipart/form-data">
+		<ul class="nav nav-pills mb-3 mt-3 ml-2" id="pills-tab" role="tablist">
+			<li class="nav-item" role="presentation">
+				<button class="nav-link active" id="pills-home-tab"
+					data-bs-toggle="pill" data-bs-target="#pills-home" type="button"
+					role="tab" aria-controls="pills-home" aria-selected="true">Financeiro</button>
+			</li>
+			<li class="nav-item" role="presentation">
+				<button class="nav-link" id="pills-profile-tab"
+					data-bs-toggle="pill" data-bs-target="#pills-profile" type="button"
+					role="tab" aria-controls="pills-profile" aria-selected="false">Notificação</button>
+			</li>
+			<li class="nav-item" role="presentation">
+				<button class="nav-link" id="pills-contact-tab"
+					data-bs-toggle="pill" data-bs-target="#pills-contact" type="button"
+					role="tab" aria-controls="pills-contact" aria-selected="false">Configurações
+					Gerais</button>
+			</li>
+		</ul>
+		<div class="tab-content" id="pills-tabContent">
+			<div class="tab-pane fade show active" id="pills-home"
+				role="tabpanel" aria-labelledby="pills-home-tab">
+				<div class="card ml-3 mr-3">
+					<div class="card-header"></div>
+					<div class="card-body">
+						<h5 class="card-title">Parcelar?</h5>
+						<p class="card-text">Habilita/Desabilita Lançamentos
+							Parcelados</p>
+						<label th:if="${config.cdConfiguracao}==null" for="cdConfiguracao">Código</label>
+						<input th:if="${config.cdConfiguracao}==null"
+							th:value="${config.cdConfiguracao}" type="text"
+							name="cdConfiguracao" id="cdConfiguracao" class="form-control">
+						<label for="snParcelar">Parcelar?</label> <select
+							class="form-select" id="snParcelar" name="snParcelado">
+							<option th:value="S" th:if="${config.snParcelado=='S'}" selected>Sim</option>
+							<option th:value="N" th:if="${config.snParcelado=='S'}"
+								th:text="Não">Não</option>
+							<option th:value="N" th:if="${config.snParcelado=='N'}" selected>Não</option>
+							<option th:value="S" th:if="${config.snParcelado=='N'}"
+								th:text="Sim">Sim</option>
+						</select>
+						<div class="mb-2 mt-2">
+							<label class="form-label">Lançar na competênia?</label> <select
+								class="form-select" id="snNaCompetencia" name="snNaCompetencia">
+								<option th:value="S" th:if="${config.snNaCompetencia=='S'}"
+									selected>Sim</option>
+								<option th:value="N" th:if="${config.snNaCompetencia=='S'}"
+									th:text="Não">Não</option>
+								<option th:value="N" th:if="${config.snNaCompetencia=='N'}"
+									selected>Não</option>
+								<option th:value="S" th:if="${config.snNaCompetencia=='N'}"
+									th:text="Sim">Sim</option>
+							</select>
+							<div class="form-text">Adiciona a primeira parcela na
+								competência atual</div>
+						</div>
+
+						<div>
+							<label class="form-label" for="limiteCartao">Teto de
+								Gasto Cartão (limite)</label> <input type="number" class="form-control"
+								th:value="${config.limiteCartao}" id="limiteCartao"
+								name="limiteCartao">
+						</div>
+
+						<div>
+							<label class="form-label">Conta de Origem</label> <select
+								class="form-select" id="nrContaOrigem" name="nrContaOrigem">
+								<option th:each="contas: ${contas}"
+									th:text="${contas.dsConta} + ' - ' + ${contas.nrConta} "
+									th:value="${contas.nrConta}"
+									th:selected="${contas.nrConta} == ${contaselecionada}"></option>
+							</select>
+						</div>
+						<div class="form-text">Informe a conta de onde sairá o
+							recurso</div>
+
+					</div>
+				</div>
+				<!-- Fim do Card -->
+				<!-- Card Provisionamento -->
+				<div class="card ml-1 mr-1 mt-3">
+					<div class="card-header"></div>
+					<div class="card-body">
+						<h5 class="card-title">Provisionamento</h5>
+						<p class="card-text">Confirguração do Provisionamento de
+							Receita</p>
+
+						<div class="mt-2">
+							<a href="/provisao/listar" th:href="@{'/provisao/listar'}"
+								class="btn btn-primary"> <span
+								class="material-icons-outlined">Configurar
+									Provisionamento</span>
+							</a>
+						</div>
+					</div>
+				</div>
+				<!-- Fim do Card -->
+				<!--  -->
+			</div>
+			<!-- ? -->
+			<div class="tab-pane fade" id="pills-profile" role="tabpanel"
+				aria-labelledby="pills-profile-tab">
+				<div class="card ml-3  mr-3">
+					<div class="card-header"></div>
+					<div class="card-body">
+						<h5 class="card-title">Notificar via E-mail</h5>
+						<p class="card-text">Notificar via e-mail o vencimento de
+							Despesas</p>
+						<label for="snEviar">Notificar?</label> <input type="checkbox"
+							th:if="${config.snNotificar}=='N'" id="snEviar" th:value="N"
+							name="snNotificar" /> <input type="checkbox"
+							th:if="${config.snNotificar}=='S'" id="snEviar" th:value="S"
+							checked="checked" name="snNotificar" />
+						<!-- <label for="nrDias">&nbsp;&nbsp;&nbsp;Número de Dias de Atrazo</label>	 -->
+						<input type="number" class="form-control"
+							th:value="${config.nrDias}" id="nrDias" name="nrDias" size="2">
+						<div class="form-text">obs: Selecione a partir de quantos
+							dias o sistema deverá notificar o usuário!</div>
+						<div>
+							<label class="form-label" for="msgDiaria">Quantidade de
+								Mensagens Diária</label> <input type="number" class="form-control"
+								th:value="${config.nrMsgDiaria}" name="nrMsgDiaria"
+								id="nrMsgDiaria" required="required" />
+							<div class="form-text">obs: Defina a quantiade de Mensagens
+								a serem enviadas diariamente!</div>
+						</div>
+						<div>
+							<label class="form-label" for="diretorio">Diretório de
+								Importação</label> <input type="text" class="form-control"
+								id="diretorio" name="dirImportacao"
+								th:value="${config.dirImportacao}">
+							<div class="form-text">obs: Utilize barras invertidas para
+								informar o caminho</div>
+						</div>
+						<!-- Email -->
+						<div>
+							<label class="form-label" for="titulo">Titulo da Mensagem</label>
+							<input type="text" class="form-control" id="titulo"
+								name="tituloMsgEmailDestino"
+								th:value="${config.tituloMsgEmailDestino}">
+							<div class="form-text">obs: Informe o Titulo da Mensagem</div>
+						</div>
+						<div>
+							<label class="form-label" for="nmorigem">Descrição do
+								E-mail de Origem</label> <input type="text" class="form-control"
+								id="nmorigem" name="nmOrigem" th:value="${config.nmOrigem}">
+							<div class="form-text">obs: Informe o nome a ser exibido no
+								e-mail de Origem</div>
+						</div>
+						<div>
+							<label class="form-label" for="emailorigem">Mensageria
+								(E-mail de origem)</label> <input type="email" class="form-control"
+								id="emailorigem" name="emailOrigem"
+								th:value="${config.emailOrigem}">
+							<div class="form-text">obs: Informe o e-mail de saida do
+								seu provedor</div>
+						</div>
+						<div>
+							<label class="form-label" for="nmdestino">Descrição do
+								E-mail de Destino</label> <input type="text" class="form-control"
+								id="nmdestino" name="nmDestino" th:value="${config.nmDestino}">
+							<div class="form-text">obs: Informe o nome a ser exibido no
+								e-mail de Destino</div>
+						</div>
+						<div>
+							<label class="form-label" for="emaildestino">Mensageria
+								(E-mail de Destino)</label> <input type="email" class="form-control"
+								id="emaildestino" name="emailDestino"
+								th:value="${config.emailDestino}"> <a href="/email"
+								class="btn btn-primary mt-2">Testar Envio</a>
+							<div class="form-text">obs: Informe o e-mail para onde a
+								mensagem será envida!</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+			<div class="tab-pane fade" id="pills-contact" role="tabpanel"
+				aria-labelledby="pills-contact-tab">
+				<div class="card ml-3  mr-3">
+					<div class="card-header"></div>
+					<div class="card-body">
+						<h5 class="card-title">Logo do Sistema</h5>
+						<p class="card-text"></p>
+						<label for="snEviar"></label>
+						<div class="mb-3">
+							<label for="formFile" class="form-label">Selecionar
+								arquivo</label> <input class="form-control" type="file" id="formFile"
+								name="file">
+						</div>
+						<div>
+							<img th:src="|getimagem|" width="100px" height="100px" />
+						</div>
+						<div class="mb-3">
+							<label for="nmArquivo" class="form-label">Nome do Arquivo
+								(Logo)</label> <input class="form-control" type="text" id="nmArquivo"
+								name="nomeArquivo" th:value="${config.nomeArquivo}">
+						</div>
+						<div class="mb-3">
+							<label for="nmArquivo" class="form-label">Cainho pasta
+								Relatórios</label>
+							<div class="form-text">obs: Informe o diretório destinado
+								aos relatórios</div>
+							<input class="form-control" type="text" id="dirRelatorio"
+								name="dirRelatorio" th:value="${config.dirRelatorio}">
+						</div>
+					</div>
+				</div>
+				<!-- Card Configurações Gerais -->
+				<div class="card ml-3  mr-3 mt-3">
+					<div class="card-header">
+						<h3>Chaves de Configuração</h3>
+					</div>
+					<div class="card-body">
+						<h5 class="card-title">Chaves</h5>
+						<p class="card-text"></p>
+						<label for="snEviar"></label>
+						<div class="mb-3">
+							<table id="chaves" class="display" style="width: 100%">
+								<thead>
+									<tr>
+										<th>Chave</th>
+										<th>Descrição</th>
+										<th>Valor</th>
+										<th>Data de Criação</th>
+									</tr>
+								</thead>
+								<tfoot>
+									<tr>
+										<th>chave</th>
+										<th>descricao</th>
+										<th>valor</th>
+										<th>dtCriacao</th>
+									</tr>
+								</tfoot>
+							</table>
+						</div>
+					</div>
+					<!-- Modal Chaves  -->
+					<!-- Button trigger modal -->
+					<button type="button" class="btn btn-primary"
+						data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+						Ativar chaves</button>
+
+					<!-- Modal -->
+					<div class="modal fade " id="staticBackdrop"
+						data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+						aria-labelledby="staticBackdropLabel" aria-hidden="true">
+						<div class="modal-dialog modal-lg">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="staticBackdropLabel">Ativar/Desativar Chaves de Configuração</h5>
+									<button type="button" class="btn-close" data-bs-dismiss="modal"
+										aria-label="Close"></button>
+								</div>
+								<div class="modal-body">
+									<table id="tabelalotes" class="table table-striped"
+										style="width: 100%">
+										<thead>
+											<tr>
+												<th>Chave</th>
+												<th>Descrição</th>
+												<th>Status</th>
+											</tr>
+											<tr th:each="chave:${chave}">
+												<td th:text="${chave.chave}"></td>
+												<td th:text="${chave.descricao}"></td>
+												<td th:if="${chave.valor}=='S'"> <a href="/configuracoes/chave/" th:href="@{'/configuracoes/chave/' + ${chave.chave}}" class="btn btn-success">Ativa</a>  </td>
+												<td th:if="${chave.valor}=='N'"> <a href="/configuracoes/chave/" th:href="@{'/configuracoes/chave/' + ${chave.chave}}" class="btn btn-danger">Inativa</a>  </td>  	 
+											</tr>
+										</thead>
+										<tbody>
+										</tbody>
+									</table>
+
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary"
+										data-bs-dismiss="modal">Fechar</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- Fim modal chaves -->
+					<!-- Fim do Card Configurações Gerais -->
+				</div>
+			</div>
+			<div>
+				<div class="col">
+					<button type="submit" class="btn btn-primary mt-5">Salvar</button>
+					<a th:replace="~{btn_home_fragment::btn_home}">home</a>
+				</div>
+				<div class="alert alert-primary mt-2" role="alert"
+					th:if="${mensagem!=null}">
+					<h5 th:text="${mensagem}"></h5>
+				</div>
+			</div>
+	</form>
+
+	<!-- Scripts para o JTable -->
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+		integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+		integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+		crossorigin="anonymous"></script>
+	<!-- Adiciona a barra de pesquisa no data table -->
+	<!-- Bibliotecas -->
+
+	<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+	<script
+		src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+	<script
+		src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap5.min.js"></script>
+	<script
+		src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
+	<script
+		src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.bootstrap5.min.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+	<script
+		src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
+	<script
+		src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.print.min.js"></script>
+	<script
+		src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.colVis.min.js"></script>
+	<!-- url: 'https://elias1576.c41.integrator.host/api/tipolancamento', -->
+	<script>
+		$(document).ready(function() {
+			$('#chaves').DataTable({
+				ajax : {
+					url : 'http://localhost:8080/chaves/listar',
+					dataSrc : ''
+				},
+				columns : [ {
+					data : 'chave'
+				}, {
+					data : 'descricao'
+				}, {
+					data : 'valor'
+				}, {
+					data : 'dtCriacao'
+				} ],
+			});
+		});
+	</script>
+	<!-- Fim Script Data Table-->
 </body>
 <script>
-  $(document).ready(function(){
-      $('#lancamentos').DataTable({
-        	"language": {
-                "lengthMenu": "Mostrando _MENU_ registros por página",
-                "zeroRecords": "Nada encontrado",
-                "info": "Mostrando página _PAGE_ de _PAGES_",
-                "infoEmpty": "Nenhum registro disponível",
-                "infoFiltered": "(filtrado de _MAX_ registros no total)"
-                
-            },
-            columnDefs: [ {
-	            targets: [ 0 ],
-	            orderData: [ 0, 3]
-	        }]
-      
-        });
-  });
-  
- 
-  </script>
-<script type="text/javascript">
-var myform = document.getElementById("formulario");
-document.getElementById("flexSwitchCheckDefault").addEventListener("click", function () {
-  myform.submit();
-});
+	$(document).ready(function() {
+		$('#lancamentos').DataTable({
+			"language" : {
+				"lengthMenu" : "Mostrando _MENU_ registros por página",
+				"zeroRecords" : "Nada encontrado",
+				"info" : "Mostrando página _PAGE_ de _PAGES_",
+				"infoEmpty" : "Nenhum registro disponível",
+				"infoFiltered" : "(filtrado de _MAX_ registros no total)"
 
+			},
+			columnDefs : [ {
+				targets : [ 0 ],
+				orderData : [ 0, 3 ]
+			} ]
+
+		});
+	});
 </script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+<script type="text/javascript">
+	var myform = document.getElementById("formulario");
+	document.getElementById("flexSwitchCheckDefault").addEventListener("click",
+			function() {
+				myform.submit();
+			});
+</script>
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+	integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+	crossorigin="anonymous"></script>
 <!-- Necessário para execição dos ícones feather-->
 <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
 <script>
-     feather.replace()
+	feather.replace()
 </script>
 
 </html>
