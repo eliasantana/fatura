@@ -20,8 +20,12 @@ public class ExtratoLancamentoController {
 	ExtratoLancamentoServices services;
 	@GetMapping("/financeiro")
 	public String extratoLancamento(@RequestParam  String mesAno, 
-																@RequestParam (name = "anolancamento", required = false) String anolancamento  , Model  model) {
-		services.getExtratoLancamento(mesAno, anolancamento, model);
+															 @RequestParam (name = "anolancamento", required = false) String anolancamento,
+															 @RequestParam(name = "tprelatorio", required = false ) String tprelatorio
+															 , Model  model) {
+		
+		
+		services.getExtratoLancamento(mesAno, anolancamento, tprelatorio,model);
 		return "extrato_lancamento";
 	}
 	

@@ -2,6 +2,7 @@ package br.com.faturaweb.fatura.services;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -37,27 +38,44 @@ public class ExtratoLancamentoServices {
 	FormaDePagamentoRepository formaPagtoRepository;
 	@Autowired
 	TipoLancamentoRepository tipoLancamentoRepository;
-/**
- * Relatórios de Lançamento em tela
- * @author elias
- * @since 04-03-2023
- * @param mesAno
- * @param anolancamento
- * @model
- * */
-	public void getExtratoLancamento(String mesAno, String anolancamento, Model model) {
+
+	/**
+	 * Relatórios de Lançamento em tela
+	 * 
+	 * @author elias
+	 * @since 04-03-2023
+	 * @param mesAno
+	 * @param anolancamento
+	 * @model
+	 */
+	public void getExtratoLancamento(String mesAno, String anolancamento, String tprelatorio, Model model) {
+		List<Lancamento> lctoFuturo = new ArrayList<>();
+		HashMap<String, BigDecimal> totalDespesaFormaPagto = new HashMap<>();
+		HashMap<String, BigDecimal> totalizacaoDespesaCategoria = new HashMap<>();
+		BigDecimal totalLctoMes = BigDecimal.ZERO;
+		String competencia = "";
 		if (anolancamento == null)
 			anolancamento = Integer.toString(LocalDate.now().getYear());
-
+		if ("0".equals(mesAno))
+			mesAno = "01"; // Se o mês não for informado aponta para o primeiro mês do ano
 		mesAno = mesAno + anolancamento;
 		List<FormaDePagamento> formaDePagamentos = formaPagtoRepository.findAllFormasDePagamento();
-		List<Lancamento> lctoFuturo = lctoRepository.findLancamentosFuturos(mesAno);
+		// Busca os lancamento do ano informado quando o tipo de relatório for = 'A -  Anual'
+		if ("A".equals(tprelatorio)) {
+			lctoFuturo = lctoRepository.findLancamentosAnual(anolancamento);
+			totalizacaoDespesaCategoria = lctoServices.totalizacaoDespesaCategoria(anolancamento);
+			totalDespesaFormaPagto = lctoServices.getTotalizacaoDespesaFormaPagto(anolancamento);
+			totalLctoMes = lctoServices.getTotalLctoMes(anolancamento);
+		} else {
+			lctoFuturo = lctoRepository.findLancamentosFuturos(mesAno);
+			totalizacaoDespesaCategoria = lctoServices.totalizacaoDespesaCategoria(mesAno);
+			totalDespesaFormaPagto = lctoServices.getTotalizacaoDespesaFormaPagto(mesAno);
+			totalLctoMes = lctoServices.getTotalLctoMes(mesAno);
+		}
 		List<Conta> contas = contaRepository.findcontas();
 		List<TipoLancamento> tiposLancamento = tipoLancamentoRepository.findAllTipoLancamentos();
 		List<AnoLancamentoProjection> anosLancamento = lctoServices.getAnosLancamento();
 		BigDecimal saldoGeral = contaServices.getSaldoGeral(contas);
-		HashMap<String, BigDecimal> totalizacaoDespesaCategoria = lctoServices.totalizacaoDespesaCategoria(mesAno);
-		HashMap<String, BigDecimal> totalDespesaFormaPagto = lctoServices.getTotalizacaoDespesaFormaPagto(mesAno);
 		model.addAttribute("lcto", lctoFuturo);
 		model.addAttribute("totalizacao", totalizacaoDespesaCategoria.keySet().toArray());
 		model.addAttribute("valores", totalizacaoDespesaCategoria.values());
@@ -68,22 +86,27 @@ public class ExtratoLancamentoServices {
 		model.addAttribute("saldoGeral", saldoGeral);
 		model.addAttribute("formapagto", formaDePagamentos);
 		model.addAttribute("tl", tiposLancamento);
-
-		String competencia = " Relatório de Despesas Competência - "
-				+ mesAno.substring(0, 2).concat("/").concat(mesAno.substring(2, 6));
+		if ("A".equals(tprelatorio)) {
+			competencia = " Relatório de Despesas Anuais  -  " + anolancamento;
+		} else {
+			competencia = " Relatório de Despesas Mensal  Competência - "
+					+ mesAno.substring(0, 2).concat("/").concat(mesAno.substring(2, 6));
+		}
 		model.addAttribute("competencia", competencia);
-		model.addAttribute("total", lctoServices.getTotalLctoMes(mesAno));
+		model.addAttribute("total", totalLctoMes);
 		model.addAttribute("contas", contas);
 		model.addAttribute("anosLancamento", anosLancamento);
 
 		System.out.println(mesAno);
 
 	}
-/**
- * Retorna a logo do sistema
- * @author elias
- * @since 04-03-2023
- * */
+
+	/**
+	 * Retorna a logo do sistema
+	 * 
+	 * @author elias
+	 * @since 04-03-2023
+	 */
 	public Configuracoes getLogo() {
 		Configuracoes config = configuracoesRepository.findConfiguracao();
 		return config;

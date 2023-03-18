@@ -19,7 +19,8 @@ public class ConfiguracoesServices {
 	ChaveRepository chaveRepository;
 
 	public RedirectView getChave(String chave) {
-		RedirectView rw = new RedirectView("/configuracoes/listar");
+		//RedirectView rw = new RedirectView("/configuracoes/listar");
+		RedirectView rw = new RedirectView("/");
 		java.util.Optional<ChaveConfig> chaveConfig = chaveRepository.findChaveConfigByDescricao(chave);
 		if (chaveConfig.isPresent()) {
 			ChaveConfig chaveLocalizada = chaveConfig.get();
