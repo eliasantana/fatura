@@ -162,13 +162,13 @@ public class LancamentoServices {
 	 */
 	public HashMap<String, BigDecimal> totalizacaoDespesaCategoria(String mesAno) {
 		HashMap<String, BigDecimal> mapTotalizador = new HashMap<String, BigDecimal>();
-		List<Lancamento> lancamentos = new ArrayList<>();		
+		List<Lancamento> lancamentos = new ArrayList<>();
 		List<TipoLancamento> tiposLancamentos = tipoLancamentoRepository.findAllTipoLancamentos();
-		//Se mes ano for menor que 6 dígitos. Busca os lançamentos do ano
-		if (mesAno.length()<6) {
-			lancamentos = lancamentoRepository.findAllLancamentosDoAno(mesAno);			
-		}else {
-			lancamentos = lancamentoRepository.findAllLancamentosDoMes(mesAno);			
+		// Se mes ano for menor que 6 dígitos. Busca os lançamentos do ano
+		if (mesAno.length() < 6) {
+			lancamentos = lancamentoRepository.findAllLancamentosDoAno(mesAno);
+		} else {
+			lancamentos = lancamentoRepository.findAllLancamentosDoMes(mesAno);
 		}
 
 		BigDecimal totalizador = new BigDecimal(0);
@@ -200,9 +200,9 @@ public class LancamentoServices {
 	public BigDecimal getTotalLctoMes(String mesAno) {
 		BigDecimal total = BigDecimal.ZERO;
 		List<Lancamento> lctoDoMes = new ArrayList<>();
-		if(mesAno.length() < 6) {
+		if (mesAno.length() < 6) {
 			lctoDoMes = lancamentoRepository.findAllLancamentosDoAno(mesAno);
-		}else {
+		} else {
 			lctoDoMes = lancamentoRepository.findAllLancamentosDoMes(mesAno);
 		}
 		for (int i = 0; i < lctoDoMes.size(); i++) {
@@ -241,9 +241,9 @@ public class LancamentoServices {
 		HashMap<String, BigDecimal> hashTotalizacao = new HashMap<String, BigDecimal>();
 		List<FormaDePagamento> formasDePagamento = formaPagtoRepository.findAllFormasDePagamento();
 		List<Lancamento> lancamentosDoMes = new ArrayList<>();
-		if (mesAno.length()<6) {
+		if (mesAno.length() < 6) {
 			lancamentosDoMes = lancamentoRepository.findAllLancamentosDoAno(mesAno);
-		}else {
+		} else {
 			lancamentosDoMes = lancamentoRepository.findAllLancamentosDoMes(mesAno);
 		}
 		BigDecimal total = BigDecimal.ZERO;
@@ -439,27 +439,21 @@ public class LancamentoServices {
 	 * @param lancamentoForm
 	 * @param model
 	 */
-	public void salvar(LancamentoForm lancamentoForm, Model model) {
+		public String salvar(LancamentoForm lancamentoForm, Model model) {
 		Optional<FormaDePagamento> findByDescricaoFormaDePagamento = formaDePagamentoRepository
 				.findByDescricaoFormaDePagamento(lancamentoForm.getDsFormaDePagamento());
 		FormaDePagamento formadepagamento = findByDescricaoFormaDePagamento.get();
-		Configuracoes config = configuracoesRepository.findConfiguracao();
-
-		Optional<Lancamento> lancamentoAnterior = lancamentoRepository.findById(lancamentoForm.getCdLancamento());
-		Optional<Lancamento> lancamentoLocalizado = lancamentoRepository.findById(lancamentoForm.getCdLancamento());
-
-		Lancamento lancamento = lancamentoLocalizado.get();
+		Lancamento lancamento = new Lancamento();
 		Optional<TipoLancamento> findBydsTipoLancamento = tipoLancamentoRepository
 				.findBydsTipoLancamento(lancamentoForm.getDsTipoLancamento());
 		TipoLancamento tipoLancamento = findBydsTipoLancamento.get();
 		Optional<Usuario> usuario = usuarioRepository.findById(5L);
+		Configuracoes config = configuracoesRepository.findConfiguracao();
 		Optional<Cartao> cartaoLocalizado = cartaoRepository.findBydsCartao(lancamentoForm.getDsCartao());
-		// Se nenhum cartao for selecionado será aplicado o cartão padrão
+		Cartao c = new Cartao();
 		if (cartaoLocalizado.isPresent()) {
-			lancamento.setCartao(cartaoLocalizado.get());
-		} else {
-			Optional<Cartao> cartaoPadrao = cartaoRepository.findBydsCartao("nenhum");
-			lancamento.setCartao(cartaoPadrao.get());
+			c.setCdCartao(cartaoLocalizado.get().getCdCartao());
+			lancamento.setCartao(c);
 		}
 		lancamento.setCdLancamento(lancamentoForm.getCdLancamento());
 		lancamento.setDsLancamento(lancamentoForm.getDsLancamento());
@@ -471,14 +465,31 @@ public class LancamentoServices {
 		lancamento.setUsuario(usuario.get());
 		lancamento.setVlPago(lancamentoForm.getVlPago());
 		lancamento.setObservacao(lancamentoForm.getObservacao());
+		lancamento.setNrParcela(1);
+		// Colocar lancamento para a próxima competência caso o lote esteja fechado
+		Lancamento lancamentoValidado = this.validaLoteLancamento(lancamento, loteRepository);
 		lancamentoRepository.save(lancamento);
-		Lancamento findUltimoLancamentoUsuario = lancamentoRepository
-				.findUltimoLancamentoUsuario(usuario.get().getCdUsuario());
-		System.out.println("Ultimo lancamento Localizado: " + findUltimoLancamentoUsuario.toString());
 
-		List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentosDoMes();
+		List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentos();
 		model.addAttribute("lancamentos", lancamentos);
 
+		// Se lancamento Parcelado
+		if (config.getSnParcelado().toUpperCase().equals("S")) {
+			Lancamento ultimoLancamento = lancamentoRepository
+					.findUltimoLancamentoUsuario(usuario.get().getCdUsuario());
+			String snNaCompetencia = config.getSnNaCompetencia();
+			if (snNaCompetencia == null)
+				snNaCompetencia = "N";
+			List<Lancamento> parcelas = this.parcelar("S", usuario.get().getCdUsuario(), lancamentoForm.getNrParcelas(),
+					snNaCompetencia);
+			lancamentoRepository.saveAll(parcelas);
+			lancamentoRepository.delete(ultimoLancamento);
+			lancamentos = lancamentoRepository.findAllLancamentosDoMes();
+
+			model.addAttribute("lancamentos", lancamentos);
+		}
+
+		return "home/listar-lancamento";
 	}
 
 	/**
@@ -636,65 +647,73 @@ public class LancamentoServices {
 		}
 
 	}
-/**
- * Exibe o detalhe do lancamento 
- * @author elias
- * @param model
- * @param id
- * */
+
+	/**
+	 * Exibe o detalhe do lancamento
+	 * 
+	 * @author elias
+	 * @param model
+	 * @param id
+	 */
 	public void getDetalheLancamento(Model model, Long id) {
 		Lancamento l = lancamentoRepository.findByIdLancamento(id);
 		model.addAttribute("lancamento", l);
-		
-	}
-/**
- * Retorna o logo do Sistema
- * @since 04-03-2023
- * @author elias
- * */
-public Configuracoes getLogoSistema() {
-	Configuracoes config = configuracoesRepository.findConfiguracao();
-	return config;
-}
-/**
- * Transfere um lançamento para a próxima competência
- * @since 04-03-2023
- * @author elias
- * @param id
- * */
 
-public RedirectView transferir(Long id) {
-	RedirectView rw = new RedirectView("/listar");
-	Lancamento lancamentoLocalizado = lancamentoRepository.findByIdLancamento(id);
-	LocalDate novaCompetencia = LocalDate.now().plusMonths(1L);
-	if (lancamentoLocalizado.getSnPago().toUpperCase().equals("NÃO")) {
-		lancamentoLocalizado.setDtCompetencia(novaCompetencia);
-		lancamentoRepository.save(lancamentoLocalizado);
 	}
-	
-	return rw;
-}
-/**
- * Paga todos os lançamentos do tipo crédito
- * @since 04-03-2023
- * @author elias
- * */
-public RedirectView pagarTodos() {
-	RedirectView rw = new RedirectView("/listar");
-	Optional<FormaDePagamento> forma = formaDePagamentoRepository.findByDescricaoFormaDePagamento("Crédito");
 
-	if (forma.isPresent()) {
-		Long cdFromapagto = forma.get().getCdFormaPgamento();
-		List<Lancamento> lancamentosDoMes = lancamentoRepository.findLancamentoPorFormaDePagamento(cdFromapagto);
-		if (lancamentosDoMes.size() > 0) {
-			for (Lancamento lancamento : lancamentosDoMes) {
-				lancamento.setSnPago("SIM");
-			}
+	/**
+	 * Retorna o logo do Sistema
+	 * 
+	 * @since 04-03-2023
+	 * @author elias
+	 */
+	public Configuracoes getLogoSistema() {
+		Configuracoes config = configuracoesRepository.findConfiguracao();
+		return config;
+	}
+
+	/**
+	 * Transfere um lançamento para a próxima competência
+	 * 
+	 * @since 04-03-2023
+	 * @author elias
+	 * @param id
+	 */
+
+	public RedirectView transferir(Long id) {
+		RedirectView rw = new RedirectView("/listar");
+		Lancamento lancamentoLocalizado = lancamentoRepository.findByIdLancamento(id);
+		LocalDate novaCompetencia = LocalDate.now().plusMonths(1L);
+		if (lancamentoLocalizado.getSnPago().toUpperCase().equals("NÃO")) {
+			lancamentoLocalizado.setDtCompetencia(novaCompetencia);
+			lancamentoRepository.save(lancamentoLocalizado);
 		}
 
-		lancamentoRepository.saveAll(lancamentosDoMes);
+		return rw;
 	}
-	return rw;
-}
+
+	/**
+	 * Paga todos os lançamentos do tipo crédito
+	 * 
+	 * @since 04-03-2023
+	 * @author elias
+	 */
+	public RedirectView pagarTodos() {
+		RedirectView rw = new RedirectView("/listar");
+		Optional<FormaDePagamento> forma = formaDePagamentoRepository.findByDescricaoFormaDePagamento("Crédito");
+
+		if (forma.isPresent()) {
+			Long cdFromapagto = forma.get().getCdFormaPgamento();
+			List<Lancamento> lancamentosDoMes = lancamentoRepository.findLancamentoPorFormaDePagamento(cdFromapagto);
+			if (lancamentosDoMes.size() > 0) {
+				for (Lancamento lancamento : lancamentosDoMes) {
+					lancamento.setSnPago("SIM");
+				}
+			}
+
+			lancamentoRepository.saveAll(lancamentosDoMes);
+		}
+		return rw;
+	}
 
 }
