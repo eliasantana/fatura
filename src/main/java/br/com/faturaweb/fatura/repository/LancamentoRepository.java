@@ -3,16 +3,10 @@ package br.com.faturaweb.fatura.repository;
 import java.math.BigDecimal;
 import java.util.List;
 
-import javax.persistence.NamedNativeQuery;
-
-import org.apache.el.lang.ELArithmetic.BigDecimalDelegate;
-import org.hibernate.annotations.Parameter;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.web.bind.annotation.PathVariable;
 
-import br.com.faturaweb.fatura.model.AnoLancamento;
 import br.com.faturaweb.fatura.model.Lancamento;
 import br.com.faturaweb.fatura.projection.AnoLancamentoProjection;
 import io.lettuce.core.dynamic.annotation.Param;
