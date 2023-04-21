@@ -1,55 +1,15 @@
 package br.com.faturaweb.fatura.controller;
 
-import java.io.UnsupportedEncodingException;
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.view.RedirectView;
 
-import br.com.faturaweb.fatura.form.LancamentoForm;
-import br.com.faturaweb.fatura.model.Cartao;
 import br.com.faturaweb.fatura.model.Chave;
-import br.com.faturaweb.fatura.model.ChaveConfig;
 import br.com.faturaweb.fatura.model.Configuracoes;
-import br.com.faturaweb.fatura.model.FormaDePagamento;
-import br.com.faturaweb.fatura.model.Lancamento;
-import br.com.faturaweb.fatura.model.Lote;
-import br.com.faturaweb.fatura.model.Menssageria;
-import br.com.faturaweb.fatura.model.Receita;
-import br.com.faturaweb.fatura.model.TipoLancamento;
-import br.com.faturaweb.fatura.model.Usuario;
-import br.com.faturaweb.fatura.repository.CartaoRepository;
-import br.com.faturaweb.fatura.repository.ChaveRepository;
-import br.com.faturaweb.fatura.repository.ConfiguracoesRepository;
-import br.com.faturaweb.fatura.repository.FormaDePagamentoRepository;
-import br.com.faturaweb.fatura.repository.LancamentoRepository;
-import br.com.faturaweb.fatura.repository.LoteRepository;
-import br.com.faturaweb.fatura.repository.MensageriaRepository;
-import br.com.faturaweb.fatura.repository.ReceitaRepository;
-import br.com.faturaweb.fatura.repository.TipoLancamentoRepository;
-import br.com.faturaweb.fatura.repository.UsuarioRepository;
-import br.com.faturaweb.fatura.services.AppServices;
 import br.com.faturaweb.fatura.services.HomeSercices;
-import br.com.faturaweb.fatura.services.LancamentoServices;
-import br.com.faturaweb.fatura.services.MensageriaServices;
-import br.com.faturaweb.fatura.services.MetaService;
-import br.com.faturaweb.fatura.services.ReceitaServices;
 
 @ComponentScan
 @Controller
@@ -62,10 +22,15 @@ public class HomeController {
 	public String index(Model model) {
 		String valorChave;
 		valorChave = homeservices.index(model);
+		String tpDashBoard = homeservices.getTpDashBoard(Chave.TP_DASHBOARD.toString());
 		if ("S".equals(valorChave)) {
 			return "redirect:/lancamento/cadastro";
-		} else {
-			return "home/dashboard";
+		} else {			
+			if (tpDashBoard.equals("2")) {
+				return "home/dashboard2";
+			}else {				
+				return  "home/dashboard";
+			}
 		}
 	}
 

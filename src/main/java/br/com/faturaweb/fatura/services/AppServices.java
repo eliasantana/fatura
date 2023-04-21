@@ -7,7 +7,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -21,18 +20,18 @@ import org.springframework.stereotype.Service;
 import com.google.common.collect.Lists;
 import com.itextpdf.html2pdf.HtmlConverter;
 
+import br.com.faturaweb.fatura.model.ChaveConfig;
 import br.com.faturaweb.fatura.model.Configuracoes;
 import br.com.faturaweb.fatura.model.Conta;
 import br.com.faturaweb.fatura.model.Lancamento;
 import br.com.faturaweb.fatura.model.Lote;
+import br.com.faturaweb.fatura.repository.ChaveRepository;
 import br.com.faturaweb.fatura.repository.ConfiguracoesRepository;
 import br.com.faturaweb.fatura.repository.ContaRepository;
 import br.com.faturaweb.fatura.repository.LancamentoRepository;
-import br.com.faturaweb.fatura.repository.LoteRepository;
 import it.ozimov.springboot.mail.model.Email;
 import it.ozimov.springboot.mail.model.defaultimpl.DefaultEmail;
 import it.ozimov.springboot.mail.service.EmailService;
-import net.bytebuddy.asm.Advice.Return;
 
 @Service
 public class AppServices {
@@ -46,6 +45,8 @@ public class AppServices {
 	ConfiguracoesRepository configGeraisRepository;
 	@Autowired
 	ReportService services;
+	@Autowired
+	ChaveRepository chaveRepository;
 
 	/**
 	 * Envia e-mail de texto simples
@@ -339,5 +340,49 @@ public class AppServices {
 		}
 
 	}
+	/**
+	 * Adiciona uma chave lógica
+	 * @since 19-04-2023
+	 * @author elias
+	 * @param chaveConfig
+	 * */
+	public String adicionaChave(ChaveConfig chaveConfig) {
+		
+		String msg=null;
+		if (chaveConfig.getDescricao()!=null || chaveConfig.getDescricao().isEmpty()){
+			msg=msg+"A descrição é obrigatória";
+		}
+		
+		if (chaveConfig.getValor().isEmpty() || chaveConfig.getValor()!=null){
+			msg=msg+"O valor da chave é obrigatório!";
+		}
+		
+		if (msg==null) {
+			chaveConfig.setDtCriacao(LocalDate.now());
+			chaveRepository.save(chaveConfig);
+			msg="Chave Cadastrada com sucesso";
+		}
+		
+		return msg;
+	}
+	
+	/**
+	 *Retorna o valor da chave de configuração 
+	 *@author elias
+	 *@since 20-04--2023
+	 *@param nmChave - Nome da chave de Configuração 
+	 **/
 
+	public String getValorChave(String nmChave) {
+		String valor = null;
+		try {
+			Optional<ChaveConfig> chave = chaveRepository.findChaveConfigByDescricao("TP_DASHBOARD");
+			if (chave.isPresent()) {
+				valor= chave.get().getValor();
+			}
+		} catch (Exception e) {
+			System.out.println("Chave não localizada!");
+		}
+		return valor;
+	}
 }

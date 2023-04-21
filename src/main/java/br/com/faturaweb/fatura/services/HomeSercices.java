@@ -67,11 +67,13 @@ public class HomeSercices {
 
 	public String index(Model model) {
 		String valorChave = "N";
+		String tpGraficoFaturamento ="column";
 		Optional<ChaveConfig> chave = chaveRepository
 				.findChaveConfigByDescricao(Chave.SN_CAD_DESPESA_INICIO.toString());
 		if (chave.isPresent()) {
 			valorChave = chave.get().getValor().toString();
 		}
+		
 		List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentos();
 		Integer dias = configuracoesRepository.findConfiguracao().getNrDias();
 		List<Lancamento> lancamentosVencidos = lancamentoRepository.findVencidos(dias);
@@ -161,12 +163,12 @@ public class HomeSercices {
 		dados.put("Dezembro", dezembro);
 
 		Map<String, BigDecimal> receitas = services.totalizaReceita(receitaRepository.findaAllReceitaAnoCorrente());
-
+		
 		// Adicionando a view os valores acumuladods
 		model.addAttribute("keyset", dados.keySet()); // Meses
 		model.addAttribute("values", dados.values()); // Valores
 		model.addAttribute("titulo", "Faturamento Mensal - SysFatura");// Titulo do Gráfico
-		model.addAttribute("grafico", "column"); // Tipo do gráfico column - Gráfico de Colunas - bar - Gráfico de
+		model.addAttribute("grafico", tpGraficoFaturamento); // Tipo do gráfico column - Gráfico de Colunas - bar - Gráfico de
 													// Barras
 		model.addAttribute("keysetreceitas", receitas.keySet());
 		model.addAttribute("valuesreceitas", receitas.values());
@@ -395,4 +397,12 @@ public class HomeSercices {
 			e.printStackTrace();
 		}
 	}
+	/**
+	 * Retorna o tipo de DashBoard
+	 * */
+	public String getTpDashBoard(String nomeChave) {
+		String chaveConfig2 = appservices.getValorChave(nomeChave);
+		return chaveConfig2;
+	}
+
 }

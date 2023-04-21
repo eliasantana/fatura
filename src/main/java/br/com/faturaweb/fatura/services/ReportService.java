@@ -16,8 +16,6 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
 
-import com.fasterxml.jackson.databind.deser.impl.CreatorCandidate.Param;
-
 import br.com.faturaweb.fatura.model.Configuracoes;
 import br.com.faturaweb.fatura.repository.ConfiguracoesRepository;
 import net.sf.jasperreports.engine.JRException;
