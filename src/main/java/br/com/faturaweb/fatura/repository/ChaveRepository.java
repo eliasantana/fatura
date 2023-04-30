@@ -17,6 +17,5 @@ public interface ChaveRepository extends CrudRepository<ChaveConfig, Long> {
 
 	@Query(value = "SELECT * FROM chave_config ", nativeQuery = true)
 	List<ChaveConfig>listarTodas();
-	
-	
+		
 }

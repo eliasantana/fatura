@@ -349,11 +349,11 @@ public class AppServices {
 	public String adicionaChave(ChaveConfig chaveConfig) {
 		
 		String msg=null;
-		if (chaveConfig.getDescricao()!=null || chaveConfig.getDescricao().isEmpty()){
+		if (chaveConfig.getDescricao()==null || chaveConfig.getDescricao().isEmpty()){
 			msg=msg+"A descrição é obrigatória";
 		}
 		
-		if (chaveConfig.getValor().isEmpty() || chaveConfig.getValor()!=null){
+		if (chaveConfig.getValor().isEmpty() || chaveConfig.getValor()==null){
 			msg=msg+"O valor da chave é obrigatório!";
 		}
 		

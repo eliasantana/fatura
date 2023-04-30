@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -73,7 +74,7 @@ public class HomeSercices {
 		if (chave.isPresent()) {
 			valorChave = chave.get().getValor().toString();
 		}
-		
+		//Lanacamentos que compõe o gráfico
 		List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentos();
 		Integer dias = configuracoesRepository.findConfiguracao().getNrDias();
 		List<Lancamento> lancamentosVencidos = lancamentoRepository.findVencidos(dias);
@@ -337,7 +338,22 @@ public class HomeSercices {
 	 */
 	public void listar(Model model) {
 		String status = "A";
-		List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentosDoMes();
+		List<Lancamento> lancamentos = new ArrayList<>();
+		String proximacompetencia = null;
+		Optional<ChaveConfig> proximaCompetencia = chaveRepository.findChaveConfigByDescricao("SN_PROXIMA_COMPETENCIA");
+		if (proximaCompetencia.isPresent()) {
+		     if (proximaCompetencia.get().getValor().equals("S")) {
+		    	 proximacompetencia = "S";
+		    	 DateTimeFormatter df2 = DateTimeFormatter.ofPattern("MMYYYY");
+		    	 String mesAno = LocalDate.now().plusMonths(1).format(df2).toString();			
+		    	 lancamentos = lancamentoRepository.findAllLancamentosDoMes(mesAno);
+		     }else {
+		    	 proximacompetencia="N";
+		    	 lancamentos = lancamentoRepository.findAllLancamentosDoMes();
+		     }
+		}else {
+			lancamentos = lancamentoRepository.findAllLancamentosDoMes();
+		}
 
 		model.addAttribute("lancamentos", lancamentos);
 
@@ -355,6 +371,7 @@ public class HomeSercices {
 			status = "A";
 		}
 		model.addAttribute("status", status);
+		model.addAttribute("proximacompetencia", proximacompetencia);
 	}
 
 	/**
