@@ -98,11 +98,7 @@ public class TesteController {
 		
 	@GetMapping("/teste")
 	public String apiltipolancnamento(Model model){
-		ChaveConfig chave2 = new ChaveConfig();
-		chave2.setChave(Chave.TP_DASHBOARD);		
-		chave2.setDescricao("Determina a DASHBOARD a ser utilizada");
-		chave2.setValor("2");
-		System.out.println(appServices.adicionaChave(chave2));
+		
 		return "teste";
 		
 	}

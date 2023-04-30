@@ -13,7 +13,12 @@
 		<div class="card-header">Lançamentos</div>
 		<div class="card-body">
 			<h5 class="card-title">Relação de Lançamentos</h5><h3 th:if="${menssagem}!=null"th:text="${menssagem}"></h3>
-			<p class="card-text"></p>
+			<p class="card-text">
+					<form method="post" action="/chaves/alterar/SN_PROXIMA_COMPETENCIA">
+						<button th:if="${proximacompetencia=='N'}" class="btn btn-primary" type="submit">Próxima Competência >></button>
+						<button th:if="${proximacompetencia=='S'}" class="btn btn-primary" type="submit"> << Competência Anterior</button>
+				</form>
+			</p>
 			<table class="table table-striped table-hover" id="lancamentos">
 				<thead>
 					<tr>
