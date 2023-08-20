@@ -13,7 +13,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "forma_pagto")
-public class FormaDePagamento {
+public class FormaDePagamento implements Comparable<FormaDePagamento> {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -63,6 +63,11 @@ public class FormaDePagamento {
 	public String toString() {
 		return "FormaDePagamento [cdFormaPgamento=" + cdFormaPgamento + ", dtInclusao=" + dtInclusao + ", descricao="
 				+ descricao + "]";
+	}
+	@Override
+	public int compareTo(FormaDePagamento o) {
+	 
+		return descricao.compareTo(o.getDescricao());
 	}
 	
 	

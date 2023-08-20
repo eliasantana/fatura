@@ -98,7 +98,10 @@ public class TesteController {
 		
 	@GetMapping("/teste")
 	public String apiltipolancnamento(Model model){
-		
+
+		Configuracoes findConfiguracao = config.findConfiguracao();
+		System.out.println(findConfiguracao.getDirImportacao());
+		System.out.println(findConfiguracao.getDirRelatorio());
 		return "teste";
 		
 	}

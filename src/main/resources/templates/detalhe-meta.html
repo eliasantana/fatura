@@ -10,7 +10,7 @@
 	<div class="container mt-2">
 		<div class="card">
 		  <div class="card-header">
-		    Detalhe da Meta
+		    Detalhe da Meta x
 		  </div>
 		  <div class="card-body">
 		    <h5 class="card-title" th:text=" 'Código: ' + ${cdmeta}"></h5>
@@ -43,10 +43,12 @@
 						</div>
 					    <!-- Fim do Modal de Confirmação -->
 		    <!-- Gráfico de Metas -->
+		    
 	         <figure class="highcharts-figure">
 			    <div id="meta" style="width: 100%;"></div>
 			    <p class="highcharts-description"></p>
 			</figure>
+			<h3>A pagar</h3>
 		    <table class="table table-striped table-hover" id="itmeta">
 		    	<thead>
 			    	<tr>
@@ -70,6 +72,46 @@
 		    		</a></td>
 		    		</tr>
 		    	</tbody>
+		    		<thead>
+			    	<tr>
+			    		<th scope="col"></th>
+			    		<th scope="col"></th>
+			    		<th scope="col"><h4 style="color: blue">Total</h4></th>
+			    		<th scope="col"><h4 th:text="${#numbers.formatDecimal(#aggregates.sum(itens.![vlrSemana]),1,2,'COMMA')}" style="color: blue"></h4></th>
+			    		<th scope="col"></th>
+			    	<tr/>
+		    	</thead>
+		    </table>
+		    <!-- Itens créditados -->
+		    <h3>Parcelas Pagas</h3>
+		    <table class="table table-striped table-hover" id="itmetacreditado">
+		    	<thead>
+			    	<tr>
+			    		<th scope="col">Código</th>
+			    		<th scope="col">Descrição</th>
+			    		<th scope="col">Semana</th>
+			    		<th scope="col">Valor</th>
+			    		<th scope="col">Acões</th>
+			    	<tr/>
+		    	</thead>
+		    	<tbody>
+		    	<tr th:each="c  :  ${creditados}">
+		    		<td th:text="${c.cdItMeta}"> </td>
+		    		<td th:text="${c.descricao}"> x </td>
+		    		<td th:text="${c.nrSemana}"> x </td>
+		    		<td th:text="${c.vlrSemana}"> x </td>
+		    		<td th:if="${c.snCreditado}=='S'" th:text="Creditado"></td>
+		    		</tr>
+		    	</tbody>
+		    	<thead>
+			    	<tr>
+			    		<th scope="col"></th>
+			    		<th scope="col"></th>
+			    		<th scope="col"><h4 style="color: blue">Total</h4></th>
+			    		<th scope="col"><h4 th:text="${#numbers.formatDecimal(#aggregates.sum(creditados.![vlrSemana]),1,2,'COMMA')}" style="color: blue"></h4></th>
+			    		<th scope="col"></th>
+			    	<tr/>
+		    	</thead>
 		    </table>
 		    
 		  </div>

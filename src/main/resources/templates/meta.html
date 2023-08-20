@@ -73,12 +73,7 @@
 				<button type="button" class="btn btn-primary mt-5" data-bs-toggle="modal" data-bs-target="#exampleModal">Salvar  </button>	
 				</div>
 		</div>
-		
-			
-	
 		<div class="col">
-			
-			
 			<!-- Modal -->
 			<div class="modal fade" id="exampleModal" tabindex="-1"
 				aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -102,10 +97,7 @@
 			<div class="alert alert-success mt-3 ml-10" role="alert"
 				th:if="${mensagem!=null}" th:text="${mensagem}"></div>
 		</div>
-
 		</form>
-
-
 	</div>
 	<div class="card mt-2">
 		<div class="card-header">Relação de Metas</div>
@@ -166,11 +158,20 @@
 						</td>
 					</tr>
 				</tbody>
+				<thead>
+					<tr>
+						<th scope="col"></th>
+						<th scope="col"></th>
+						<th scope="col"></th>
+						<th scope="col"><h4 style="color: blue">Total</h4></th>
+						<th scope="col"><h4 th:text="${#numbers.formatDecimal(#aggregates.sum(metas.![vlMeta]),1,2,'COMMA')}" style="color: blue"></h4></th>
+						<th scope="col"></th>
+						<th scope="col"></th>
+						<th scope="col"></th>
+					</tr>
+				</thead>
 			</table>
-			<div><h4 th:text="'Totalização - Metas da Competência: R$' + ${#numbers.formatDecimal(totalgeral,1,2,'COMMA')}"> </h4> </div>
-
 		</div>
-	</div>
 	</div>
 	<!-- Imports -->
 	<!-- Bootstrap core JavaScript

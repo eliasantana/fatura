@@ -14,7 +14,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name = "Lancamento")
-public class Lancamento {
+public class Lancamento implements Comparable<Lancamento> {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -155,5 +155,13 @@ public String toString() {
 			+ vlPago + ", formaDePagamento=" + formaDePagamento + ", dtCompetencia=" + dtCompetencia + ", nrParcela="
 			+ nrParcela + ", dsAnexo=" + dsAnexo + ", observacao=" + observacao + "]";
 }
+
+
+@Override
+public int compareTo(Lancamento l) {	
+	return  formaDePagamento.getDescricao().compareTo((l.formaDePagamento.getDescricao()));
+}
+
+
 
 }

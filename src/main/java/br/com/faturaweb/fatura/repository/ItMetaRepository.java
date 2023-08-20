@@ -25,8 +25,8 @@ public interface ItMetaRepository extends CrudRepository<ItMeta, Long> {
 	 * @since 21/04/2022
 	 * @param cdMeta
 	 * */
-	  @Query(value = "select * from it_meta where meta_cd_meta = :cdMeta and sn_creditado = 'S'",nativeQuery = true)
-		List<ItMeta> findItMetaCreditada(@Param(value = "cdMeta") Long cdMeta);
+	  @Query(value = "select * from it_meta where meta_cd_meta =:cdmeta and sn_creditado = 'S'",nativeQuery = true)
+		List<ItMeta> findItMetaCreditada(@Param(value = "cdmeta") Long cdmeta);
 	  		
 	  
   /**
