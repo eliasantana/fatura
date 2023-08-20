@@ -51,9 +51,11 @@ public class UploadFilesController {
 		System.out.println("local");
 		System.out.println(file.getOriginalFilename());
 		System.out.println("codigo"+codigo);
+		
 		if (codigo!=null) {
 			try {
 				Configuracoes config = configRepository.findConfiguracao();
+				System.out.println(config.getDirImportacao());
 				Optional<Lancamento> lancamento = lanctoRepository.findById(codigo);
 				lancamento.get().setDsAnexo(config.getDirImportacao().concat("\\").concat(file.getOriginalFilename()));
 				lanctoRepository.save(lancamento.get());

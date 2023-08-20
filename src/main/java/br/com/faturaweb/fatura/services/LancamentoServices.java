@@ -620,11 +620,12 @@ public class LancamentoServices {
 
 //teste
 	public void exibirAnexo(Long id, HttpServletResponse response, HttpServletRequest request) throws IOException {
+
 		Configuracoes config = configuracoesRepository.findConfiguracao();
 		Lancamento lancamento = lancamentoRepository.findByIdLancamento(id);
 		System.out.println(" Anexo: " + lancamento.getDsAnexo());
 		File file = new File(lancamento.getDsAnexo());
-
+		
 		if (file.exists()) {
 			String mimeType = URLConnection.guessContentTypeFromName(file.getName());
 			System.out.println("Nome do Arquivo: " + file.getName());
@@ -645,7 +646,8 @@ public class LancamentoServices {
 		} else {
 			System.out.println("Arquivo não localizado!");
 		}
-
+		
+		
 	}
 
 	/**

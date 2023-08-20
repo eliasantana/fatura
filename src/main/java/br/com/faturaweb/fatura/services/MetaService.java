@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.hibernate.internal.build.AllowSysOut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
@@ -226,7 +227,8 @@ public class MetaService {
 	public void listar(Model model, Meta meta) {
 		List<Conta> contas = contaRepository.findcontas();
 		List<Meta> metas = metaRepository.findAllMetas();
-		BigDecimal totalGeralItMeta = totalGeralItMeta(metas);
+		//BigDecimal totalGeralItMeta = totalGeralItMeta(metas);
+		BigDecimal totalGeralItMeta = BigDecimal.ZERO;
 		System.out.println("Total geral -> " + totalGeralItMeta);
 		Conta c = new Conta();
 		Meta m = new Meta();
@@ -250,6 +252,7 @@ public class MetaService {
 		BigDecimal total = BigDecimal.ZERO;
 		if (metas.size() >0) {
 			for (Meta meta : metas) {
+				 System.out.println(meta.getCdMeta());
 				 ItMeta itMeta = itMetaRepository.getValorItMeta(meta.getCdMeta());
 				total = total.add(itMeta.getVlrSemana());
 			}

@@ -63,6 +63,7 @@ public class ItMetaServices {
 public String listarItMeta(@PathVariable Long id, Model model) {
 		
 		List<ItMeta> itMeta = itMetaRepository.findItNaoCreditado(id);
+		List<ItMeta> itMetaCreditado = itMetaRepository.findItMetaCreditada(id);
 		Optional<Meta> metaLocalizada = metaRepository.findById(id);
 		Conta conta = metaLocalizada.get().getConta();
 		List<ItMeta> itemCreditados = itMetaRepository.findItMeta(id);
@@ -81,6 +82,7 @@ public String listarItMeta(@PathVariable Long id, Model model) {
 			model.addAttribute("andamento", andamentoMeta);
 			model.addAttribute("titulo", metaLocalizada.get().getDescricao());
 			model.addAttribute("descricao"," Resta para a meta "+meta.get().getDescricao());
+			model.addAttribute("creditados",itMetaCreditado);
 		} catch (Exception e) {
 			model.addAttribute("nome_meta","Não há itens de  meta a serem exibidos!");
 			model.addAttribute("cdmeta",id);

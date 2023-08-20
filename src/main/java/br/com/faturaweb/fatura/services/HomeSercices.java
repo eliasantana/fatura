@@ -6,6 +6,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -347,9 +349,11 @@ public class HomeSercices {
 		    	 DateTimeFormatter df2 = DateTimeFormatter.ofPattern("MMYYYY");
 		    	 String mesAno = LocalDate.now().plusMonths(1).format(df2).toString();			
 		    	 lancamentos = lancamentoRepository.findAllLancamentosDoMes(mesAno);
+		    	 Collections.sort(lancamentos);
 		     }else {
-		    	 proximacompetencia="N";
+		    	 proximacompetencia="N";		    	 
 		    	 lancamentos = lancamentoRepository.findAllLancamentosDoMes();
+		    	Collections.sort(lancamentos);
 		     }
 		}else {
 			lancamentos = lancamentoRepository.findAllLancamentosDoMes();

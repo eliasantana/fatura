@@ -15,7 +15,7 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "Tipo_Lancamento")
-public class TipoLancamento {
+public class TipoLancamento implements Comparable<TipoLancamento> {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -63,6 +63,12 @@ public class TipoLancamento {
 	@Override
 	public String toString() {
 		return "TipoLancamento [dtCadastro=" + dtCadastro + ", dsTipoLancamento=" + dsTipoLancamento + "]";
+	}
+
+	@Override
+	public int compareTo(TipoLancamento o) {
+	   
+		return getDsTipoLancamento().compareTo(o.getDsTipoLancamento());
 	}
 	
 	
