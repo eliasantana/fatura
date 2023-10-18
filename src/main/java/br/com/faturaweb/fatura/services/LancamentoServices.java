@@ -9,6 +9,8 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
 import java.net.URLConnection;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -50,11 +52,12 @@ import br.com.faturaweb.fatura.repository.LogMovimentacaoFinanceiraRepository;
 import br.com.faturaweb.fatura.repository.LoteRepository;
 import br.com.faturaweb.fatura.repository.TipoLancamentoRepository;
 import br.com.faturaweb.fatura.repository.UsuarioRepository;
+import br.com.faturaweb.fatura.utils.ExportFromQuery;
 
 @Service
 public class LancamentoServices {
 	@Autowired
-	LancamentoRepository lancamentoRepository;
+	public LancamentoRepository lancamentoRepository;
 	@Autowired
 	TipoLancamentoRepository tipoLancamentoRepository;
 	@Autowired
@@ -63,8 +66,6 @@ public class LancamentoServices {
 	ConfiguracoesRepository configuracaoRepository;
 	@Autowired
 	ChaveRepository chaveRepository;
-	@Autowired
-	ConfiguracoesRepository configuracoesRepository;
 	@Autowired
 	CartaoRepository cartaoRepository;
 	@Autowired
@@ -77,6 +78,11 @@ public class LancamentoServices {
 	ContaRepository contaRepository;
 	@Autowired
 	LogMovimentacaoFinanceiraRepository logRepository;
+	@Autowired
+	QueryServices queryServices;
+	@Autowired
+	Connection conn;
+	
 
 	public List<Lancamento> parcelar(String snParcelar, Long cdUsuario, Integer qtParcela,
 			String primeiraParcelaNaCompetencia) {
@@ -397,7 +403,7 @@ public class LancamentoServices {
 		String msg = "";
 		try {
 			status = loteRepository.findLoteCompetencia().getStatus();
-			Configuracoes config = configuracoesRepository.findConfiguracao();
+			Configuracoes config = configuracaoRepository.findConfiguracao();
 			if (status.equals("F") && config.getSnNaCompetencia().equals("S")) {
 				msg = "Lote fechado! Não é possível lancar Despesa nesta Competência!";
 			} else {
@@ -448,7 +454,7 @@ public class LancamentoServices {
 				.findBydsTipoLancamento(lancamentoForm.getDsTipoLancamento());
 		TipoLancamento tipoLancamento = findBydsTipoLancamento.get();
 		Optional<Usuario> usuario = usuarioRepository.findById(5L);
-		Configuracoes config = configuracoesRepository.findConfiguracao();
+		Configuracoes config = configuracaoRepository.findConfiguracao();
 		Optional<Cartao> cartaoLocalizado = cartaoRepository.findBydsCartao(lancamentoForm.getDsCartao());
 		Cartao c = new Cartao();
 		if (cartaoLocalizado.isPresent()) {
@@ -562,7 +568,7 @@ public class LancamentoServices {
 
 		if ("Débito".equals(lancamento.getFormaDePagamento().getDescricao())) {
 			// Debitar na conta informada
-			Configuracoes config = configuracoesRepository.findConfiguracao();
+			Configuracoes config = configuracaoRepository.findConfiguracao();
 			String nrContaOrigem = config.getNrContaOrigem();
 			Optional<Conta> contaLocalizada = contaRepository.findConta(nrContaOrigem);
 
@@ -621,7 +627,7 @@ public class LancamentoServices {
 //teste
 	public void exibirAnexo(Long id, HttpServletResponse response, HttpServletRequest request) throws IOException {
 
-		Configuracoes config = configuracoesRepository.findConfiguracao();
+		Configuracoes config = configuracaoRepository.findConfiguracao();
 		Lancamento lancamento = lancamentoRepository.findByIdLancamento(id);
 		System.out.println(" Anexo: " + lancamento.getDsAnexo());
 		File file = new File(lancamento.getDsAnexo());
@@ -670,7 +676,7 @@ public class LancamentoServices {
 	 * @author elias
 	 */
 	public Configuracoes getLogoSistema() {
-		Configuracoes config = configuracoesRepository.findConfiguracao();
+		Configuracoes config = configuracaoRepository.findConfiguracao();
 		return config;
 	}
 
@@ -716,6 +722,21 @@ public class LancamentoServices {
 			lancamentoRepository.saveAll(lancamentosDoMes);
 		}
 		return rw;
+	}
+/**
+ * Gera relatório no formato XLSx
+ * */
+	public String geraRelatorioXls(String mesano) throws SQLException {
+		String diretorio =null;
+		String dirImportacao = configuracaoRepository.findConfiguracao().getDirImportacao();
+		if (mesano==null) {
+			diretorio = dirImportacao.concat("\\lancamentos_da_compentencia".concat("_"+String.valueOf(LocalDate.now().getMonthValue())).concat("_"+String.valueOf(LocalDate.now().getYear())).concat(".xlsx"));
+		}else {
+			diretorio = dirImportacao.concat("\\lancamentos_da_compentencia".concat("_"+mesano).concat(".xlsx"));
+		}
+		 String query = queryServices.getLancamentosCompetencia(mesano);
+		 ExportFromQuery export = new ExportFromQuery(conn,diretorio,query);
+		 return diretorio;
 	}
 
 }

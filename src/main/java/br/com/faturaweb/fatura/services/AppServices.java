@@ -7,6 +7,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -15,6 +18,9 @@ import javax.mail.internet.InternetAddress;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Lists;
@@ -32,6 +38,7 @@ import br.com.faturaweb.fatura.repository.LancamentoRepository;
 import it.ozimov.springboot.mail.model.Email;
 import it.ozimov.springboot.mail.model.defaultimpl.DefaultEmail;
 import it.ozimov.springboot.mail.service.EmailService;
+import net.sf.jasperreports.repo.InputStreamResource;
 
 @Service
 public class AppServices {
@@ -47,7 +54,7 @@ public class AppServices {
 	ReportService services;
 	@Autowired
 	ChaveRepository chaveRepository;
-
+	
 	/**
 	 * Envia e-mail de texto simples
 	 * 
@@ -385,4 +392,40 @@ public class AppServices {
 		}
 		return valor;
 	}
+	
+	public ResponseEntity<Object> download(String caminho, HttpServletResponse response) {
+		Path path = Paths.get(caminho);
+		Path absolutePath = path.toAbsolutePath();
+		File file =absolutePath.toFile();
+		
+		org.springframework.core.io.InputStreamResource resource = null;
+		
+		try {
+			resource = new org.springframework.core.io.InputStreamResource  (new FileInputStream(file.getAbsoluteFile()));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		
+	    HttpHeaders headers= new HttpHeaders();
+	    headers.add("Content-Disposition", String.format("attachment; filename=\"%s\"", file.getName()));
+	    headers.add("Cache-Control", "no-chace, no-store,must-revalidate");
+	    headers.add("Pragma", "no-cache");
+	    headers.add("Expires","0");
+	    
+	    ResponseEntity<Object> responseEntity = ResponseEntity.ok().headers(headers)
+	    		.contentLength(file.length())
+	    		.contentType(MediaType.parseMediaType("application/pdf"))
+	    		.body(resource);	    
+	    		
+	    return responseEntity;
+	}
+	
+	public void deletaArquivo(String caminho) throws IOException {
+		Path path = Paths.get(caminho);
+		Path absolutePath = path.toAbsolutePath();
+		if (Files.exists(absolutePath)) {
+			Files.delete(absolutePath);
+		}		
+	}
+	
 }

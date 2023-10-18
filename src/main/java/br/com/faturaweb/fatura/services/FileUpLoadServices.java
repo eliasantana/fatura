@@ -8,4 +8,5 @@ public interface FileUpLoadServices {
 	
 
 	public void upLoadToLocal(MultipartFile file, Long cdAnexo);
+
 }
