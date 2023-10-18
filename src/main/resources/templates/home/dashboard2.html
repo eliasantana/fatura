@@ -21,7 +21,7 @@
 					href="#offcanvasExample" role="button"
 					aria-controls="offcanvasExample"> 	<span data-feather="menu"></span>Opções</a>
 				<h3 class="h4">
-					Dashboard - teste
+					Dashboard
 					</h4>
 					<div>
 						<div class="alert alert-danger" role="alert" th:text="${mensagem}"
@@ -233,7 +233,7 @@ var series_receitas=[]
           },
           yAxis: {
               title: {
-                  text: 'Faturamento em milhares R$'
+                  text: 'Receitas em milhares R$'
               }
           },
           series: [{
@@ -273,7 +273,7 @@ var series_receitas=[]
 	    yAxis: {
 	        min: 0,
 	        title: {
-	            text: 'Despesas (millions)',
+	            text: 'Despesas em milhares R$',
 	            align: 'high'
 	        },
 	        labels: {
@@ -281,7 +281,7 @@ var series_receitas=[]
 	        }
 	    },
 	    tooltip: {
-	        valueSuffix: ' millions'
+	        valueSuffix: ' Reais'
 	    },
 	    plotOptions: {
 	        bar: {

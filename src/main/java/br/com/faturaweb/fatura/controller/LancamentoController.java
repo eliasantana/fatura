@@ -1,12 +1,14 @@
 package br.com.faturaweb.fatura.controller;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +20,9 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import br.com.faturaweb.fatura.form.LancamentoForm;
 import br.com.faturaweb.fatura.model.Configuracoes;
+import br.com.faturaweb.fatura.services.AppServices;
 import br.com.faturaweb.fatura.services.LancamentoServices;
+import br.com.faturaweb.fatura.services.QueryServices;
 
 @Controller
 @EnableAutoConfiguration
@@ -28,8 +32,9 @@ public class LancamentoController {
 
 	@Autowired
 	LancamentoServices services;
+	@Autowired
+	AppServices appServices;
 	
-
 	/**
 	 * Só libera o cadastro quando sn_lancarNaCompetencia='N' das configuações
 	 * Gerais habilitado
@@ -104,4 +109,11 @@ public class LancamentoController {
 		return rw;
 	}
 
+	@GetMapping({"/relxlscompetencia","/relxlscompetencia/{mesano}"})
+	public ResponseEntity<Object> geraRelatorioMovimentacaoXls(@PathVariable(name = "mesano", required = false) String mesano,HttpServletResponse response) throws SQLException, IOException {
+		String competencia=mesano;
+		String arquivo = services.geraRelatorioXls(competencia);		
+		ResponseEntity<Object> download = appServices.download(arquivo, response);	
+		return download;
+	}
 }

@@ -96,9 +96,8 @@ public class ExtratoLancamentoServices {
 		model.addAttribute("total", totalLctoMes);
 		model.addAttribute("contas", contas);
 		model.addAttribute("anosLancamento", anosLancamento);
-
-		System.out.println(mesAno);
-
+		
+	
 	}
 
 	/**
