@@ -738,5 +738,13 @@ public class LancamentoServices {
 		 ExportFromQuery export = new ExportFromQuery(conn,diretorio,query);
 		 return diretorio;
 	}
+/**
+ * O lancamento informado no id
+ * @author elias
+ * @since 22-10-2023
+ * */
+public Lancamento getLancamento(Long id) {
+	return lancamentoRepository.findByIdLancamento(id);
+}
 
 }
