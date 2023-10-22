@@ -56,17 +56,18 @@ public class UploadFilesController {
 			try {
 				Configuracoes config = configRepository.findConfiguracao();
 				System.out.println(config.getDirImportacao());
-				Optional<Lancamento> lancamento = lanctoRepository.findById(codigo);
-				lancamento.get().setDsAnexo(config.getDirImportacao().concat("\\").concat(file.getOriginalFilename()));
+				Optional<Lancamento> lancamento = lanctoRepository.findById(codigo);				
+				lancamento.get().setDsAnexo(config.getDirImportacao().concat(file.getOriginalFilename()));
 				lanctoRepository.save(lancamento.get());
-				
+				System.out.println("Anexando compovanete: "+lancamento.get().getDsAnexo());
 			} catch (Exception e) {
 				 System.out.println("Lançamento não lodalizado! (uplocad/local)");
 			}
 		}
+		
 		fileUploadServices.upLoadToLocal(file,codigo);		
 		
-		RedirectView rw = new RedirectView("http://localhost:8080/listar");
+		RedirectView rw = new RedirectView("/listar");
 		return rw;
 	}
 	

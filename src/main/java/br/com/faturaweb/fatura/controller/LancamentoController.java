@@ -20,6 +20,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import br.com.faturaweb.fatura.form.LancamentoForm;
 import br.com.faturaweb.fatura.model.Configuracoes;
+import br.com.faturaweb.fatura.model.Lancamento;
 import br.com.faturaweb.fatura.services.AppServices;
 import br.com.faturaweb.fatura.services.LancamentoServices;
 import br.com.faturaweb.fatura.services.QueryServices;
@@ -78,10 +79,10 @@ public class LancamentoController {
 	}
 
 	@GetMapping("anexo/{id}")
-	public String exibirAnexo(@PathVariable Long id, HttpServletResponse response, HttpServletRequest request)
+	public ResponseEntity<Object> exibirAnexo(@PathVariable Long id, HttpServletResponse response, HttpServletRequest request)
 			throws IOException {
-		services.exibirAnexo(id, response, request);
-		return "teste";
+		Lancamento lancamento = services.getLancamento(id);
+		return appServices.download(lancamento.getDsAnexo(), response);
 	}
 
 	@GetMapping("/detalhe/{id}")
