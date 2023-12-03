@@ -48,9 +48,9 @@ public class LancamentoController {
 
 //Método chamado através da página de alteação de lancamento
 	@PostMapping("/salvar")
-	public String salvar(LancamentoForm lancamentoForm, Model model) {
+	public RedirectView salvar(LancamentoForm lancamentoForm, Model model) {
 		services.salvar(lancamentoForm, model);
-		return "home/listar-lancamento";
+		return new RedirectView("/listar");
 	}
 
 	@GetMapping("/excluir/{id}")
