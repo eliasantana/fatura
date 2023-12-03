@@ -13,6 +13,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -341,8 +343,13 @@ public class HomeSercices {
 	public void listar(Model model) {
 		String status = "A";
 		List<Lancamento> lancamentos = new ArrayList<>();
+		BigDecimal totalCredito = BigDecimal.ZERO;
+		BigDecimal totalDebito = BigDecimal.ZERO;
+		BigDecimal totalDinheiro = BigDecimal.ZERO;
 		String proximacompetencia = null;
+
 		Optional<ChaveConfig> proximaCompetencia = chaveRepository.findChaveConfigByDescricao("SN_PROXIMA_COMPETENCIA");
+		
 		if (proximaCompetencia.isPresent()) {
 		     if (proximaCompetencia.get().getValor().equals("S")) {
 		    	 proximacompetencia = "S";
@@ -352,13 +359,48 @@ public class HomeSercices {
 		    	 Collections.sort(lancamentos);
 		     }else {
 		    	 proximacompetencia="N";		    	 
-		    	 lancamentos = lancamentoRepository.findAllLancamentosDoMes();
+		    	 lancamentos = lancamentoRepository.findAllLancamentosDoMes();		    	 			
 		    	Collections.sort(lancamentos);
 		     }
 		}else {
 			lancamentos = lancamentoRepository.findAllLancamentosDoMes();
 		}
+		
+		//Filtrando e totalizando despesas no Cartão de Crédito
+		List<Lancamento> lctoCredito =  lancamentos.stream()
+		.filter((Predicate<? super Lancamento>) l -> l.getFormaDePagamento().getDescricao().equals("Crédito"))
+		.collect(Collectors.toList());
+		
+		totalCredito = lctoCredito.stream()
+		.map(Lancamento::getVlPago)
+		.reduce(BigDecimal.ZERO, BigDecimal::add);
 
+		//Filtrando e Totalizando despesas no Débito
+		List<Lancamento> lctoDebito =  lancamentos.stream()
+		.filter((Predicate<? super Lancamento>) l -> l.getFormaDePagamento().getDescricao().equals("Débito"))
+		.collect(Collectors.toList());
+		
+		totalDebito = lctoDebito.stream()
+	 	.map(Lancamento::getVlPago)
+	 	.reduce(BigDecimal.ZERO, BigDecimal::add);
+		
+		//Filtrando e Totalizando despesas no Débito
+		List<Lancamento> lctoDinheiro =  lancamentos.stream()
+		.filter((Predicate<? super Lancamento>) l -> l.getFormaDePagamento().getDescricao().equals("Dinheiro"))
+		.collect(Collectors.toList());
+		
+		BigDecimal totalGeral =  BigDecimal.ZERO;
+		totalGeral = totalGeral.add(totalCredito.add(totalDebito)).add(totalDinheiro);
+		
+		totalDinheiro = lctoDinheiro.stream()
+	 	.map(Lancamento::getVlPago)
+	 	.reduce(BigDecimal.ZERO, BigDecimal::add);	
+		
+		model.addAttribute("totaldinheiro", totalDinheiro);
+		model.addAttribute("totaldebito", totalDebito);
+		model.addAttribute("totalcredito", totalCredito);
+		model.addAttribute("totalgeral", totalGeral);
+		
 		model.addAttribute("lancamentos", lancamentos);
 
 		// Verifica lote da competencia
@@ -426,4 +468,5 @@ public class HomeSercices {
 		return chaveConfig2;
 	}
 
+	 
 }
