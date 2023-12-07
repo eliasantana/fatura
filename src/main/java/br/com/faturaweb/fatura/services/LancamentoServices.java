@@ -524,19 +524,23 @@ public class LancamentoServices {
 	 * @param model
 	 */
 	public void alterar(Long id, Model model) {
+		List<Cartao> listaCartoes = cartaoRepository.findAllCartoes();
 		Lancamento lancamento = lancamentoRepository.findByIdLancamento(id);
-
+		List<FormaDePagamento> formasDePagamento = formaDePagamentoRepository.findAllFormasDePagamento();
 		Optional<FormaDePagamento> formaDePagamento = formaDePagamentoRepository
 				.findById(lancamento.getFormaDePagamento().getCdFormaPgamento());
 
 		Optional<TipoLancamento> findBydsTipoLancamento = tipoLancamentoRepository
 				.findById(lancamento.getCdLancamento());
 
-		TipoLancamento tipoLancamento = tipoLancamentoRepository
-				.findTipoLancamentoId(lancamento.getTipoLancamento().getCdTipoLancamento());
+//		TipoLancamento tipoLancamento = tipoLancamentoRepository
+//				.findTipoLancamentoId(lancamento.getTipoLancamento().getCdTipoLancamento());
+		List<TipoLancamento> tipoLancamento = tipoLancamentoRepository.findAllTipoLancamentos();
 
 		Optional<Usuario> usuario = usuarioRepository.findById(5L);
 
+		Long cdFormaPgamento = formaDePagamento.get().getCdFormaPgamento();
+		
 		LancamentoForm lf = new LancamentoForm();
 		lf.setCdLancamento(lancamento.getCdLancamento());
 		lf.setDsLancamento(lancamento.getDsLancamento());
@@ -545,9 +549,12 @@ public class LancamentoServices {
 		lf.setVlPago(lancamento.getVlPago());
 		lf.setObservacao(lancamento.getObservacao());
 		model.addAttribute("lancamentos", lf);
-		model.addAttribute("formapagto", formaDePagamento.get());
+		model.addAttribute("formapagto", formasDePagamento);
 		model.addAttribute("tpLancamentos", tipoLancamento);
 		model.addAttribute("usuario", usuario.get());
+		model.addAttribute("nrparcela", lancamento.getNrParcela());
+		model.addAttribute("cartao",listaCartoes);
+		model.addAttribute("cdformadepagamento",cdFormaPgamento);
 
 	}
 

@@ -23,4 +23,5 @@ public interface TipoLancamentoRepository extends CrudRepository<TipoLancamento,
 	Optional<TipoLancamento> findBycdTipoLancamento(Long cdTipoLancamento);
 	
 	
+	
 }
