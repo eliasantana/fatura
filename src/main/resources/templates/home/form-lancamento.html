@@ -27,15 +27,26 @@
 							<input type="text" class="form-control" name="dsLancamento" id="descricao" th:value="${lancamentos.dsLancamento}" aria-describedby="dsLancamento" required="required" />
 							<div id="desCricao" class="form-text">Descrição do Lançamento Ex: Pagamento Cartão de Crédito</div>
 						</div>
-						
+						<div class="col">
+							<label  class="form-label" for="cartao">Cartão</label>
+							<select class="form-select" name="dsCartao">
+								<option th:each="cartoes: ${cartao}" th:text="${cartoes.dsCartao}"></option>
+							</select>
+							<div id="cartao" class="form-text">Selecione um Cartão</div>
+						</div>
 						<div class="col">
 							<label  class="form-label" for="formadepagamento">Forma de Pagamento</label>
-							<select class="form-select" name="dsFormaDePagamento">
-								<option th:each="formadepagamento: ${formapagto}" th:text="${formadepagamento.descricao}">1</option>
-							</select>
-							<div id="formadepagamento" class="form-text">Ex: Espécie, Parcelado</div>
+							<select class="form-select"  name="dsFormaDePagamento">
+								<option th:each="formadepagamento: ${formapagto}"  th:text="${formadepagamento.descricao}" th:value="${formadepagamento.descricao}" th:if="${formadepagamento.descricao}" selected="selected">1</option>
+								</select>							
+							<div id="formadepagamento" class="form-text">Ex: Cédito, Dinheiro, etc.</div>
 						</div>
-						
+						<div class="col">
+						<label class="form-label">Numero e Parcela</label>
+							<select class="form-select" name="nrParcelas" >
+								<option th:text="${nrparcela}" th:value="${nrparcela}">1</option>								
+							</select>
+						</div>
 						<div class="col">
 							<label  class="form-label" for="tipolancamento">Tipo de Lançamento</label>
 							
@@ -45,7 +56,6 @@
 							
 							<div id="formadepagamento" class="form-text">Ex: Crétido, Débito, Carteira</div>
 						</div>
-						
 						<div class="col">
 						<label class="form-label" for="snpago">Pago?</label>						
 							<select class="form-select" id="snpago" name="snPago">
@@ -53,11 +63,9 @@
 								<option>SIM</option>
 							</select>												
 						</div>
-						
 						<div class="col">
 						<label class="form-label" for="vlpago">Valor a Pagar R$</label>
 						<input class="form-control" type="numeric" id="vlpago" onfocus="this.value=''" name="vlPago" th:value="${lancamentos.vlPago}" required="required"  onkeypress="$(this).mask('9999.990,00')">
-						
 						</div>
 						<div class="col">
 							<div class="form-floating mt-2">
