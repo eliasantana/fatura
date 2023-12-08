@@ -33,5 +33,20 @@ public class ConfiguracoesServices {
 		}
 		return rw;
 	}
+	/**
+	 * Retorna o valor da chave informada
+	 * @author elias
+	 * @since 08-12-2023
+	 * @param chave - Nome da Chave
+	 * */
+	public String  getChaveValor(String chave) {
+		java.util.Optional<ChaveConfig> chaveConfig = chaveRepository.findChaveConfigByDescricao(chave);
+		String valorChave = null;
+		if (chaveConfig.isPresent()) {
+			valorChave = chaveConfig.get().getValor();
+		}
+		return valorChave;
+	}
+	
 
 }
