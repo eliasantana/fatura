@@ -38,15 +38,18 @@ public interface LancamentoRepository extends CrudRepository<Lancamento, Long> {
 		 * Obs: Atualmente utilizado para fornecer dados para o gráfico de totalização de Despesas exibido na DashBoard 
 		 * */
 		@Modifying
-//		@Query(value = "SELECT *"
-//				+ " FROM lancamento "
-//				+ "where date_format(dt_competencia,'%m%Y') =:mesano "
-//				+ "group by  ds_lancamento", nativeQuery = true)
 		@Query(value = "SELECT *"
 				+ " FROM lancamento "
 				+ "where date_format(dt_competencia,'%m%Y') =:mesano "
 				, nativeQuery = true)
 		List<Lancamento> findAllLancamentosDoMes(String mesano);
+
+		@Query(value = "SELECT *"
+				+ " FROM lancamento "
+				+ "where date_format(dt_competencia,'%m%Y') =:mesano  and  forma_de_pagamento_cd_forma_pgamento =:cdformapagto"
+				, nativeQuery = true)
+		List<Lancamento> findAllLancamentosDoMesPortipo(String mesano,String cdformapagto);
+
 		
 		/**
 		 * @author elias

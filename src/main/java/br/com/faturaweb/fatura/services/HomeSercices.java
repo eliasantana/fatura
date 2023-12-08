@@ -349,7 +349,8 @@ public class HomeSercices {
 		String proximacompetencia = null;
 
 		Optional<ChaveConfig> proximaCompetencia = chaveRepository.findChaveConfigByDescricao("SN_PROXIMA_COMPETENCIA");
-		
+		Optional<ChaveConfig> snFixaLancamento = chaveRepository.findChaveConfigByDescricao("FIXA_LANCAMENTO");
+		 				
 		if (proximaCompetencia.isPresent()) {
 		     if (proximaCompetencia.get().getValor().equals("S")) {
 		    	 proximacompetencia = "S";
@@ -400,9 +401,23 @@ public class HomeSercices {
 		model.addAttribute("totaldebito", totalDebito);
 		model.addAttribute("totalcredito", totalCredito);
 		model.addAttribute("totalgeral", totalGeral);
-		
+		if (snFixaLancamento.isPresent()) {
+			      String valor = snFixaLancamento.get().getValor();
+			      switch (valor) {
+				case "D":
+					lancamentos = lctoDebito;
+					break;
+				case "C":
+					lancamentos = lctoCredito;
+					break;
+				case "DI":
+					lancamentos = lctoDinheiro;
+					break;
+				default:
+					break;
+				}
+		}	
 		model.addAttribute("lancamentos", lancamentos);
-
 		// Verifica lote da competencia
 		boolean existeLctoAberto = appservices.isLancamentoAberto(lancamentos);
 		try {

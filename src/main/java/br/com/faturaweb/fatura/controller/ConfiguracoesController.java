@@ -112,6 +112,7 @@ public RedirectView chaveConfig(@PathVariable  String  chave) {
 	RedirectView rw = 	services.getChave(chave);  
 		return rw;
 }
+	
 
 }
  
