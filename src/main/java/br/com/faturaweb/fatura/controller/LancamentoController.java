@@ -117,4 +117,11 @@ public class LancamentoController {
 		ResponseEntity<Object> download = appServices.download(arquivo, response);	
 		return download;
 	}
+	
+	@GetMapping("/clonar/{id}")
+	public RedirectView clonar(@PathVariable Long id, Model model) {
+		return  services.clonar(id, model);
+		
+	}
+
 }
