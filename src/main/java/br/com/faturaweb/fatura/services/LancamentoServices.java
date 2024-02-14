@@ -446,12 +446,10 @@ public class LancamentoServices {
 	 * @param model
 	 */
 		public String salvar(LancamentoForm lancamentoForm, Model model) {
-		Optional<FormaDePagamento> findByDescricaoFormaDePagamento = formaDePagamentoRepository
-				.findByDescricaoFormaDePagamento(lancamentoForm.getDsFormaDePagamento());
+		Optional<FormaDePagamento> findByDescricaoFormaDePagamento = formaDePagamentoRepository.findByDescricaoFormaDePagamento(lancamentoForm.getDsFormaDePagamento());
 		FormaDePagamento formadepagamento = findByDescricaoFormaDePagamento.get();
 		Lancamento lancamento = new Lancamento();
-		Optional<TipoLancamento> findBydsTipoLancamento = tipoLancamentoRepository
-				.findBydsTipoLancamento(lancamentoForm.getDsTipoLancamento());
+		Optional<TipoLancamento> findBydsTipoLancamento = tipoLancamentoRepository.findBydsTipoLancamento(lancamentoForm.getDsTipoLancamento());
 		TipoLancamento tipoLancamento = findBydsTipoLancamento.get();
 		Optional<Usuario> usuario = usuarioRepository.findById(5L);
 		Configuracoes config = configuracaoRepository.findConfiguracao();
@@ -474,6 +472,7 @@ public class LancamentoServices {
 		lancamento.setNrParcela(1);
 		// Colocar lancamento para a próxima competência caso o lote esteja fechado
 		Lancamento lancamentoValidado = this.validaLoteLancamento(lancamento, loteRepository);
+		
 		lancamentoRepository.save(lancamento);
 
 		List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentos();
@@ -752,6 +751,33 @@ public class LancamentoServices {
  * */
 public Lancamento getLancamento(Long id) {
 	return lancamentoRepository.findByIdLancamento(id);
+}
+/**
+ *Clona um Lançmento
+ * 
+ * @since 13-02-2024
+ * @param id
+ * @param model
+ */
+public RedirectView clonar(Long id, Model model) {	
+		Optional<Lancamento> lancamentoLocalizado = lancamentoRepository.findById(id);
+		Lancamento lancamento = new Lancamento();
+		if (lancamentoLocalizado.isPresent()) {
+			lancamento.setCartao(lancamentoLocalizado.get().getCartao());	
+			lancamento.setDsLancamento(lancamentoLocalizado.get().getDsLancamento().concat("*"));			
+			lancamento.setDtCadastro(LocalDate.now());
+			lancamento.setDtCompetencia(lancamentoLocalizado.get().getDtCompetencia());
+			lancamento.setFormaDePagamento(lancamentoLocalizado.get().getFormaDePagamento());
+			lancamento.setNrParcela(lancamentoLocalizado.get().getNrParcela());
+			lancamento.setObservacao(lancamentoLocalizado.get().getObservacao());
+			lancamento.setSnPago("Não");
+			lancamento.setTipoLancamento(lancamentoLocalizado.get().getTipoLancamento());
+			lancamento.setUsuario(lancamentoLocalizado.get().getUsuario());
+			lancamento.setVlPago(lancamentoLocalizado.get().getVlPago());
+			
+			lancamentoRepository.save(lancamento);
+		}
+		return new RedirectView("/listar");
 }
 
 }
