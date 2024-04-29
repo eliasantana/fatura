@@ -43,7 +43,7 @@ public class LancamentoController {
 	@GetMapping("/cadastro")
 	public String cadastrar(Model model) {
 		services.cadastro(model);
-		return "lancamento/form-lancamento";
+		return "lancamento/form-lancamento2.0";
 	}
 
 //Método chamado através da página de alteação de lancamento

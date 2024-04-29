@@ -335,6 +335,10 @@ public class AppServices {
 						.concat(" AND  l.dt_competencia between  '" + periodoini + "' AND  '" + periodofim + "'");
 				cfFiltro = cfFiltro.concat("  Período:  Data Inicial: " + periodoini + " Período Final: " + periodofim);
 			}
+			
+			System.out.println("cfWare ->"+cfWhere);
+			System.out.println("cfFiltro ->"+cfFiltro);
+			System.out.println("cfOrderBy ->"+orderBy);
 			services.addParam("CF_WHERE", cfWhere);
 			services.addParam("CF_FILTRO", cfFiltro);
 			services.addParam("CF_ORDER_BY", orderBy);

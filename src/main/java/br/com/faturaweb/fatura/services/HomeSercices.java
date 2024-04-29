@@ -347,6 +347,7 @@ public class HomeSercices {
 		BigDecimal totalDebito = BigDecimal.ZERO;
 		BigDecimal totalDinheiro = BigDecimal.ZERO;
 		String proximacompetencia = null;
+		 String mesAno = null;
 
 		Optional<ChaveConfig> proximaCompetencia = chaveRepository.findChaveConfigByDescricao("SN_PROXIMA_COMPETENCIA");
 		Optional<ChaveConfig> snFixaLancamento = chaveRepository.findChaveConfigByDescricao("FIXA_LANCAMENTO");
@@ -355,13 +356,16 @@ public class HomeSercices {
 		     if (proximaCompetencia.get().getValor().equals("S")) {
 		    	 proximacompetencia = "S";
 		    	 DateTimeFormatter df2 = DateTimeFormatter.ofPattern("MMYYYY");
-		    	 String mesAno = LocalDate.now().plusMonths(1).format(df2).toString();			
+		    	  mesAno = LocalDate.now().plusMonths(1).format(df2).toString();			
 		    	 lancamentos = lancamentoRepository.findAllLancamentosDoMes(mesAno);
 		    	 Collections.sort(lancamentos);
 		     }else {
 		    	 proximacompetencia="N";		    	 
 		    	 lancamentos = lancamentoRepository.findAllLancamentosDoMes();		    	 			
 		    	Collections.sort(lancamentos);
+		    	DateTimeFormatter df2 = DateTimeFormatter.ofPattern("MMYYYY");
+		    	  mesAno = LocalDate.now().format(df2).toString();			
+		    	 lancamentos = lancamentoRepository.findAllLancamentosDoMes(mesAno);
 		     }
 		}else {
 			lancamentos = lancamentoRepository.findAllLancamentosDoMes();
@@ -433,6 +437,8 @@ public class HomeSercices {
 		}
 		model.addAttribute("status", status);
 		model.addAttribute("proximacompetencia", proximacompetencia);
+		model.addAttribute("filtro",snFixaLancamento.get().getValor());
+		model.addAttribute("competencia",mesAno);
 	}
 
 	/**

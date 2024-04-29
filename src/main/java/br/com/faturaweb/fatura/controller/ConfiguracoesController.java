@@ -49,7 +49,7 @@ public String configuracoes(Model model) {
 	model.addAttribute("contaselecionada",config.getNrContaOrigem());
 	model.addAttribute("chave",listaDeChaves);
 	
-	return "configuracoes";
+	return "configuracoes2.0";
 }
 
 @PostMapping("salvar")

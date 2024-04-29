@@ -4,51 +4,42 @@
 <meta name="viewport" content="width=device-width">
 <meta charset="UTF-8">
 <title>Lançamentos </title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    
 </head>
 <body style="font-size: 15px;">
 	<!-- Nav Bar -->
 	<nav th:replace="~{navfragment:: nav }"></nav>
-	<div class="container">
-		<!-- Fim da row -->
+	<div class="container" style="width: 100%">
 		<div class="row mt-2 mb-2">
 					<div class="col">
+					<!-- tete  -->
 					<table>
-								<tr>
-									<td>
-											<div class="dropdown">											
-												<a href="/" class="btn btn-success mt-2" style="width: 150px;">Home <svg	xmlns="http://www.w3.org/2000/svg" width="25" height="25" 	fill="currentColor" class="bi bi-house-door" viewBox="0 0 16 16">
-						  								<path	d="M8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4.5a.5.5 0 0 0 .5-.5v-4h2v4a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146zM2.5 14V7.707l5.5-5.5 5.5 5.5V14H10v-4a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v4H2.5z" />
-														</svg>
-												</a>
-												<a class="btn btn-secondary dropdown-toggle mt-2" href="#" role="button"	id="dropdownMenuLink" data-bs-toggle="dropdown"	aria-expanded="false" style="width: 150px;" >Filtros 
-														<svg xmlns="http://www.w3.org/2000/svg" width="25"	height="25" fill="currentColor" class="bi bi-coin"	viewBox="0 0 16 16">
-																							  <path	d="M5.5 9.511c.076.954.83 1.697 2.182 1.785V12h.6v-.709c1.4-.098 2.218-.846 2.218-1.932 0-.987-.626-1.496-1.745-1.76l-.473-.112V5.57c.6.068.982.396 1.074.85h1.052c-.076-.919-.864-1.638-2.126-1.716V4h-.6v.719c-1.195.117-2.01.836-2.01 1.853 0 .9.606 1.472 1.613 1.707l.397.098v2.034c-.615-.093-1.022-.43-1.114-.9H5.5zm2.177-2.166c-.59-.137-.91-.416-.91-.836 0-.47.345-.822.915-.925v1.76h-.005zm.692 1.193c.717.166 1.048.435 1.048.91 0 .542-.412.914-1.135.982V8.518l.087.02z" />
-																							  <path	d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
-																							  <path	d="M8 13.5a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11zm0 .5A6 6 0 1 0 8 2a6 6 0 0 0 0 12z" />
-														</svg>
-												</a>
-												<ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-													<li><a class="dropdown-item" href="/chaves/alterar/FIXA_LANCAMENTO/T"> Mostrat todos</a></li>
-													<li><a class="dropdown-item" href="/chaves/alterar/FIXA_LANCAMENTO/C"> Fixar lançamentos no Crédito</a></li>
-													<li><a class="dropdown-item" href="/chaves/alterar/FIXA_LANCAMENTO/D">Fixar lancamentos no Débito</a></li>
-													<li><a class="dropdown-item" href="/chaves/alterar/FIXA_LANCAMENTO/DI">Fixar lancamentos no Dinheiro</a></li>
-												</ul>
-												 <a href="/lancamento/cadastro" class="btn btn-primary mt-2" style="width: 150px;" >Cadastro
-													<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25"
-														fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">																  
-														<path	d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />																 ]
-														 <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />	</svg>
-												</a>	
-												
-										<!-- Menu -->
-										<!-- Example split danger button -->
+							<tr>
+								<td width="10%">
+								<!-- Filtros -->
+										<div class="dropdown">
+											<a class="btn btn-secondary dropdown-toggle mt-2" href="#" role="button"	id="dropdownMenuLink" data-bs-toggle="dropdown"	aria-expanded="false" style="width: 150px;" >Filtros 
+													<svg xmlns="http://www.w3.org/2000/svg" width="25"	height="25" fill="currentColor" class="bi bi-coin"	viewBox="0 0 16 16">
+																						  <path	d="M5.5 9.511c.076.954.83 1.697 2.182 1.785V12h.6v-.709c1.4-.098 2.218-.846 2.218-1.932 0-.987-.626-1.496-1.745-1.76l-.473-.112V5.57c.6.068.982.396 1.074.85h1.052c-.076-.919-.864-1.638-2.126-1.716V4h-.6v.719c-1.195.117-2.01.836-2.01 1.853 0 .9.606 1.472 1.613 1.707l.397.098v2.034c-.615-.093-1.022-.43-1.114-.9H5.5zm2.177-2.166c-.59-.137-.91-.416-.91-.836 0-.47.345-.822.915-.925v1.76h-.005zm.692 1.193c.717.166 1.048.435 1.048.91 0 .542-.412.914-1.135.982V8.518l.087.02z" />
+																						  <path	d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+																						  <path	d="M8 13.5a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11zm0 .5A6 6 0 1 0 8 2a6 6 0 0 0 0 12z" />
+													</svg>
+											</a>
+											<ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+												<li><a class="dropdown-item" href="/chaves/alterar/FIXA_LANCAMENTO/T"> Mostrat todos</a></li>
+												<li><a class="dropdown-item" href="/chaves/alterar/FIXA_LANCAMENTO/C"> Fixar lançamentos no Crédito</a></li>
+												<li><a class="dropdown-item" href="/chaves/alterar/FIXA_LANCAMENTO/D">Fixar lancamentos no Débito</a></li>
+												<li><a class="dropdown-item" href="/chaves/alterar/FIXA_LANCAMENTO/DI">Fixar lancamentos no Dinheiro</a></li>
+											</ul>
+										<!-- Filtros -->
+								</td>
+								<td>
+									<!-- Menu  Próxima Competência-->
+								<div class="dropdown">											
 													<div class="btn-group">
 													  <form method="post" action="/chaves/alterar/SN_PROXIMA_COMPETENCIA">
-																			<button th:if="${proximacompetencia=='N'}" class="btn btn-danger mt-2" 	type="submit" th:text="${competencia}">Próxima Competência >></button>
-																			<button th:if="${proximacompetencia=='S'}" class="btn btn-danger mt-2" type="submit"><< Competência Anterior</button>
+																			<button th:if="${proximacompetencia=='N'}" class="btn btn-danger mt-2" 	type="submit"><span th:text="'Atual:  '+${competencia}"> Próxima Competência >></span></button>
+																			<button th:if="${proximacompetencia=='S'}" class="btn btn-danger mt-2" type="submit"  ><span th:text="'Comp.  '+${competencia}"> Próxima Competência >></span></button>
 															</form>
 													  <button type="button" class="btn btn-danger dropdown-toggle dropdown-toggle-split mt-2" data-bs-toggle="dropdown" aria-expanded="false">
 													  		  <span class="visually-hidden -mt-2">Toggle Dropdown</span>
@@ -95,80 +86,63 @@
 													    </li>
 													  </ul>
 													</div>
-										<!-- Fim Menu -->
-										</div>	
-									</td>
-								</tr>
-					</table>
-					</div>				
-			</div>
-	</div>
-	<div class="card">
-		<div class="card-header">Lançamentos </div>
-		<div class="card-body">
-			<table class="table table-striped table-hover" id="lancamentos">
-				<thead>
-					<tr>
-						<th scope="col">Lançamento</th>						
-					</tr>
-				</thead>
-				<tbody>
-					<tr th:each="lancamento : ${lancamentos}">
-						<th scope="row">
-								<div th:text="${lancamento.cdLancamento}"></div>
-								<div  th:text="${lancamento.dsLancamento}"></div>
-								<div	th:text="${#temporals.format(lancamento.dtCompetencia, 'dd/MM/yyyy')}"></div>
-										  
-										 <span class="badge bg-primary rounded-pill"  th:text=" 'R$ ' + ${#numbers.formatDecimal(lancamento.vlPago,1,2,'COMMA')}">1</span>
-										 <span class="badge bg-primary rounded-pill"   th:text="${lancamento.formaDePagamento.descricao}">Forma de Pagamento</span>										
-										 <span class="badge bg-primary rounded-pill"   th:text="${lancamento.tipoLancamento.dsTipoLancamento}"></span>	
-										
-										 <a href="/lancamento/detalhe/"		th:href="@{'/lancamento/detalhe/' +  ${lancamento.cdLancamento}}"	target="_blank" class="btn btn-link"> 
-										 		<svg 	xmlns="http://www.w3.org/2000/svg" width="32" height="32" 	fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
-											 		  <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z" />  
-											 		  <path	d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z" />
-												</svg>
+										<!-- Fim  Menu  Próxima Competência-->		
+								</td>
+							</tr>
+					</table>				
+				    <h5 th:if ="${filtro}==T"> Filtrando: Todas as formas de Pagamento</h5>
+				    <h5 th:if ="${filtro}==C">Filtrando: Crédito</h5>
+				     <h5 th:if ="${filtro}==D">Filtrando: Débito</h5>
+				     <h5 th:if ="${filtro}==DI">Filtrando: Dinheiro</h5>
+			    	<ul class="collapsible">
+							    <li  th:each="lancamento : ${lancamentos}" >							 
+							    <table>							   
+							    		<tr>
+							    				<td width="2%"> 
+							    				 <img   th:if="${lancamento.cartao.cdCartao}!=null" alt=""width="20px" height="20px"	th:src="|/cartao/getimagem/${lancamento.cartao.cdCartao}|" />	
+							    				</td>
+							    				 <td  th:text="${#temporals.format(lancamento.dtCompetencia, 'dd/MM/yyyy')}" align="left"></td>
+							    				 <td align="right" width="100%">
+							    				 		<span class="badge bg-primary rounded-pill indigo lighten-1 accent-2"  th:text=" 'R$ ' + ${#numbers.formatDecimal(lancamento.vlPago,1,2,'COMMA')}"  style="color: white;">1</span>
+							    				 </td>
+							    		</tr>
+							    </table>
+							      <div class="collapsible-header" th:text="${lancamento.cdLancamento} + ' - '+  ${lancamento.dsLancamento}"> </div>
+							      <div class="collapsible-body">
+										 <span class="badge bg-primary rounded-pill indigo lighten-1 accent-2"   th:text="${lancamento.formaDePagamento.descricao}" style="color: white;">Forma de Pagamento</span>										
+										 <span class="badge bg-primary rounded-pill indigo lighten-1 accent-2"   th:text="${lancamento.tipoLancamento.dsTipoLancamento}" style="color: white;"></span>	
+										 <a href="/lancamento/detalhe/"		th:href="@{'/lancamento/detalhe/' +  ${lancamento.cdLancamento}}"	target="_blank" class="waves-effect indigo lighten-1  btn"> 
+										 		<i class="material-icons center">description</i>
 										</a>
 										  <img   th:if="${lancamento.cartao.cdCartao}!=null" alt=""width="40px" height="40px"	th:src="|/cartao/getimagem/${lancamento.cartao.cdCartao}|" />	  
 										 <table>
 										 		<tr>
-										 			<td>
-										 					<a href="/lancamento/excluir/"		th:href="@{'/lancamento/excluir/'  + ${lancamento.cdLancamento}}"			class="btn btn-danger">Excluir</a> 
-										 			</td>
-										 			<td>
-										 					<a href="/lancamento/alterar/"		th:href="@{'/lancamento/alterar/'  + ${lancamento.cdLancamento}}"			class="btn btn-warning">Alterar</a> 
-										 			</td>
-										 			<td>
-										 					<a href="/lancamento/anexar"	th:if="${lancamento.dsAnexo==null}"	th:href="@{'/lancamento/anexar/'  + ${lancamento.cdLancamento}}"		class="btn btn-secondary">Anexar</a> 
-										 			</td>
-										 			
-										 			<td>
-										 					<a href="/lancamento/anexo/"		th:href="@{'/lancamento/anexo/'  + ${lancamento.cdLancamento}}" th:if="${lancamento.dsAnexo!=null}" class="btn btn-success"	th:alt="teste" target="_blank">
-																	<span	data-feather="paperclip"></span>
-															</a>
+										 			<td>										 				
+										 				   <a  th:if="${lancamento.snPago}=='Não'"   href="/lancamento/pagar/"	th:href="@{'/lancamento/pagar/'  + ${lancamento.cdLancamento}}" class="waves-effect indigo lighten-1 btn"><i class="material-icons center">account_balance_wallet</i></a>
+										 				   <a  href="/lancamento/alterar/"		th:href="@{'/lancamento/alterar/'  + ${lancamento.cdLancamento}}"			 class="waves-effect indigo lighten-1 btn"><i class="material-icons center">create</i></a> 
+										 				   <a  href="/lancamento/anexar"	th:if="${lancamento.dsAnexo==null}"	th:href="@{'/lancamento/anexar/'  + ${lancamento.cdLancamento}}"	 class="waves-effect lighten-1 btn"><i class="material-icons center">attachment</i></a>
+										 			    	<a href="/lancamento/anexo/"		th:href="@{'/lancamento/anexo/'  + ${lancamento.cdLancamento}}" th:if="${lancamento.dsAnexo!=null}" class="waves-effec  indigo lighten-1 btn" 	th:alt="teste" target="_blank">	<i class="material-icons center">attachment</i></a>
+										 				   <a   href="/lancamento/excluir/"		th:href="@{'/lancamento/excluir/'  + ${lancamento.cdLancamento}}"	 class="waves-effect indigo lighten-1  btn"><i class="material-icons center">delete</i></a>
+										 				   <a   href="/lancamento/clonar"  th:if="${lancamento.snPago}=='Não'" 	th:href="@{'/lancamento/clonar/'  + ${lancamento.cdLancamento}}"	 class="waves-effectindigo lighten-1 btn"><i class="material-icons center">control_point_duplicate</i></a>
+										 				   <a th:if="${lancamento.snPago}=='Não'"   href="/lancamento/transfetir/"	th:href="@{'/lancamento/transferir/' + ${lancamento.cdLancamento}}"  	 class="waves-effectindigo lighten-1 btn"><i class="material-icons center">call_missed_outgoing</i></a>
+										 				   
 										 			</td>
 										 		</tr>
 										 </table>		
-										 <table>
-										 	<tr>
-										 			<td th:if="${lancamento.snPago}=='Não'">															
-										 					<a	href="/lancamento/pagar/"	th:href="@{'/lancamento/pagar/'  + ${lancamento.cdLancamento}}"	class="btn btn-success">Pagar</a> 
-										 					<td>
-										 						<a href="/lancamento/clonar"	th:if="${lancamento.dsAnexo==null}"	th:href="@{'/lancamento/clonar/'  + ${lancamento.cdLancamento}}"		class="btn btn-primary">Clonar</a> 
-										 					</td>
-										 					<td>
-																<a href="/lancamento/transfetir/"	th:href="@{'/lancamento/transferir/' + ${lancamento.cdLancamento}}"  	class="btn btn-link" data-toggle="tooltip" data-placement="top"	title="Transferir para próxima conpetência"> 
-																		  <svg	xmlns="http://www.w3.org/2000/svg" width="35" height="35"		fill="currentColor" class="bi bi-sign-turn-slight-right-fill"		viewBox="0 0 16 16">
-																			  <path fill-rule="evenodd"	d="M6.95.435c.58-.58 1.52-.58 2.1 0l6.515 6.516c.58.58.58 1.519 0 2.098L9.05 15.565c-.58.58-1.519.58-2.098 0L.435 9.05a1.482 1.482 0 0 1 0-2.098L6.95.435Zm1.385 6.547.8 1.386a.25.25 0 0 0 .451-.039l1.06-2.882a.25.25 0 0 0-.192-.333l-3.026-.523a.25.25 0 0 0-.26.371l.667 1.154-.621.373A2.5 2.5 0 0 0 6 8.632V11h1V8.632a1.5 1.5 0 0 1 .728-1.286l.607-.364Z" />	
-																		  </svg>
-																</a>
-														 </td>
-										 	</tr>
-										 </table>										
-							</th>						
-													
-					</tr>
-				</tbody>
+							      </div>
+							    </li>
+							  </ul>
+					<!-- tete  -->
+				<table>
+				
+				<thead>
+				<tr>
+					<th></th>
+				</tr>
+				</thead>
+				<tbody>
+				
+				</tbody>	
 				<tfoot>
 					<tr>
 						<th th:text="'Crédito R$ ' + ${totalcredito} " style="align-items: right;"></th>
@@ -187,12 +161,29 @@
 					</tr>
 				</tfoot>
 			</table>
+			<!-- FloatButtons-->
+		 	<div class="fixed-action-btn">
+					  <a class="btn-floating btn-large red">
+					    <i class="large material-icons   indigo lighten-1">reorder</i>
+					  </a>
+					  <ul>
+					    <li><a   href="/"  class="btn-floating gray"><i class="material-icons">home</i></a></li>
+					    <li><a   href="/lancamento/cadastro"  class="btn-floating red"><i class="material-icons">add</i></a></li>
+					    <li><a  href="/chaves/alterar/FIXA_LANCAMENTO/T" class="btn-floating green"><i class="material-icons">autorenew</i></a></li>
+					    <!-- Cr[edito -->
+					    <li><a class="btn-floating red"  href="/chaves/alterar/FIXA_LANCAMENTO/C"><i class="material-icons">credit_card</i></a></li>
+					    <!-- Fixar lancamentos no Débito -->
+					    <li><a   href="/chaves/alterar/FIXA_LANCAMENTO/DI" class="btn-floating yellow darken-1"><i class="material-icons">account_balance_wallet</i></a></li>
+					    <li><a  href="/chaves/alterar/FIXA_LANCAMENTO/D" class="btn-floating blue"><i class="material-icons">attach_money</i></a></li>
+					  </ul>
+			</div>
+		 	<!-- Fim - FloatButtons-->
 		</div>
 	</div>
 	<!-- Paginação -->
 	<script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
 	<script src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
-
+	
 	<script>
 		$(document)
 				.ready(
@@ -205,6 +196,7 @@
 											});
 						});
 	</script>
+	
 	<!-- Script necessário para o funcionamento da NavBar-->
 	<script
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
@@ -216,5 +208,29 @@
 		feather.replace()
 	</script>
 
+      <!--JavaScript at end of body for optimized loading-->
+      <script type="text/javascript" src="materialize/js/materialize.min.js"></script>
+      <script type="text/javascript">
+
+      document.addEventListener('DOMContentLoaded', function() {
+        var elems = document.querySelectorAll('.fixed-action-btn');
+        var instances = M.FloatingActionButton.init(elems, options);
+      });
+
+      // Or with jQuery
+      $(document).ready(function(){
+        $('.fixed-action-btn').floatingActionButton();
+      });
+      </script>
+      <!-- TEste -->
+      <script type="text/javascript">
+      
+
+      $(document).ready(function(){
+        $('.collapsible').collapsible();
+      });
+      </script>
+      <!-- TEste -->
+      
 </body>
 </html>
