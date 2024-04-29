@@ -10,14 +10,18 @@
 		<div class="card mt-1">
 			<div class="card-header">Cadastro de Lançamentos</div>
 			<div class="card-body">
-				<h5 class="card-title" >Lançamentos xx</h5>
+				<h5 class="card-title" >Lançamentos 2.0</h5>
 				
 				<div th:text="${menssagem}">yr</div>
 				<p class="card-text">
 				<div class="container">
 					<!-- <form method="post" action="/salvar"> -->
-					<form method="post" action="/lancamento/salvar">
-						<div class="col">
+					
+					<!-- TEste -->
+					<!-- fim teste -->
+					
+					<form method="post" action="/lancamento/salvar" class="col s12">
+						<div class="row">
 							<label th:if="${lancamentos.cdLancamento}==!null" class="form-label" for="codigo">ID</label>
 							<input th:if="${lancamentos.cdLancamento}==!null" type="text" class="form-control" name="cdLancamento" id="codigo" th:value="${lancamentos.cdLancamento}" aria-describedby="cdLancamento" />
 							<div th:if="${lancamentos.cdLancamento}==!null" id="cdLancamento" class="form-text">Código do Lançamento</div>
@@ -30,7 +34,7 @@
 						</div>
 						
 						<div class="col">
-							<label  class="form-label" for="formadepagamento">Forma de Pagamento</label>
+							<label  class="form-label" for="formadepagamento">Forma de Pagamento</label>							
 							<select class="form-select" name="dsFormaDePagamento">
 								<option th:each="formadepagamento: ${formapagto}" th:text="${formadepagamento.descricao}">1</option>
 							</select>
@@ -133,4 +137,13 @@
 <script>
    feather.replace()
  </script>
+  <!--JavaScript at end of body for optimized loading-->
+      <script type="text/javascript" src="materialize/js/materialize.min.js"></script>
+   <script type="text/javascript">
+	 $(document).ready(function() {
+	   M.updateTextFields();
+ });
+ </script>
+ 
+    </body>
 </html>

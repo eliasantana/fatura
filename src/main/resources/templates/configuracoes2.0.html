@@ -36,7 +36,7 @@
 				<button class="nav-link" id="pills-contact-tab"
 					data-bs-toggle="pill" data-bs-target="#pills-contact" type="button"
 					role="tab" aria-controls="pills-contact" aria-selected="false">Configurações
-					Gerais</button>
+					Gerais 2.0</button>
 			</li>
 		
 		</ul>
@@ -255,7 +255,7 @@
 												<td th:text="${chave.chave}"></td>
 												<td th:text="${chave.descricao}"></td>
 												<td th:if="${chave.valor}=='S'"> <a href="/configuracoes/chave/" th:href="@{'/configuracoes/chave/' + ${chave.chave}}" class="btn btn-success">Ativa</a>  </td>
-												<td th:if="${chave.valor}=='N'"> <a href="/configuracoes/chave/" th:href="@{'/configuracoes/chave/' + ${chave.chave}}" class="btn btn-danger">Inativa</a>  </td>  	 
+												<td th:if="${chave.valor}=='N'"> <a href="/configuracoes/chave/" th:href="@{'/configuracoes/chave/' + ${chave.chave}}" class="btn btn-danger">Inativa</a>  </td>  	
 											</tr>
 										</thead>
 										<tbody>

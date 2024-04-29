@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import br.com.faturaweb.fatura.model.Chave;
 import br.com.faturaweb.fatura.model.Configuracoes;
+import br.com.faturaweb.fatura.repository.ChaveRepository;
 import br.com.faturaweb.fatura.services.HomeSercices;
 
 @ComponentScan
@@ -17,7 +18,7 @@ import br.com.faturaweb.fatura.services.HomeSercices;
 public class HomeController {
 	@Autowired
 	HomeSercices homeservices;
-
+	
 	@GetMapping("/")
 	public String index(Model model) {
 		String valorChave;
@@ -44,7 +45,8 @@ public class HomeController {
 	public String listar(Model model) {
 		homeservices.listar(model);
 
-		return "home/listar-lancamento";
+		//return "home/listar-lancamento";
+		return "home/listar-lancamento2.0";
 	}
 
 	@GetMapping("configuracoes")
