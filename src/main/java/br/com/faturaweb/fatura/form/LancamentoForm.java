@@ -22,8 +22,8 @@ public class LancamentoForm {
 	private String dsCartao;
 	
 	public LancamentoForm() {
-		 this.dtCadastro = LocalDate.now();
-		 this.dtCompetencia=LocalDate.now();
+//		 this.dtCadastro = LocalDate.now();
+//		 this.dtCompetencia=LocalDate.now();
 		
 	}
 	
@@ -148,7 +148,7 @@ public class LancamentoForm {
 		return "LancamentoForm [cdLancamento=" + cdLancamento + ", dsLancamento=" + dsLancamento + ", usuario="
 				+ usuario + ", dtCadastro=" + dtCadastro + ", dsTipoLancamento=" + dsTipoLancamento + ", snPago="
 				+ snPago + ", vlPago=" + vlPago + ", dsFormaDePagamento=" + dsFormaDePagamento + ", dtCompetencia="
-				+ dtCompetencia + ", nrParcelas=" + nrParcelas + "]";
+				+ dtCompetencia.toString() + ", nrParcelas=" + nrParcelas + "]";
 	}
 	
 	

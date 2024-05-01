@@ -63,7 +63,7 @@ public class LancamentoController {
 	@GetMapping("/alterar/{id}")
 	public String alterar(@PathVariable Long id, Model model) {
 		services.alterar(id, model);
-		return "home/form-lancamento";
+		return "home/form-lancamento2.0";
 	}
 
 	@GetMapping("/pagar/{id}")
