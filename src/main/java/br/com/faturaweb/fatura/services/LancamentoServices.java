@@ -461,7 +461,7 @@ public class LancamentoServices {
 		}
 		lancamento.setCdLancamento(lancamentoForm.getCdLancamento());
 		lancamento.setDsLancamento(lancamentoForm.getDsLancamento());
-		lancamento.setDtCadastro(lancamentoForm.getDtCadastro());
+		lancamento.setDtCadastro(LocalDate.now());
 		lancamento.setDtCompetencia(lancamentoForm.getDtCompetencia());
 		lancamento.setFormaDePagamento(formadepagamento);
 		lancamento.setSnPago(lancamentoForm.getSnPago());
@@ -547,6 +547,7 @@ public class LancamentoServices {
 		lf.setSnPago(lancamento.getSnPago());
 		lf.setVlPago(lancamento.getVlPago());
 		lf.setObservacao(lancamento.getObservacao());
+		lf.setDtCompetencia(lancamento.getDtCompetencia());
 		model.addAttribute("lancamentos", lf);
 		model.addAttribute("formapagto", formasDePagamento);
 		model.addAttribute("tpLancamentos", tipoLancamento);
