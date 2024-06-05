@@ -38,7 +38,6 @@ import br.com.faturaweb.fatura.repository.LancamentoRepository;
 import it.ozimov.springboot.mail.model.Email;
 import it.ozimov.springboot.mail.model.defaultimpl.DefaultEmail;
 import it.ozimov.springboot.mail.service.EmailService;
-import net.sf.jasperreports.repo.InputStreamResource;
 
 @Service
 public class AppServices {
@@ -73,7 +72,6 @@ public class AppServices {
 		final Email email = DefaultEmail.builder().from(new InternetAddress(origem, origemNome))
 				.to(Lists.newArrayList(new InternetAddress(destino, destinoNome))).subject(tiulo)
 				.body(corpoDamensagem.toString()).encoding("UTF-8").build();
-
 		emailService.send(email);
 	}
 
@@ -128,9 +126,7 @@ public class AppServices {
 		try {
 			HtmlConverter.convertToPdf(new FileInputStream(fileIn.toString()),
 					new FileOutputStream(new File(fileOut.toString() + nomeArquivo)));
-			System.out.println("Arquivo Criado com sucessos!");
 		} catch (FileNotFoundException e) {
-			System.out.println("Erro ao tentar gerar o arquivo");
 			e.printStackTrace();
 		}
 	}
@@ -206,8 +202,6 @@ public class AppServices {
 		File arquivo = new File(caminho.concat(nomeAtual));
 		File novoArquivo = new File(caminho.concat(novoNome));
 		if (arquivo.exists()) {
-			System.out.println("Arquivo " + nomeAtual + " foi localizado! " + " em " + caminho.concat(nomeAtual));
-			System.out.println("O arquivo agora se chama " + novoNome);
 			arquivo.renameTo(novoArquivo);
 		}
 	}
@@ -273,12 +267,9 @@ public class AppServices {
 	public void imprmirRelatorio(String nmRelatorio, String strMes, String strAno, String orderBy,
 		HttpServletResponse response, String acao, String formapagto, String tppagto, String periodoini,
 		String periodofim, String competencia, String nrLote) {
-		
 		String cfWhere = "";
 		String cfFiltro = "Filtro: ";
-		
 		switch (nmRelatorio) {
-		
 		case "lotecontabil":
 			nmRelatorio="relFechamentoContabil";
 			services.removeParam();
@@ -286,22 +277,17 @@ public class AppServices {
 			services.addParam("PCD_LOTE",nrLote);			
 			services.imprime(nmRelatorio, acao, response);
 		break;	
-			
-		
 		case "relatoriodacompetencia":
 			nmRelatorio = "lancamentos";
-
 			services.addParam("COMPETENCIA", strMes.concat("/").concat(strAno));
 			services.addParam("CF_COMPETENCIA", strMes.concat(strAno));
 			services.addParam("CF_WHERE", "AND l.CD_LANCAMENTO = l.CD_LANCAMENTO");
 			services.addParam("CF_ORDER_BY", orderBy);
 			services.imprime(nmRelatorio, acao, response);
 			break;
-
 		case "relatoriocomfiltro":
 			nmRelatorio = "lancamentos";
 			services.addParam("COMPETENCIA", competencia.concat("/").concat(strAno));
-
 			if (competencia.equals("0") || competencia == null) {
 				cfWhere = cfWhere
 						.concat(" AND DATE_FORMAT(l.dt_competencia,'%m%Y') = DATE_FORMAT(l.dt_competencia,'%m%Y') ");
@@ -336,20 +322,14 @@ public class AppServices {
 				cfFiltro = cfFiltro.concat("  Período:  Data Inicial: " + periodoini + " Período Final: " + periodofim);
 			}
 			
-			System.out.println("cfWare ->"+cfWhere);
-			System.out.println("cfFiltro ->"+cfFiltro);
-			System.out.println("cfOrderBy ->"+orderBy);
 			services.addParam("CF_WHERE", cfWhere);
 			services.addParam("CF_FILTRO", cfFiltro);
 			services.addParam("CF_ORDER_BY", orderBy);
 			services.imprime(nmRelatorio, acao, response);
-
 			break;
-
-		default:
+			default:
 			break;
 		}
-
 	}
 	/**
 	 * Adiciona uma chave lógica
@@ -358,22 +338,18 @@ public class AppServices {
 	 * @param chaveConfig
 	 * */
 	public String adicionaChave(ChaveConfig chaveConfig) {
-		
 		String msg=null;
 		if (chaveConfig.getDescricao()==null || chaveConfig.getDescricao().isEmpty()){
 			msg=msg+"A descrição é obrigatória";
 		}
-		
 		if (chaveConfig.getValor().isEmpty() || chaveConfig.getValor()==null){
 			msg=msg+"O valor da chave é obrigatório!";
 		}
-		
 		if (msg==null) {
 			chaveConfig.setDtCriacao(LocalDate.now());
 			chaveRepository.save(chaveConfig);
 			msg="Chave Cadastrada com sucesso";
 		}
-		
 		return msg;
 	}
 	
@@ -392,7 +368,7 @@ public class AppServices {
 				valor= chave.get().getValor();
 			}
 		} catch (Exception e) {
-			System.out.println("Chave não localizada!");
+			e.printStackTrace();
 		}
 		return valor;
 	}
@@ -401,26 +377,21 @@ public class AppServices {
 		Path path = Paths.get(caminho);
 		Path absolutePath = path.toAbsolutePath();
 		File file =absolutePath.toFile();
-		
 		org.springframework.core.io.InputStreamResource resource = null;
-		
 		try {
 			resource = new org.springframework.core.io.InputStreamResource  (new FileInputStream(file.getAbsoluteFile()));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-		
 	    HttpHeaders headers= new HttpHeaders();
 	    headers.add("Content-Disposition", String.format("attachment; filename=\"%s\"", file.getName()));
 	    headers.add("Cache-Control", "no-chace, no-store,must-revalidate");
 	    headers.add("Pragma", "no-cache");
 	    headers.add("Expires","0");
-	    
 	    ResponseEntity<Object> responseEntity = ResponseEntity.ok().headers(headers)
 	    		.contentLength(file.length())
 	    		.contentType(MediaType.parseMediaType("application/pdf"))
 	    		.body(resource);	    
-	    		
 	    return responseEntity;
 	}
 	

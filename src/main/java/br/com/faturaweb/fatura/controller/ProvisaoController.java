@@ -32,11 +32,9 @@ public class ProvisaoController {
 	public String provisaoListar(Model model, Provisao provisao, @PathVariable(name = "msg", required = false) String msg) {
 		List<Conta> contas = contaRepository.findcontas();
 		List<Provisao> provisoes = provisaoRepository.findAllProvisao();
-		
 		model.addAttribute("contas",contas);
 		model.addAttribute("provisoes",provisoes);
 		model.addAttribute("mensagem",msg);
-		
 		return "provisao";
 	}
 	
@@ -47,84 +45,45 @@ public class ProvisaoController {
 																	@RequestParam(name="percentual") String percentual,
 																	@RequestParam(name="nrconta") String nrconta)
 	{
-		 
 		List<Conta> contas = contaRepository.findcontas();
 		List<Provisao> provisoes = provisaoRepository.findAllProvisao();
 		Optional<Conta> contaLocalizada = contaRepository.findConta(nrconta);
 		BigDecimal totalPercent =  BigDecimal.ZERO;
-		 String flag=""; //A - Alteração
-		 
-		//Extrair método para o service para simplificar a lógica
-		 //Calcula o percentual total já cadastrado
+ 	    String flag=""; //A - Alteração
 		for (Provisao prov : provisoes) {
 			System.out.println(" Valor "+totalPercent);
 			totalPercent = totalPercent.add(prov.getPercentual());
 		}
 		totalPercent = totalPercent.multiply( new BigDecimal(100)); //Converte para inteiro 
-		
 		totalPercent = totalPercent.add(new BigDecimal(percentual)); //Adiciona o percentual informado ao total calculado
-		System.out.println(" Total Calculado -> " + totalPercent);
-		
 		BigDecimal max = new BigDecimal(100);
 		if ((totalPercent.compareTo(max)<=0)) { // Se o total + o percentual informado for <=100%
-
 				  Provisao p = new Provisao();
 				  if (id!=null) {
 					  flag="A";
-					  //Alterando a provisao
 					  	p.setCdProvisao(id);
 					  	p.setDsProvisao(dsprovisao);
 					  	BigDecimal bPercentual = new BigDecimal(percentual).divide(new BigDecimal(100));
 					  	p.setPercentual(bPercentual);
 					  	p.setNrConta(nrconta);
 				  }else {
-					  //Novo Cadastro
 					  p.setDsProvisao(dsprovisao);
 					  BigDecimal bPercentual = new BigDecimal(percentual).divide(new BigDecimal(100));
 					  p.setPercentual(bPercentual);
 					  p.setNrConta(contaLocalizada.get().getNrConta());
-					  
 				  }
-			
 		  		provisaoRepository.save(p);
-		  		
 		  		if (flag.equals("A")) {
 					model.addAttribute("mensagem", "A provisão [ "+p.getDsProvisao() +" ] foi alterada com sucesso!");	
 				}else {
 					model.addAttribute("mensagem", "A provisão [ "+p.getDsProvisao() +" ] foi salva com sucesso!");	
 				}
-			
 		}else {
 			model.addAttribute("mensagem", "O Percentual informado ultrapassa o acumulado de 100%");	
 		}
 		provisoes =  provisaoRepository.findAllProvisao();
 		model.addAttribute("contas",contas);
 		model.addAttribute("provisoes",provisoes);
-		
-		BigDecimal big10 = new BigDecimal(20);
-		BigDecimal big20 = new BigDecimal(100);
-
-		System.out.println(big10.compareTo(big20) < -1);  // false
-		System.out.println(big10.compareTo(big20) <= -1); // true
-		System.out.println(big10.compareTo(big20) == -1); // true
-		System.out.println(big10.compareTo(big20) >= -1); // true
-		System.out.println(big10.compareTo(big20) > -1);  // false
-		System.out.println(big10.compareTo(big20) != -1); // false
-
-		System.out.println(big10.compareTo(big20) < 0);   // true
-		System.out.println(big10.compareTo(big20) <= 0);  // true
-		System.out.println(big10.compareTo(big20) == 0);  // false
-		System.out.println(big10.compareTo(big20) >= 0);  // false
-		System.out.println(big10.compareTo(big20) > 0);   // false
-		System.out.println(big10.compareTo(big20) != 0);  // true
-
-		System.out.println(big10.compareTo(big20) < 1);   // true
-		System.out.println(big10.compareTo(big20) <= 1);  // true
-		System.out.println(big10.compareTo(big20) == 1);  // false
-		System.out.println(big10.compareTo(big20) >= 1);  // false
-		System.out.println(big10.compareTo(big20) > 1);   // false
-		System.out.println(big10.compareTo(big20) != 1);  // true
-		
 		return "provisao";
 	}
 	
@@ -133,16 +92,12 @@ public class ProvisaoController {
 	    Provisao provisaoLocalizada = provisaoRepository.findProvisaoByID(id);
 		List<Conta> contas = contaRepository.findcontas();
 		List<Provisao> provisoes = provisaoRepository.findAllProvisao();
-		
-		
 		model.addAttribute("provisoes",provisoes);
 		model.addAttribute("contas",contas);
 		model.addAttribute("codigo",provisaoLocalizada.getCdProvisao());
 		model.addAttribute("descricao",provisaoLocalizada.getDsProvisao());
 		model.addAttribute("percentual",provisaoLocalizada.getPercentual().multiply(BigDecimal.valueOf(100)));
 		model.addAttribute("nrconta",provisaoLocalizada);
-		
-		
 		return "provisao";
 	}
 	
@@ -151,12 +106,8 @@ public class ProvisaoController {
 		Provisao provisaoExcluida = provisaoRepository.findProvisaoByID(id);
 		String msg="Exclusão realizada com sucesso!";
 		RedirectView rw  = new RedirectView("/provisao/listar/"+msg);
-		
-		
 		Optional<Provisao> provisao = provisaoRepository.findById(id);
 		if (provisao.isPresent()) provisaoRepository.delete(provisao.get());
-		
 		return rw;
 	}
-	
 }

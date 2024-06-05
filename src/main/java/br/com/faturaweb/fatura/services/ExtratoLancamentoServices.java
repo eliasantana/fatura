@@ -86,6 +86,7 @@ public class ExtratoLancamentoServices {
 		model.addAttribute("saldoGeral", saldoGeral);
 		model.addAttribute("formapagto", formaDePagamentos);
 		model.addAttribute("tl", tiposLancamento);
+		model.addAttribute("ano",LocalDate.now().getYear());
 		if ("A".equals(tprelatorio)) {
 			competencia = " Relatório de Despesas Anuais  -  " + anolancamento;
 		} else {

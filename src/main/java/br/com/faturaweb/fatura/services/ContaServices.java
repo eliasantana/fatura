@@ -77,27 +77,15 @@ public class ContaServices {
 		Optional<Conta> contaDeOrigem = repository.findConta(ctaOrigem);
 		Optional<Conta> contaDeDestino = repository.findConta(ctaDestino);
 		BigDecimal bValor = new BigDecimal(vlr);
-		// Obtendo o saldo da conta de origem e debitando o valor
 		BigDecimal saldoOrigem = contaDeOrigem.get().getSaldo();
-		System.out.println(" Saldo da Conta de origem " + saldoOrigem);
-
 		saldoOrigem = saldoOrigem.subtract(bValor);
 		contaDeOrigem.get().setSaldo(saldoOrigem);
-
-		System.out.println("Novo saldo " + contaDeOrigem.get().getSaldo());
-
-		// Obtendo o saldo da conta de Destino e creditando o valor tranferido
 		BigDecimal saldoDestino = contaDeDestino.get().getSaldo();
-		System.out.println("Saldo da conta de Destino  " + saldoDestino);
-
 		saldoDestino = saldoDestino.add(bValor);
 		contaDeDestino.get().setSaldo(saldoDestino);
-		System.out.println("Novo Saldo da conta de Destino  " + contaDeDestino.get().getSaldo());
-		// Adicionando as contas e salvando o novo saldo
 		contas.add(contaDeOrigem.get());
 		contas.add(contaDeDestino.get());
 		repository.saveAll(contas);
-
 		insereLog(" Transferência de  R$ " + vlr + "  |  " + contaDeOrigem.get().getNrConta() + " - "
 				+ contaDeOrigem.get().getDsConta() + " para " + contaDeDestino.get().getNrConta() + " - "
 				+ contaDeDestino.get().getDsConta(), ctaOrigem, ctaDestino, "T", bValor);
@@ -115,8 +103,7 @@ public class ContaServices {
 	 * @param vlMovimentado  - Valor transferido
 	 */
 	public void insereLog(String descricao, String nrContaOrigem, String nrContaDestino, String tpMovimentacao,
-			BigDecimal vlMovimentado) {
-
+		BigDecimal vlMovimentado) {
 		LogMovimentacaoFinanceira log = new LogMovimentacaoFinanceira();
 		log.setDescricao(descricao);
 		log.setDtMovimentacao(LocalDate.now());
@@ -124,9 +111,7 @@ public class ContaServices {
 		log.setTpMovimentacao(tpMovimentacao);
 		log.setUsuario("Elias");
 		log.setVlMovimentado(vlMovimentado);
-
 		logMovimentacao.save(log);
-
 	}
 
 	/**
@@ -138,13 +123,11 @@ public class ContaServices {
 	 */
 	public BigDecimal getSaldoGeral(List<Conta> contas) {
 		BigDecimal total = BigDecimal.ZERO;
-
 		if (contas.size() > 0) {
 			for (Conta conta : contas) {
 				total = total.add(conta.getSaldo());
 			}
 		}
-
 		return total;
 	}
 
@@ -174,7 +157,6 @@ public class ContaServices {
 	 */
 	public RedirectView salvar(Model model, Conta conta, MultipartFile file) {
 		RedirectView rw = new RedirectView("/conta/listar");
-
 		try {
 			if (file.getBytes().length > 0) {
 				conta.setQrcod(file.getBytes());
@@ -244,8 +226,6 @@ public class ContaServices {
 			BigDecimal saldo = contaLocalizada.get().getSaldo();
 			Double vlr = Double.valueOf(valor);
 			BigDecimal vlr2 = BigDecimal.valueOf(vlr);
-
-			// D = Débito C="Crédito"
 			if (operacao.equals("D")) {
 				saldo = saldo.subtract(vlr2);
 				lmf.setDescricao(motivo.toUpperCase());
@@ -254,7 +234,6 @@ public class ContaServices {
 				lmf.setTpMovimentacao(operacao);
 				lmf.setUsuario("Elias");
 				lmf.setVlMovimentado(vlr2);
-
 			} else {
 				saldo = saldo.add(vlr2);
 				lmf.setDescricao(motivo);
@@ -264,7 +243,6 @@ public class ContaServices {
 				lmf.setUsuario("Elias");
 				lmf.setVlMovimentado(vlr2);
 			}
-
 			Conta novosaldo = contaLocalizada.get();
 			novosaldo.setSaldo(saldo);
 			repository.save(novosaldo);
@@ -291,7 +269,6 @@ public class ContaServices {
 		vlr = vlr.replace(",", ".");
 		String msgTransacao = contaServices.validaTransacao(ctaorigem, ctadestino, vlr);
 		boolean contains = msgTransacao.contains("sucesso");
-
 		if (contains) {
 			contaServices.transfere(contas, ctaorigem, ctadestino, vlr);
 			model.addAttribute("conta", conta);
@@ -318,10 +295,8 @@ public class ContaServices {
 		Optional<Conta> conta = repository.findById(id);
 		return conta;
 	}
-
 	public Conta creditar(Long id, Model model, Conta conta) {
 		Conta contaLocalizada = repository.findContaId(id);
 		return contaLocalizada;
 	}
-
 }
