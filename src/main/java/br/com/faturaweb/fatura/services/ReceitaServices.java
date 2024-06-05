@@ -109,7 +109,6 @@ public class ReceitaServices {
 				default:
 					break;
 				}
-
 				dadosReceita.put("janeiro", jan);
 				dadosReceita.put("fevereiro", fev);
 				dadosReceita.put("março", mar);
@@ -122,11 +121,9 @@ public class ReceitaServices {
 				dadosReceita.put("outubro", out);
 				dadosReceita.put("novembro", nov);
 				dadosReceita.put("dezembro", dez);
-
 			}
 		}
 		return dadosReceita;
-
 	}
 
 	/**
@@ -139,21 +136,15 @@ public class ReceitaServices {
 	 * @param model
 	 */
 	public void excluir(Long id, Model model) {
-
-		// Obtendo a conta de origem
 		LogMovimentacaoFinanceira log = new LogMovimentacaoFinanceira();
 		Configuracoes config = configuracoesRepository.findConfiguracao();
 		Optional<Conta> contaLocalizada = contaRepository.findConta(config.getNrContaOrigem());
-		// Localizando a receita a ser excluída
 		Optional<Receita> receita = receitaRepository.findById(id);
-		// Se a receita for localizada, debita o valor da conta e salva com o novo
-		// saldo.
 		if (receita.isPresent()) {
 			BigDecimal saldo = contaLocalizada.get().getSaldo();
 			BigDecimal novoSaldo = saldo.subtract(receita.get().getSalLiquido());
 			contaLocalizada.get().setSaldo(novoSaldo);
 			contaRepository.save(contaLocalizada.get());
-			// Registrando no log a movimentação financeira
 			log.setDescricao("Debitando " + receita.get().getSalLiquido() + " na " + contaLocalizada.get().getNrConta()
 					+ " -" + contaLocalizada.get().getDsConta());
 			log.setDtMovimentacao(LocalDate.now());
@@ -189,11 +180,9 @@ public class ReceitaServices {
 	 * @return {@link RedirectView}
 	 */
 	public void clonar(Long id) {
-
 		Configuracoes config = configuracoesRepository.findConfiguracao();
 		Optional<Conta> contaLocalizada = contaRepository.findConta(config.getNrContaOrigem());
 		LogMovimentacaoFinanceira log = new LogMovimentacaoFinanceira();
-
 		Receita r = new Receita();
 		Optional<Receita> receitaOptional = receitaRepository.findById(id);
 		if (receitaOptional.isPresent()) {
@@ -204,16 +193,12 @@ public class ReceitaServices {
 			r.setSalBruto(receita.getSalBruto());
 			r.setSalLiquido(receita.getSalLiquido());
 		}
-
 		receitaRepository.save(r);
-
 		if (contaLocalizada.isPresent()) {
 			BigDecimal saldo = contaLocalizada.get().getSaldo();
 			BigDecimal novoSaldo = saldo.add(r.getSalLiquido());
 			contaLocalizada.get().setSaldo(novoSaldo);
 			contaRepository.save(contaLocalizada.get());
-
-			// Registrando no log a movimentação financeira
 			log.setDescricao("Creditando " + r.getSalLiquido() + " na " + contaLocalizada.get().getNrConta() + " -"
 					+ contaLocalizada.get().getDsConta());
 			log.setDtMovimentacao(LocalDate.now());
@@ -223,7 +208,6 @@ public class ReceitaServices {
 			log.setVlMovimentado(r.getSalLiquido());
 			logRepository.save(log);
 		}
-
 	}
 
 	/**
@@ -236,23 +220,16 @@ public class ReceitaServices {
 	 */
 	public void salvar(Model model, Receita receitaForm) {
 		LogMovimentacaoFinanceira log = new LogMovimentacaoFinanceira();
-		
 		try {
-			
 			receitaRepository.save(receitaForm);
 			model.addAttribute("mensagem", "Receita Salva com sucesso!");
-			// Obtendo a conta configurada
 			Configuracoes config = configuracoesRepository.findConfiguracao();
 			Optional<Conta> contaLocalizada = contaRepository.findConta(config.getNrContaOrigem());
 			if (contaLocalizada.isPresent()) {
-				// obtendo o saldo e somando a receita líquida
 				BigDecimal saldo = contaLocalizada.get().getSaldo();
 				BigDecimal novoSaldoBigDecimal = saldo.add(receitaForm.getSalLiquido());
 				contaLocalizada.get().setSaldo(novoSaldoBigDecimal);
-				// Salvando a conta com o novo saldo
 				contaRepository.save(contaLocalizada.get());
-				// registrando a movimentação no log
-				// Registrando no log a movimentação financeira
 				log.setDescricao("Creditando " + receitaForm.getSalLiquido() + " na "
 						+ contaLocalizada.get().getNrConta() + " -" + contaLocalizada.get().getDsConta());
 				log.setDtMovimentacao(LocalDate.now());
@@ -264,11 +241,10 @@ public class ReceitaServices {
 			}
 
 		} catch (Exception e) {
-			System.out.println("Não foi possível salvar a receita informada ->" + receitaForm.getDsReceita());
+			e.printStackTrace();
 			model.addAttribute("mensagem", "Falha ao tentar savar a receita!");
 		}
 		model.addAttribute("receita", new Receita());
-
 	}
 
 	/**
@@ -286,11 +262,9 @@ public class ReceitaServices {
 			msg = "Lote Fechado! Não é possivel - Excluir / Alterar ou Salvar uma Receita"
 					+ "Ação: Reabra o lote contábil!!!";
 			statusLote = "F";
-		} else
+		} else {
 			statusLote = "A";
-		{
 		}
-
 		model.addAttribute("receitas", receitas);
 		model.addAttribute("mensagem", msg);
 		model.addAttribute("statuslote", statusLote);
@@ -309,7 +283,5 @@ public class ReceitaServices {
 		}
 		model.addAttribute("statuslote", statuslote);
 		model.addAttribute("menssagem", mensagem);
-		
 	}
-
 }

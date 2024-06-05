@@ -84,33 +84,27 @@ public class LancamentoServices {
 	Connection conn;
 	
 
-	public List<Lancamento> parcelar(String snParcelar, Long cdUsuario, Integer qtParcela,
-			String primeiraParcelaNaCompetencia) {
+	public List<Lancamento> parcelar(String snParcelar, Long cdUsuario, Integer qtParcela, String primeiraParcelaNaCompetencia) {
 		BigDecimal vlPago = new BigDecimal(0);
 		Integer nrParcela = 0;
 		BigDecimal vlParcela = new BigDecimal(0);
 		MathContext mctx = new MathContext(2, RoundingMode.HALF_UP);
 		List<Lancamento> listaDeLancamentos = new ArrayList<Lancamento>();
 		if (snParcelar.toLowerCase().equals("s")) {
-			System.out.println("Localizando o último lancamento do usuário!");
 			Lancamento lancamento = lancamentoRepository.findUltimoLancamentoUsuario(cdUsuario);
 			vlPago = lancamento.getVlPago();
 			nrParcela = qtParcela;
 			vlParcela = (vlPago.divide(new BigDecimal(nrParcela), MathContext.DECIMAL32));
-			// Adicona a primeira parcela para o mês seguinte
 			for (int i = 1; i <= nrParcela; i++) {
 				Lancamento l = new Lancamento();
 				l.setDsLancamento(lancamento.getDsLancamento() + " " + (i) + "/" + nrParcela);
 				l.setDtCadastro(lancamento.getDtCadastro());
 				l.setCartao(lancamento.getCartao());
-				// Lança a primeira parcela na competencia atual somente se a configuração
-				// global estiver ligada sn_nacompetencia = 'S'
 				if (primeiraParcelaNaCompetencia.equals("S")) {
 					l.setDtCompetencia(lancamento.getDtCompetencia().plusMonths(i - 1)); // lança a parcela no mês atual
 				} else {
 					l.setDtCompetencia(LocalDate.now());
 					l.setDtCompetencia(lancamento.getDtCompetencia().plusMonths(i)); // lança a primeira parcela no mês
-																						// seguinte
 				}
 				l.setFormaDePagamento(lancamento.getFormaDePagamento());
 				l.setNrParcela(i + 1);
@@ -119,7 +113,6 @@ public class LancamentoServices {
 				l.setUsuario(lancamento.getUsuario());
 				l.setVlPago(vlParcela);
 				l.setObservacao(lancamento.getObservacao());
-
 				listaDeLancamentos.add(l);
 			}
 		}
@@ -136,26 +129,20 @@ public class LancamentoServices {
 	 */
 	public HashMap<String, BigDecimal> totalizacaoDespesaCategoria() {
 		HashMap<String, BigDecimal> mapTotalizador = new HashMap<String, BigDecimal>();
-
 		List<TipoLancamento> tiposLancamentos = tipoLancamentoRepository.findAllTipoLancamentos();
 		List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentosDoMes();
-
 		BigDecimal totalizador = new BigDecimal(0);
-
 		for (TipoLancamento tipoLancamento : tiposLancamentos) {
-
 			for (Lancamento lancamento : lancamentos) {
 				if (lancamento.getTipoLancamento().getCdTipoLancamento().equals(tipoLancamento.getCdTipoLancamento())) {
 					totalizador = totalizador.add(lancamento.getVlPago());
 				}
 			}
-			// Só adiciona o valor se ele for maior que zero
 			if (totalizador.compareTo(BigDecimal.ZERO) == 1) {
 				mapTotalizador.put(tipoLancamento.getDsTipoLancamento(), totalizador);
 			}
 			totalizador = totalizador.ZERO;
 		}
-
 		return mapTotalizador;
 	}
 
@@ -170,29 +157,23 @@ public class LancamentoServices {
 		HashMap<String, BigDecimal> mapTotalizador = new HashMap<String, BigDecimal>();
 		List<Lancamento> lancamentos = new ArrayList<>();
 		List<TipoLancamento> tiposLancamentos = tipoLancamentoRepository.findAllTipoLancamentos();
-		// Se mes ano for menor que 6 dígitos. Busca os lançamentos do ano
 		if (mesAno.length() < 6) {
 			lancamentos = lancamentoRepository.findAllLancamentosDoAno(mesAno);
 		} else {
 			lancamentos = lancamentoRepository.findAllLancamentosDoMes(mesAno);
 		}
-
 		BigDecimal totalizador = new BigDecimal(0);
-
 		for (TipoLancamento tipoLancamento : tiposLancamentos) {
-
 			for (Lancamento lancamento : lancamentos) {
 				if (lancamento.getTipoLancamento().getCdTipoLancamento().equals(tipoLancamento.getCdTipoLancamento())) {
 					totalizador = totalizador.add(lancamento.getVlPago());
 				}
 			}
-			// Só adiciona o valor se ele for maior que zero
 			if (totalizador.compareTo(BigDecimal.ZERO) == 1) {
 				mapTotalizador.put(tipoLancamento.getDsTipoLancamento(), totalizador);
 			}
 			totalizador = totalizador.ZERO;
 		}
-
 		return mapTotalizador;
 	}
 
@@ -219,7 +200,6 @@ public class LancamentoServices {
 
 	public String getTotal() {
 		HashMap<String, BigDecimal> totalizacaoDespesaCategoria = totalizacaoDespesaCategoria();
-
 		Set<String> keySet = totalizacaoDespesaCategoria.keySet();
 		java.util.Collection<BigDecimal> values = totalizacaoDespesaCategoria.values();
 		Iterator i = keySet.iterator();
@@ -228,9 +208,7 @@ public class LancamentoServices {
 		while (i.hasNext()) {
 			str = str + "{ name : ' " + i.next() + " ' , y: " + ivalues.next() + " },";
 		}
-
 		str = " [ " + str.substring(0, str.length() - 1) + " ]";
-
 		return str;
 	}
 
@@ -253,7 +231,6 @@ public class LancamentoServices {
 			lancamentosDoMes = lancamentoRepository.findAllLancamentosDoMes(mesAno);
 		}
 		BigDecimal total = BigDecimal.ZERO;
-
 		for (FormaDePagamento pagamentos : formasDePagamento) {
 			for (Lancamento lancamento : lancamentosDoMes) {
 				String pagtoDescricao = pagamentos.getDescricao();
@@ -284,7 +261,6 @@ public class LancamentoServices {
 		BigDecimal limite = configuracao.getLimiteCartao();
 		BigDecimal percent = BigDecimal.ZERO;
 		MathContext mtx = new MathContext(2, RoundingMode.HALF_UP);
-		// Limite 1000 gasto de 1200
 		List<Lancamento> lancamentosDoMes = lancamentoRepository.findAllLancamentosDoMes(mesAno);
 		BigDecimal totalGasto = BigDecimal.ZERO;
 		for (Lancamento lancamento : lancamentosDoMes) {
@@ -292,19 +268,14 @@ public class LancamentoServices {
 				totalGasto = totalGasto.add(lancamento.getVlPago());
 			}
 		}
-		System.out.println("Total Gasto: " + totalGasto);
-		// Se o total for menor que o limite
 		if (totalGasto.compareTo(limite) == -1) {
 			System.out.println("Entrei aqui");
 			percent = (totalGasto.divide(limite, 3, RoundingMode.FLOOR).multiply(BigDecimal.valueOf(100.0)));
 		} else {
-			// Retorna o percentual negativo quando o totalGasto for maior que o limite
 			BigDecimal diferenca = totalGasto.subtract(limite);
 			percent = (diferenca.divide(limite, 3, RoundingMode.FLOOR).multiply(BigDecimal.valueOf(100.0))
 					.multiply(BigDecimal.valueOf(-1)));
 		}
-		System.out.println("Percentual Calcualdo " + percent);
-		System.out.println("Limite " + limite);
 		return percent;
 	}
 
@@ -331,7 +302,6 @@ public class LancamentoServices {
 			} else {
 				lancamento.setDtCompetencia(LocalDate.now());
 			}
-
 		} catch (Exception e) {
 			lancamento.setDtCompetencia(LocalDate.now());
 		}
@@ -347,18 +317,14 @@ public class LancamentoServices {
 	 * @param lancamentoLocalizado - Lancamento Original Localizado
 	 */
 	public void alterarTodos(LancamentoForm lancamentoForm, Lancamento lancamentoLocalizado) {
-
-		System.out.println(lancamentoLocalizado.getDsLancamento());
 		int length = lancamentoLocalizado.getDsLancamento().length();
 		String dsLancamento = lancamentoLocalizado.getDsLancamento().substring(0, length - 4);
-
 		BigDecimal vlPago = lancamentoLocalizado.getVlPago();
 		List<Lancamento> listaDemaisLancamentos = lancamentoRepository.findDemiasLancamento(dsLancamento, vlPago);
 		List<Lancamento> listaLancamentosAlterarados = new ArrayList<Lancamento>();
 		if (listaDemaisLancamentos.size() > 1) {
 			for (Lancamento lancamento2 : listaDemaisLancamentos) {
 				String controle = lancamento2.getDsLancamento().substring(length - 4);
-
 				Lancamento lancamentoAlterado = new Lancamento();
 				lancamentoAlterado = lancamento2;
 				lancamentoAlterado.setDsLancamento(lancamentoForm.getDsLancamento() + " " + controle);
@@ -372,11 +338,9 @@ public class LancamentoServices {
 				lancamentoAlterado.setVlPago(lancamentoForm.getVlPago());
 				lancamentoAlterado.setObservacao(lancamentoForm.getDsLancamento());
 				listaLancamentosAlterarados.add(lancamentoAlterado);
-
 			}
 			lancamentoRepository.saveAll(listaDemaisLancamentos);
 		}
-
 	}
 
 	/**
@@ -391,14 +355,12 @@ public class LancamentoServices {
 	}
 
 	public void cadastro(Model model) {
-		// Obtem o valor da chave
 		Optional<ChaveConfig> chave = chaveRepository
 				.findChaveConfigByDescricao(Chave.SN_CAD_DESPESA_INICIO.toString());
 		String valorChave = null;
 		if (chave.isPresent()) {
 			valorChave = chave.get().getValor();
 		}
-
 		String status = "A";
 		String msg = "";
 		try {
@@ -410,7 +372,7 @@ public class LancamentoServices {
 				status = "A";
 			}
 		} catch (Exception e) {
-			System.out.println("Não há lote aberto na competencia!");
+			e.printStackTrace();
 		}
 		try {
 			List<Cartao> listaCartoes = cartaoRepository.findAllCartoes();
@@ -419,9 +381,7 @@ public class LancamentoServices {
 			Usuario u = new Usuario();
 			Optional<Usuario> usuario = usuarioRepository.findById(5L);
 			List<TipoLancamento> tiposDeLancamento = tipoLancamentoRepository.findAllTipoLancamentos();
-
 			List<FormaDePagamento> formasDePagamento = formaDePagamentoRepository.findAllFormasDePagamento();
-
 			model.addAttribute("lancamentos", lf);
 			model.addAttribute("formapagto", formasDePagamento);
 			model.addAttribute("tpLancamentos", tiposDeLancamento);
@@ -430,7 +390,6 @@ public class LancamentoServices {
 			model.addAttribute("menssagem", msg);
 			model.addAttribute("cartao", listaCartoes);
 			model.addAttribute("chave", valorChave);
-
 		} catch (Exception e) {
 			e.getMessage();
 		}
@@ -470,15 +429,10 @@ public class LancamentoServices {
 		lancamento.setVlPago(lancamentoForm.getVlPago());
 		lancamento.setObservacao(lancamentoForm.getObservacao());
 		lancamento.setNrParcela(1);
-		// Colocar lancamento para a próxima competência caso o lote esteja fechado
 		Lancamento lancamentoValidado = this.validaLoteLancamento(lancamento, loteRepository);
-		
 		lancamentoRepository.save(lancamento);
-
 		List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentos();
 		model.addAttribute("lancamentos", lancamentos);
-
-		// Se lancamento Parcelado
 		if (config.getSnParcelado().toUpperCase().equals("S")) {
 			Lancamento ultimoLancamento = lancamentoRepository
 					.findUltimoLancamentoUsuario(usuario.get().getCdUsuario());
@@ -490,10 +444,8 @@ public class LancamentoServices {
 			lancamentoRepository.saveAll(parcelas);
 			lancamentoRepository.delete(ultimoLancamento);
 			lancamentos = lancamentoRepository.findAllLancamentosDoMes();
-
 			model.addAttribute("lancamentos", lancamentos);
 		}
-
 		return "home/listar-lancamento";
 	}
 
@@ -528,18 +480,11 @@ public class LancamentoServices {
 		List<FormaDePagamento> formasDePagamento = formaDePagamentoRepository.findAllFormasDePagamento();
 		Optional<FormaDePagamento> formaDePagamento = formaDePagamentoRepository
 				.findById(lancamento.getFormaDePagamento().getCdFormaPgamento());
-
 		Optional<TipoLancamento> findBydsTipoLancamento = tipoLancamentoRepository
 				.findById(lancamento.getCdLancamento());
-
-//		TipoLancamento tipoLancamento = tipoLancamentoRepository
-//				.findTipoLancamentoId(lancamento.getTipoLancamento().getCdTipoLancamento());
 		List<TipoLancamento> tipoLancamento = tipoLancamentoRepository.findAllTipoLancamentos();
-
 		Optional<Usuario> usuario = usuarioRepository.findById(5L);
-
 		Long cdFormaPgamento = formaDePagamento.get().getCdFormaPgamento();
-		
 		LancamentoForm lf = new LancamentoForm();
 		lf.setCdLancamento(lancamento.getCdLancamento());
 		lf.setDsLancamento(lancamento.getDsLancamento());
@@ -555,7 +500,6 @@ public class LancamentoServices {
 		model.addAttribute("nrparcela", lancamento.getNrParcela());
 		model.addAttribute("cartao",listaCartoes);
 		model.addAttribute("cdformadepagamento",cdFormaPgamento);
-
 	}
 
 	/**
@@ -572,19 +516,16 @@ public class LancamentoServices {
 		List<Lancamento> lancamentos = lancamentoRepository.findAllLancamentosDoMes();
 		lancamento.setSnPago("SIM");
 		lancamentoRepository.save(lancamento);
-
 		if ("Débito".equals(lancamento.getFormaDePagamento().getDescricao())) {
 			// Debitar na conta informada
 			Configuracoes config = configuracaoRepository.findConfiguracao();
 			String nrContaOrigem = config.getNrContaOrigem();
 			Optional<Conta> contaLocalizada = contaRepository.findConta(nrContaOrigem);
-
 			if (contaLocalizada.isPresent()) {
 				Conta conta = contaLocalizada.get();
 				BigDecimal novoSaldo = conta.getSaldo().subtract(lancamento.getVlPago());
 				conta.setSaldo(novoSaldo);
 				contaRepository.save(conta);
-
 				LogMovimentacaoFinanceira log = new LogMovimentacaoFinanceira();
 				log.setDescricao("Pagamento " + lancamento.getDsLancamento() + "  Data:  " + LocalDate.now()
 						+ " Conta: " + conta.getNrConta() + " - " + conta.getDsConta());
@@ -594,9 +535,7 @@ public class LancamentoServices {
 				log.setUsuario("Elias");
 				log.setVlMovimentado(lancamento.getVlPago());
 				logRepository.save(log);
-
 			}
-
 		}
 		model.addAttribute("lancamentos", lancamentos);
 		return rw;
@@ -604,18 +543,13 @@ public class LancamentoServices {
 
 	public void anexar(Long id, Model model) {
 		Lancamento lancamento = lancamentoRepository.findByIdLancamento(id);
-
 		Optional<FormaDePagamento> formaDePagamento = formaDePagamentoRepository
 				.findById(lancamento.getFormaDePagamento().getCdFormaPgamento());
-
 		Optional<TipoLancamento> findBydsTipoLancamento = tipoLancamentoRepository
 				.findById(lancamento.getCdLancamento());
-
 		TipoLancamento tipoLancamento = tipoLancamentoRepository
 				.findTipoLancamentoId(lancamento.getTipoLancamento().getCdTipoLancamento());
-
 		Optional<Usuario> usuario = usuarioRepository.findById(5L);
-
 		LancamentoForm lf = new LancamentoForm();
 		lf.setCdLancamento(lancamento.getCdLancamento());
 		lf.setDsLancamento(lancamento.getDsLancamento());
@@ -628,25 +562,17 @@ public class LancamentoServices {
 		model.addAttribute("tpLancamentos", tipoLancamento);
 		model.addAttribute("usuario", usuario.get());
 		model.addAttribute("cdLancamento", id);
-
 	}
 
-//teste
 	public void exibirAnexo(Long id, HttpServletResponse response, HttpServletRequest request) throws IOException {
-
 		Configuracoes config = configuracaoRepository.findConfiguracao();
 		Lancamento lancamento = lancamentoRepository.findByIdLancamento(id);
-		System.out.println(" Anexo: " + lancamento.getDsAnexo());
 		File file = new File(lancamento.getDsAnexo());
-		
 		if (file.exists()) {
 			String mimeType = URLConnection.guessContentTypeFromName(file.getName());
-			System.out.println("Nome do Arquivo: " + file.getName());
-			System.out.println("Encontrei o arquivo");
 			if (lancamento.getDsAnexo().contains(file.getName())) {
 				System.out.println("A descrição contem");
 			}
-			System.out.println();
 			if (mimeType == null) {
 				mimeType = "application/octet-stream";
 			}
@@ -673,7 +599,6 @@ public class LancamentoServices {
 	public void getDetalheLancamento(Model model, Long id) {
 		Lancamento l = lancamentoRepository.findByIdLancamento(id);
 		model.addAttribute("lancamento", l);
-
 	}
 
 	/**
@@ -716,7 +641,6 @@ public class LancamentoServices {
 	public RedirectView pagarTodos() {
 		RedirectView rw = new RedirectView("/listar");
 		Optional<FormaDePagamento> forma = formaDePagamentoRepository.findByDescricaoFormaDePagamento("Crédito");
-
 		if (forma.isPresent()) {
 			Long cdFromapagto = forma.get().getCdFormaPgamento();
 			List<Lancamento> lancamentosDoMes = lancamentoRepository.findLancamentoPorFormaDePagamento(cdFromapagto);
@@ -725,7 +649,6 @@ public class LancamentoServices {
 					lancamento.setSnPago("SIM");
 				}
 			}
-
 			lancamentoRepository.saveAll(lancamentosDoMes);
 		}
 		return rw;
@@ -775,7 +698,6 @@ public RedirectView clonar(Long id, Model model) {
 			lancamento.setTipoLancamento(lancamentoLocalizado.get().getTipoLancamento());
 			lancamento.setUsuario(lancamentoLocalizado.get().getUsuario());
 			lancamento.setVlPago(lancamentoLocalizado.get().getVlPago());
-			
 			lancamentoRepository.save(lancamento);
 		}
 		return new RedirectView("/listar");

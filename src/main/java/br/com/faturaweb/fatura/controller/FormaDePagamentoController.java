@@ -47,52 +47,39 @@ public class FormaDePagamentoController {
 
 	@PostMapping("adicionar")
 	public String adicionar(@Valid FormaDePagamento formaPagto, Model model) {
-		System.out.println("Descrição do Form: " + formaPagto.getDescricao());
 		FormaDePagamento formapagtoForm = new FormaDePagamento(formaPagto.getDescricao());
 		model.addAttribute("formapagto", formaPagto);
-
 		if (formaPagto.getCdFormaPgamento() != null) {
 			try {
 				Optional<FormaDePagamento> formaPagtoLocalizada = formaDePagamentoRepository
 						.findById(formaPagto.getCdFormaPgamento());
 				formapagtoForm.setCdFormaPgamento(formaPagtoLocalizada.get().getCdFormaPgamento());
 				formapagtoForm.setDtInclusao(formaPagtoLocalizada.get().getDtInclusao());
-				System.out.println("Salvando forma de pagamento localizada!");
 				formaDePagamentoRepository.save(formapagtoForm);
 
 			} catch (NoSuchElementException e) {
-
-				System.out.println("Salvando forma de pagamento não localizada!");
-
+				e.printStackTrace();
 			}
 		} else {
-			System.out.println("Salvando");
 			formaDePagamentoRepository.save(formapagtoForm);
-
 		}
 		return "formapagto/form-formade-pagamento";
 	}
 
 	@GetMapping("/excluir/{id}")
 	public RedirectView excluir(@PathVariable Long id, Model model) {
-
 		FormaDePagamento formaDePagamentoForm = new FormaDePagamento();
 		model.addAttribute(formaDePagamentoForm);
 		RedirectView redirectView = new RedirectView("/formapagto/listar");
-
 		Optional<FormaDePagamento> formapagto = formaDePagamentoRepository.findById(id);
 		formaDePagamentoRepository.delete(formapagto.get());
-
 		return redirectView;
-
 	}
 
 	@GetMapping("/alterar/{id}")
 	public String alterar(@PathVariable Long id, Model model) {
-
 		Optional<FormaDePagamento> formaPagtoLocalizada = formaDePagamentoRepository.findById(id);
 		model.addAttribute("formapagto", formaPagtoLocalizada.get());
-		System.out.println("Forma de pagamento localizada: " + formaPagtoLocalizada.get().toString());
 		return "formapagto/form-formade-pagamento";
 	}
 

@@ -112,27 +112,18 @@ public RedirectView creditarItMeta(@PathVariable Long idMeta, @PathVariable Long
 	BigDecimal totalItMeta = metaservices.totalizaItMeta(itemCreditados);
 	
    BigDecimal andamentoMeta = metaservices.andamentoMeta(metaLocalizada.get(), totalItMeta);
-	//Valia o id informado é igual ao localizado
 	if (itMeta.getCdItMeta()!=null) {
-		//Localizando a conta  conta
 		 Conta conta = itMeta.getMeta().getConta();
-		 //Credita o valor do item da meta (Valor Semanal)
 		appServices.credita(conta, itMeta.getVlrSemana());
-		//Debitando o valor na conta de origem			
 		appServices.debitaNaOrigem(itMeta.getVlrSemana());
-		//Gerando log da movimentação
 		logMovimentacao.setDescricao("Creditando valor em " + conta.getNrConta()  +" Ag. " + conta.getNrAgencia() );
 		logMovimentacao.setNrConta(conta.getNrConta()  );
 		logMovimentacao.setDtMovimentacao(LocalDate.now());
 		logMovimentacao.setTpMovimentacao("C");
 		logMovimentacao.setVlMovimentado(itMeta.getVlrSemana());
 		log.save(logMovimentacao);
-		
-		//Muda o status para creditado
 		itMeta.setSnCreditado("S");
 		itMetaRepository.save(itMeta);
-		
-		// Gerando um lançamento despesas para a meta paga
 		Lancamento lancamento = new Lancamento();
 		lancamento.setDsLancamento("Pagamento Meta "+metaLocalizada.get().getDescricao());
 		lancamento.setDtCadastro(LocalDate.now());
@@ -141,7 +132,6 @@ public RedirectView creditarItMeta(@PathVariable Long idMeta, @PathVariable Long
 		lancamento.setFormaDePagamento(formaPagto.get());
 		lancamento.setNrParcela(1);
 		lancamento.setSnPago("SIM"); //Pago
-		//Optional<TipoLancamento> tl = tipoLancamentoRepository.findBycdTipoLancamento(36L); // 36-Metas
 		Optional<TipoLancamento> tl = tipoLancamentoRepository.findBydsTipoLancamento("Metas");
 	    Cartao cartao = new Cartao();
 	    cartao.setCdCartao(1L);//Nenhum
@@ -151,9 +141,7 @@ public RedirectView creditarItMeta(@PathVariable Long idMeta, @PathVariable Long
 		u.setCdUsuario(5L);
 		lancamento.setUsuario(u);//TESTES
 		lancamento.setVlPago(itMeta.getVlrSemana());
-		
 		lancamentoRepository.save(lancamento);
-		//Gerano um log para o credito lançado
 		logLancamentoCredito.setDescricao(lancamento.getDsLancamento());
 		logLancamentoCredito.setDtMovimentacao(LocalDate.now());
 		logLancamentoCredito.setNrConta(conta.getNrConta());
@@ -161,7 +149,6 @@ public RedirectView creditarItMeta(@PathVariable Long idMeta, @PathVariable Long
 		logLancamentoCredito.setTpMovimentacao("C");
 		log.save(logLancamentoCredito);
 	}
-	// Dados do Gráfico 
 		model.addAttribute("totalmeta",totalItMeta);
 		model.addAttribute("andamento", andamentoMeta);
 		model.addAttribute("titulo", metaLocalizada.get().getDescricao());
@@ -175,26 +162,19 @@ public RedirectView creditarItMeta(@PathVariable Long idMeta, @PathVariable Long
  * @param id - Código do item da meta
  * */
 public RedirectView reGerarMetaItMeta(@PathVariable Long id) {
-		System.out.println("1 - Recalculando Meta a Meta!");
 		RedirectView rw = new RedirectView("/itmeta/listar/"+id.toString());
-		
 		try {
 			Optional<Meta> metaLocalizada = metaRepository.findById(id);
 			Meta meta = metaLocalizada.get();
-			
 		    List<ItMeta> itensRecalculados = metaservices.reGeraItMeta(meta);
 		    itMetaRepository.saveAll(itensRecalculados);
-		    
-		    System.out.println("Itens recalculados salvos com sucesso!");
 			LogMovimentacaoFinanceira log = new LogMovimentacaoFinanceira();
 			log.setDescricao("Recalculando itens da meta  " + meta.getCdMeta() + " - " +meta.getDescricao());
 			log.setDtMovimentacao(LocalDate.now());
 			log.setTpMovimentacao("R");
-			
 			this.log.save(log);
-			
 		} catch (Exception e) {
-			System.out.println(e.getMessage() + "Erro ao regerar os itens de meta!");
+			e.printStackTrace();
 		}
 	return rw;
 }

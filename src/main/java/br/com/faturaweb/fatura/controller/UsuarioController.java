@@ -41,15 +41,9 @@ public class UsuarioController {
 	@PostMapping("adicionar")
 	public RedirectView adicionar(@Valid Usuario usuario, Model model) {
 		RedirectView rw = new RedirectView("http://localhost:8080/usuario/listar");
-
 		if (usuario.getCdUsuario() != null) {
-			
-			
-			System.out.println("Alterando o usuário");
 			try {
 				Optional<Usuario> usuarioLocalizado = usuarioRepository.findById(usuario.getCdUsuario());
-				System.out.println("Usuário localizado!" +   usuarioLocalizado.toString());
-				
 				Usuario usuarioForm = new Usuario();
 				usuarioForm.setCdUsuario(usuarioLocalizado.get().getCdUsuario());
 				usuarioForm.setDtCardastro(usuarioLocalizado.get().getDtCardastro());
@@ -58,21 +52,15 @@ public class UsuarioController {
 				usuarioForm.setLogin(usuario.getLogin());
 				usuarioForm.setSenha(usuario.getSenha());
 				usuarioForm.setSnAtivo(usuario.getSnAtivo());				
-				System.out.println("Usuario form: " + usuarioForm.toString());
-				
 				usuarioRepository.save(usuarioForm);
-				
 			} catch (Exception e) {
-				
+				e.printStackTrace();
 			}
-			
 		}else {
 			 usuario.setDtCardastro(LocalDate.now());
 			 usuarioRepository.save(usuario);
 		}
-
 		return rw;
-
 	}
 
 	@GetMapping("listar")
@@ -81,33 +69,26 @@ public class UsuarioController {
 			List<Usuario> todosOsUusuarios = usuarioRepository.listarTodos();
 			model.addAttribute("usuarios", todosOsUusuarios);
 		} catch (Exception e) {
-
+			e.printStackTrace();
 		}
 		return "usuario/listar-usuario";
 	}
 
 	@GetMapping("excluir/{id}")
 	public RedirectView excluir(@PathVariable Long id, Usuario usuario) {
-
 		RedirectView rw = new RedirectView("http://localhost:8080/usuario/listar");
 		Optional<Usuario> usuarioLocalizado = usuarioRepository.findById(id);
 		if (usuarioLocalizado.get().getCdUsuario() != null) {
 			usuarioRepository.delete(usuarioLocalizado.get());
-			System.out.println(usuarioLocalizado.get().getNome() + "  excluído com sucesso! ");
 		}
 		return rw;
 	}
 
 	@GetMapping("alterar/{id}")
 	public String alterar(@PathVariable Long id, Model model) {
-
 		Optional<Usuario> usuarioLocalizado = usuarioRepository.findById(id);
 		Usuario u = usuarioLocalizado.get();
 		model.addAttribute("usuario", u);
-		System.out.println(id);
 		return "usuario/form-usuario";
 	}
-	
-	
-	
 }

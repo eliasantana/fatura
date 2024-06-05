@@ -31,7 +31,7 @@ UsuarioRepository UsuarioRepository;
 		
 		model.addAttribute("keyset",data.keySet());
 		model.addAttribute("values",data.values());
-		
+		System.out.println("Cheguei aqui");
 		return "login";
 	}
 

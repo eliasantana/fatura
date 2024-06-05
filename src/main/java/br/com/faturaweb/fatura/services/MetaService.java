@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.hibernate.internal.build.AllowSysOut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
@@ -47,19 +46,15 @@ public class MetaService {
 	 * @return {@link ArrayList}
 	 */
 	public List<ItMeta> geraItMeta(Meta meta) {
-
 		List<ItMeta> itensMeta = new ArrayList<ItMeta>();
 		MathContext mt = new MathContext(0, RoundingMode.HALF_UP);
 		if (meta.getTpMeta().equals("M")) {
-			// Meta Mensal
 			Long totalDeMes = ChronoUnit.MONTHS.between(meta.getDtInicio(), meta.getDtFim());
 			if (totalDeMes == 0) {
 				totalDeMes = 1L;
 			}
 			BigDecimal vlParcela = meta.getVlMeta().divide(new BigDecimal(totalDeMes), mt.DECIMAL32);
 			LocalDate dataMeta = meta.getDtInicio();
-
-			// Gera os itens da meta
 			for (int i = 1; i <= totalDeMes; i++) {
 				dataMeta = dataMeta.plusMonths(i);
 				ItMeta it = new ItMeta(meta.getDescricao() + " - " + "Mês " + i + "/" + totalDeMes + " - " + dataMeta,
@@ -67,14 +62,10 @@ public class MetaService {
 				itensMeta.add(it);
 			}
 		} else {
-			// Meta Semanal
-
 			long totalDeDias = ChronoUnit.DAYS.between(meta.getDtInicio(), meta.getDtFim());
 			long totalSemanas = (totalDeDias / 7);
 			BigDecimal vlParcela = meta.getVlMeta().divide(new BigDecimal(totalSemanas), mt.DECIMAL32);
 			LocalDate dataMeta = meta.getDtInicio();
-
-			// Gera os itens da meta
 			for (int i = 1; i <= totalSemanas; i++) {
 				dataMeta = dataMeta.plusDays(7);
 				ItMeta it = new ItMeta(
@@ -99,34 +90,21 @@ public class MetaService {
 		List<ItMeta> itensMeta = new ArrayList<ItMeta>();
 		List<ItMeta> itensLocalizados = itMetaRepository.findAllItensMeta(meta.getCdMeta());
 		LocalDate dataMeta = LocalDate.now();
-
 		if (itensLocalizados.size() > 0) { // Recalcula os itens da meta
-
 			List<ItMeta> findItMetas = itMetaRepository.findItNaoCreditado(meta.getCdMeta()); // Listando metas não
-																								// pagas
-
 			BigDecimal diferenca = BigDecimal.ZERO;
 			BigDecimal totalMeta = BigDecimal.ZERO;
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/yyyy");
-
 			for (ItMeta itMeta : findItMetas) {
 				itMetaRepository.delete(itMeta); // Excluíndo os itens de meta não pagos
 			}
-
 			BigDecimal totalCreditado = getTotalItMetaCreditada(meta); // Retorna o valor dos itens de meta já
-																		// creditados
 			BigDecimal novoTotalAcreditar = meta.getVlMeta().subtract(totalCreditado); // Calcula o novo valor a
-																						// creditar
 			MathContext mt = new MathContext(0, RoundingMode.HALF_UP);
-
 			diferenca = meta.getVlMeta().subtract(novoTotalAcreditar.add(totalCreditado)); // Calculando a diferença
 			long totalDeDias = ChronoUnit.DAYS.between(LocalDate.now(), meta.getDtFim()); // Calcula a quantidade de
-																							// dias entre a data atual e
-																							// a data fim da meta
 			long totalSemanas = (totalDeDias / 7);
 			long totalMes = (totalDeDias / 30);
-
-			// Meta Mensal
 			if (meta.getTpMeta().equals("M")) {
 				BigDecimal vlParcela = novoTotalAcreditar.divide(new BigDecimal(totalMes), mt.DECIMAL32);
 				System.out.println("Diferença : " + diferenca);
@@ -137,7 +115,6 @@ public class MetaService {
 					itensMeta.add(it);
 				}
 			} else {
-				// Meta Semanal
 				BigDecimal vlParcela = novoTotalAcreditar.divide(new BigDecimal(totalSemanas), mt.DECIMAL32);
 				System.out.println("Diferença : " + diferenca);
 				for (int i = 1; i <= totalSemanas; i++) {
@@ -147,13 +124,10 @@ public class MetaService {
 					itensMeta.add(it);
 				}
 			}
-
 		} else {
 			itensMeta = geraItMeta(meta); // Gera novamente todos os itens da meta
 		}
-
 		return itensMeta;
-
 	}
 
 	/**
@@ -168,7 +142,6 @@ public class MetaService {
 		for (ItMeta itMeta : itensDaMeta) {
 			total = total.add(itMeta.getVlrSemana());
 		}
-
 		return total;
 	}
 
@@ -213,9 +186,7 @@ public class MetaService {
 		for (ItMeta itMeta : metasCreditadas) {
 			vlrPAgo = vlrPAgo.add(itMeta.getVlrSemana());
 		}
-
 		return vlrPAgo;
-
 	}
 
 	/**
@@ -227,9 +198,7 @@ public class MetaService {
 	public void listar(Model model, Meta meta) {
 		List<Conta> contas = contaRepository.findcontas();
 		List<Meta> metas = metaRepository.findAllMetas();
-		//BigDecimal totalGeralItMeta = totalGeralItMeta(metas);
 		BigDecimal totalGeralItMeta = BigDecimal.ZERO;
-		System.out.println("Total geral -> " + totalGeralItMeta);
 		Conta c = new Conta();
 		Meta m = new Meta();
 		m.setConta(c);
@@ -286,7 +255,7 @@ public class MetaService {
 			metaRepository.save(metaForm);
 
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			e.printStackTrace();
 		}
 		return rw;
 	}
@@ -314,7 +283,7 @@ public class MetaService {
 				metaRepository.delete(meta.get());
 			}
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			e.printStackTrace();
 		}
 		return rw;
 	}
@@ -327,22 +296,17 @@ public class MetaService {
 	 * @since 21/07/2022
 	 */
 	public RedirectView encerrarMeta(Long idMeta, Model model) {
-
 		RedirectView rw = new RedirectView("/meta/listar");
 		Optional<Meta> metaLocalizada = metaRepository.findById(idMeta);
-
 		if (metaLocalizada.isPresent()) {
 			Meta meta = metaLocalizada.get();
 			meta.setSnAtivo("N");
 			metaRepository.save(meta);
-
 			List<ItMeta> itensNaoCreditados = itMetaRepository.findItNaoCreditado(idMeta);
 			itMetaRepository.deleteAll(itensNaoCreditados);
 		}
-
 		List<Meta> metas = metaRepository.findAllMetas();
 		model.addAttribute("metas", metas);
 		return rw;
 	}
-
 }
