@@ -13,6 +13,8 @@
 		<div class="row mt-2 mb-2">
 					<div class="col">
 					<!-- tete  -->
+					2.1
+					<p th:text="${lancamento}">
 					<table>
 							<tr>
 								<td width="10%">
@@ -104,9 +106,6 @@
 							    				 <td  th:text="${#temporals.format(lancamento.dtCompetencia, 'dd/MM/yyyy')}" align="left"></td>
 							    				 <td align="right" width="100%">
 							    				 		<span class="badge bg-primary rounded-pill indigo lighten-1 accent-2"  th:text=" 'R$ ' + ${#numbers.formatDecimal(lancamento.vlPago,1,2,'COMMA')}"  style="color: white;">1</span>
-							    				 </td>
-							    				  <td align="right" width="100%">
-							    				 		<span class="badge bg-primary rounded-pill red lighten-1 accent-2"  th:text="Pago"   th:if="${lancamento.snPago}=='SIM'"   style="color: white;">1</span>
 							    				 </td>
 							    		</tr>
 							    </table>

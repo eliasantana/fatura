@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import br.com.faturaweb.fatura.model.TipoLancamento;
+import br.com.faturaweb.fatura.projection.LancamentoProjection;
 import br.com.faturaweb.fatura.repository.ChaveRepository;
 import br.com.faturaweb.fatura.repository.ConfiguracoesRepository;
 import br.com.faturaweb.fatura.repository.LancamentoRepository;
@@ -64,35 +66,39 @@ public class TesteController {
 
 	@GetMapping("/teste")
 	public String apiltipolancnamento(Model model) throws SQLException {
-
-		String sql = "SELECT                                                                          																"
-				+ "	l.cd_lancamento,                                                           																	"
-				+ "    l.ds_lancamento,                                                            																	"
-				+ "    l.dt_cadastro,                                                              																		"
-				+ "    l.dt_competencia,                                                          																	"
-				+ "    l.sn_pago,                                                                  																		"
-				+ "    l.vl_pago,                                                                 																		    "
-				+ "    fp.descricao,                                                               																		"
-				+ "    tl.ds_tipo_lancamento,                                                      																"
-				+ "    u.nome,                                                                    																		    "
-				+ "    nr_parcela,                                                                 																		"
-				+ "    l.ds_anexo,                                                                 																		"
-				+ "    l.observacao,                                                               																		"
-				+ "    c.ds_cartao                                                                 																		"
-				+ "FROM lancamento l,                                                              																"
-				+ "	 forma_pagto fp,                                                            																	"
-				+ "     tipo_lancamento tl,                                                        																	"
-				+ "     cartao c,                                                                  																	 		"
-				+ "     usuario u                                                                  																	 		"
-				+ "where date_format(dt_competencia,'%m%Y') = (date_format(CURDATE(),'%m%Y' ))    		 		"
-				+ "and l.forma_de_pagamento_cd_forma_pgamento = fp.cd_forma_pgamento              		 		"
-				+ "and l.tipo_lancamento_cd_tipo_lancamento = tl.cd_tipo_lancamento                					 		"
-				+ "and l.cartao_cd_cartao = c.cd_cartao                                            												 		"
-				+ "and l.usuario_cd_usuario = u.cd_usuario                                         ";
-
-				 String dirImportacao = config.findConfiguracao().getDirImportacao();
-				 String diretorio = dirImportacao.concat("\\lancamentos_da_compentencia".concat("_"+String.valueOf(LocalDate.now().getMonthValue())).concat("_"+String.valueOf(LocalDate.now().getYear())).concat(".xlsx"));
-				 ExportFromQuery export = new ExportFromQuery(conn,  diretorio,sql);
+//
+//		String sql = "SELECT                                                                          																"
+//				+ "	l.cd_lancamento,                                                           																	"
+//				+ "    l.ds_lancamento,                                                            																	"
+//				+ "    l.dt_cadastro,                                                              																		"
+//				+ "    l.dt_competencia,                                                          																	"
+//				+ "    l.sn_pago,                                                                  																		"
+//				+ "    l.vl_pago,                                                                 																		    "
+//				+ "    fp.descricao,                                                               																		"
+//				+ "    tl.ds_tipo_lancamento,                                                      																"
+//				+ "    u.nome,                                                                    																		    "
+//				+ "    nr_parcela,                                                                 																		"
+//				+ "    l.ds_anexo,                                                                 																		"
+//				+ "    l.observacao,                                                               																		"
+//				+ "    c.ds_cartao                                                                 																		"
+//				+ "FROM lancamento l,                                                              																"
+//				+ "	 forma_pagto fp,                                                            																	"
+//				+ "     tipo_lancamento tl,                                                        																	"
+//				+ "     cartao c,                                                                  																	 		"
+//				+ "     usuario u                                                                  																	 		"
+//				+ "where date_format(dt_competencia,'%m%Y') = (date_format(CURDATE(),'%m%Y' ))    		 		"
+//				+ "and l.forma_de_pagamento_cd_forma_pgamento = fp.cd_forma_pgamento              		 		"
+//				+ "and l.tipo_lancamento_cd_tipo_lancamento = tl.cd_tipo_lancamento                					 		"
+//				+ "and l.cartao_cd_cartao = c.cd_cartao                                            												 		"
+//				+ "and l.usuario_cd_usuario = u.cd_usuario                                         ";
+//
+//				 String dirImportacao = config.findConfiguracao().getDirImportacao();
+//				 String diretorio = dirImportacao.concat("\\lancamentos_da_compentencia".concat("_"+String.valueOf(LocalDate.now().getMonthValue())).concat("_"+String.valueOf(LocalDate.now().getYear())).concat(".xlsx"));
+//				 ExportFromQuery export = new ExportFromQuery(conn,  diretorio,sql);
+		List<LancamentoProjection> p = lancamentoRepository.lancamentoProjection();
+		for (LancamentoProjection lancamentoProjection : p) {
+			System.out.println(lancamentoProjection.getcdLancamento());
+		}
 		return "teste";
 
 	}
@@ -140,4 +146,5 @@ public class TesteController {
 		return "sucesso!";
 	}
 
+	
 }

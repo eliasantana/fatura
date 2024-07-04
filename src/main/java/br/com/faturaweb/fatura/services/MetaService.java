@@ -198,6 +198,10 @@ public class MetaService {
 	public void listar(Model model, Meta meta) {
 		List<Conta> contas = contaRepository.findcontas();
 		List<Meta> metas = metaRepository.findAllMetas();
+		List<ItMeta> listaItMeta = new ArrayList<>();
+		for (Meta m : metas) {
+			 listaItMeta.add(itMetaRepository.getValorItMeta(m.getCdMeta()));
+		}
 		BigDecimal totalGeralItMeta = BigDecimal.ZERO;
 		Conta c = new Conta();
 		Meta m = new Meta();
@@ -208,6 +212,7 @@ public class MetaService {
 		model.addAttribute("mensagem", null);
 		model.addAttribute("metas", metas);
 		model.addAttribute("totalgeral",totalGeralItMeta);
+		model.addAttribute("itmeta",listaItMeta);
 	}
 
 
@@ -309,4 +314,5 @@ public class MetaService {
 		model.addAttribute("metas", metas);
 		return rw;
 	}
+	
 }

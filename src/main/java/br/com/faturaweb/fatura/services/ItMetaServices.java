@@ -2,6 +2,7 @@ package br.com.faturaweb.fatura.services;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -178,4 +179,5 @@ public RedirectView reGerarMetaItMeta(@PathVariable Long id) {
 		}
 	return rw;
 }
+
 }
