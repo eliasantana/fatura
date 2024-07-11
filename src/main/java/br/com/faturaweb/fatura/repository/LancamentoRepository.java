@@ -9,6 +9,7 @@ import org.springframework.data.repository.CrudRepository;
 
 import br.com.faturaweb.fatura.model.Lancamento;
 import br.com.faturaweb.fatura.projection.AnoLancamentoProjection;
+import br.com.faturaweb.fatura.projection.LancamentoProjection;
 import io.lettuce.core.dynamic.annotation.Param;
 
 public interface LancamentoRepository extends CrudRepository<Lancamento, Long> {
@@ -154,4 +155,10 @@ public interface LancamentoRepository extends CrudRepository<Lancamento, Long> {
 				+ " FROM lancamento "
 				+ " where date_format(dt_competencia,'%m%Y') = (date_format(CURDATE(),'%m%Y' ))  and forma_de_pagamento_cd_forma_pgamento =:cdformapagamento ", nativeQuery = true)
 		List<Lancamento> findLancamentoPorFormaDePagamento(Long cdformapagamento);
+		
+		@Modifying
+		@Query(value = "SELECT *"
+				+ " FROM lancamento "
+				+ " where date_format(dt_competencia,'%m%Y') = (date_format(CURDATE(),'%m%Y' ))  ", nativeQuery = true)
+		List<LancamentoProjection> lancamentoProjection();
 }

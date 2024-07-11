@@ -111,7 +111,8 @@
 						<th scope="col">Descrição</th>
 						<th scope="col">Inicio</th>
 						<th scope="col">Fim</th>
-						<th scope="col">Valor</th>
+						<th scope="col">Vl Meta</th>
+						<th scope="col">Vl Parcela</th>
 						<th scope="col">Conta</th>
 						<th scope="col">Tipo</th>
 						<th scope="col">Ação</th>
@@ -121,9 +122,10 @@
 					<tr th:each="metas : ${metas}">
 						<td th:text="${metas.cdMeta}"></td>
 						<td th:text="${metas.descricao}"></td>
-						<td th:text="${#temporals.format(metas.dtInicio,'dd/MM/yyyy')}">
+						<td th:text="${#temporals.format(metas.dtInicio,'dd/MM/yyyy')}"></td>
 						<td th:text="${#temporals.format(metas.dtFim,'dd/MM/yyyy')}"></td>
-						<td th:text="${#numbers.formatDecimal(metas.vlMeta,1,2,'COMMA')}">
+						<td th:text="${#numbers.formatDecimal(metas.vlMeta,1,2,'COMMA')}"></td>
+						<td th:each="i :${itmeta}" th:if="${i.meta.cdMeta}==${metas.cdMeta}" th:text="${i.vlrSemana}"}>0.00</td>
 						<td th:text="${metas.conta.nrConta}"></td>
 						<td th:if="${metas.tpMeta=='M'}" th:text="Mensal"></td>
 						<td th:if="${metas.tpMeta=='S'}" th:text="Semanal"></td>
@@ -163,9 +165,10 @@
 						<th scope="col"></th>
 						<th scope="col"></th>
 						<th scope="col"></th>
-						<th scope="col"><h4 style="color: blue">Total</h4></th>
-						<th scope="col"><h4 th:text="${#numbers.formatDecimal(#aggregates.sum(metas.![vlMeta]),1,2,'COMMA')}" style="color: blue"></h4></th>
-						<th scope="col"></th>
+						
+						<th scope="col"><h5 style="color: blue">Totais</h5></th>
+						<th scope="col"><h5 th:text="${#numbers.formatDecimal(#aggregates.sum(metas.![vlMeta]),1,2,'COMMA')}" style="color: blue"></h5></th>
+						<th scope="col"><h5 th:text="${#numbers.formatDecimal(#aggregates.sum(itmeta.![vlrSemana]),1,2,'COMMA')}" style="color: blue"></h5></th>
 						<th scope="col"></th>
 						<th scope="col"></th>
 					</tr>
