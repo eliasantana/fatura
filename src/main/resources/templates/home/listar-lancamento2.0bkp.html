@@ -7,11 +7,13 @@
     
 </head>
 <body style="font-size: 15px;">
+	<!-- Nav Bar -->
 	<nav th:replace="~{navfragment:: nav }"></nav>
 	<div class="container" style="width: 100%">
 		<div class="row mt-2 mb-2">
 					<div class="col">
 					<!-- tete  -->
+					teste
 					<table>
 							<tr>
 								<td width="10%">
@@ -128,29 +130,6 @@
 										 				   <a   href="/lancamento/clonar"  th:if="${lancamento.snPago}=='Não'" 	th:href="@{'/lancamento/clonar/'  + ${lancamento.cdLancamento}}"	 class="waves-effectindigo lighten-1 btn"><i class="material-icons center">control_point_duplicate</i></a>
 										 				   <a th:if="${lancamento.snPago}=='Não'"   href="/lancamento/transfetir/"	th:href="@{'/lancamento/transferir/' + ${lancamento.cdLancamento}}"  	 class="waves-effectindigo lighten-1 btn"><i class="material-icons center">call_missed_outgoing</i></a>
 										 				   
-										 				   <!-- Button trigger modal -->
-															<button type="button" class="btn btn-primary red" data-bs-toggle="modal" th:attr="data-bs-target='#exampleModal_'+${lancamento.cdLancamento}" data-bs-target="#exampleModal">
-															  <i class="material-icons center">delete</i>
-															</button>															
-															<!-- Modal -->
-															<div class="modal fade" th:id="'exampleModal_'+${lancamento.cdLancamento}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-															  <div class="modal-dialog">
-															    <div class="modal-content">
-															      <div class="modal-header">
-															        <h1 class="modal-title fs-5" id="exampleModalLabel">Confirmação de Exclusão</h1>
-															        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-															      </div>
-															      <div class="modal-body">
-															      <br>Lançamento
-															        <br th:text="${lancamento.cdLancamento} +' - '+${lancamento.dsLancamento}">
-															      </div>
-															      <div class="modal-footer">
-															        <button type="button" class="btn btn-secondary mr-2" data-bs-dismiss="modal">Cancelar</button>
-															         <a   href="/lancamento/excluir/"		th:href="@{'/lancamento/excluir/'  + ${lancamento.cdLancamento}}"	 class="waves-effect red lighten-1  btn">Confirmar</a>
-															      </div>
-															    </div>
-															  </div>
-															</div>
 										 			</td>
 										 		</tr>
 										 </table>		
