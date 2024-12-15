@@ -703,4 +703,15 @@ public RedirectView clonar(Long id, Model model) {
 		return new RedirectView("/listar");
 }
 
+public List<Lancamento> pesquisar(String pesquisa, Model model) {
+		List<Lancamento> lancamentos = new ArrayList<>();			
+		lancamentos = lancamentoRepository.pesquisar(pesquisa);
+		model.addAttribute("total",lancamentos.size());
+	return lancamentos ;
+}
+
+public void salvarTodos(List<Lancamento> novoValor) {
+	lancamentoRepository.saveAll(novoValor);
+}
+
 }

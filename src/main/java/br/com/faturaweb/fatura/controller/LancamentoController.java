@@ -1,10 +1,14 @@
 package br.com.faturaweb.fatura.controller;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.sound.midi.Soundbank;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -15,12 +19,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.view.RedirectView;
 
 import br.com.faturaweb.fatura.form.LancamentoForm;
 import br.com.faturaweb.fatura.model.Configuracoes;
 import br.com.faturaweb.fatura.model.Lancamento;
+import br.com.faturaweb.fatura.repository.LancamentoRepository;
 import br.com.faturaweb.fatura.services.AppServices;
 import br.com.faturaweb.fatura.services.LancamentoServices;
 import br.com.faturaweb.fatura.services.QueryServices;
@@ -35,6 +41,9 @@ public class LancamentoController {
 	LancamentoServices services;
 	@Autowired
 	AppServices appServices;
+	List<Lancamento> lancamentosLocalizados = new ArrayList<>();
+	String txtPesquisa = null;
+	BigDecimal novoValor = BigDecimal.ZERO;
 	
 	/**
 	 * Só libera o cadastro quando sn_lancarNaCompetencia='N' das configuações
@@ -122,6 +131,37 @@ public class LancamentoController {
 	public RedirectView clonar(@PathVariable Long id, Model model) {
 		return  services.clonar(id, model);
 		
+	}
+	@GetMapping("/ajustar")
+	public String ajustar(@RequestParam (name = "pesquisa", required = false) String pesquisa, 
+										@RequestParam (name = "valor", required = false) BigDecimal valor,
+			Model model) {
+			txtPesquisa = pesquisa;
+			lancamentosLocalizados =  services.pesquisar(pesquisa, model);
+			model.addAttribute("lancamentos",lancamentosLocalizados);
+			model.addAttribute("textopesquisa",txtPesquisa);			
+			novoValor = valor;
+			model.addAttribute("valor",novoValor);		
+			
+		return "ajuste_lancamento";
+	}
+	@GetMapping("/novovalor")
+	public String novoValor(@RequestParam (name = "valor", required = false) BigDecimal valor,Model model) {
+		String mensagem=null;
+		List<Lancamento>novoValor = new ArrayList<>();
+		BigDecimal vlAnterior = BigDecimal.ZERO;
+		if (lancamentosLocalizados.size()>0) {
+			vlAnterior= lancamentosLocalizados.get(0).getVlPago();
+			for (Lancamento l : lancamentosLocalizados) {
+				l.setVlPago(valor);
+				novoValor.add(l);				
+			}	
+		}		
+		services.salvarTodos(novoValor);
+		mensagem = String.format(" %s lançamento(s)  foram atualizado(s) de %s para %s com sucesso!",lancamentosLocalizados.size(), vlAnterior, valor);
+		model.addAttribute("mensagem",mensagem);
+		model.addAttribute("lancamentos",novoValor);	
+		return "ajuste_lancamento";
 	}
 
 }

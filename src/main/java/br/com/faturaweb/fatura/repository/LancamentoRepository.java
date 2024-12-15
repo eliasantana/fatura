@@ -161,4 +161,9 @@ public interface LancamentoRepository extends CrudRepository<Lancamento, Long> {
 				+ " FROM lancamento "
 				+ " where date_format(dt_competencia,'%m%Y') = (date_format(CURDATE(),'%m%Y' ))  ", nativeQuery = true)
 		List<LancamentoProjection> lancamentoProjection();
+		@Modifying
+		@Query(value = "SELECT *"
+				+ " FROM lancamento "
+				+ " where ds_lancamento like  %:pesquisa%  and sn_pago ='Não'  ", nativeQuery = true)
+		List<Lancamento> pesquisar(String pesquisa);
 }

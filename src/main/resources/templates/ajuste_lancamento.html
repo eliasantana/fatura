@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+ <head th:replace="~{fragmento :: head('Logs - Lista') }">
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style> 
+		#atualizar { display: none; }
+</style> 
+
+</head>
+<body>
+	<!-- Nav Bar -->
+    <nav th:replace="~{navfragment:: nav }"></nav>
+	
+	<div class="row">
+		<div style="text-align: right;" class="mt-2">
+			<img th:src="|/getimagem|" width="100px" height="100px">
+		</div>
+		<div style="text-align: center;">
+			<h4 >Reajuste de Valores</h4>
+		</div>		 
+		<div class="col-8 ml-5">
+		</div>
+	</div>
+
+<form action="/lancamento/ajustar">
+	<div class="container ml-1 mb-3 mt-3" style="width: 100%;">
+		<div class="row">
+			<div class="col">
+					<label class="form-label">Pesquisa</label> 
+					<input type="text" class="form-control" th:value="${textopesquisa}" name="pesquisa" id="pesquisa" required="required" style="width: 35%">
+						<button type="submit" class="btn btn-primary mt-4">
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+							  <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+							</svg>	
+							Pesquisar
+						</button>	
+					<div class="alert alert-success mt-2" role="alert" th:text="${mensagem}" th:if="${mensagem}!=null">
+			 		 A simple dark alert—check it out!
+				</div>		
+			</div>				
+			
+		</div>			
+			<div th:text="'Total de Resigistros Localizados:   '+ ${total}" th:if="${total}!=null"></div>			
+	</div>
+</form>	
+<form action="/lancamento/novovalor">
+	<div class="row">
+				<div class="col">
+					<label class="form-label">Novo valor</label>
+					<input type="number" step="0.01" name="valor" id="valor" style="width: 200px;" required="required" th:value="${valor}">
+				 	<button class="btn btn-danger">Atualizar Valor</button>
+				</div>
+		</div>
+</form>
+	<div class="row">
+		<div class="col ml-3 mr-3">
+			<table class="table table-striped table-hover" id="lancamentos">
+			
+			<thead>
+					<th scope="col" >Código</th>
+					<th scope="col">Descrição</th>
+					<th scope="col" style="text-align: right;">Valor</th>
+					<th scope="col" >Forma de Pagamento</th>
+					<th scope="col" >Tipo de Lançamento</th>											
+				</thead>
+				<tbody>
+					<tr th:each="l : ${lancamentos}">
+						<td th:text="${l.cdLancamento}"></td>
+						<td th:text="${l.dsLancamento}"></td>
+						<td th:text="${l.vlPago}"></td>
+						<td th:text="${l.formaDePagamento.descricao}"></td>
+						<td th:text="${l.tipoLancamento.dsTipoLancamento}"></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+<script> // Obtendo o campo de entrada e o botão 
+			var input = document.getElementById('valor'); 
+			var botao = document.getElementById('atualizar'); // Adicionando evento de perda de foco no campo de entrada 
+			input.addEventListener('blur', function() { // Exibindo o botão ao perder o foco 
+				botao.style.display = 'inline'; });
+ 
+</script>
+<!-- Tabela -->
+<!-- Paginação -->
+	<script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
+  	<script src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+
+ <script>
+  $(document).ready(function(){
+      $('#lancamentos').DataTable({
+        	"language": {
+                "lengthMenu": "Mostrando _MENU_ registros por página",
+                "zeroRecords": "Nada encontrado",
+                "info": "Mostrando página _PAGE_ de _PAGES_",
+                "infoEmpty": "Nenhum registro disponível",
+                "infoFiltered": "(filtrado de _MAX_ registros no total)"
+                
+            },
+            columnDefs: [ {
+	            targets: [ 0 ],
+	            orderData: [ 0, 3]
+	        }]
+      
+        });
+  });
+</script>  
+
+
+<!-- Fim  do  -->
+</body>
+</html>
