@@ -115,21 +115,23 @@
 										 <span class="badge bg-primary rounded-pill indigo lighten-1 accent-2"   th:text="${lancamento.tipoLancamento.dsTipoLancamento}" style="color: white;"></span>	
 										 <a href="/lancamento/detalhe/"		th:href="@{'/lancamento/detalhe/' +  ${lancamento.cdLancamento}}"	target="_blank" class="waves-effect indigo lighten-1  btn"> 
 										 		<i class="material-icons center">description</i>
-										</a>
+										</a>										
 										  <img   th:if="${lancamento.cartao.cdCartao}!=null" alt=""width="40px" height="40px"	th:src="|/cartao/getimagem/${lancamento.cartao.cdCartao}|" />	  
 										 <table>
 										 		<tr>
 										 			<td>										 				
-										 				   <a  th:if="${lancamento.snPago}=='Não'"   href="/lancamento/pagar/"	th:href="@{'/lancamento/pagar/'  + ${lancamento.cdLancamento}}" class="waves-effect indigo lighten-1 btn"><i class="material-icons center">account_balance_wallet</i></a>
-										 				   <a  href="/lancamento/alterar/"		th:href="@{'/lancamento/alterar/'  + ${lancamento.cdLancamento}}"			 class="waves-effect indigo lighten-1 btn"><i class="material-icons center">create</i></a> 
-										 				   <a  href="/lancamento/anexar"	th:if="${lancamento.dsAnexo==null}"	th:href="@{'/lancamento/anexar/'  + ${lancamento.cdLancamento}}"	 class="waves-effect lighten-1 btn"><i class="material-icons center">attachment</i></a>
-										 			    	<a href="/lancamento/anexo/"		th:href="@{'/lancamento/anexo/'  + ${lancamento.cdLancamento}}" th:if="${lancamento.dsAnexo!=null}" class="waves-effec  indigo lighten-1 btn" 	th:alt="teste" target="_blank">	<i class="material-icons center">attachment</i></a>
-										 				   <a   href="/lancamento/excluir/"		th:href="@{'/lancamento/excluir/'  + ${lancamento.cdLancamento}}"	 class="waves-effect indigo lighten-1  btn"><i class="material-icons center">delete</i></a>
-										 				   <a   href="/lancamento/clonar"  th:if="${lancamento.snPago}=='Não'" 	th:href="@{'/lancamento/clonar/'  + ${lancamento.cdLancamento}}"	 class="waves-effectindigo lighten-1 btn"><i class="material-icons center">control_point_duplicate</i></a>
-										 				   <a th:if="${lancamento.snPago}=='Não'"   href="/lancamento/transfetir/"	th:href="@{'/lancamento/transferir/' + ${lancamento.cdLancamento}}"  	 class="waves-effectindigo lighten-1 btn"><i class="material-icons center">call_missed_outgoing</i></a>
-										 				   
-										 				   <!-- Button trigger modal -->
-															<button type="button" class="btn btn-primary red" data-bs-toggle="modal" th:attr="data-bs-target='#exampleModal_'+${lancamento.cdLancamento}" data-bs-target="#exampleModal">
+										 				   <a  th:if="${lancamento.snPago}=='Não'"   href="/lancamento/pagar/"	th:href="@{'/lancamento/pagar/'  + ${lancamento.cdLancamento}}" class="waves-effect indigo lighten-1 btn mt-2"><i class="material-icons center">account_balance_wallet</i></a>
+										 				   <a  href="/lancamento/alterar/"		th:href="@{'/lancamento/alterar/'  + ${lancamento.cdLancamento}}"			 class="waves-effect indigo lighten-1 btn mt-2"><i class="material-icons center">create</i></a> 
+										 				   <a  href="/lancamento/anexar"	th:if="${lancamento.dsAnexo==null}"	th:href="@{'/lancamento/anexar/'  + ${lancamento.cdLancamento}}"	 class="waves-effect lighten-1 btn mt-2"><i class="material-icons center">attachment</i></a>
+										 			    	<a href="/lancamento/anexo/"		th:href="@{'/lancamento/anexo/'  + ${lancamento.cdLancamento}}" th:if="${lancamento.dsAnexo!=null}" class="waves-effec  indigo lighten-1 btn mt-2" 	th:alt="teste" target="_blank">	<i class="material-icons center">attachment</i></a>
+										 				   <a   href="/lancamento/clonar"  th:if="${lancamento.snPago}=='Não'" 	th:href="@{'/lancamento/clonar/'  + ${lancamento.cdLancamento}}"	 class="waves-effectindigo lighten-1 btn mt-2"><i class="material-icons center">control_point_duplicate</i></a>
+										 				   <a th:if="${lancamento.snPago}=='Não'"   href="/lancamento/transfetir/"	th:href="@{'/lancamento/transferir/' + ${lancamento.cdLancamento}}"  	 class="waves-effectindigo lighten-1 btn mt-2"><i class="material-icons center">call_missed_outgoing</i></a>
+										 				   <!-- Pesquisar -->
+										 				   <a href="/lancamento/detalhe/" th:href="@{'/lancamento/ajustar?pesquisa=' +  ${lancamento.dsLancamento}}"	target="_blank" class="waves-effect yellow accent-2  btn mt-2 blue-text  text-darken-2">
+															 		<i class="material-icons">autorenew</i>
+															</a>
+										 				   <!-- Modal de Confirmação de Exclusão -->
+															<button type="button" class="btn btn-primary red mt-2" data-bs-toggle="modal" th:attr="data-bs-target='#exampleModal_'+${lancamento.cdLancamento}" data-bs-target="#exampleModal">
 															  <i class="material-icons center">delete</i>
 															</button>															
 															<!-- Modal -->
@@ -249,13 +251,9 @@
       </script>
       <!-- TEste -->
       <script type="text/javascript">
-      
-
       $(document).ready(function(){
         $('.collapsible').collapsible();
       });
       </script>
-      <!-- TEste -->
-      
 </body>
 </html>
