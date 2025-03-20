@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
+import java.net.URI;
 import java.net.URLConnection;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -24,11 +25,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.view.RedirectView;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import br.com.faturaweb.fatura.dto.HistoricoPagamentoDto;
 import br.com.faturaweb.fatura.form.LancamentoForm;
 import br.com.faturaweb.fatura.model.Cartao;
 import br.com.faturaweb.fatura.model.Chave;
@@ -39,6 +47,7 @@ import br.com.faturaweb.fatura.model.FormaDePagamento;
 import br.com.faturaweb.fatura.model.Lancamento;
 import br.com.faturaweb.fatura.model.LogMovimentacaoFinanceira;
 import br.com.faturaweb.fatura.model.Lote;
+import br.com.faturaweb.fatura.model.Receita;
 import br.com.faturaweb.fatura.model.TipoLancamento;
 import br.com.faturaweb.fatura.model.Usuario;
 import br.com.faturaweb.fatura.projection.AnoLancamentoProjection;
@@ -50,6 +59,7 @@ import br.com.faturaweb.fatura.repository.FormaDePagamentoRepository;
 import br.com.faturaweb.fatura.repository.LancamentoRepository;
 import br.com.faturaweb.fatura.repository.LogMovimentacaoFinanceiraRepository;
 import br.com.faturaweb.fatura.repository.LoteRepository;
+import br.com.faturaweb.fatura.repository.ReceitaRepository;
 import br.com.faturaweb.fatura.repository.TipoLancamentoRepository;
 import br.com.faturaweb.fatura.repository.UsuarioRepository;
 import br.com.faturaweb.fatura.utils.ExportFromQuery;
@@ -80,6 +90,12 @@ public class LancamentoServices {
 	LogMovimentacaoFinanceiraRepository logRepository;
 	@Autowired
 	QueryServices queryServices;
+	@Autowired
+	ReceitaRepository receitaRepository;
+	
+	@Autowired
+	HistoricoPagamentoEnvioServices historicoPagSErvices;
+	
 	@Autowired
 	Connection conn;
 	
@@ -713,5 +729,46 @@ public List<Lancamento> pesquisar(String pesquisa, Model model) {
 public void salvarTodos(List<Lancamento> novoValor) {
 	lancamentoRepository.saveAll(novoValor);
 }
+
+@PostMapping("/integrar")
+
+public ResponseEntity<Lancamento> integra(HistoricoPagamentoDto dto, UriComponentsBuilder builder) throws Exception {
+	
+	String token="8d852f714016324f0639ddee06477a399f522608";
+	URI uri = builder.path("/receita/listar/{id}") .buildAndExpand((dto.getCdCliente())).toUri();
+	if (token.equals(dto.getToken())) {
+		Receita receita = new Receita();
+		receita.setDsReceita(" PAGAMENTO " + " | CLIENTE: " + dto.getCdCliente() + "|  ID: "+dto.getCdHistoricoDto() + " | " + dto.getUsurecebimento());
+		receita.setDesconto(BigDecimal.ZERO);
+		receita.setDtRecebimento(LocalDate.now());
+		receita.setSalBruto(dto.getValor());
+		receita.setSalLiquido(dto.getValor());		
+		Receita receitaSalva = receitaRepository.save(receita);		
+		historicoPagSErvices.salvaHistorico(dto, uri);
+		Configuracoes config = configuracaoRepository.findConfiguracao();
+		if (config!=null) {
+			Optional<Conta> contaLocalizada = contaRepository.findConta(config.getNrContaOrigem());
+			if (contaLocalizada.isPresent()) {
+				BigDecimal saldoAtual = contaLocalizada.get().getSaldo();
+				BigDecimal novoSaldo = saldoAtual.add(receitaSalva.getSalLiquido());
+				contaLocalizada.get().setSaldo(novoSaldo);
+				contaRepository.save(contaLocalizada.get());
+				LogMovimentacaoFinanceira log = new LogMovimentacaoFinanceira();
+				log.setDescricao("CRÉDITO INTEGRACAO | CLIENTE "+dto.getCdCliente() + " | Valor  "+dto.getValor());
+				log.setDtMovimentacao(LocalDate.now());
+				log.setTpMovimentacao("C");
+				log.setNrConta(contaLocalizada.get().getNrConta());
+				log.setUsuario("Elias");
+				log.setVlMovimentado(receita.getSalLiquido());
+				logRepository.save(log);
+			}
+		}
+		return ResponseEntity.created(uri).build();
+	}else {		
+		return ResponseEntity.badRequest().build();
+	}
+	
+}
+
 
 }
