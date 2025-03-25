@@ -256,6 +256,7 @@
 												<td th:text="${chave.descricao}"></td>
 												<td th:if="${chave.valor}=='S'"> <a href="/configuracoes/chave/" th:href="@{'/configuracoes/chave/' + ${chave.chave}}" class="btn btn-success">Ativa</a>  </td>
 												<td th:if="${chave.valor}=='N'"> <a href="/configuracoes/chave/" th:href="@{'/configuracoes/chave/' + ${chave.chave}}" class="btn btn-danger">Inativa</a>  </td>  	
+												<td th:if="${chave.valor}=='D'"> <a href="/configuracoes/chave/" th:href="@{'/configuracoes/chave/' + ${chave.chave}}" class="btn btn-danger">Ativa</a>  </td>  	
 											</tr>
 										</thead>
 										<tbody>
