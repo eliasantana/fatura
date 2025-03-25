@@ -67,6 +67,10 @@ public class ApiController {
 		public ResponseEntity<Lancamento>integra(@RequestBody HistoricoPagamentoDto dto, UriComponentsBuilder builder ) throws Exception{
 				return services.integra(dto, builder);
 		}
+	@PostMapping("/integratodos")
+	public ResponseEntity<Lancamento>integraTodos(@RequestBody List< HistoricoPagamentoDto>dto, UriComponentsBuilder builder ) throws Exception{
+			return services.integraTodos(dto, builder);
+	}
 
 	
 }

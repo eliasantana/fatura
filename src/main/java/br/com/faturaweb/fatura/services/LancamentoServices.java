@@ -769,6 +769,46 @@ public ResponseEntity<Lancamento> integra(HistoricoPagamentoDto dto, UriComponen
 	}
 	
 }
+@PostMapping("/integratodos")
+public ResponseEntity<Lancamento> integraTodos(List<HistoricoPagamentoDto>dto,	UriComponentsBuilder builder) {
+	String token="8d852f714016324f0639ddee06477a399f522608";
+	List<Receita>receitas = new ArrayList<>();
+	int index=0;
+	BigDecimal total = BigDecimal.ZERO;
+	for (HistoricoPagamentoDto historicoPagamentoDto : dto) {
+		Receita receita = new Receita();		
+		receita.setDsReceita(" PAGAMENTO " + " | CLIENTE: " +    dto.get(index).getCdCliente()+ "|  ID: "+dto.get(index).getCdHistoricoDto() + " | " + dto.get(index).getUsurecebimento());
+		receita.setDesconto(BigDecimal.ZERO);
+		receita.setDtRecebimento(LocalDate.now());
+		receita.setSalBruto(dto.get(index).getValor());
+		receita.setSalLiquido(dto.get(index).getValor());		
+		receitas.add(receita);
+		index=index+1;
+		total = total.add(receita.getSalBruto());
+	}
+		receitaRepository.saveAll(receitas);
+		Configuracoes config = configuracaoRepository.findConfiguracao();
+		if (config!=null) {
+			Optional<Conta> contaLocalizada = contaRepository.findConta(config.getNrContaOrigem());
+			if (contaLocalizada.isPresent()) {
+				BigDecimal saldoAtual = contaLocalizada.get().getSaldo();
+				BigDecimal novoSaldo = saldoAtual.add(total);
+				contaLocalizada.get().setSaldo(novoSaldo);
+				contaRepository.save(contaLocalizada.get());				
+				LogMovimentacaoFinanceira log = new LogMovimentacaoFinanceira();
+				log.setDescricao("CRÉDITO INTEGRACAO EM MASSA | TOTAL " + total);
+				log.setDtMovimentacao(LocalDate.now());
+				log.setTpMovimentacao("C");
+				log.setNrConta(contaLocalizada.get().getNrConta());
+				log.setUsuario("Elias");
+				log.setVlMovimentado(total);
+				logRepository.save(log);
+			}
+		}
+	
+		System.out.println(total);
+	return null;
+}
 
 
 }
