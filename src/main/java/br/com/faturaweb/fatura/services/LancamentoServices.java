@@ -740,9 +740,10 @@ public ResponseEntity<Lancamento> integra(HistoricoPagamentoDto dto, UriComponen
 		Receita receita = new Receita();
 		receita.setDsReceita(" PAGAMENTO " + " | CLIENTE: " + dto.getCdCliente() + "|  ID: "+dto.getCdHistoricoDto() + " | " + dto.getUsurecebimento());
 		receita.setDesconto(BigDecimal.ZERO);
-		receita.setDtRecebimento(LocalDate.now());
+		receita.setDtRecebimento(LocalDate.now().plusMonths(1));
 		receita.setSalBruto(dto.getValor());
-		receita.setSalLiquido(dto.getValor());		
+		receita.setSalLiquido(dto.getValor());
+		receita.setCdExpReceita(dto.getCdHistoricoDto());
 		Receita receitaSalva = receitaRepository.save(receita);		
 		historicoPagSErvices.salvaHistorico(dto, uri);
 		Configuracoes config = configuracaoRepository.findConfiguracao();
@@ -779,9 +780,10 @@ public ResponseEntity<Lancamento> integraTodos(List<HistoricoPagamentoDto>dto,	U
 		Receita receita = new Receita();		
 		receita.setDsReceita(" PAGAMENTO " + " | CLIENTE: " +    dto.get(index).getCdCliente()+ "|  ID: "+dto.get(index).getCdHistoricoDto() + " | " + dto.get(index).getUsurecebimento());
 		receita.setDesconto(BigDecimal.ZERO);
-		receita.setDtRecebimento(LocalDate.now());
+		receita.setDtRecebimento(LocalDate.now().plusMonths(1));
 		receita.setSalBruto(dto.get(index).getValor());
-		receita.setSalLiquido(dto.get(index).getValor());		
+		receita.setSalLiquido(dto.get(index).getValor());
+		receita.setCdExpReceita(dto.get(index).getCdHistoricoDto());
 		receitas.add(receita);
 		index=index+1;
 		total = total.add(receita.getSalBruto());
@@ -809,6 +811,4 @@ public ResponseEntity<Lancamento> integraTodos(List<HistoricoPagamentoDto>dto,	U
 		System.out.println(total);
 	return null;
 }
-
-
 }

@@ -1,5 +1,6 @@
 package br.com.faturaweb.fatura.services;
 
+import java.lang.StackWalker.Option;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -9,12 +10,15 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.view.RedirectView;
 
 import br.com.faturaweb.fatura.model.Configuracoes;
 import br.com.faturaweb.fatura.model.Conta;
+import br.com.faturaweb.fatura.model.Lancamento;
 import br.com.faturaweb.fatura.model.LogMovimentacaoFinanceira;
 import br.com.faturaweb.fatura.model.Receita;
 import br.com.faturaweb.fatura.repository.ConfiguracoesRepository;
@@ -35,9 +39,13 @@ public class ReceitaServices {
 	@Autowired
 	ConfiguracoesRepository configuracoesRepository;
 	@Autowired
+	ConfiguracoesServices configuracoesServices;
+	@Autowired
 	AppServices appServices;
 	@Autowired
 	LoteRepository loteRepository;
+	@Autowired
+	ContaServices contaServices;
 
 	/**
 	 * Totaliza as receitas e retorna uma Map com chave e valor
@@ -284,4 +292,15 @@ public class ReceitaServices {
 		model.addAttribute("statuslote", statuslote);
 		model.addAttribute("menssagem", mensagem);
 	}
+
+public ResponseEntity<Lancamento> delete(Long id) {
+	Optional<Receita>  receitaLocalizada = receitaRepository.findReceitaIntegrada(id);
+	Configuracoes config = configuracoesRepository.findConfiguracao();
+	String motivo ="Exclusão de Parcela Integrada!";
+	if (receitaLocalizada.isPresent()) {
+			receitaRepository.delete(receitaLocalizada.get());	
+			contaServices.movimentacao(receitaLocalizada.get().getSalLiquido().toString(), config.getNrContaOrigem(),"D" ,motivo);
+	}
+	return ResponseEntity.ok().build();
+}
 }

@@ -8,10 +8,13 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -22,6 +25,7 @@ import br.com.faturaweb.fatura.model.TipoLancamento;
 import br.com.faturaweb.fatura.repository.LancamentoRepository;
 import br.com.faturaweb.fatura.repository.TipoLancamentoRepository;
 import br.com.faturaweb.fatura.services.LancamentoServices;
+import br.com.faturaweb.fatura.services.ReceitaServices;
 
 @RestController
 @RequestMapping("/api")
@@ -35,6 +39,8 @@ public class ApiController {
 	
 	@Autowired
 	LancamentoServices services;
+	@Autowired
+	ReceitaServices receitaServices;
 
 	@GetMapping("/lancamentos")
 	public List<Lancamento> getLancamentos() {
@@ -71,6 +77,15 @@ public class ApiController {
 	public ResponseEntity<Lancamento>integraTodos(@RequestBody List< HistoricoPagamentoDto>dto, UriComponentsBuilder builder ) throws Exception{
 			return services.integraTodos(dto, builder);
 	}
-
+	@DeleteMapping("/delete/{id}")
+	public ResponseEntity<Lancamento>delete(@PathVariable Long id) throws Exception{
+			return receitaServices.delete(id);
+	}
 	
+	@GetMapping("/status")
+	public ResponseEntity<String> getStatusCode() {
+			String status = "S";
+		return ResponseEntity.ok(status);
+	}
 }
+

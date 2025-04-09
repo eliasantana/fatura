@@ -23,6 +23,7 @@ public class Receita {
 		private BigDecimal salLiquido;
 		@DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME)
 		private LocalDate dtRecebimento;
+		private Long cdExpReceita;
 		
 		public Receita() {
 
@@ -75,6 +76,14 @@ public class Receita {
 
 		public void setDtRecebimento(LocalDate dtRecebimento) {
 			this.dtRecebimento = dtRecebimento;
+		}
+		
+		public void setCdExpReceita(Long cdExpReceita) {
+			this.cdExpReceita = cdExpReceita;
+		}
+	
+		public Long getCdExpReceita() {
+			return cdExpReceita;
 		}
 
 		public Receita(Long cdReceita, String dsReceita, BigDecimal salBruto, BigDecimal desconto,

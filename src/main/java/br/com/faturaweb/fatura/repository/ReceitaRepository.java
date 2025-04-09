@@ -2,6 +2,7 @@ package br.com.faturaweb.fatura.repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -29,6 +30,13 @@ public interface ReceitaRepository extends CrudRepository<Receita, Long>{
 	 * */
 	@Query(value = "SELECT * FROM receita where date_format(dt_recebimento,'%m')=date_format( curdate(),'%m')",nativeQuery = true)
 	List<Receita> findAllReceitaMesCorrente();
-	
+	/**
+	 * Retorna a receita integrada pelo ID informado.
+	 * @author elias
+	 * @since 24/03/2025
+	 * @return {@link Receita}
+	 * */
+	@Query(value = "SELECT * FROM receita where cd_exp_receita=:id ",nativeQuery = true)
+	Optional<Receita> findReceitaIntegrada(Long id);
 		
 }

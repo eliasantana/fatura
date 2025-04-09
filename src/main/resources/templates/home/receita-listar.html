@@ -5,13 +5,11 @@
 <!-- Imports do Bootstrap -->
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
 </head>
 <body>
 		 <!-- Nav Bar -->
     <nav th:replace="~{navfragment:: nav }"></nav>
  <!-- Alertas -->
-    
     <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
 	  <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
 	    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
@@ -24,7 +22,6 @@
 	  </symbol>
 	</svg>
     <!-- Fim dos Alertas -->	
-	
 		<div class="card">
 			<div class="card-header">Receitas</div>
 				<div class="card-body">
@@ -41,9 +38,9 @@
 							<tr>
 								<th scope="col">Código</th>
 								<th scope="col">Descrição</th>
-								<th scope="col">Salário Bruto</th>
+								<th scope="col">Valor Bruto</th>
 								<th scope="col">Descontos</th>
-								<th scope="col">Salário Líquido</th>
+								<th scope="col">Valor Líquido</th>
 								<th scope="col">Recebio em</th>
 								<th scope="col">Ação</th>
 							</tr>
@@ -56,11 +53,8 @@
 								<td scope="row" th:text="${receita.desconto}">-</td>
 								<td scope="row" th:text="${receita.salLiquido}">-</td>
 								<td scope="row" th:text="${#temporals.format(receita.dtRecebimento,'dd/MM/yyyy')}">-</td>
-								<td scope="row">
-									<a href="/receita/excluir/" th:href="@{'/receita/excluir/'  + ${receita.cdReceita}}" class="btn btn-danger"
-											data-bs-toggle="tooltip" data-bs-placement="top"
-									        data-bs-custom-class="custom-tooltip"
-									        data-bs-title="Excluir" th:if="${statuslote=='A'}">
+								<td scope="row">												
+									  <a href="/receita/excluir/" th:href="@{'/receita/excluir/'  + ${receita.cdReceita}}" class="btn btn-danger" 	data-bs-toggle="tooltip" data-bs-placement="top"   data-bs-custom-class="custom-tooltip"    data-bs-title="Excluir" th:if="${statuslote=='A' && receita.cdExpReceita==null} ">   
 									        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
 											  <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
 											  <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
@@ -69,7 +63,7 @@
 									<a href="/receita/alterar/" th:href="@{'/receita/alterar/'  + ${receita.cdReceita}}" class="btn btn-warning"
 										data-bs-toggle="tooltip" data-bs-placement="top"
 										data-bs-custom-class="custom-tooltip"
-										data-bs-title="Alterar Receita" th:if="${statuslote=='A'}">
+										data-bs-title="Alterar Receita" th:if="${statuslote=='A' &&receita.cdExpReceita==null}">
 											<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
 											  <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
 											  <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
@@ -78,7 +72,7 @@
 									<a href="/receita/clonar/" th:href="@{'/receita/clonar/'  + ${receita.cdReceita}}" type="button" class="btn btn-primary"
 									        data-bs-toggle="tooltip" data-bs-placement="top"
 									        data-bs-custom-class="custom-tooltip"
-									        data-bs-title="Clonar Receita" >
+									        data-bs-title="Clonar Receita" th:if="${statuslote=='A' &&receita.cdExpReceita==null}">
 									       <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="white" class="bi bi-clipboard-plus-fill" viewBox="0 0 16 16">
 											  <path d="M6.5 0A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3Zm3 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3Z"/>
 											  <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1A2.5 2.5 0 0 1 9.5 5h-3A2.5 2.5 0 0 1 4 2.5v-1Zm4.5 6V9H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V10H6a.5.5 0 0 1 0-1h1.5V7.5a.5.5 0 0 1 1 0Z"/>
@@ -88,7 +82,6 @@
 							</tr>
 						</tbody>
 					</table>
-					
 					 <a href="/" class="btn btn-success">Home
 				    	<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-house-door" viewBox="0 0 16 16">
 				 				 <path d="M8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4.5a.5.5 0 0 0 .5-.5v-4h2v4a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146zM2.5 14V7.707l5.5-5.5 5.5 5.5V14H10v-4a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v4H2.5z"/>
@@ -101,10 +94,8 @@
 			 					 <path d="M5 1a2 2 0 0 0-2 2v2H2a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h1v1a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-1h1a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-1V3a2 2 0 0 0-2-2H5zM4 3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2H4V3zm1 5a2 2 0 0 0-2 2v1H2a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v-1a2 2 0 0 0-2-2H5zm7 2v3a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1z"/>
 						</svg>
 					</a>
-					
 			</div>
 		</div>
-		
 <!-- Paginação -->
 <script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
 <script src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>		
@@ -129,14 +120,11 @@
 
 <!-- Link Necessário para o funcionamento da janela modal -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-
-
 <!-- Icons -->
  <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
  <script>
    feather.replace()
  </script>
- 
  <script type="text/javascript">
  var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
  var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
