@@ -250,6 +250,50 @@ public class ContaServices {
 		}
 		return rw;
 	}
+	
+	/**
+	 * Registra a movimentação financeira de CRÉDITO e DÉBITO
+	 * 
+	 * @author Elias
+	 * @since 25-02-2023
+	 * @param model
+	 * @param vavalor
+	 * @param conta
+	 * @param operacao
+	 * @param motivo
+	 */
+	public void movimentacao( String valor, String conta, String operacao, String motivo) {
+		RedirectView rw = new RedirectView("/conta/listar");
+		Optional<Conta> contaLocalizada = repository.findConta(conta);
+		LogMovimentacaoFinanceira lmf = new LogMovimentacaoFinanceira();
+		valor = valor.replaceAll(",", ".");
+		if (valor != null) {
+			BigDecimal saldo = contaLocalizada.get().getSaldo();
+			Double vlr = Double.valueOf(valor);
+			BigDecimal vlr2 = BigDecimal.valueOf(vlr);
+			if (operacao.equals("D")) {
+				saldo = saldo.subtract(vlr2);
+				lmf.setDescricao(motivo.toUpperCase());
+				lmf.setDtMovimentacao(LocalDate.now());
+				lmf.setNrConta(contaLocalizada.get().getNrConta());
+				lmf.setTpMovimentacao(operacao);
+				lmf.setUsuario("Elias");
+				lmf.setVlMovimentado(vlr2);
+			} else {
+				saldo = saldo.add(vlr2);
+				lmf.setDescricao(motivo);
+				lmf.setDtMovimentacao(LocalDate.now());
+				lmf.setNrConta(contaLocalizada.get().getNrConta());
+				lmf.setTpMovimentacao(operacao);
+				lmf.setUsuario("Elias");
+				lmf.setVlMovimentado(vlr2);
+			}
+			Conta novosaldo = contaLocalizada.get();
+			novosaldo.setSaldo(saldo);
+			repository.save(novosaldo);
+			logMovimentacao.save(lmf);
+		}
+	}
 
 	/**
 	 * Transfere valores entre contas
