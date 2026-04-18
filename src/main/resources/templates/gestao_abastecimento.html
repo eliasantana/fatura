@@ -1,0 +1,331 @@
+<!DOCTYPE html >
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Controle Veicular - SysFaturaWB</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-bg: #f4f7f6;
+            --card-bg: #ffffff;
+            --text-main: #333;
+            --sidebar-width: 250px;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--primary-bg);
+            color: var(--text-main);
+            overflow-x: hidden;
+        }
+
+        /* Estilização dos Cards de KPI */
+        .kpi-card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background: var(--card-bg);
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .kpi-icon {
+            font-size: 2.5rem;
+            opacity: 0.8;
+        }
+
+        /* Estilização Geral dos Cards */
+        .main-card {
+            border: none;
+            border-radius: 15px;
+            background: var(--card-bg);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+
+        .card-header-custom {
+            background-color: transparent;
+            border-bottom: 1px solid #eee;
+            padding: 1.5rem;
+            font-weight: 600;
+        }
+
+        /* Ajustes para Tabela */
+        table.dataTable thead th {
+            border-bottom: 2px solid #eee !important;
+        }
+
+        /* Responsividade para Gráficos */
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .chart-container {
+                height: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container-fluid p-0">
+    <div class="row g-0">
+        
+        <main class="col ps-md-2 pt-2 p-4">
+            
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-4 border-bottom">
+                    <h1 class="h2 fw-bold text-primary">Gestão de Abastecimentos</h1>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <button type="button" class="btn btn-sm btn-outline-secondary">
+                            <i class="bi bi-calendar3 me-2"></i>Exportar Dados
+                        </button>
+                    </div>
+                </div>
+
+                <div class="row g-3 mb-4">
+                    <div class="col-12 col-sm-6 col-xl-3">
+                        <div class="card kpi-card p-3 h-100 border-start border-primary border-4">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div>
+                                    <form action="/abastecimento/atualizar" method="get">
+                                        <h6 class="text-muted text-uppercase fw-semibold mb-1">Veículos</h6>
+                                        <select class="form-select text-muted" name="cd_veiculo" required onchange="this.form.submit()">
+                                            <option value="" selected disabled>Selecione o veículo...</option>
+                                            <option th:each="v : ${veiculos}" th:text="${v.fabricante} + ' - ' +${v.placa}" th:value="${v.cdVeiculo}"></option>
+                                        </select>
+                                    </form>
+                                    <small class="text-muted">Veículos Cadastrados</small>
+                                </div>
+                                <i class="bi bi-speedometer2 text-primary kpi-icon"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Teste -->
+                    <div class="col-12 col-sm-6 col-xl-3">
+                        <div class="card kpi-card p-3 h-100 border-start border-primary border-4">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div>
+                                    <h6 class="text-muted text-uppercase fw-semibold mb-1">Total Percorrido</h6>
+                                    <h2 class="fw-bold mb-0" th:text="${kmpercorrido}"0.000 km</h2>
+                                </div>
+                                <i class="bi bi-speedometer2 text-primary kpi-icon"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- -->
+                    <div class="col-12 col-sm-6 col-xl-3">
+                        <div class="card kpi-card p-3 h-100 border-start border-success border-4">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div>
+                                    <h6 class="text-muted text-uppercase fw-semibold mb-1">Consumo Médio (Geral)</h6>
+                                    <h2 class="fw-bold mb-0 text-success" th:text="${consumomediogeral}">00,0 km/l</h2>
+                                </div>
+                                <i class="bi bi-fuel-pump text-success kpi-icon"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-6 col-xl-3">
+                        <div class="card kpi-card p-3 h-100 border-start border-warning border-4">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div>
+                                    <h6 class="text-muted text-uppercase fw-semibold mb-1">Valor Ult. Abastecimento</h6>
+                                    <h2 class="fw-bold mb-0 text-warning" th:text="${ultimovalorpago}">R$ 0,00</h2>
+                                </div>
+                                <i class="bi bi-currency-dollar text-warning kpi-icon"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-6 col-xl-3">
+                        <div class="card kpi-card p-3 h-100 border-start border-info border-4">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div>
+                                    <h6 class="text-muted text-uppercase fw-semibold mb-1">Consumo Médio (Mensal)</h6>
+                                    <h2 class="fw-bold mb-0 text-info" th:text="${cosumomensal}">0,0 km/l</h2>
+                                </div>
+                                <i class="bi bi-bar-chart-line text-info kpi-icon"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-3 mb-4">
+                    <div class="col-lg-8">
+                        <div class="card main-card">
+                            <div class="card-header card-header-custom d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">Evolução da Quilometragem Atual (km)</h5>
+                                <i class="bi bi-info-circle text-muted" data-bs-toggle="tooltip" title="Acompanhamento do hodômetro ao longo do tempo."></i>
+                            </div>
+                            <div class="card-body p-4">
+                                <div style="height: 100%; width: 100%;" id="container">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-4">
+                        <div class="card main-card h-100">
+                            <div class="card-header card-header-custom">
+                                <h5 class="mb-0">Distribuição do Consumo</h5>
+                            </div>
+                            <div style="height: 100%; width: 100%;">
+                                <div id="evolucao"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-3">
+                    <div class="col-12">
+                        <div class="card main-card">
+                            <div class="card-header card-header-custom d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">Registro Detalhado de Abastecimentos</h5>
+                                <a href="/abastecimento/registrar" class="btn btn-sm btn-primary"><i class="bi bi-plus-lg me-2"></i>Registrar Abastecimento</a>
+                                <a href="/" class="btn btn-sm btn-primary"><i class="bi bi-plus-lg me-2"></i>Home</a>
+                            </div>
+                            <div class="card-body p-4">
+                                <div class="table-responsive">
+                                    <table id="abastecimentoTable" class="table table-striped table-hover table-bordered w-100">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Data</th>
+                                                <th>Km Atual</th>
+                                                <th>Litros</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr th:each="ab : ${abastecimentogeral}">
+                                                <td th:text="${ab.cdAbastecimento}"></td>
+                                                <td th:text="${#temporals.format(ab.dtAbastecimento,'dd/MM/yyyy')}"></td>
+                                                <td th:text="${ab.kmAtual}"></td>
+                                                <td th:text="${ab.litros}"></td>
+                                            </tr>
+                                            </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            <footer class="pt-5 my-5 text-muted border-top text-center">
+                SysFaturaWB - Sistema de Gestão Veicular &copy; 2026
+            </footer>
+        </main>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://code.highcharts.com/highcharts.js"> </script>
+
+<script th:inline="javascript">
+    var meses=[[${meses}]];
+    var valores=[[${valores}]];
+    var litrosMes=[[${litrosmes}]];
+    Highcharts.chart('container', {
+    chart: {
+        type: 'bar'
+    },
+    title: {
+        text: 'Evolução da Quilometragem x Litros'
+    },
+    subtitle: {
+        text:
+            'Abastecimentos'
+    },
+    xAxis: {
+        categories: meses,
+        crosshair: true,
+        accessibility: {
+            description: 'Countries'
+        }
+    },
+    yAxis: {
+        min: 0,
+        title: {
+            text: 'Kilometragem (Km)'
+        }
+    },
+    tooltip: {
+        valueSuffix: ' (Mes)'
+    },
+    plotOptions: {
+        column: {
+            pointPadding: 0.2,
+            borderWidth: 0
+        }
+    },
+    series: [
+        {
+            name: 'Km Percorridos',
+            data: valores
+        },
+        {
+            name: 'Litros',
+            data: litrosMes
+        }
+    ]
+});
+
+
+</script>
+<script th:inline="javascript">
+    var cosumomeses=[[${cosumomeses}]];
+    var consumoLitros=[[${cosumolitros}]];
+    Highcharts.chart('evolucao', {
+        chart: {
+            type: 'line'
+        },
+        title: {
+            text: 'Evolução do Consumo - Litros (MEs)'
+        },
+        subtitle: {
+            text:''
+        },
+        xAxis: {
+            categories: cosumomeses
+        },
+        yAxis: {
+            title: {
+                text: 'Litros (Lt)'
+            }
+        },
+        plotOptions: {
+            line: {
+                dataLabels: {
+                    enabled: true
+                },
+                enableMouseTracking: false
+            }
+        },
+        series: [{
+            name: 'Consumo Mensal',
+            data: consumoLitros
+        }]
+    });
+</script>
+</body>
+</html>
