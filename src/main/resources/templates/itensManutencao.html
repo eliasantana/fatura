@@ -7,97 +7,145 @@
  <!-- Nav Bar -->
     <nav th:replace="~{navfragment:: nav }"></nav>
 	<div class="container-fluid">
-		<div class="card mt-1" th:if="${operacao=='C'}">
-			<div class="card-header">Manutenções</div>
+		<div class="card mt-1" >
+			<div class="card-header">
+				<h4 th:text="'Manutenção de '+${kilometragem} + ' KM '" th:if="${kilometragem!=null}">Manutencao</h4></div>
+                <h4 th:text="Manutenção" th:if="${kilometragem==null}">Manutencao</h4></div>
 			<div class="card-body">
-				<h5 class="card-title">Cadastro</h5>
+				<h4 th:if="${operacao=='C'}">Fornecedor</h4>
 				<p class="card-text">
-				<div class="container">
-					<form method="post" action="/manutencao/adicionar">
-						<label class="label-form" for="cdManutencao">Código</label>
-						<input type="text"  id="cdManutencao" name="cdManutencao" th:value="${manutencao.cdManutencao}" th:field="*{manutencao.cdManutencao}"  class="form-control" readonly>
-						<label class="label-form" for="veiculo">Vecículo</label>
-						<select class="form-select mt-3" id="veiculo" name="veiculo" aria-label="Default select example" required>
-							<option selected>Selecione um Veículo</option>
-							<option th:each="veiculos : ${veiculos}"  th:text="${veiculos.fabricante}+' - '+${veiculos.modelo}+' - '+ ${veiculos.placa}" th:value="${veiculos.cdVeiculo}">One</option>
-						</select>
-                        <select class="form-select mt-3" id="fornecedor" name="fornecedor" aria-label="Default select example" required>
-                            <option selected>Selecione um Fornecedor</option>
-                            <option th:each="fornecedor : ${fornecedores}"  th:text="${fornecedor.nmFornecedor}" th:value="${fornecedor.cdFornecedor}">One</option>
-                        </select>
-						<label class="label-form" for="km">Manutenção KM</label>
-						<input type="number"  id="km" name="km" th:value="${manutencao.km}" th:field="*{manutencao.km}"  class="form-control mt-3" required>
-						<a th:href="@{'/'}" class="btn btn-primary gray mt-3">
-							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-house-door-fill" viewBox="0 0 16 16">
-								<path d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5"/>
-							</svg>&nbsp;Home
-						</a>
-						<button type="submit" class="btn btn-primary mt-3">
-							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-square-fill" viewBox="0 0 16 16">
-								<path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm6.5 4.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3a.5.5 0 0 1 1 0"/>
-							</svg>&nbsp;Adicionar
-						</button>
-						<a href="/manutencao/pesquisar" class="btn btn-primary mt-3 red">
-							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-								<path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
-							</svg>&nbsp;Pesquisar
-						</a>
-					</form>
-				</div>
-			</div>
-		</div>
-		<!-- iNICIO DO CARD TABELA -->
-		<div class="card mt-1" th:if="${operacao=='P'}">
-			<div class="card-header"></div>
-			<div class="card-body">
-				<h5 class="card-title">Manutenções Cadastradas</h5>
-				<p class="card-text">
-				<div class="container">
-				<div class="alert alert-primary mt-3 mb-3" role="alert" th:if="${msg!=null}" th:text="${msg}">
-					A simple primary alert—check it out!
-				</div>
-				<table class="table table-striped table-hover" id="fornecedores">
+				<table class="table table-hover table-striped" th:if="${operacao=='C'}">
 					<thead>
-                        <th scope="col">ID</th>
-						<th scope="col">Veiculo</th>
-						<th scope="col">Fornecedor</th>
+					<tr>
+						<th scope="col">#</th>
 						<th scope="col">KM</th>
-						<th scope="col">Realizado</th>
-						<th scope="col">Data de Realização</th>
+						<th scope="col">Fornecedor</th>
+						<th scope="col">Telefone</th>
+						<th>Detalhe</th>
+					</tr>
 					</thead>
 					<tbody>
-					<tr th:each="m : ${manutencoes}">
-						<td th:text="${m.cdManutencao}"></td>
-						<td th:text="${m.veiculo.fabricante} + ' - ' + ${m.veiculo.modelo}+ ' - ' + ${m.veiculo.cor} + ' - ' + ${m.veiculo.placa}"></td>
-						<td th:text="${m.km}"></td>
-						<td th:text="${m.snRealizado}"></td>
-						<td th:text="${m.dtRealizacao}"></td>
+					<tr>
+						<td th:text="${manutencao.cdManutencao}">KM</td>
+						<td th:text="${manutencao.km}">KM</td>
+						<th scope="row" th:text="${manutencao.Fornecedor.nmFornecedor}">1</th>
+						<th scope="row" th:text="${manutencao.Fornecedor.telefone}">1</th>
+						<td><p>
+							<a class="btn btn-primary" href="/manutencao/pesquisar" role="button" aria-expanded="false">
+								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-car-front-fill" viewBox="0 0 16 16">
+									<path d="M2.52 3.515A2.5 2.5 0 0 1 4.82 2h6.362c1 0 1.904.596 2.298 1.515l.792 1.848c.075.175.21.319.38.404.5.25.855.715.965 1.262l.335 1.679q.05.242.049.49v.413c0 .814-.39 1.543-1 1.997V13.5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-1.338c-1.292.048-2.745.088-4 .088s-2.708-.04-4-.088V13.5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-1.892c-.61-.454-1-1.183-1-1.997v-.413a2.5 2.5 0 0 1 .049-.49l.335-1.68c.11-.546.465-1.012.964-1.261a.8.8 0 0 0 .381-.404l.792-1.848ZM3 10a1 1 0 1 0 0-2 1 1 0 0 0 0 2m10 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2M6 8a1 1 0 0 0 0 2h4a1 1 0 1 0 0-2zM2.906 5.189a.51.51 0 0 0 .497.731c.91-.073 3.35-.17 4.597-.17s3.688.097 4.597.17a.51.51 0 0 0 .497-.731l-.956-1.913A.5.5 0 0 0 11.691 3H4.309a.5.5 0 0 0-.447.276L2.906 5.19Z"/>
+								</svg> &nbsp;Cadastro
+							</a>
+							<a class="btn btn-primary purple" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list-check" viewBox="0 0 16 16">
+									<path fill-rule="evenodd" d="M5 11.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5M3.854 2.146a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 1 1 .708-.708L2 3.293l1.146-1.147a.5.5 0 0 1 .708 0m0 4a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 1 1 .708-.708L2 7.293l1.146-1.147a.5.5 0 0 1 .708 0m0 4a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 0 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0"/>
+								</svg> &nbsp;Detalhe
+							</a>
+							<a class="btn btn-primary" href="/item/adicionar" role="button" aria-expanded="false">
+								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+									<path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z"/>
+								</svg>&nbsp;Adicionar Itens
+							</a>
+							</p>
+								<div class="collapse" id="collapseExample">
+									<div class="card card-body">
+										<h4>Veículo</h4>
+										<table class="table">
+											<thead>
+											<tr>
+												<th scope="col">#</th>
+												<th scope="col">Veiculo</th>
+												<th scope="col">Ano</th>
+												<th scope="col">Modelo</th>
+												<th scope="col">Cor</th>
+												<th scope="col">Km atual</th>
+												<th scope="col">Placa</th>
+											</tr>
+											</thead>
+											<tbody>
+											<tr>
+												<th scope="row" th:text="${manutencao.Veiculo.cdVeiculo}">cdVeiculo</th>
+												<td th:text="${manutencao.Veiculo.fabricante}">Mark</td>
+												<td th:text="${manutencao.Veiculo.ano}">Mark</td>
+												<td th:text="${manutencao.Veiculo.modelo}">Otto</td>
+												<td th:text="${manutencao.Veiculo.cor}">@mdo</td>
+												<td th:text="${manutencao.Veiculo.kmAtual}">Otto</td>
+												<td th:text="${manutencao.Veiculo.placa}">@mdo</td>
+											</tr>
+											</tbody>
+										</table>
+									</div>
+									<div class="row">
+										<h4>Itens da Manutenção</h4>
+										<a th:href="@{'/item/excluir/'+${manutencao.cdManutencao}+'/'+${manutencao.Veiculo.cdVeiculo}}" class="btn btn-danger red" style="width: 150px;">
+											<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3-fill" viewBox="0 0 16 16">
+												<path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5"/>
+											</svg>&nbsp;Excluir Todos
+										</a>
+									</div>
+									<table class="table">
+										<thead>
+										<tr>
+											<th scope="col">#</th>
+											<th scope="col">Peça</th>
+											<th scope="col">Data de Inclusão</th>
+											<th>Ação</th>
+										</tr>
+										</thead>
+										<tbody>
+										<tr th:each="it : ${itensmanutencao}">
+											<th scope="row" th:text="${it.peca.cdPecas}" ></th>
+											<td th:text="${it.peca.nmPeca}">Mark</td>
+											<td th:text="${it.peca.dtInclusao}">Mark</td>
+											<td>
+												<a th:href="@{'/item/excluir/pecas/'+${manutencao.cdManutencao}+'/'+${it.peca.cdPecas}}" class="btn btn-danger red">
+													<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3-fill" viewBox="0 0 16 16">
+														<path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5"/>
+													</svg>
+												</a>
+											</td>
+										</tr>
+										</tbody>
+									</table>
+								</div>
+						</td>
+					</tr>
+					</tbody>
+				</table>
+				<h4 th:if="${operacao=='A'}">Peças</h4>
+				<table class="table table-hover table-striped" th:if="${operacao=='A'}">
+					<thead>
+					<tr>
+						<th scope="col">#</th>
+						<th scope="col">Peças</th>
+						<th scope="col">Ação</th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr th:each="p : ${pecas}">
+						<th scope="row" th:text="${p.cdPecas}">cdPeca</th>
+						<td th:text="${p.nmPeca}">Mark</td>
 						<td>
-							<a th:href="@{'/manutencao/excluir/'}+${m.cdManutencao}" class="btn btn-primary">
-								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
-									<path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
-									<path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
-								</svg>
-							</a>
-							<a th:href="@{'/manutencao/excluir/'}+${m.cdManutencao}" class="btn btn-primary red">
-								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3-fill" viewBox="0 0 16 16">
-									<path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5"/>
-								</svg>
-							</a>
-							<a th:href="@{'/manutencao/cadastro/'}" class="btn btn-primary gray">
-								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-square-fill" viewBox="0 0 16 16">
-									<path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm6.5 4.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3a.5.5 0 0 1 1 0"/>
-								</svg>
+							<a class="btn btn-primary red" th:href="'/item/salvar/'+${cdmanutencao}+'/'+${p.cdPecas}" role="button" aria-expanded="false">
+								<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-tools" viewBox="0 0 16 16">
+									<path d="M1 0 0 1l2.2 3.081a1 1 0 0 0 .815.419h.07a1 1 0 0 1 .708.293l2.675 2.675-2.617 2.654A3.003 3.003 0 0 0 0 13a3 3 0 1 0 5.878-.851l2.654-2.617.968.968-.305.914a1 1 0 0 0 .242 1.023l3.27 3.27a.997.997 0 0 0 1.414 0l1.586-1.586a.997.997 0 0 0 0-1.414l-3.27-3.27a1 1 0 0 0-1.023-.242L10.5 9.5l-.96-.96 2.68-2.643A3.005 3.005 0 0 0 16 3q0-.405-.102-.777l-2.14 2.141L12 4l-.364-1.757L13.777.102a3 3 0 0 0-3.675 3.68L7.462 6.46 4.793 3.793a1 1 0 0 1-.293-.707v-.071a1 1 0 0 0-.419-.814zm9.646 10.646a.5.5 0 0 1 .708 0l2.914 2.915a.5.5 0 0 1-.707.707l-2.915-2.914a.5.5 0 0 1 0-.708M3 11l.471.242.529.026.287.445.445.287.026.529L5 13l-.242.471-.026.529-.445.287-.287.445-.529.026L3 15l-.471-.242L2 14.732l-.287-.445L1.268 14l-.026-.529L1 13l.242-.471.026-.529.445-.287.287-.445.529-.026z"/>
+								</svg>&nbsp;Incluir
 							</a>
 						</td>
 					</tr>
 					</tbody>
 				</table>
-				<a th:href="@{'/'}" class="btn btn-primary gray">
-					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-house-door-fill" viewBox="0 0 16 16">
-						<path d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5"/>
-					</svg>Home
+				<a class="btn btn-primary" href="/manutencao/cadastro" role="button" aria-expanded="false">
+					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-square-fill" viewBox="0 0 16 16">
+						<path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm6.5 4.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3a.5.5 0 0 1 1 0"/>
+					</svg>&nbsp;Cadastro
 				</a>
+				<a class="btn btn-primary ml-2" th:href="'/item/todos/'+${kilometragem}+'/'+${cdmanutencao}" role="button" aria-expanded="false">
+				<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-car-front-fill" viewBox="0 0 16 16">
+					<path d="M2.52 3.515A2.5 2.5 0 0 1 4.82 2h6.362c1 0 1.904.596 2.298 1.515l.792 1.848c.075.175.21.319.38.404.5.25.855.715.965 1.262l.335 1.679q.05.242.049.49v.413c0 .814-.39 1.543-1 1.997V13.5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-1.338c-1.292.048-2.745.088-4 .088s-2.708-.04-4-.088V13.5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-1.892c-.61-.454-1-1.183-1-1.997v-.413a2.5 2.5 0 0 1 .049-.49l.335-1.68c.11-.546.465-1.012.964-1.261a.8.8 0 0 0 .381-.404l.792-1.848ZM3 10a1 1 0 1 0 0-2 1 1 0 0 0 0 2m10 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2M6 8a1 1 0 0 0 0 2h4a1 1 0 1 0 0-2zM2.906 5.189a.51.51 0 0 0 .497.731c.91-.073 3.35-.17 4.597-.17s3.688.097 4.597.17a.51.51 0 0 0 .497-.731l-.956-1.913A.5.5 0 0 0 11.691 3H4.309a.5.5 0 0 0-.447.276L2.906 5.19Z"/>
+				</svg> &nbsp;Adicionar Todos
+				</a>
+
 				</div>
 			</div>
 		</div>

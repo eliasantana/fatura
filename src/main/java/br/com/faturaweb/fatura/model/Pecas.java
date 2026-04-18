@@ -1,115 +1,74 @@
 package br.com.faturaweb.fatura.model;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "fornecedor")
-public class Fornecedor {
+@Table(name = "pecas")
+public class Pecas {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long cdFornecedor;
-    private String nmFornecedor;
-    private String telefone;
-    private String endereco;
-    private String bairro;
-    private String cep;
-    private String uf;
-    private String email;
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    private LocalDate dtCadastro;
+    private  Long cdPecas;
+    private String nmPeca;
+    private LocalDate dtInclusao;
 
-    public Fornecedor(){
-        this.dtCadastro = LocalDate.now();
+    private String snIncluir;
+
+    public Pecas(){
+        this.dtInclusao = LocalDate.now();
     }
 
-    public Long getCdFornecedor() {
-        return cdFornecedor;
+    public Long getCdPecas() {
+        return cdPecas;
     }
 
-    public void setCdFornecedor(Long cdFornecedor) {
-        this.cdFornecedor = cdFornecedor;
+    public void setCdPecas(Long cdPecas) {
+        this.cdPecas = cdPecas;
+    }
+    @Column(precision = 9, scale = 3)
+    private BigDecimal kmTroca;
+
+
+    public String getNmPeca() {
+        return nmPeca;
     }
 
-    public String getNmFornecedor() {
-        return nmFornecedor;
+    public void setNmPeca(String nmPeca) {
+        this.nmPeca = nmPeca;
     }
 
-    public void setNmFornecedor(String nmFornecedor) {
-        this.nmFornecedor = nmFornecedor;
+    public LocalDate getDtInclusao() {
+        return dtInclusao;
     }
 
-    public String getTelefone() {
-        return telefone;
+    public void setDtInclusao(LocalDate dtInclusao) {
+        this.dtInclusao = dtInclusao;
     }
 
-    public void setTelefone(String telefone) {
-        this.telefone = telefone;
+    public void setSnIncluir(String snIncluir) {
+        this.snIncluir = snIncluir;
     }
 
-    public String getEndereco() {
-        return endereco;
+    public String getSnIncluir() {
+        return snIncluir;
     }
 
-    public void setEndereco(String endereco) {
-        this.endereco = endereco;
+    public void setKmTroca(BigDecimal kmTroca) {
+        this.kmTroca = kmTroca;
     }
 
-    public String getBairro() {
-        return bairro;
-    }
-
-    public void setBairro(String bairro) {
-        this.bairro = bairro;
-    }
-
-    public String getCep() {
-        return cep;
-    }
-
-    public void setCep(String cep) {
-        this.cep = cep;
-    }
-
-    public String getUf() {
-        return uf;
-    }
-
-    public void setUf(String uf) {
-        this.uf = uf;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public LocalDate getDtCadastro() {
-        return dtCadastro;
-    }
-
-    public void setDtCadastro(LocalDate dtCadastro) {
-        this.dtCadastro = dtCadastro;
+    public BigDecimal getKmTroca() {
+        return kmTroca;
     }
 
     @Override
     public String toString() {
-        return "Fornecedor{" +
-                "cdFornecedor=" + cdFornecedor +
-                ", nmFornecedor='" + nmFornecedor + '\'' +
-                ", telefone='" + telefone + '\'' +
-                ", endereco='" + endereco + '\'' +
-                ", bairro='" + bairro + '\'' +
-                ", cep='" + cep + '\'' +
-                ", uf='" + uf + '\'' +
-                ", email='" + email + '\'' +
+        return "Pecas{" +
+                "cdPecas=" + cdPecas +
+                ", nmPeca='" + nmPeca + '\'' +
+                ", dtInclusao=" + dtInclusao +
+                ", snIncluir='" + snIncluir + '\'' +
                 '}';
     }
-
-
 }

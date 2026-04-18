@@ -1,35 +1,26 @@
 package br.com.faturaweb.fatura.controller;
 
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.sound.midi.Soundbank;
-
+import br.com.faturaweb.fatura.form.LancamentoForm;
+import br.com.faturaweb.fatura.model.Configuracoes;
+import br.com.faturaweb.fatura.model.Lancamento;
+import br.com.faturaweb.fatura.services.AppServices;
+import br.com.faturaweb.fatura.services.ConfiguracoesServices;
+import br.com.faturaweb.fatura.services.LancamentoServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
-import br.com.faturaweb.fatura.form.LancamentoForm;
-import br.com.faturaweb.fatura.model.Configuracoes;
-import br.com.faturaweb.fatura.model.Lancamento;
-import br.com.faturaweb.fatura.repository.LancamentoRepository;
-import br.com.faturaweb.fatura.services.AppServices;
-import br.com.faturaweb.fatura.services.LancamentoServices;
-import br.com.faturaweb.fatura.services.QueryServices;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @EnableAutoConfiguration
@@ -44,6 +35,8 @@ public class LancamentoController {
 	List<Lancamento> lancamentosLocalizados = new ArrayList<>();
 	String txtPesquisa = null;
 	BigDecimal novoValor = BigDecimal.ZERO;
+	@Autowired
+	ConfiguracoesServices configuracoesServices;
 	
 	/**
 	 * Só libera o cadastro quando sn_lancarNaCompetencia='N' das configuações
@@ -58,8 +51,14 @@ public class LancamentoController {
 //Método chamado através da página de alteação de lancamento
 	@PostMapping("/salvar")
 	public RedirectView salvar(LancamentoForm lancamentoForm, Model model) {
+
 		services.salvar(lancamentoForm, model);
-		return new RedirectView("/listar");
+		String snHabilitaModManutencao = configuracoesServices.getChaveValor("SN_HABILITA_MOD_MANUTENCAO");
+		if (lancamentoForm.getDsTipoLancamento().equals("Combustível") && snHabilitaModManutencao.equals("S")){
+			return new RedirectView("/abastecimento/registrar");
+		}else{
+			return new RedirectView("/listar");
+		}
 	}
 
 	@GetMapping("/excluir/{id}")

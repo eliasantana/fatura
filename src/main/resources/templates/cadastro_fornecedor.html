@@ -8,31 +8,35 @@
     <nav th:replace="~{navfragment:: nav }"></nav>
 	<div class="container-fluid">
 		<div class="card mt-1" th:if="${operacao=='C'}">
-			<div class="card-header">Cadastro de Veiculos</div>
+			<div class="card-header">Cadastro de Fornecedores</div>
 			<div class="card-body">
-				<h5 class="card-title">Adicionar</h5>
+				<h5 class="card-title">Cadastro</h5>
 				<p class="card-text">
 				<div class="container">
-					<form method="post" action="/veiculo/adicionar">
-						<label class="label-form" for="cdVeiculo" th:if="*{veiculo.cdVeiculo!=null}">Código</label>
-						<input type="text"  id="cdVeiculo" name="cdVeiculo"  class="form-control" required="true" th:value="${cdVeiculo}" th:field="*{veiculo.cdVeiculo}" th:if="*{veiculo.cdVeiculo!=null}"  readonly>
-						<label class="label-form" for="fabricante">Fabricante</label>
-						<input type="text" id="fabricante" name="fabricante" placeholder="RENAULT, FORD, BYD" class="form-control" required="true" th:value="${veiculo.fabricante}" th:field="*{veiculo.fabricante}">
-						<label class="label-form" for="modelo">Modelo</label>
-						<input type="number" id="modelo" name="modelo" step="0.01"   min="0"  placeholder="1.0, 2.0"  class="form-control" required="true" th:value="${modelo}" th:field="*{veiculo.modelo}">
-						<label class="label-form" for="cor">Cor</label>
-						<input type="text" id="cor" name="cor" class="form-control" required="true" th:value="${cor}" th:field="*{veiculo.cor}">
-						<label class="label-form" for="ano">Ano</label>
-						<input type="number" id="ano" name="ano" placeholder="2026, 2018" class="form-control" required="true" th:value="${ano}"  th:field="*{veiculo.ano}">
-						<label class="label-form" for="kmAtual">Kilometragem Atual</label>
-						<input type="number" id="kmAtual" name="kmAtual" class="form-control" step="0.01"   min="0"  placeholder="0,00" required="true" th:value="${kmAtual}" th:field="*{veiculo.kmAtual}">
+					<form method="post" action="/fornecedor/adicionar">
+						<label class="label-form" for="cdFornecedor" th:if="*{f.cdFornecedor!=null}">Código</label>
+						<input type="text"  id="cdFornecedor" name="cdFornecedor"  class="form-control" required="true" th:value="${cdFornecedor}" th:field="*{f.cdFornecedor}" th:if="*{f.cdFornecedor!=null}"  readonly>
+						<label class="label-form" for="nmFornecedor">Nome</label>
+						<input type="text" id="nmFornecedor" name="nmFornecedor" placeholder="Nome" class="form-control" required="true" th:value="${nmFornecedor}" th:field="*{f.nmFornecedor}">
+						<label class="label-form" for="telefone">Telefone</label>
+						<input type="text" id="telefone" name="telefone"  class="form-control" required="true" th:value="${telefone}" th:field="*{f.telefone}">
+						<label class="label-form" for="endereco">Endereço</label>
+						<input type="text" id="endereco" name="endereco" class="form-control" required="true" th:value="${endereco}" th:field="*{f.endereco}">
+						<label class="label-form" for="bairro">Bairro</label>
+						<input type="text" id="bairro" name="bairro"  class="form-control" required="true" th:value="${bairro}"  th:field="*{f.bairro}">
+						<label class="label-form" for="cep">CEP</label>
+						<input type="text" id="cep" name="cep" class="form-control"  placeholder="00000-000" required="true" th:value="${cep}" th:field="*{f.cep}">
+						<label class="label-form" for="uf">UF</label>
+						<input type="text" id="uf" name="uf" class="form-control" required="true" th:value="${uf}"  th:field="*{f.uf}">
+						<label class="label-form" for="email">E-MAIL</label>
+						<input type="text" id="email" name="email" class="form-control"  placeholder="seuemail@provedor.com.br" required="true" th:value="${email}" th:field="*{f.email}">
 						<div class="row">
 							<!-- Button trigger modal -->
 							<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" style="Width: 120px">
 								Adicionar
 							</button>
 							<button type="reset" class="form-control btn btn-danger ml-2" style="Width: 120px">Limpar</button>
-							<a th:href="@{'/veiculo/pesquisar'}" class="form-control btn btn-danger ml-2 red" style="Width: 120px">Pesquisar</a>
+							<a th:href="@{'/fornecedor/pesquisar'}" class="form-control btn btn-danger ml-2 red" style="Width: 120px">Pesquisar</a>
 							<a th:href="@{'/'}" class="btn btn-primary gray ml-2" th:if="${operacao=='C'}" style="Width: 120px" >
 								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-house-door-fill" viewBox="0 0 16 16">
 									<path d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5"/>
@@ -55,7 +59,7 @@
 									</div>
 									<div class="modal-footer">
 										<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-										<button type="submit" class="btn btn-primary ml-2">Adicionar</button>
+										<button type="submit" class="btn btn-primary ml-2">Salvar</button>
 									</div>
 								</div>
 							</div>
@@ -69,40 +73,42 @@
 		<div class="card mt-1" th:if="${operacao=='P'}">
 			<div class="card-header"></div>
 			<div class="card-body">
-				<h5 class="card-title">Veículos Cadastrados</h5>
+				<h5 class="card-title">Fornecedores Cadastrados</h5>
 				<p class="card-text">
 				<div class="container">
-				<table class="table table-striped table-hover" id="veiculos">
+				<table class="table table-striped table-hover" id="fornecedores">
 					<thead>
 					<th scope="col" >Código</th>
-					<th scope="col" >Fabricante</th>
-					<th scope="col">Modelo</th>
-					<th scope="col" style="text-align: center;">Cor</th>
-					<th scope="col" >Ano</th>
-					<th scope="col" >Km Atual</th>
+					<th scope="col" >Nome</th>
+					<th scope="col">Telefone</th>
+					<th scope="col" >Endereco</th>
+					<th scope="col" >Bairro</th>
+					<th scope="col" >CEP</th>
+					<th scope="col" >UF</th>
 					<th scope="col" >Ação</th>
 					</thead>
 					<tbody>
-					<tr th:each="v : ${veiculosadicionados}">
-						<td th:text="${v.cdVeiculo}"></td>
-						<td th:text="${v.fabricante}"></td>
-						<td th:text="${v.modelo}"></td>
-						<td th:text="${v.cor}"></td>
-						<td th:text="${v.ano}"></td>
-						<td th:text="${v.kmAtual}" style="text-align: right;"></td>
+					<tr th:each="forn : ${fornec}">
+						<td th:text="${forn.cdFornecedor}"></td>
+						<td th:text="${forn.nmFornecedor}"></td>
+						<td th:text="${forn.telefone}"></td>
+						<td th:text="${forn.endereco}"></td>
+						<td th:text="${forn.bairro}"></td>
+						<td th:text="${forn.cep}"></td>
+						<td th:text="${forn.uf}"></td>
 						<td>
-							<a th:href="@{'/veiculo/editar/'}+${v.cdVeiculo}" class="btn btn-primary">
+							<a th:href="@{'/fornecedor/editar/'}+${forn.cdFornecedor}" class="btn btn-primary">
 									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
 										<path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
 										<path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
 									</svg>
 							</a>
-							<a th:href="@{'/veiculo/excluir/'}+${v.cdVeiculo}" class="btn btn-primary red">
+							<a th:href="@{'/fornecedor/excluir/'}+${forn.cdFornecedor}" class="btn btn-primary red">
 								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3-fill" viewBox="0 0 16 16">
 									<path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5"/>
 								</svg>
 							</a>
-							<a th:href="@{'/veiculo/cadastro/'}" class="btn btn-primary gray">
+							<a th:href="@{'/fornecedor/cadastrar'}" class="btn btn-primary gray">
 								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-square-fill" viewBox="0 0 16 16">
 									<path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm6.5 4.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3a.5.5 0 0 1 1 0"/>
 								</svg>
@@ -152,7 +158,7 @@ feather.replace()
  <script src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
  <script>
 	 $(document).ready(function(){
-         $('#veiculos').DataTable({
+         $('#fornecedores').DataTable({
                "language": {
                    "lengthMenu": "Mostrando _MENU_ registros por página",
                    "zeroRecords": "Nada encontrado",
