@@ -19,9 +19,10 @@ import org.springframework.web.servlet.view.RedirectView;
 public class ManutencaoController {
     @Autowired
     ManutencaoServices services;
-    @GetMapping("/cadastro")
+    @GetMapping({"/cadastro","/cadastro/{id}"})
     public String manutencao(Model model, Manutencao manutencao, Veiculo veiculo, Fornecedor fornecedor){
         return services.cadastro(model, manutencao, veiculo, fornecedor,"C");
+
     }
     @PostMapping("/adicionar")
     public RedirectView adicionar(Model model, Manutencao manutencao, Veiculo veiculo, Fornecedor fornecedor){

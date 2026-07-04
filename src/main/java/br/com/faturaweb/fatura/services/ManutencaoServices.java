@@ -27,7 +27,11 @@ public class ManutencaoServices {
     @Autowired
     ItManutencaoRepository itManutencaoRepository;
 
-    public String cadastro(Model model, Manutencao manutencao, Veiculo veiculo, Fornecedor fornecedor, String acao) {
+    public String cadastro(Model model, Manutencao manutencao,
+                           Veiculo veiculo,
+                           Fornecedor fornecedor,
+                           String acao) {
+
         List<Veiculo> veiculos = veiculoRepository.veiculosAdicionados();
         List<Manutencao> manutencoes = repository.listarManutencao();
         List<Fornecedor> fornecedores = fornecedorRepository.pesquisarFornecedores();

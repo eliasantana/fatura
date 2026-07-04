@@ -28,17 +28,20 @@ public interface AbastecimentoRepository extends CrudRepository<Abastecimento, L
     @Query(value = "select a.*  from abastecimento a, veiculo v " +
             " where a.cd_veiculo = v.cd_veiculo " +
             " and a.km_atual = (select max(km_atual) from abastecimento   where cd_veiculo = v.cd_veiculo) " +
-            " and v.cd_veiculo=1 and date_format(dt_abastecimento,'%Y%m' )=date_format(curdate(),'%Y%m' )",nativeQuery = true)
+            " and v.cd_veiculo=:cdveiculo and date_format(dt_abastecimento,'%Y%m' )=date_format(curdate(),'%Y%m' )",nativeQuery = true)
     Optional<Abastecimento> kmMaximoMes(long cdveiculo);
     @Query(value = "select a.*  from abastecimento a, veiculo v " +
             " where a.cd_veiculo = v.cd_veiculo " +
-            " and a.km_atual = (select min(km_atual) from abastecimento   where cd_veiculo = v.cd_veiculo) " +
-            " and v.cd_veiculo=1 and date_format(dt_abastecimento,'%Y%m' )=date_format(curdate(),'%Y%m' )",nativeQuery = true)
+            " and a.km_atual = (select min(km_atual) from abastecimento   where cd_veiculo = v.cd_veiculo " +
+            " and date_format(dt_abastecimento,'%Y%m' )=date_format(curdate(),'%Y%m' )) " +
+            " and v.cd_veiculo=:cdveiculo ",nativeQuery = true)
     Optional<Abastecimento> kmMinimoMes(long cdveiculo);
 
 
     @Query(value = "select * from abastecimento where cd_veiculo =:cdveiculo", nativeQuery = true)
     List<Abastecimento> todosOsAbastecimentos( Long cdveiculo);
+    @Query(value = "select * from abastecimento where cd_veiculo =:cdveiculo and date_format(dt_abastecimento,'%Y%m')=date_format(curdate(),'%Y%m')", nativeQuery = true)
+    List<Abastecimento> todosOsAbastecimentosNoMes(Long cdveiculo);
     @Query(value = " select * from  vw_consumo where cd_veiculo =:cdveiculo ", nativeQuery = true)
     List<ViewConsumo> evolcaoConsumo(Long cdveiculo);
 }

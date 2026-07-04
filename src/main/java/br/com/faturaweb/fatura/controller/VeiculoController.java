@@ -34,10 +34,10 @@ public String editar(Model model, @PathVariable Long idveiculo){
 public RedirectView excluir (Model model, @PathVariable Long cdVeiculo, RedirectAttributes ra){
     return services.excluirVeiculo(cdVeiculo, model, ra);
 }
-    @GetMapping("/pesquisar")
-    public String excluir (Model model){
-        return services.pesquisar(model);
-    }
+@GetMapping("/pesquisar")
+public String excluir (Model model){
+    return services.pesquisar(model);
+}
 
 
 }

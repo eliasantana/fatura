@@ -30,6 +30,7 @@ public class AbastecimentoServices {
     public String registrar(Model model) {
         List<Veiculo> veiculos= veiculoServices.veiculosAdicionados();
         model.addAttribute("veiculos",veiculos);
+        model.addAttribute("data",LocalDate.now().toString());
         return "formulario_abastecimento";
     }
 
@@ -68,6 +69,7 @@ public class AbastecimentoServices {
       List<Veiculo> veiculos =veiculoServices.repository.veiculosAdicionados();
         model.addAttribute("veiculos", veiculos);
         model.addAttribute("modelo", null);
+        model.addAttribute("veiculoselecionado", null);
         return "gestao_abastecimento";
     }
 
@@ -77,12 +79,12 @@ public class AbastecimentoServices {
         Optional<Abastecimento> kmMinimo = repository.kmMinimo(cdVeiculo);
         Optional<Abastecimento> kmMesMinimo = repository.kmMinimoMes(cdVeiculo);
         Optional<Abastecimento> kmMesMaximo = repository.kmMaximoMes(cdVeiculo);
+        String veiculoSelecionado =  kmMaximo.get().getVeiculo().getFabricante().toString().concat(" - ").concat(kmMaximo.get().getVeiculo().getModelo().toString());
         List<Abastecimento> abastecimentoGeral = repository.todosOsAbastecimentos(cdVeiculo);
         List<ViewConsumo>evolucaoDeConsumo = repository.evolcaoConsumo(cdVeiculo);
         List<String>mesesConsumo =  retornaConsumoPorVeiuloMes(evolucaoDeConsumo);
         List<BigDecimal> litrosConsumo = retornaConsumoPorVeiculoLitros(evolucaoDeConsumo);
-        System.out.println(mesesConsumo.toString());
-        System.out.println(litrosConsumo.toString());
+
         BigDecimal kilometragemPercorrida = calculaKmPercorrido(kmMaximo, kmMinimo);
         BigDecimal kilometragemPercorridaNoMes = calculaKmPercorrido(kmMesMaximo, kmMesMinimo);
         BigDecimal consumoMensal = calculaConsumo(kilometragemPercorridaNoMes, cdVeiculo);
@@ -91,7 +93,7 @@ public class AbastecimentoServices {
         List<YearMonth> meses = new ArrayList<>(dados.keySet());
         List<Double> valores = new ArrayList<>(dados.values());
         Map<YearMonth, Double> totalLitrosMes = totalizaLitrosPorMes(abastecimentoGeral);
-        System.out.println(totalLitrosMes.values());
+
         model.addAttribute("veiculos", veiculos);
         model.addAttribute("kmpercorrido", kilometragemPercorrida);
         model.addAttribute("consumomediogeral", consumoMedioGeral);
@@ -103,6 +105,7 @@ public class AbastecimentoServices {
         model.addAttribute("litrosmes",totalLitrosMes.values());
         model.addAttribute("cosumomeses",mesesConsumo);
         model.addAttribute("cosumolitros",litrosConsumo);
+        model.addAttribute("veiculoselecionado",veiculoSelecionado);
 
 
         return("gestao_abastecimento");
@@ -169,7 +172,7 @@ public class AbastecimentoServices {
     }
 
     public BigDecimal calculaConsumo(BigDecimal kmPercorrido, Long cdVeiculo){
-        List<Abastecimento> abastecimentoGeral = repository.todosOsAbastecimentos(cdVeiculo);
+        List<Abastecimento> abastecimentoGeral = repository.todosOsAbastecimentosNoMes(cdVeiculo);
         BigDecimal consumo = BigDecimal.ZERO;
         if (!abastecimentoGeral.isEmpty()){
            BigDecimal litros = abastecimentoGeral.stream().map(Abastecimento ::getLitros).reduce(BigDecimal.ZERO, BigDecimal::add);

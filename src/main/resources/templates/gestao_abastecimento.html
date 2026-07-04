@@ -90,7 +90,7 @@
         <main class="col ps-md-2 pt-2 p-4">
             
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-4 border-bottom">
-                    <h1 class="h2 fw-bold text-primary">Gestão de Abastecimentos</h1>
+                    <h1 class="h2 fw-bold text-primary" th:if="${veiculoselecionado!=null}"  th:text="'Gestão do Abastecimento - '+${veiculoselecionado}">Gestão de Abastecimentos</h1>
                     <div class="btn-toolbar mb-2 mb-md-0">
                         <button type="button" class="btn btn-sm btn-outline-secondary">
                             <i class="bi bi-calendar3 me-2"></i>Exportar Dados
@@ -157,7 +157,7 @@
                         <div class="card kpi-card p-3 h-100 border-start border-info border-4">
                             <div class="d-flex align-items-center justify-content-between">
                                 <div>
-                                    <h6 class="text-muted text-uppercase fw-semibold mb-1">Consumo Médio (Mensal)</h6>
+                                    <h6 class="text-muted text-uppercase fw-semibold mb-1">Consumo Médio (Km/l)</h6>
                                     <h2 class="fw-bold mb-0 text-info" th:text="${cosumomensal}">0,0 km/l</h2>
                                 </div>
                                 <i class="bi bi-bar-chart-line text-info kpi-icon"></i>
